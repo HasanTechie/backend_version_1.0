@@ -6,4 +6,8 @@
 
     <h1>Hotels</h1>
 
+    @foreach ($hotels as $hotel)
+        {{$hotel}}
+    @endforeach
+
 @endsection

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Hotel;
+use App\Flight;
 use Illuminate\Http\Request;
 
-class HotelController extends Controller
+use Unirest;
+
+class FlightController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +17,14 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = Hotel::all();
 
-       return view('hotels.index', compact('hotels'));
+        $response = Unirest\Request::get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/DE/EUR/en-US/BER/FRA/2019-01-01?inboundpartialdate=2019-01-04",
+            array(
+                "X-RapidAPI-Key" => "oMjAp5aiMKmshRgeMJbPG4Ur9DUep1RWJGfjsnBbwwXtavjNnW"
+            )
+        );
+
+        dd($response);
     }
 
     /**
@@ -44,10 +51,10 @@ class HotelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Hotel  $hotel
+     * @param  \App\Flight  $flight
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show(Flight $flight)
     {
         //
     }
@@ -55,10 +62,10 @@ class HotelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Hotel  $hotel
+     * @param  \App\Flight  $flight
      * @return \Illuminate\Http\Response
      */
-    public function edit(Hotel $hotel)
+    public function edit(Flight $flight)
     {
         //
     }
@@ -67,10 +74,10 @@ class HotelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Hotel  $hotel
+     * @param  \App\Flight  $flight
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Hotel $hotel)
+    public function update(Request $request, Flight $flight)
     {
         //
     }
@@ -78,10 +85,10 @@ class HotelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Hotel  $hotel
+     * @param  \App\Flight  $flight
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hotel $hotel)
+    public function destroy(Flight $flight)
     {
         //
     }

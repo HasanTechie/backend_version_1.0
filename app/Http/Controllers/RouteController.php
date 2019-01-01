@@ -43,7 +43,7 @@ class RouteController extends Controller
 
 //        return $content;
 
-        $routes = Route::take(10000)->get();; //limit to 10000
+        $routes = Route::take(2000)->get();; //limit to 2000
         return view('routes.index', compact('routes'));
     }
 

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h1>Airports</h1>
+    <h1>Airlines</h1>
     <table class="table table-bordered table-hover table-striped">
         <thead>
         <tr>

@@ -45,7 +45,7 @@ class AirportController extends Controller
 
 //        return $content;
 
-        $airports = Airport::take(10000)->get();; //limit to 10000
+        $airports = Airport::take(2000)->get();; //limit to 2000
         return view('airports.index', compact('airports'));
     }
 

@@ -6,9 +6,16 @@
 </head>
 <body>
 <h1>Planes</h1>
-@foreach ($content as $line)
-    {{$line}} <br> <br>
+
+@foreach ($planes as $plane)
+    <div>
+        <div>NAME: {{$plane->name}}</div>
+        <div>ID: {{$plane->id}}</div>
+        <div>IATA: {{$plane->IATA}}</div>
+        <div>ICAO: {{$plane->ICAO}}</div>
+    </div>
+
+    <br>
 @endforeach
-{{--{{$content}}--}}
 </body>
 </html>

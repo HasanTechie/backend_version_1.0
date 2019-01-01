@@ -17,7 +17,7 @@ class HotelController extends Controller
         //
         $hotels = Hotel::all();
 
-        return view('hotel.index', compact('hotels'));
+        return view('hotels.index', compact('hotels'));
     }
 
     /**

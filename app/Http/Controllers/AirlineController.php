@@ -15,11 +15,11 @@ class AirlineController extends Controller
     public function index()
     {
         //
-        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat";
-
-        $contenta = file_get_contents($url);
-
-        $content = explode("\n",$contenta);
+//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat";
+//
+//        $contenta = file_get_contents($url);
+//
+//        $content = explode("\n",$contenta);
 
 //        foreach ($content as $line)
 //        {
@@ -40,7 +40,9 @@ class AirlineController extends Controller
 //        }
 
 //        return $content;
-        return view('airlines.index',compact('content'));
+
+        $airlines = Airline::take(10000)->get();; //limit to 10000
+        return view('airlines.index', compact('airlines'));
     }
 
     /**

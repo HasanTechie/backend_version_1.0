@@ -15,15 +15,15 @@ class PlaneController extends Controller
     public function index()
     {
         //
-        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/planes.dat";
-
-        $contenta = file_get_contents($url);
-
-        $contentb = explode("\n", $contenta);
-
-        foreach ($contentb as $line){
-            $content = explode(",",$line);
-        }
+//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/planes.dat";
+//
+//        $contenta = file_get_contents($url);
+//
+//        $contentb = explode("\n", $contenta);
+//
+//        foreach ($contentb as $line){
+//            $content = explode(",",$line);
+//        }
 
 //        foreach ($content as $line) {
 //            $plane = new Plane();
@@ -36,7 +36,10 @@ class PlaneController extends Controller
 //        }
 
 //        return $content;
-        return view('planes.index', compact('content'));
+
+
+        $planes = Plane::all();
+        return view('planes.index', compact('planes'));
     }
 
 

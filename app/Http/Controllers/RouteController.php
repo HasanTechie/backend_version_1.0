@@ -15,13 +15,13 @@ class RouteController extends Controller
     public function index()
     {
         //
-        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat";
+//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat";
+//
+//        $contenta = file_get_contents($url);
+//
+//        $content = explode("\n",$contenta);
 
-        $contenta = file_get_contents($url);
-
-        $content = explode("\n",$contenta);
-
-        set_time_limit(180);
+//        set_time_limit(180);
 
 //        foreach ($content as $line)
 //        {
@@ -42,7 +42,9 @@ class RouteController extends Controller
 //
 
 //        return $content;
-        return view('routes.index',compact('content'));
+
+        $routes = Route::take(10000)->get();; //limit to 10000
+        return view('routes.index', compact('routes'));
     }
 
     /**

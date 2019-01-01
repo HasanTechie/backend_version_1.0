@@ -15,15 +15,15 @@ class CreatePricesTable extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('Checkin');
-            $table->string('Nights');
-            $table->string('Baserate');
-            $table->string('TaxAndOtherFees');
-            $table->string('Currency');
-            $table->string('LastUpdateTime');
-            $table->integer('IsVisible');
-            $table->integer('IsComplete');
-            $table->string('ErrorReasons');
+            $table->string('checkin');
+            $table->string('nights');
+            $table->string('baserate');
+            $table->string('taxAndOtherFees');
+            $table->string('currency');
+            $table->string('lastUpdateTime');
+            $table->integer('isVisible');
+            $table->integer('isComplete');
+            $table->string('errorReasons');
             $table->timestamps();
         });
     }

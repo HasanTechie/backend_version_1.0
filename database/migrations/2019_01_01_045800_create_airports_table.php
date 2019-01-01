@@ -14,7 +14,20 @@ class CreateAirportsTable extends Migration
     public function up()
     {
         Schema::create('airports', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('airport_id')->unique();
+            $table->string('name');
+            $table->string('city');
+            $table->string('country');
+            $table->string('IATA');
+            $table->string('ICAO');
+            $table->double('latitude');
+            $table->double('longitude');
+            $table->double('altitude');
+            $table->double('timezone');
+            $table->string('DST');
+            $table->string('Tz_database_time_zone');
+            $table->string('type');
+            $table->string('source');
             $table->timestamps();
         });
     }

@@ -15,6 +15,36 @@ class AirportController extends Controller
     public function index()
     {
         //
+        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat";
+
+        $contenta = file_get_contents($url);
+
+        $content = explode("\n",$contenta);
+
+        foreach ($content as $line)
+        {
+            $airport = new Airport();
+
+            $airport->airport_id = $line;
+            $airport->name = 'testing';
+            $airport->city = 'testing';
+            $airport->country = 'testing';
+            $airport->IATA = 'testing';
+            $airport->ICAO = 'testing';
+            $airport->latitude = 1;
+            $airport->longitude = 2;
+            $airport->altitude = 3;
+            $airport->timezone = 4;
+            $airport->DST = 'testing';
+            $airport->Tz_database_time_zone = 'testing';
+            $airport->type = 'testing';
+            $airport->source = 'testing';
+            $airport->save();
+
+        }
+
+//        return $content;
+        return view('airports.index',compact('content'));
     }
 
     /**
@@ -30,7 +60,7 @@ class AirportController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +71,7 @@ class AirportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Airport  $airport
+     * @param  \App\Airport $airport
      * @return \Illuminate\Http\Response
      */
     public function show(Airport $airport)
@@ -52,7 +82,7 @@ class AirportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Airport  $airport
+     * @param  \App\Airport $airport
      * @return \Illuminate\Http\Response
      */
     public function edit(Airport $airport)
@@ -63,8 +93,8 @@ class AirportController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Airport  $airport
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Airport $airport
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Airport $airport)
@@ -75,7 +105,7 @@ class AirportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Airport  $airport
+     * @param  \App\Airport $airport
      * @return \Illuminate\Http\Response
      */
     public function destroy(Airport $airport)

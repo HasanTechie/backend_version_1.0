@@ -15,7 +15,26 @@ class PlaneController extends Controller
     public function index()
     {
         //
+        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/planes.dat";
+
+        $contenta = file_get_contents($url);
+
+        $content = explode("\n", $contenta);
+
+        foreach ($content as $line) {
+            $plane = new Plane();
+
+            $plane->name = $line;
+            $plane->IATA = 'testing';
+            $plane->ICAO = 'testing';
+
+            $plane->save();
+        }
+
+//        return $content;
+        return view('planes.index', compact('content'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -30,7 +49,7 @@ class PlaneController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +60,7 @@ class PlaneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Plane  $plane
+     * @param  \App\Plane $plane
      * @return \Illuminate\Http\Response
      */
     public function show(Plane $plane)
@@ -52,7 +71,7 @@ class PlaneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Plane  $plane
+     * @param  \App\Plane $plane
      * @return \Illuminate\Http\Response
      */
     public function edit(Plane $plane)
@@ -63,8 +82,8 @@ class PlaneController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Plane  $plane
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Plane $plane
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Plane $plane)
@@ -75,7 +94,7 @@ class PlaneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Plane  $plane
+     * @param  \App\Plane $plane
      * @return \Illuminate\Http\Response
      */
     public function destroy(Plane $plane)

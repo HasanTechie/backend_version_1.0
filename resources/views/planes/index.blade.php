@@ -1,21 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<h1>Planes</h1>
+@extends ('/layouts/header')
 
-@foreach ($planes as $plane)
-    <div>
-        <div>NAME: {{$plane->name}}</div>
-        <div>ID: {{$plane->id}}</div>
-        <div>IATA: {{$plane->IATA}}</div>
-        <div>ICAO: {{$plane->ICAO}}</div>
-    </div>
+@section('title','Planes')
 
-    <br>
-@endforeach
-</body>
-</html>
+@section('content')
+
+    <h1>Planes</h1>
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NAME</th>
+            <th scope="col">IATA</th>
+            <th scope="col">ICAO</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach ($planes as $plane)
+            <tr>
+                <th scope="row">{{$plane->id}}</th>
+                <td>{{$plane->name}}</td>
+                <td>{{$plane->IATA}}</td>
+                <td>{{$plane->ICAO}}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+@endsection

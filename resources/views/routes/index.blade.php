@@ -1,26 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<h1>Routes</h1>
-@foreach ($routes as $route)
-    <div>
-        <div>ID: {{$route->id}}</div>
-        <div>Airline: {{$route->airline}}</div>
-        <div>Airline ID: {{$route->airline_id}}</div>
-        <div>Source Airport: {{$route->source_airport}}</div>
-        <div>Source Airport ID: {{$route->source_airport_id}}</div>
-        <div>Destination Airport: {{$route->destination_airport}}</div>
-        <div>Destination Airport ID: {{$route->destination_airport_id}}</div>
-        <div>Codeshare: {{$route->codeshare}}</div>
-        <div>Stops: {{$route->stops}}</div>
-        <div>Equipment: {{$route->equipment}}</div>
-    </div>
+@extends ('/layouts/header')
 
-    <br>
-@endforeach
-</body>
-</html>
+@section('title','Routes')
+
+@section('content')
+
+    <h1>Routes</h1>
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Airline</th>
+            <th scope="col">Airline ID</th>
+            <th scope="col">Source Airport</th>
+            <th scope="col">Source Airport ID</th>
+            <th scope="col">Destination Airport</th>
+            <th scope="col">Destination Airport ID</th>
+            <th scope="col">Codeshare</th>
+            <th scope="col">Stops</th>
+            <th scope="col">Equipment</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach ($routes as $route)
+            <tr>
+                <th scope="row">{{$route->id}}</th>
+                <td>{{$route->airline}}</td>
+                <td>{{$route->airline_id}}</td>
+                <td>{{$route->source_airport}}</td>
+                <td>{{$route->source_airport_id}}</td>
+                <td>{{$route->destination_airport}}</td>
+                <td>{{$route->destination_airport_id}}</td>
+                <td>{{$route->codeshare}}</td>
+                <td>{{$route->stops}}</td>
+                <td>{{$route->equipment}}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+@endsection
+

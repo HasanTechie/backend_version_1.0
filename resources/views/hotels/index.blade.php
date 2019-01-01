@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<h1>hotels</h1>
-@foreach ($hotels as $hotel)
-    {{$hotel->id}}
-@endforeach
+@extends ('/layouts/header')
 
-</body>
-</html>
+@section('title','Planes')
+
+@section('content')
+
+    <h1>Hotels</h1>
+
+@endsection

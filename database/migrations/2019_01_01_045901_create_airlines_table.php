@@ -17,11 +17,11 @@ class CreateAirlinesTable extends Migration
             $table->increments('id');
             $table->string('airline_id')->unique();
             $table->string('name');
-            $table->string('alias');
-            $table->string('IATA');
-            $table->string('ICAO');
-            $table->string('callsign');
-            $table->string('country');
+            $table->string('alias')->nullable();
+            $table->string('IATA')->nullable();
+            $table->string('ICAO')->nullable();
+            $table->string('callsign')->nullable();
+            $table->string('country')->nullable();
             $table->string('active');
             $table->timestamps();
         });

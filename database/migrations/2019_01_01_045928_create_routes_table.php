@@ -16,13 +16,14 @@ class CreateRoutesTable extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('airline');
-            $table->string('airline_id');
-            $table->string('source_airport');
-            $table->string('source_airport_id');
-            $table->string('destination_airport_id');
-            $table->string('codeshare');
+            $table->string('airline_id')->nullable();
+            $table->string('source_airport')->nullable();
+            $table->string('source_airport_id')->nullable();
+            $table->string('destination_airport')->nullable();
+            $table->string('destination_airport_id')->nullable();
+            $table->string('codeshare')->nullable();
             $table->string('stops');
-            $table->string('equipment');
+            $table->string('equipment')->nullable();
             $table->timestamps();
         });
     }

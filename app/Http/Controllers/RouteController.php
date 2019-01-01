@@ -23,23 +23,23 @@ class RouteController extends Controller
 
         set_time_limit(180);
 
-        foreach ($content as $line)
-        {
-            $route = new Route();
-
-            $route->airline = $line;
-            $route->airline_id = 'testing';
-            $route->source_airport = 'testing';
-            $route->source_airport_id = 'testing';
-            $route->destination_airport_id = 'testing';
-            $route->codeshare = 'testing';
-            $route->stops = 1;
-            $route->equipment = 2;
-
-            $route->save();
-
-        }
-
+//        foreach ($content as $line)
+//        {
+//            $route = new Route();
+//
+//            $route->airline = $line;
+//            $route->airline_id = 'testing';
+//            $route->source_airport = 'testing';
+//            $route->source_airport_id = 'testing';
+//            $route->destination_airport_id = 'testing';
+//            $route->codeshare = 'testing';
+//            $route->stops = 1;
+//            $route->equipment = 2;
+//
+//            $route->save();
+//
+//        }
+//
 
 //        return $content;
         return view('routes.index',compact('content'));

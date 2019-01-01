@@ -16,9 +16,8 @@ class CreatePlanesTable extends Migration
         Schema::create('planes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('IATA');
-            $table->string('ICAO');
-            $table->timestamps();
+            $table->string('IATA')->nullable();
+            $table->string('ICAO')->nullable();
         });
     }
 

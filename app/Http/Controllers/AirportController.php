@@ -21,27 +21,27 @@ class AirportController extends Controller
 
         $content = explode("\n",$contenta);
 
-        foreach ($content as $line)
-        {
-            $airport = new Airport();
-
-            $airport->airport_id = $line;
-            $airport->name = 'testing';
-            $airport->city = 'testing';
-            $airport->country = 'testing';
-            $airport->IATA = 'testing';
-            $airport->ICAO = 'testing';
-            $airport->latitude = 1;
-            $airport->longitude = 2;
-            $airport->altitude = 3;
-            $airport->timezone = 4;
-            $airport->DST = 'testing';
-            $airport->Tz_database_time_zone = 'testing';
-            $airport->type = 'testing';
-            $airport->source = 'testing';
-            $airport->save();
-
-        }
+//        foreach ($content as $line)
+//        {
+//            $airport = new Airport();
+//
+//            $airport->airport_id = $line;
+//            $airport->name = 'testing';
+//            $airport->city = 'testing';
+//            $airport->country = 'testing';
+//            $airport->IATA = 'testing';
+//            $airport->ICAO = 'testing';
+//            $airport->latitude = 1;
+//            $airport->longitude = 2;
+//            $airport->altitude = 3;
+//            $airport->timezone = 4;
+//            $airport->DST = 'testing';
+//            $airport->Tz_database_time_zone = 'testing';
+//            $airport->type = 'testing';
+//            $airport->source = 'testing';
+//            $airport->save();
+//
+//        }
 
 //        return $content;
         return view('airports.index',compact('content'));

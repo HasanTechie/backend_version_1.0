@@ -19,17 +19,21 @@ class PlaneController extends Controller
 
         $contenta = file_get_contents($url);
 
-        $content = explode("\n", $contenta);
+        $contentb = explode("\n", $contenta);
 
-        foreach ($content as $line) {
-            $plane = new Plane();
-
-            $plane->name = $line;
-            $plane->IATA = 'testing';
-            $plane->ICAO = 'testing';
-
-            $plane->save();
+        foreach ($contentb as $line){
+            $content = explode(",",$line);
         }
+
+//        foreach ($content as $line) {
+//            $plane = new Plane();
+//
+//            $plane->name = $line;
+//            $plane->IATA = 'testing';
+//            $plane->ICAO = 'testing';
+//
+//            $plane->save();
+//        }
 
 //        return $content;
         return view('planes.index', compact('content'));

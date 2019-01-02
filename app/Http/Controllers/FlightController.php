@@ -18,14 +18,14 @@ class FlightController extends Controller
     {
         //
 
-//        $response = Unirest\Request::get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/DE/EUR/en-US/BER/FRA/2019-01-01?inboundpartialdate=2019-01-04",
-//            array(
-//                "X-RapidAPI-Key" => "oMjAp5aiMKmshRgeMJbPG4Ur9DUep1RWJGfjsnBbwwXtavjNnW"
-//            )
-//        );
+        $response = Unirest\Request::get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/DE/EUR/en-US/BER/FRA/2019-01-02",
+            array(
+                "X-RapidAPI-Key" => "oMjAp5aiMKmshRgeMJbPG4Ur9DUep1RWJGfjsnBbwwXtavjNnW"
+            )
+        );
 
-        $response = Unirest\Request::get("https://api.laminardata.aero/v1/airlines/DLH/flights?user_key=5a183c1f789682da267a20a54ca91197&status=scheduled");
-        
+//        $response = Unirest\Request::get("https://api.laminardata.aero/v1/airlines/DLH/flights?user_key=5a183c1f789682da267a20a54ca91197&status=scheduled");
+
         dd($response);
     }
 

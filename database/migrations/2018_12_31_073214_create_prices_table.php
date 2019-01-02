@@ -18,12 +18,12 @@ class CreatePricesTable extends Migration
             $table->string('checkin');
             $table->string('nights');
             $table->string('baserate');
-            $table->string('taxAndOtherFees');
+            $table->string('tax_and_other_fees');
             $table->string('currency');
-            $table->string('lastUpdateTime');
-            $table->integer('isVisible');
-            $table->integer('isComplete');
-            $table->string('errorReasons');
+            $table->string('last_update_time');
+            $table->integer('is_visible');
+            $table->integer('is_complete');
+            $table->string('error_reasons');
             $table->timestamps();
         });
     }

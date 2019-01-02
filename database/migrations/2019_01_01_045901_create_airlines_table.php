@@ -18,8 +18,8 @@ class CreateAirlinesTable extends Migration
             $table->string('airline_id')->unique();
             $table->string('name');
             $table->string('alias')->nullable();
-            $table->string('IATA')->nullable();
-            $table->string('ICAO')->nullable();
+            $table->string('iata')->nullable();
+            $table->string('icao')->nullable();
             $table->string('callsign')->nullable();
             $table->string('country')->nullable();
             $table->string('active');

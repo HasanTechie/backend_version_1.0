@@ -19,14 +19,14 @@ class CreateAirportsTable extends Migration
             $table->string('name');
             $table->string('city')->nullable();
             $table->string('country');
-            $table->string('IATA')->nullable();
-            $table->string('ICAO')->nullable();
+            $table->string('iata')->nullable();
+            $table->string('icao')->nullable();
             $table->double('latitude');
             $table->double('longitude');
             $table->double('altitude');
             $table->double('timezone')->nullable();
-            $table->string('DST')->nullable();
-            $table->string('Tz_database_time_zone')->nullable();
+            $table->string('dst')->nullable();
+            $table->string('tz_database_time_zone')->nullable();
             $table->string('type');
             $table->string('source');
             $table->timestamps();

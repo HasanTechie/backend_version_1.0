@@ -21,6 +21,43 @@ class FlightController extends Controller
     {
         //
 
+        $flights = Flight::take(2000)->get();; //limit to 2000
+        return view('flights.index', compact('flights'));
+
+    }
+
+    public function current(){
+
+        $url = "https://api.laminardata.aero/v1/aerodromes/EDDB/departures?user_key=5a183c1f789682da267a20a54ca91197&status=scheduled";
+//        $response = Unirest\Request::get($url);
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                // Set Here Your Requesred Headers
+                'Accept: application/json',
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            $json = json_decode($response);
+        }
+
+
+        return view('flights.current' , compact('json'));
 
     }
 
@@ -40,7 +77,7 @@ class FlightController extends Controller
 //            )
 //        );
 
-        $url = "https://api.laminardata.aero/v1/aerodromes/EDDB/departures?user_key=5a183c1f789682da267a20a54ca91197&status=scheduled";
+        $url = "https://api.laminardata.aero/v1/aerodromes/EDDF/departures?user_key=5a183c1f789682da267a20a54ca91197&status=airborne";
 //        $response = Unirest\Request::get($url);
 
 
@@ -79,7 +116,7 @@ class FlightController extends Controller
             if (isset($value->properties->arrival->aerodrome->scheduled)) {$flight->arrival_airport_scheduled = $value->properties->arrival->aerodrome->scheduled;}
             if (isset($value->properties->arrival->aerodrome->actual)) {$flight->arrival_airport_actual = $value->properties->arrival->aerodrome->actual;}
             if (isset($value->properties->arrival->runwayTime->initial)) {$flight->arrival_runway_time_initial = $value->properties->arrival->runwayTime->initial;}
-            if (isset($value->properties->arrival->runwayTime->estimated)) {$flight->arrival_runway_time_estimated = $value->properties->arrival->runwayTime->estimated;}
+            if (isset($value->properties->arrival->runwayTime->estimated)) {$flight->arrival_runway_time_estimated = $value->properties->arrival->runwayTime->initial;}
             if (isset($value->properties->departure->aerodrome->scheduled)) {$flight->departure_airport_scheduled = $value->properties->departure->aerodrome->scheduled;}
             if (isset($value->properties->departure->aerodrome->actual)) {$flight->departure_airport_actual = $value->properties->departure->aerodrome->actual;}
             if (isset($value->properties->departure->runwayTime->initial)) {$flight->departure_runway_time_initial = $value->properties->departure->runwayTime->initial;}

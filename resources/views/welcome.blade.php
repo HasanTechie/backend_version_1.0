@@ -86,6 +86,7 @@
 
                 <div class="links">
                     <a href="/airports">Airports</a>
+                    <a href="/flights">Flights</a>
                     <a href="/airlines">Airlines</a>
                     <a href="/hotels">Hotels</a>
                     <a href="/planes">Planes</a>

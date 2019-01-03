@@ -1,6 +1,6 @@
 @extends ('layouts/header')
 
-@section('title','Airline')
+@section('title','Flights')
 
 @section('content')
 

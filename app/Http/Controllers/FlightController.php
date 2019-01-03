@@ -23,7 +23,7 @@ class FlightController extends Controller
     {
         //
 
-        $flights = Flight::take(2000)->get();; //limit to 2000
+        $flights = Flight::take(2000)->inRandomOrder()->get();; //limit to 2000
         return view('flights.index', compact('flights'));
 
     }
@@ -31,33 +31,41 @@ class FlightController extends Controller
     public function current()
     {
 
-        $url = "https://api.laminardata.aero/v1/aerodromes/EDDB/departures?user_key=5a183c1f789682da267a20a54ca91197&status=scheduled";
+//        set_time_limit(0);
+//        ini_set('max_execution_time', '80000');
+//
+//        $titles = DB::table('airports')->inRandomOrder()->limit(5)->pluck('ICAO');
+
+//        foreach ($titles as $title) {
+
+            $url = "https://api.laminardata.aero/v1/aerodromes/EDDF/departures?user_key=5a183c1f789682da267a20a54ca91197&status=airborne";
 //        $response = Unirest\Request::get($url);
 
 
-        $curl = curl_init();
+            $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
-                'Accept: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_TIMEOUT => 30000,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    // Set Here Your Requesred Headers
+                    'Accept: application/json',
+                ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $json = json_decode($response);
-        }
+            if ($err) {
+                echo "cURL Error #:" . $err;
+            } else {
+                $json = json_decode($response);
+            }
+//        }
 
 
         return view('flights.current', compact('json'));

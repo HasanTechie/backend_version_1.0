@@ -1,8 +1,9 @@
 @extends ('layouts/header')
 
 @section('title','Flights')
-
+{{--{{phpinfo()}}--}}
 @section('content')
+
 
     <h1>Flights</h1>
     <table class="table table-bordered table-hover table-striped">

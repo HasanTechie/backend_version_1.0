@@ -1,31 +1,31 @@
 @extends ('layouts/header')
 
 @section('title','Flights')
-{{--{{phpinfo()}}--}}
+{{phpinfo()}}
 @section('content')
 
 
     <h1>Flights</h1>
-    <table class="table table-bordered table-hover table-striped">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Flight ID</th>
-            <th scope="col">IATA flight_number</th>
-            <th scope="col">Airline</th>
-            <th scope="col">Arrival Airport Scheduled</th>
-            <th scope="col">Arrival Runwaytime Initial</th>
-            <th scope="col">Arrival Runwaytime Estimated</th>
-            <th scope="col">Departure Airport Scheduled</th>
-            <th scope="col">Departure Runwaytime Initial</th>
-            <th scope="col">Flight Status</th>
-            <th scope="col">Aircraft Code</th>
+            <th>ID</th>
+            <th>Flight ID</th>
+            <th>IATA flight number</th>
+            <th>Airline</th>
+            <th>Arrival Airport Scheduled</th>
+            <th>Arrival Runwaytime Initial</th>
+            <th>Arrival Runwaytime Estimated</th>
+            <th>Departure Airport Scheduled</th>
+            <th>Departure Runwaytime Initial</th>
+            <th>Flight Status</th>
+            <th>Aircraft Code</th>
         </tr>
         </thead>
         <tbody>
         @foreach ($flights as $flight)
             <tr>
-                <th scope="row">{{$flight->id}}</th>
+                <th>{{$flight->id}}</th>
                 <td>{{$flight->flight_id}}</td>
                 <td>{{$flight->iata_flight_number}}</td>
                 <td>{{$flight->airline}}</td>

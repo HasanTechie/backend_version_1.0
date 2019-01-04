@@ -186,9 +186,9 @@ class FlightController extends Controller
 //        );
 
         set_time_limit(0);
-        ini_set('max_execution_time', '80000');
+        ini_set('max_execution_time', '800000');
 
-        $titles = DB::table('airports')->inRandomOrder()->pluck('ICAO');
+        $titles = DB::table('airports')->pluck('ICAO');
 
         foreach ($titles as $title) {
 
@@ -204,7 +204,7 @@ class FlightController extends Controller
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
-                CURLOPT_TIMEOUT => 30000,
+                CURLOPT_TIMEOUT => 300000,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
                 CURLOPT_HTTPHEADER => array(

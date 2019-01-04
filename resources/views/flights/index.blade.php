@@ -1,43 +1,54 @@
 @extends ('layouts/header')
 
 @section('title','Flights')
-{{phpinfo()}}
+{{--{{phpinfo()}}--}}
 @section('content')
 
 
-    <h1>Flights</h1>
+    <h1 class="title is-1">Flights</h1>
+    <h2 class="subtitle">total number of records : {{$flights->total()}}</h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Flight ID</th>
-            <th>IATA flight number</th>
+            <th>Flight Number</th>
+            <th>Departure Airport Scheduled</th>
             <th>Airline</th>
             <th>Arrival Airport Scheduled</th>
-            <th>Arrival Runwaytime Initial</th>
             <th>Arrival Runwaytime Estimated</th>
-            <th>Departure Airport Scheduled</th>
             <th>Departure Runwaytime Initial</th>
             <th>Flight Status</th>
             <th>Aircraft Code</th>
         </tr>
         </thead>
         <tbody>
+
         @foreach ($flights as $flight)
             <tr>
-                <th>{{$flight->id}}</th>
-                <td>{{$flight->flight_id}}</td>
-                <td>{{$flight->iata_flight_number}}</td>
-                <td>{{$flight->airline}}</td>
-                <td>{{$flight->arrival_airport_scheduled}}</td>
-                <td>{{$flight->arrival_runway_time_initial}}</td>
-                <td>{{$flight->arrival_runway_time_estimated}}</td>
-                <td>{{$flight->departure_airport_scheduled}}</td>
-                <td>{{$flight->departure_runway_time_initial}}</td>
+
+                <td>{{$flight->id}}</td>
+                <td><a href="https://www.google.com/search?q={{$flight->iata_flight_number}}">{{$flight->iata_flight_number}}</a></td>
+                @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
+                    <td>{{$airport->name}}</td>
+                @endif
+                @if ($airline = DB::table('airlines')->select('name')->where('ICAO', $flight->airline)->first())
+                    <td>{{$airline->name}}</td>
+                @endif
+                @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->arrival_airport_scheduled)->first())
+                    <td>{{$airport->name}}</td>
+                @endif
+                <td>{{$flight->arrival_runway_time_estimated_date}}
+                    <br/>{{isset($flight->arrival_runway_time_estimated_time) ? $flight->arrival_runway_time_estimated_time : '' }}
+                </td>
+                <td>{{isset($flight->departure_runway_time_initial_date) ? $flight->departure_runway_time_initial_date : '' }}
+                    <br/>{{isset($flight->departure_runway_time_initial_time) ? $flight->departure_runway_time_initial_time : '' }}
+                </td>
                 <td>{{$flight->flight_status}}</td>
                 <td>{{$flight->aircraft_code}}</td>
             </tr>
         @endforeach
+
         </tbody>
     </table>
+        {{ $flights->links() }}
 @endsection

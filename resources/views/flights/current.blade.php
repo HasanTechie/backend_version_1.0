@@ -1,40 +1,65 @@
 @extends ('layouts/header')
 
 @section('title','Flights')
-
+{{--{{phpinfo()}}--}}
 @section('content')
 
-    <h1>Flights</h1>
-    <table class="table table-bordered table-hover table-striped">
+
+    <h1 class="title is-1">Flights</h1>
+    <h2 class="subtitle">total number of records : {{$flights->total()}}</h2>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
-            <th scope="col">Flight ID</th>
-            <th scope="col">IATA flight_number</th>
-            <th scope="col">Airline</th>
-            <th scope="col">Arrival Airport Scheduled</th>
-            {{--<th scope="col">Arrival Runwaytime Initial</th>--}}
-            <th scope="col">Arrival Runwaytime Estimated</th>
-            <th scope="col">Departure Airport Scheduled</th>
-            {{--<th scope="col">Departure Runwaytime Initial</th>--}}
-            <th scope="col">Flight Status</th>
+            <th>ID</th>
+            <th>Flight Number</th>
+            <th>Departure Airport Scheduled</th>
+            <th>Airline</th>
+            <th>Arrival Airport Scheduled</th>
+            <th>Arrival Runwaytime Estimated</th>
+            <th>Departure Runwaytime Initial</th>
+            <th>Flight Status</th>
+            <th>Aircraft Code</th>
         </tr>
         </thead>
         <tbody>
-
-        @foreach ($json->features as $value)
+        @foreach ($flights as $flight)
             <tr>
-                <th scope="row">{{$value->id}}</th>
-                <td>{{$value->properties->iataFlightNumber}}</td>
-                <td>{{$value->properties->airline}}</td>
-                <td>{{$value->properties->arrival->aerodrome->scheduled}}</td>
-{{--                <td>{{$value->properties->arrival->runwayTime->initial}}</td>--}}
-                <td>{{$value->properties->arrival->runwayTime->estimated}}</td>
-                <td>{{$value->properties->departure->aerodrome->scheduled}}</td>
-{{--                <td>{{$value->properties->departure->runwayTime->initial}}</td>--}}
-                <td>{{$value->properties->flightStatus}}</td>
+
+                <td>{{$flight->id}}</td>
+                <td>
+                    <a href="https://www.google.com/search?q={{$flight->iata_flight_number}}">{{$flight->iata_flight_number}}</a>
+                </td>
+
+                @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
+                    <td>{{$airport->name }}</td>
+                @else
+                    <td>Not Available</td>
+                @endif
+
+                @if ($airline = DB::table('airlines')->select('name')->where('ICAO', $flight->airline)->first())
+                    <td>{{$airline->name }}</td>
+                @else
+                    <td>Not Available</td>
+                @endif
+
+                @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->arrival_airport_scheduled)->first())
+                    <td>{{$airport->name }}</td>
+                @else
+                    <td>Not Available</td>
+                @endif
+
+                <td>{{$flight->arrival_runway_time_estimated_date}}
+                    <br/>{{isset($flight->arrival_runway_time_estimated_time) ? $flight->arrival_runway_time_estimated_time : '&nbsp;' }}
+                </td>
+                <td>{{$flight->departure_runway_time_initial_date}}
+                    <br/>{{isset($flight->departure_runway_time_initial_time) ? $flight->departure_runway_time_initial_time : '&nbsp;' }}
+                </td>
+                <td>{{$flight->flight_status}}</td>
+                <td>{{$flight->aircraft_code}}</td>
             </tr>
         @endforeach
+
         </tbody>
     </table>
-
+    {{ $flights->links() }}
 @endsection

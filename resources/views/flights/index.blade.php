@@ -30,12 +30,18 @@
                 <td><a href="https://www.google.com/search?q={{$flight->iata_flight_number}}">{{$flight->iata_flight_number}}</a></td>
                 @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
                     <td>{{$airport->name}}</td>
+                @else
+                    <td>Not Available</td>
                 @endif
                 @if ($airline = DB::table('airlines')->select('name')->where('ICAO', $flight->airline)->first())
                     <td>{{$airline->name}}</td>
+                @else
+                    <td>Not Available</td>
                 @endif
                 @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->arrival_airport_scheduled)->first())
                     <td>{{$airport->name}}</td>
+                @else
+                    <td>Not Available</td>
                 @endif
                 <td>{{$flight->arrival_runway_time_estimated_date}}
                     <br/>{{isset($flight->arrival_runway_time_estimated_time) ? $flight->arrival_runway_time_estimated_time : '' }}

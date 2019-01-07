@@ -18,6 +18,7 @@ class CreatePlanesTable extends Migration
             $table->string('name');
             $table->string('iata')->nullable();
             $table->string('icao')->nullable();
+            $table->integer('capacity')->nullable();
         });
     }
 

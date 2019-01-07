@@ -36,6 +36,76 @@ class FlightController extends Controller
         return view('flights.current', compact('flights'));
     }
 
+    public function search(Request $request)
+    {
+
+        if ($request->method() == 'POST') {
+
+//            dd($request);
+
+            $flights = DB::table('flights')
+                ->Join('planes', 'flights.aircraft_code', '=', 'planes.icao')
+                ->inRandomOrder();
+
+//            if($request['criteria'])
+//                ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
+//                    return $query->where('departure_airport_scheduled', $icaoa);
+//                })
+//                ->when($icaob = $request['icao_b'], function ($query, $icaob) {
+//                    return $query->where('arrival_airport_scheduled', $icaob);
+//                })
+//                ->when((($icaoa = $request['icao_a']) && ($request['criteria']=='arrival')), function ($query, $icaoa) {
+//                    return $query->where('arrival_airport_scheduled', $icaoa);
+//                })
+//
+//                ->when((($icaob = $request['icao_b']) && ($request['criteria']=='arrival')), function ($query, $icaob) {
+//                    return $query->where('departure_airport_scheduled', $icaob);
+//                })
+
+            $flights
+                ->when($request['is_private_included'] == 'no', function ($query) {
+                return $query->where('planes.capacity', '>', 40);
+                })
+                ->when($request['flight_status'] == 'airborne', function ($query) {
+                    return $query->where('flights.flight_status', '=', 'airborne');
+                })
+                ->when($request['flight_status'] == 'completed', function ($query) {
+                    return $query->where('flights.flight_status', '=', 'completed');
+                })
+                ->when($request['flight_status'] == 'scheduled', function ($query) {
+                    return $query->where('flights.flight_status', '=', 'scheduled');
+                })
+                ->selectRaw('flights.* , planes.*');
+
+            $total_capacity = $flights->sum('capacity');
+            $flights = $flights->paginate(25);
+
+            dd($flights);
+        } else {
+            $flights = DB::table('flights')
+                ->join('planes', 'flights.aircraft_code', '=', 'planes.icao')
+                ->select('flights.*', 'planes.*');
+
+            $total_capacity = $flights->sum('capacity');
+            $flights = $flights->paginate(25);
+        }
+
+        return view('flights.search', compact('flights', 'total_capacity'));
+
+
+//        dd($flights);
+
+//        $flights = DB::table('flights')->select('flights.aircraft_code', 'planes.icao','planes.name')
+//            ->whereExists(function ($query) {
+//                $query->select(DB::raw(1))
+//                    ->from('planes')
+//                    ->whereRaw('planes.icao = flights.aircraft_code');
+//            })
+//            ->paginate(25);
+//
+//        dd($flights);
+    }
+
 //    public function test()
 //    {
 //        $titles = DB::table('airports')->pluck('ICAO');
@@ -148,157 +218,157 @@ class FlightController extends Controller
 //            )
 //        );
 
-        $titles = DB::table('airports')->pluck('ICAO');
-
-        foreach ($titles as $title) {
-
-            $url = "https://api.laminardata.aero/v1/aerodromes/$title/departures?user_key=5a183c1f789682da267a20a54ca91197";
-
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_TIMEOUT => 300000,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => array(
-                    // Set Here Your Requesred Headers
-                    'Accept: application/json',
-                ),
-            ));
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
-
-            if ($err) {
-                echo "cURL Error #:" . $err;
-            } else {
-                if (isset($response)) {
-                    $json = json_decode($response);
-                }
-            }
-//            dd($json);
-//            if (isset($json->features)) {dd($json->features);}
-
-            if (isset($json->features)) {
-                if (is_array($json->features)) {
-                    foreach ($json->features as $value) {
-
-                        if ($value) {
-                            $flight = new Flight();
-
-                            if (isset($value->id)) {
-                                $flight->flight_id = $value->id;
-                            }
-                            if (isset($value->type)) {
-                                $flight->type = $value->type;
-                            }
-
-                            if (isset($value->geometry)) {
-                                if (is_array($value->geometry) || is_object($value->geometry)) {
-                                    if (isset($value->geometry->type)) {
-                                        $flight->geometry_type = $value->geometry->type;
-                                    }
-                                    if (isset($value->geometry->coordinates)) {
-                                        if (is_array($value->geometry->coordinates) || is_object($value->geometry->coordinates)) {
-                                            $flight->geometry_coordinates = serialize($value->geometry->coordinates);
-                                        }
-                                    }
-                                    $flight->geometry = 'Available';
-                                } else {
-                                    $flight->geometry = $value->geometry;
-                                }
-                            }
-
-                            if (isset($value->properties->airline)) {
-                                $flight->airline = $value->properties->airline;
-                            }
-
-                            if (isset($value->properties->arrival->aerodrome->scheduled)) {
-                                $flight->arrival_airport_scheduled = $value->properties->arrival->aerodrome->scheduled;
-                            }
-                            if (isset($value->properties->arrival->aerodrome->initial)) {
-                                $flight->arrival_airport_actual = $value->properties->arrival->aerodrome->initial;
-                            }
-                            if (isset($value->properties->arrival->aerodrome->actual)) {
-                                $flight->arrival_airport_actual = $value->properties->arrival->aerodrome->actual;
-                            }
-                            if (isset($value->properties->arrival->runwayTime->initial)) {
-                                $array = explode("T", $value->properties->arrival->runwayTime->initial);
-                                $flight->arrival_runway_time_initial_date = $array[0] ;
-                                $flight->arrival_runway_time_initial_time = $array[1] ;
-                            }
-                            if (isset($value->properties->arrival->runwayTime->estimated)) {
-                                $array = explode("T", $value->properties->arrival->runwayTime->estimated);
-                                $flight->arrival_runway_time_estimated_date = $array[0] ;
-                                $flight->arrival_runway_time_estimated_time = $array[1] ;
-                            }
-
-                            if (isset($value->properties->callsign)) {
-                                $flight->callsign = $value->properties->callsign;
-                            }
-
-                            if (isset($value->properties->departure->gateTime->estimated)) {
-                                $array = explode("T", $value->properties->departure->gateTime->estimated);
-                                $flight->gate_time_date = $array[0] ;
-                                $flight->gate_time_time = $array[1] ;
-                            }
-
-                            if (isset($value->properties->departure->aerodrome->scheduled)) {
-                                $flight->departure_airport_scheduled = $value->properties->departure->aerodrome->scheduled;
-                            }
-                            if (isset($value->properties->arrival->aerodrome->initial)) {
-                                $flight->departure_airport_actual = $value->properties->arrival->aerodrome->initial;
-                            }
-
-                            if (isset($value->properties->departure->aerodrome->actual)) {
-                                $flight->departure_airport_actual = $value->properties->departure->aerodrome->actual;
-                            }
-                            if (isset($value->properties->departure->runwayTime->initial)) {
-                                $array = explode("T", $value->properties->departure->runwayTime->initial);
-                                $flight->departure_runway_time_initial_date = $array[0] ;
-                                $flight->departure_runway_time_initial_time = $array[1] ;
-                            }
-                            if (isset($value->properties->departure->runwayTime->estimated)) {
-                                $array = explode("T", $value->properties->departure->runwayTime->estimated);
-                                $flight->departure_runway_time_estimated_date = $array[0] ;
-                                $flight->departure_runway_time_estimated_time = $array[1] ;
-                            }
-
-                            if (isset($value->properties->flightStatus)) {
-                                $flight->flight_status = $value->properties->flightStatus;
-                            }
-                            if (isset($value->properties->positionReport)) {
-                                if (is_array($value->properties->positionReport) || is_object($value->properties->positionReport)) {
-                                    $flight->position_report = serialize($value->properties->positionReport);
-                                }
-                            }
-                            if (isset($value->properties->iataFlightNumber)) {
-                                $flight->iata_flight_number = $value->properties->iataFlightNumber;
-                            }
-                            if (isset($value->properties->timestampProcessed)) {
-                                $array = explode("T", $value->properties->timestampProcessed);
-                                $flight->timestamp_processed_date = $array[0] ;
-                                $flight->timestamp_processed_time = $array[1] ;
-                            }
-
-                            if (isset($value->properties->aircraftDescription->aircraftCode)) {
-                                $flight->aircraft_code = $value->properties->aircraftDescription->aircraftCode;
-                            }
-                            if (isset($value->properties->aircraftDescription->aircraftRegistration)) {
-                                $flight->aircraft_registration = $value->properties->aircraftDescription->aircraftRegistration;
-                            }
-//                            dd($flight);
-                            $flight->save();
-
-                        }
-                    }
-                }
-            }
-        }
+//        $titles = DB::table('airports')->pluck('ICAO');
+//
+//        foreach ($titles as $title) {
+//
+//            $url = "https://api.laminardata.aero/v1/aerodromes/$title/departures?user_key=5a183c1f789682da267a20a54ca91197";
+//
+//
+//            $curl = curl_init();
+//
+//            curl_setopt_array($curl, array(
+//                CURLOPT_URL => $url,
+//                CURLOPT_RETURNTRANSFER => true,
+//                CURLOPT_ENCODING => "",
+//                CURLOPT_TIMEOUT => 300000,
+//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//                CURLOPT_CUSTOMREQUEST => "GET",
+//                CURLOPT_HTTPHEADER => array(
+//                    // Set Here Your Requesred Headers
+//                    'Accept: application/json',
+//                ),
+//            ));
+//            $response = curl_exec($curl);
+//            $err = curl_error($curl);
+//            curl_close($curl);
+//
+//            if ($err) {
+//                echo "cURL Error #:" . $err;
+//            } else {
+//                if (isset($response)) {
+//                    $json = json_decode($response);
+//                }
+//            }
+////            dd($json);
+////            if (isset($json->features)) {dd($json->features);}
+//
+//            if (isset($json->features)) {
+//                if (is_array($json->features)) {
+//                    foreach ($json->features as $value) {
+//
+//                        if ($value) {
+//                            $flight = new Flight();
+//
+//                            if (isset($value->id)) {
+//                                $flight->flight_id = $value->id;
+//                            }
+//                            if (isset($value->type)) {
+//                                $flight->type = $value->type;
+//                            }
+//
+//                            if (isset($value->geometry)) {
+//                                if (is_array($value->geometry) || is_object($value->geometry)) {
+//                                    if (isset($value->geometry->type)) {
+//                                        $flight->geometry_type = $value->geometry->type;
+//                                    }
+//                                    if (isset($value->geometry->coordinates)) {
+//                                        if (is_array($value->geometry->coordinates) || is_object($value->geometry->coordinates)) {
+//                                            $flight->geometry_coordinates = serialize($value->geometry->coordinates);
+//                                        }
+//                                    }
+//                                    $flight->geometry = 'Available';
+//                                } else {
+//                                    $flight->geometry = $value->geometry;
+//                                }
+//                            }
+//
+//                            if (isset($value->properties->airline)) {
+//                                $flight->airline = $value->properties->airline;
+//                            }
+//
+//                            if (isset($value->properties->arrival->aerodrome->scheduled)) {
+//                                $flight->arrival_airport_scheduled = $value->properties->arrival->aerodrome->scheduled;
+//                            }
+//                            if (isset($value->properties->arrival->aerodrome->initial)) {
+//                                $flight->arrival_airport_actual = $value->properties->arrival->aerodrome->initial;
+//                            }
+//                            if (isset($value->properties->arrival->aerodrome->actual)) {
+//                                $flight->arrival_airport_actual = $value->properties->arrival->aerodrome->actual;
+//                            }
+//                            if (isset($value->properties->arrival->runwayTime->initial)) {
+//                                $array = explode("T", $value->properties->arrival->runwayTime->initial);
+//                                $flight->arrival_runway_time_initial_date = $array[0] ;
+//                                $flight->arrival_runway_time_initial_time = $array[1] ;
+//                            }
+//                            if (isset($value->properties->arrival->runwayTime->estimated)) {
+//                                $array = explode("T", $value->properties->arrival->runwayTime->estimated);
+//                                $flight->arrival_runway_time_estimated_date = $array[0] ;
+//                                $flight->arrival_runway_time_estimated_time = $array[1] ;
+//                            }
+//
+//                            if (isset($value->properties->callsign)) {
+//                                $flight->callsign = $value->properties->callsign;
+//                            }
+//
+//                            if (isset($value->properties->departure->gateTime->estimated)) {
+//                                $array = explode("T", $value->properties->departure->gateTime->estimated);
+//                                $flight->gate_time_date = $array[0] ;
+//                                $flight->gate_time_time = $array[1] ;
+//                            }
+//
+//                            if (isset($value->properties->departure->aerodrome->scheduled)) {
+//                                $flight->departure_airport_scheduled = $value->properties->departure->aerodrome->scheduled;
+//                            }
+//                            if (isset($value->properties->arrival->aerodrome->initial)) {
+//                                $flight->departure_airport_actual = $value->properties->arrival->aerodrome->initial;
+//                            }
+//
+//                            if (isset($value->properties->departure->aerodrome->actual)) {
+//                                $flight->departure_airport_actual = $value->properties->departure->aerodrome->actual;
+//                            }
+//                            if (isset($value->properties->departure->runwayTime->initial)) {
+//                                $array = explode("T", $value->properties->departure->runwayTime->initial);
+//                                $flight->departure_runway_time_initial_date = $array[0] ;
+//                                $flight->departure_runway_time_initial_time = $array[1] ;
+//                            }
+//                            if (isset($value->properties->departure->runwayTime->estimated)) {
+//                                $array = explode("T", $value->properties->departure->runwayTime->estimated);
+//                                $flight->departure_runway_time_estimated_date = $array[0] ;
+//                                $flight->departure_runway_time_estimated_time = $array[1] ;
+//                            }
+//
+//                            if (isset($value->properties->flightStatus)) {
+//                                $flight->flight_status = $value->properties->flightStatus;
+//                            }
+//                            if (isset($value->properties->positionReport)) {
+//                                if (is_array($value->properties->positionReport) || is_object($value->properties->positionReport)) {
+//                                    $flight->position_report = serialize($value->properties->positionReport);
+//                                }
+//                            }
+//                            if (isset($value->properties->iataFlightNumber)) {
+//                                $flight->iata_flight_number = $value->properties->iataFlightNumber;
+//                            }
+//                            if (isset($value->properties->timestampProcessed)) {
+//                                $array = explode("T", $value->properties->timestampProcessed);
+//                                $flight->timestamp_processed_date = $array[0] ;
+//                                $flight->timestamp_processed_time = $array[1] ;
+//                            }
+//
+//                            if (isset($value->properties->aircraftDescription->aircraftCode)) {
+//                                $flight->aircraft_code = $value->properties->aircraftDescription->aircraftCode;
+//                            }
+//                            if (isset($value->properties->aircraftDescription->aircraftRegistration)) {
+//                                $flight->aircraft_registration = $value->properties->aircraftDescription->aircraftRegistration;
+//                            }
+////                            dd($flight);
+//                            $flight->save();
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
 //        dd(count($json->features));
 //        dd($json->features[0]->id);
 //        dd($json->features[0]->type);

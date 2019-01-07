@@ -18,12 +18,24 @@
                     <div class="field is-narrow has-addons">
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">
+                                {{--                                {{dd($flights[0]->arrival_airport_scheduled)}}--}}
                                 @if($airports = DB::table('airports')->select('id','name','city','icao','country','icao')->get())
+
                                     <select name="icao_a" required>
                                         <option value="">Select Airport A</option>
                                         @foreach($airports as $airport)
-                                            <option
-                                                value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                            @if(isset($flights[0]->departure_airport_scheduled))
+                                                @if($flights[0]->departure_airport_scheduled == $airport->icao && $is_submitted==1)
+                                                    <option value="{{$airport->icao}}"
+                                                            selected>{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                                @else
+                                                    <option
+                                                        value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                                @endif
+                                            @else
+                                                <option
+                                                    value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                            @endif
                                         @endforeach
                                         @endif
                                     </select>
@@ -45,10 +57,20 @@
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">
                                 <select name="icao_b" required>
-                                        <option value="">Select Airport B</option>
+                                    <option value="">Select Airport B</option>
                                     @foreach($airports as $airport)
-                                        <option
-                                            value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                        @if(isset($flights[0]->arrival_airport_scheduled))
+                                            @if($flights[0]->arrival_airport_scheduled == $airport->icao && $is_submitted==1)
+                                                <option value="{{$airport->icao}}"
+                                                        selected>{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                            @else
+                                                <option
+                                                    value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                            @endif
+                                        @else
+                                            <option
+                                                value="{{$airport->icao}}">{{$airport->name.', '.$airport->city.', '.$airport->country}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -156,7 +178,6 @@
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
-            <th>ID</th>
             <th>Flight Number</th>
             <th>Departure Airport Scheduled</th>
             <th>Airline</th>
@@ -164,16 +185,16 @@
             <th>Arrival Runwaytime Estimated</th>
             <th>Departure Runwaytime Initial</th>
             <th>Flight Status</th>
-            <th>Aircraft Code</th>
+            <th>Aircraft Name</th>
+            <th>Aircraft Capacity</th>
         </tr>
         </thead>
         <tbody>
 
         @foreach ($flights as $flight)
             <tr>
-                <td>{{$flight->id}}</td>
                 <td>
-                    <a href="https://www.google.com/search?q={{$flight->iata_flight_number}}">{{$flight->iata_flight_number}}</a>
+                    <a href="https://www.google.com/search?q={{$flight->iata_flight_number}} flight">{{$flight->iata_flight_number}}</a>
                 </td>
                 @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
                     <td>{{$airport->name}}</td>
@@ -197,7 +218,8 @@
                     <br/>{{isset($flight->departure_runway_time_initial_time) ? $flight->departure_runway_time_initial_time : '' }}
                 </td>
                 <td>{{$flight->flight_status}}</td>
-                <td>{{$flight->aircraft_code}}</td>
+                <td>{{$flight->name}}</td>
+                <td>{{$flight->capacity}} passengers</td>
             </tr>
         @endforeach
 

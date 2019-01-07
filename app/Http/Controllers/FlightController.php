@@ -47,24 +47,52 @@ class FlightController extends Controller
                 ->Join('planes', 'flights.aircraft_code', '=', 'planes.icao')
                 ->inRandomOrder();
 
-//            if($request['criteria'])
-//                ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
-//                    return $query->where('departure_airport_scheduled', $icaoa);
-//                })
-//                ->when($icaob = $request['icao_b'], function ($query, $icaob) {
-//                    return $query->where('arrival_airport_scheduled', $icaob);
-//                })
-//                ->when((($icaoa = $request['icao_a']) && ($request['criteria']=='arrival')), function ($query, $icaoa) {
-//                    return $query->where('arrival_airport_scheduled', $icaoa);
-//                })
-//
-//                ->when((($icaob = $request['icao_b']) && ($request['criteria']=='arrival')), function ($query, $icaob) {
-//                    return $query->where('departure_airport_scheduled', $icaob);
-//                })
+            if ($request['criteria'] == 'departure') {
+                $flights
+                    ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
+                        return $query->where('departure_airport_scheduled', $icaoa);
+                    })
+                    ->when($icaob = $request['icao_b'], function ($query, $icaob) {
+                        return $query->where('arrival_airport_scheduled', $icaob);
+                    });
+            }
+
+            if ($request['criteria'] == 'arrival') {
+                $flights
+                    ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
+                        return $query->where('arrival_airport_scheduled', $icaoa);
+                    })
+                    ->when($icaob = $request['icao_b'], function ($query, $icaob) {
+                        return $query->where('departure_airport_scheduled', $icaob);
+                    });
+            }
+
+            if ($request['criteria'] == 'all') {
+
+                $flights->whereRaw('departure_airport_scheduled="'.$request['icao_b'].'" AND arrival_airport_scheduled="'.$request['icao_a'].'"
+                                    OR arrival_airport_scheduled="'.$request['icao_b'].'" AND departure_airport_scheduled="'.$request['icao_a'].'"');
+//                $flights
+//                    ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
+//                        global $request;
+//                        $query->where('departure_airport_scheduled', $icaoa);
+//                        $query->where('arrival_airport_scheduled', $request['icao_b']);
+//                        $query->where('arrival_airport_scheduled', $request['icao_b']);
+//                        $query->where('departure_airport_scheduled', $request['icao_a']);
+//                        return $query;
+//                    });
+
+//                $flights
+//                    ->when($icaob = $request['icao_b'], function ($query, $icaob) {
+//                        global $request;
+//                        $query->where('arrival_airport_scheduled', $icaob);
+//                        $query->where('departure_airport_scheduled', $request['icao_a']);
+//                        return $query;
+//                    });
+            }
 
             $flights
                 ->when($request['is_private_included'] == 'no', function ($query) {
-                return $query->where('planes.capacity', '>', 40);
+                    return $query->where('planes.capacity', '>', 40);
                 })
                 ->when($request['flight_status'] == 'airborne', function ($query) {
                     return $query->where('flights.flight_status', '=', 'airborne');
@@ -80,7 +108,7 @@ class FlightController extends Controller
             $total_capacity = $flights->sum('capacity');
             $flights = $flights->paginate(25);
 
-            dd($flights);
+            $is_submitted=1;
         } else {
             $flights = DB::table('flights')
                 ->join('planes', 'flights.aircraft_code', '=', 'planes.icao')
@@ -88,9 +116,11 @@ class FlightController extends Controller
 
             $total_capacity = $flights->sum('capacity');
             $flights = $flights->paginate(25);
+
+            $is_submitted=0;
         }
 
-        return view('flights.search', compact('flights', 'total_capacity'));
+        return view('flights.search', compact('flights', 'total_capacity','is_submitted'));
 
 
 //        dd($flights);

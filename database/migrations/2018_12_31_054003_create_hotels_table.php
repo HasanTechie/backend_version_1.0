@@ -15,14 +15,17 @@ class CreateHotelsTable extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('category');
-            $table->string('address');
-            $table->string('phone');
-            $table->string('content');
-            $table->string('country');
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->string('hotel_id')->default('Not Available');
+            $table->string('unk_id')->default('Not Available');
+            $table->string('name')->default('Not Available');
+            $table->string('address')->default('Not Available');
+            $table->longText('geometry')->nullable('Not Available');
+            $table->longText('plus_code')->nullable('Not Available');
+            $table->string('phone')->default('Not Available');
+            $table->string('country')->default('Not Available');
+            $table->double('rating')->default(0);
+            $table->double('total_ratings')->default(0);
+            $table->longText('all_data')->nullable();
             $table->timestamps();
         });
     }

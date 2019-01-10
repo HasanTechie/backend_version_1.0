@@ -31,7 +31,7 @@ class HotelController extends Controller
      */
     public function create()
     {
-        //$key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
+        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
 
         /*
         session_start();
@@ -43,17 +43,17 @@ class HotelController extends Controller
         $response = $googlePlaces->placeAutocomplete('hotels in berlin');
         */
 
-        /*
+//        /*
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Hotel%20in%20Berlin&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=$key"); //free but only one result
-        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,price_level,formatted_phone_number&key=$key");
-        if (!empty($_SESSION['next_page_token'])) {
-            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key&pagetoken=" . $_SESSION['next_page_token'] . "");
-        } else {
-            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key");
-        }
-        */
+//        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Lindner%20Hotel%20Am%20Ku'damm&inputtype=textquery&key=$key"); //free but only one result
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJoWWNpP5QqEcRiCJoLCXTM2o&key=$key");
+//        if (!empty($_SESSION['next_page_token'])) {
+//            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key&pagetoken=" . $_SESSION['next_page_token'] . "");
+//        } else {
+//            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key");
+//        }
 
+        dd(json_decode($response->getBody()));
         /*
         $hotels = DB::table('hotels')->select('hotel_id')->get();
 
@@ -166,6 +166,7 @@ class HotelController extends Controller
             }
         }
         */
+
     }
 
 
@@ -235,6 +236,7 @@ class HotelController extends Controller
     public function show(Hotel $hotel)
     {
         //
+        return view('hotels.show',compact('hotel'));
     }
 
     /**

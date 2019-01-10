@@ -11,7 +11,10 @@
         <tr>
             <th>ID</th>
             <th>Hotel Name</th>
-            <th>City Name</th>
+            <th>Phone Number</th>
+            <th>International Phone Number</th>
+            <th>Locality</th>
+            <th>Country</th>
             <th>Hotel Address</th>
             <th>Rating</th>
             <th>Total Rating</th>
@@ -23,20 +26,11 @@
             <tr>
 
                 <td>{{$hotel->id}}</td>
-                <td>{{$hotel->name}}</td>
-                @if(strpos($hotel->address,'Berlin') !== false)
-                    <td>{{'Berlin'}}</td>
-                @elseif(strpos($hotel->address,'Hamburg') !== false)
-                    <td>{{'Hamburg'}}</td>
-                @elseif(strpos($hotel->address,'München') !== false)
-                    <td>{{'München'}}</td>
-                @elseif(strpos($hotel->address,'Köln') !== false)
-                    <td>{{'Köln'}}</td>
-                @elseif(strpos($hotel->address,'Frankfurt am Main') !== false)
-                    <td>{{'Frankfurt am Main'}}</td>
-                @else
-                    <td></td>
-                @endif
+                <td><a href="/hotels/{{$hotel->id}}">{{$hotel->name}}</a></td>
+                <td><nobr>{{$hotel->phone}}</nobr></td>
+                <td>{{$hotel->international_phone}}</td>
+                <td><nobr>{{$hotel->locality}}</nobr></td>
+                <td><nobr>{{$hotel->country}}</nobr></td>
                 <td>{{$hotel->address}}</td>
                 <td>{{$hotel->rating}}</td>
                 <td>{{$hotel->total_ratings}}</td>

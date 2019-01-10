@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Route::get('/hotels', 'HotelController@index');
 Route::get('/hotels/create', 'HotelController@create');
+Route::get('/hotels/test1', 'HotelController@test1');
+Route::get('/hotels/test2', 'HotelController@test2');
 
 Route::get('/flights', 'FlightController@index');
 Route::get('/flights/create', 'FlightController@create');

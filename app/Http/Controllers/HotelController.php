@@ -19,46 +19,64 @@ class HotelController extends Controller
     public function index()
     {
         //
-//        $hotels = Hotel::all();
+        $hotels = Hotel::orderBy('total_ratings', 'desc')->get();
+        return view('hotels.index', compact('hotels'));
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
 
         $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
+
+        /*
         session_start();
+        $_SESSION['next_page_token']='';
+        */
 
-//        $_SESSION['next_page_token']='';
+        /*
+        $googlePlaces = new PlacesApi($key);
+        $response = $googlePlaces->placeAutocomplete('hotels in berlin');
+        */
 
-
-//        $googlePlaces = new PlacesApi($key);
         $client = new \GuzzleHttp\Client();
-//        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Hotel%20in%20Berlin&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=$key"); //free but only one result
-//        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,price_level,formatted_phone_number&key=$key");
-        if (empty($_SESSION['next_page_token'])) {
-            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20near%20Berlin,%20Germany&key=$key&pagetoken=" . $_SESSION['next_page_token'] . "");
+        /*
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Hotel%20in%20Berlin&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=$key"); //free but only one result
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,price_level,formatted_phone_number&key=$key");
+        if (!empty($_SESSION['next_page_token'])) {
+            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key&pagetoken=" . $_SESSION['next_page_token'] . "");
         } else {
-            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20near%20Berlin,%20Germany&key=$key");
-//            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name,rating,formatted_phone_number,address_component, adr_address, alt_id, formatted_address,geometry,icon,id,name,permanently_closed,photo,place_id,plus_code,scope,type,url,utc_offset,price_level,rating,review,formatted_phone_number,international_phone_number,opening_hours,website,vicinity&key=$key");
+            $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/textsearch/json?query=Hotels%20in%20Frankfurt,%20Germany&key=$key");
         }
-//        $response->getStatusCode();
-//// 200
-//        $response->getHeaderLine('content-type');
-//// 'application/json; charset=utf8'
-//        $response->getBody();
-// '{"id": 1420053, "name": "guzzle", ...}'
+        */
 
-//        $response = $googlePlaces->placeAutocomplete('hotel in berlin');
-//        $response= "";
-//        $request = new \GuzzleHttp\Psr7\Request('GET', 'https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,formatted_phone_number&key=AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg');
-//        $promise = $client->sendAsync($request)->then(function ($response) {
-//            echo 'I completed! ' . $response->getBody();
-//        });
-//        $promise->wait();
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ4Q7iHh9OqEcRoYdM_f1daq0&key=$key");
+
+//        dd(json_decode($response->getBody())->result);
+
+        /*
+        //asynchronous
+        $request = new \GuzzleHttp\Psr7\Request('GET', 'https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,formatted_phone_number&key=AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg');
+        $promise = $client->sendAsync($request)->then(function ($response) {
+            echo 'I completed! ' . $response->getBody();
+        });
+        $promise->wait();
+        */
 
         $res = json_decode($response->getBody());
-//
+
+        /*
         if (!empty($res->next_page_token)) {
             $_SESSION['next_page_token'] = $res->next_page_token;
         }
+        */
 
-        foreach ($res->results as $hotelinstance) {
+        foreach ($res->result as $hotelinstance) {
 
             $results = DB::select('select * from hotels where hotel_id = :id', ['id' => "$hotelinstance->place_id"]);
 
@@ -74,26 +92,41 @@ class HotelController extends Controller
                 $hotel->plus_code = serialize($hotelinstance->plus_code);
                 $hotel->rating = $hotelinstance->rating;
                 $hotel->total_ratings = $hotelinstance->user_ratings_total;
-                $hotel->all_data = serialize($hotelinstance);
+                $hotel->all_data = serialize($res->result);
                 $hotel->save();
+
+            dd($res);
             }
         }
-
-        dd($res);
-//        return view('hotels.index', compact('hotels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function test1()
     {
+        $results = DB::select('select * from hotels where id = :id', ['id' => '401']);
 
-        $results = DB::select('select * from hotels where hotel_id = :id', ['id' => 'ChIJwUq6mx5OqEcREPAUaRdFmT4']);
+        dd(unserialize($results[0]->all_data));
+//        //
+//        $hotels = Hotels::get(); //limit to 2000
+//
+////        $res = unserialize($hotel[0]->all_data);
+//            $data = "";
+//        foreach ($hotels as $instance){
+////            $hotel = new Hotel();
+////            $hotel->address= $instance->formatted_address;
+////
+//            dd(unserialize($instance->all_data));
+//        }
+//        dd($res);
+//        dd($data);
+//        return view('flights.index', compact('flights'));
+    }
 
-        dd(empty($results));
+    public function test2()
+    {
+        $results = DB::select('select * from hotels where id = :id', ['id' => '1']);
+
+        dd(unserialize($results[0]->all_data));
 //        //
 //        $hotels = Hotels::get(); //limit to 2000
 //

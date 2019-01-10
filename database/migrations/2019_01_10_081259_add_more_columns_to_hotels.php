@@ -15,6 +15,11 @@ class AddMoreColumnsToHotels extends Migration
     {
         Schema::table('hotels', function (Blueprint $table) {
 
+            $table->string('locality')->default('Not Available');
+            $table->string('sublocality')->default('Not Available');
+            $table->string('route')->default('Not Available');
+            $table->string('street_number')->default('Not Available');
+            $table->string('postal_code')->default('Not Available');
             $table->string('international_phone')->default('Not Available');
             $table->text('address_components')->nullable();
             $table->text('adr_address')->nullable();

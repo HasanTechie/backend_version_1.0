@@ -141,7 +141,6 @@
                                     $date->setTimestamp($review->time);
                                     echo $date->format('Y-m-d H:i:s');
                                 @endphp
-
                             </div>
 
                             <!-- Modal footer -->
@@ -157,7 +156,7 @@
 
             <script>
                 $(function () {
-                    $('[data-toggle="popover"]').popover()
+                    $('[data-toggle="popover"]').popover();
                 })
             </script>
         </div>

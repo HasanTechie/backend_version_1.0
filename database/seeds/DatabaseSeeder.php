@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CompletedFlightsSeeder');
 //        $this->call('AirborneFlightsSeeder');
 //        $this->call('HotelDetailsSeeder');
-        $this->call('PlacesSeeder');
+//        $this->call('PlacesSeeder');
+        $this->call('PlacesDetailsReviewsSeeder');
     }
 }

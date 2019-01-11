@@ -271,7 +271,8 @@ class HotelController extends Controller
             }
         */
 
-        /* details and review details
+        /*
+        // details and review details
         $cities = array("Amsterdam", "Barcelona", "Berlin", "Dubai", "London", "Paris", "Rome", "Tuscany");
 
         foreach ($cities as $city) {
@@ -324,7 +325,7 @@ class HotelController extends Controller
                                 foreach ($response1->reviews as $id) {
                                     $client = new \GuzzleHttp\Client();
                                     $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
-                                    if ($response1->getStatusCode() == 200) {
+                                    if ($response11->getStatusCode() == 200) {
                                         $reviewsArray[$i] = json_decode($response11->getBody());
                                         $i++;
                                     }

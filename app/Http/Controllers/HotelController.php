@@ -271,7 +271,8 @@ class HotelController extends Controller
             }
         */
 
-//
+        /*
+//      detailed selected data
         $places = DB::table('places')->select('place_id')->get();
         foreach ($places as $place) {
             $place = $place->place_id;
@@ -280,70 +281,49 @@ class HotelController extends Controller
             $response = json_decode($response->getBody());
 
 //            dd($response->id);
-            dd($response);
+            $reviewsArray = [];
+            $i = 0;
 
-            //id": 204042
-            //  +"name": "Hotel Bologna"
-            //  +"address": "Via Giuseppe Mazzini 57, 56125 Pisa"
-            //  +"category": "accommodation"
-            //  +"location": "Tuscany"
-            //  +"lat": 43.714217886107
-            //  +"lng": 10.398866683245
-            //  +"services": {#260312 ▶}
-            //  +"phone_number": "050 502120"
-            //  +"international_phone_number": "+39 050 502120"
-            //  +"website": "http://www.hotelbologna.pisa.it/"
-            //  +"icon": "http://maps.gstatic.com/mapfiles/place_api/icons/bar-71.png"
-            //  +"description": {#260299 ▶}
-            //  +"external_urls": {#260308 ▶}
-            //  +"statistics": {#260313 ▼
-            //    +"Foursquare": {#260301 ▶}
-            //    +"Facebook": {#260306 ▶}
-            //  }
-            //  +"numReviews": 9
-            //  +"reviews": array:9 [▼
-            //    0 => "52a766baae9eef5a506cbcf2"
-            //    1 => "52a766baae9eef5a506cbcf3"
-            //    2 => "52a766baae9eef5a506cbcf4"
-            //    3 => "52a766baae9eef5a506cbcf5"
-            //    4 => "533ecd7fae9eef521e65838c"
-            //    5 => "533ecd7fae9eef521e65838d"
-            //    6 => "533ecd7fae9eef521e65838e"
-            //    7 => "533ecd7fae9eef521e65838f"
-            //    8 => "533ecd7fae9eef521e658390"
-            //  ]
-            //  +"polarity": 8
-            $detailed_reviews = "";
+            if (isset($response->reviews) && is_array($response->reviews)) {
+
+                foreach ($response->reviews as $id) {
+                    $client = new \GuzzleHttp\Client();
+                    $response1 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
+                    $reviewsArray[$i] = json_decode($response1->getBody());
+                    $i++;
+                }
+            }
+
+//            dd(serialize($reviewsArray));
+
             DB::table('places')
                 ->where('place_id', $response->id)
                 ->update([
                     'name' => (isset($response->name) ? $response->name : 'Not Available'),
                     'address' => (isset($response->address) ? $response->address : 'Not Available'),
-                    'phone_number' => (isset($response->phone_number) ? $response->phone_number : 'Not Available'),//
-                    'international_phone_number' => (isset($instance->international_phone_number) ? $response->international_phone_number : 'Not Available'),//
-                    'website' => (isset($response->website) ? $response->website : 'Not Available'),//
+                    'phone_number' => (isset($response->phone_number) ? $response->phone_number : 'Not Available'),
+                    'international_phone_number' => (isset($instance->international_phone_number) ? $response->international_phone_number : 'Not Available'),
+                    'website' => (isset($response->website) ? $response->website : 'Not Available'),
                     'category' => (isset($response->category) ? $response->category : 'Not Available'),
                     'location' => (isset($response->location) ? $response->location : 'Not Available'),
                     'lat' => (isset($response->lat) ? $response->lat : null),
                     'lng' => (isset($response->lng) ? $response->lng : null),
                     'numReviews' => (isset($response->numReviews) ? $response->numReviews : null),
-                    'reviews' => (isset($response->reviews) ? $response->reviews : 'Not Available'),
                     'polarity' => (isset($response->polarity) ? $response->polarity : null),
                     'details' => (isset($response->details) ? $response->details : 'Not Available'),
                     'originalId' => (isset($response->originalId) ? $response->originalId : 'Not Available'),
                     'subCategory' => (isset($response->subCategory) ? $response->subCategory : 'Not Available'),
                     'source' => 'http://tour-pedia.org',
-                    'description' => (isset($response->description) ? serialize($response->description) : 'Not Available'),//
-                    'external_urls' => (isset($response->external_urls) ? serialize($response->external_urls) : 'Not Available'),//
-                    'statistics' => (isset($response->statistics) ? serialize($response->statistics) : 'Not Available'),//
-                    'reviews' => (isset($response->reviews) ? serialize($response->reviews) : 'Not Available'),//
-                    'detailed_reviews' => (isset($response->reviews) ? serialize($detailed_reviews) : 'Not Available'),//
-                    'all_data_detailed' => serialize($response),//
-
+                    'description' => (isset($response->description) ? serialize($response->description) : 'Not Available'),
+                    'external_urls' => (isset($response->external_urls) ? serialize($response->external_urls) : 'Not Available'),
+                    'statistics' => (isset($response->statistics) ? serialize($response->statistics) : 'Not Available'),
+                    'reviews_ids' => (isset($response->reviews) ? serialize($response->reviews) : 'Not Available'),
+                    'detailed_reviews' => (isset($reviewsArray) ? serialize($reviewsArray) : 'Not Available'),
+                    'all_data_detailed' => serialize($response)
                 ]);
-
-//            dd($response);
+        dd($response);
         }
+        */
     }
 
 
@@ -391,6 +371,13 @@ class HotelController extends Controller
         dd($data);
         return view('flights.index', compact('flights'));
         */
+    }
+
+    public function test3()
+    {
+        $results = DB::select('select * from places where id = :id', ['id' => '2']);
+
+        dd($results);
     }
 
     /**

@@ -15,6 +15,15 @@ class AddMoreColumnsToPlaces extends Migration
     {
         Schema::table('places', function (Blueprint $table) {
             //
+            $table->string('phone_number')->default('Not Available');
+            $table->string('international_phone_number')->default('Not Available');
+            $table->text('website')->nullable();
+            $table->text('description')->nullable();
+            $table->text('external_urls')->nullable();
+            $table->text('statistics')->nullable();
+            $table->text('reviews_ids')->nullable();
+            $table->longText('detailed_reviews')->nullable();
+            $table->longText('all_data_detailed')->nullable();
         });
     }
 

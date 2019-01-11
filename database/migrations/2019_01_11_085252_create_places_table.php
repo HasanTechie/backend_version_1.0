@@ -29,7 +29,7 @@ class CreatePlacesTable extends Migration
             $table->text('details')->nullable();
             $table->string('originalId')->default('Not Available');
             $table->string('subCategory')->default('Not Available');
-            $table->text('all_data')->nullable();
+            $table->longText('all_data')->nullable();
             $table->string('source')->default('Not Available');
             $table->timestamps();
         });

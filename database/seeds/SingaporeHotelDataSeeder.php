@@ -33,6 +33,7 @@ class SingaporeHotelDataSeeder extends Seeder
                 'international_phone' => (isset($instance->phone) ? $instance->phone : 'Not Available'),
                 'latitude' => $instance->location->latitude,
                 'longitude' => $instance->location->longitude,
+                'source' => 'https://api.jael.ee/datasets/hotels',
                 'all_data' => serialize($instance),
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')

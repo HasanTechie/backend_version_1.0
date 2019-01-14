@@ -167,7 +167,8 @@ class HotelController extends Controller
         }
         */
 
-        /* // FOR makcorps API
+        /*
+         // FOR makcorps API
         $data = [
             'username' => 'sayyid',
             'password' => 'minimum;\'90',
@@ -187,7 +188,7 @@ class HotelController extends Controller
             CURLOPT_HTTPHEADER => array(
                 // Set here requred headers */
 //                "accept: */*",
-        /*                "accept-language: en-US,en;q=0.8",
+/*                       "accept-language: en-US,en;q=0.8",
                         "content-type: application/json",
                     ),
                 ));
@@ -234,6 +235,7 @@ class HotelController extends Controller
                     dd(json_decode($response));
                 }
                 */
+
         /*
         // for tour-pedia.org all data
             $cities = array("Amsterdam", "Barcelona", "Berlin", "Dubai", "London", "Paris", "Rome", "Tuscany");
@@ -416,9 +418,48 @@ class HotelController extends Controller
 
     public function test3()
     {
-        $results = DB::select('select * from places where id = :id', ['id' => '2']);
+        $results = DB::select('select * from places where id = :id', ['id' => '99950']);
 
-        dd($results);
+        dd(unserialize($results[0]->all_data));
+
+        /*
+        $hotels = Hotels::get(); //limit to 2000
+
+//        $res = unserialize($hotel[0]->all_data);
+            $data = "";
+        foreach ($hotels as $instance){
+//            $hotel = new Hotel();
+//            $hotel->address= $instance->formatted_address;
+//
+            dd(unserialize($instance->all_data));
+        }
+        dd($res);
+        dd($data);
+        return view('flights.index', compact('flights'));
+        */
+    }
+
+    public function getPlaces()
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "http://tour-pedia.org/api/getPlaces?location=Berlin"); //free but only one result
+
+        dd(json_decode($response->getBody()));
+    }
+
+    public function getPlaceDetails()
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "http://tour-pedia.org/api/getPlaceDetails?id=204042");
+
+        dd(json_decode($response->getBody()));
+    }
+
+    public function getReviewDetails()
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=53513358ae9eef9405b2d9ac"); //free
+        dd(json_decode($response->getBody()));
     }
 
     /**

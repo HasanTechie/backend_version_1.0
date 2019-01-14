@@ -12,12 +12,12 @@ class PlacesDetailsReviewsSeeder extends Seeder
     public function run()
     {
         //
-        $places = DB::table('places')->select('place_id')->get();
+        $places = DB::table('places')->select(['place_id','id'])->get();
         foreach ($places as $place) {
 
-            $place = $place->place_id;
+            $place1 = $place->place_id;
             $client = new \GuzzleHttp\Client();
-            $response1 = $client->request('GET', "http://tour-pedia.org/api/getPlaceDetails?id=$place"); //free
+            $response1 = $client->request('GET', "http://tour-pedia.org/api/getPlaceDetails?id=$place1"); //free
 
             if ($response1->getStatusCode() == 200) {
                 $response1 = json_decode($response1->getBody());
@@ -31,7 +31,9 @@ class PlacesDetailsReviewsSeeder extends Seeder
 
 
                         foreach ($response1->reviews as $id) {
-                            sleep(0.4);//delay execution by 1 second.
+                            if (count($response1->reviews) > 20) {
+                                sleep(1);//delay execution by 1 second.
+                            }
                             $client = new \GuzzleHttp\Client();
                             $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
                             if ($response11->getStatusCode() == 200) {
@@ -69,7 +71,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                         'detailed_reviews' => (isset($reviewsArray) ? serialize($reviewsArray) : 'Not Available'),
                         'all_data_detailed' => serialize($response1)
                     ]);
-                echo $response1->id . ' ';
+                echo $place->id . ' ';
             }
         }
     }

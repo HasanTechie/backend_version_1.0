@@ -31,6 +31,7 @@ class HotelController extends Controller
      */
     public function create()
     {
+
 //        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
 
         /*
@@ -188,53 +189,53 @@ class HotelController extends Controller
             CURLOPT_HTTPHEADER => array(
                 // Set here requred headers */
 //                "accept: */*",
-/*                       "accept-language: en-US,en;q=0.8",
-                        "content-type: application/json",
-                    ),
-                ));
+        /*                       "accept-language: en-US,en;q=0.8",
+                                "content-type: application/json",
+                            ),
+                        ));
 
-                $response1 = curl_exec($curl1);
-                $err = curl_error($curl1);
+                        $response1 = curl_exec($curl1);
+                        $err = curl_error($curl1);
 
-                curl_close($curl1);
+                        curl_close($curl1);
 
-                if ($err) {
-                    echo "cURL Error #:" . $err;
-                } else {
-                    $token = (json_decode($response1)->access_token);
-                }
+                        if ($err) {
+                            echo "cURL Error #:" . $err;
+                        } else {
+                            $token = (json_decode($response1)->access_token);
+                        }
 
 
-                $curl = curl_init();
+                        $curl = curl_init();
 
-        //        $url="https://api.makcorps.com/king/v2/berlin/2019-01-18/2019-01-20";
-                $url="https://api.makcorps.com/free/berlin";
+                //        $url="https://api.makcorps.com/king/v2/berlin/2019-01-18/2019-01-20";
+                        $url="https://api.makcorps.com/free/berlin";
 
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "$url",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_TIMEOUT => 30000,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "GET",
-                    CURLOPT_HTTPHEADER => array(
-                        // Set Here Your Requesred Headers
-                        'Content-Type: application/json',
-                        "Authorization: JWT $token"
-                    ),
-                ));
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => "$url",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_TIMEOUT => 30000,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => array(
+                                // Set Here Your Requesred Headers
+                                'Content-Type: application/json',
+                                "Authorization: JWT $token"
+                            ),
+                        ));
 
-        //        dd($token);
-                $response = curl_exec($curl);
-                $err = curl_error($curl);
-                curl_close($curl);
+                //        dd($token);
+                        $response = curl_exec($curl);
+                        $err = curl_error($curl);
+                        curl_close($curl);
 
-                if ($err) {
-                    echo "cURL Error #:" . $err;
-                } else {
-                    dd(json_decode($response));
-                }
-                */
+                        if ($err) {
+                            echo "cURL Error #:" . $err;
+                        } else {
+                            dd(json_decode($response));
+                        }
+                        */
 
         /*
         // for tour-pedia.org all data

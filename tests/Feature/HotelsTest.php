@@ -4,17 +4,22 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class ExampleTest extends TestCase
+class HotelsTest extends TestCase
 {
     /**
      * A basic test example.
      *
      * @return void
      */
-    public function testBasicTest()
+
+    use DatabaseMigrations;
+
+    /** @test */
+    public function a_user_can_browse_hotels()
     {
-        $response = $this->get('/');
+        $response = $this->get('/hotels/');
 
         $response->assertStatus(200);
     }

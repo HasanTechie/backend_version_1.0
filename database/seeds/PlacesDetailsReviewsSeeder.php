@@ -12,7 +12,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
     public function run()
     {
         //
-        $places = DB::table('places')->select(['place_id','id'])->get();
+        $places = DB::table('places')->select(['place_id', 'id'])->get();
         foreach ($places as $place) {
 
             $place1 = $place->place_id;
@@ -32,13 +32,21 @@ class PlacesDetailsReviewsSeeder extends Seeder
 
                         foreach ($response1->reviews as $id) {
                             if (count($response1->reviews) > 20) {
-                                sleep(1);//delay execution by 1 second.
-                            }
-                            $client = new \GuzzleHttp\Client();
-                            $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
-                            if ($response11->getStatusCode() == 200) {
-                                $reviewsArray[$i] = json_decode($response11->getBody());
-                                $i++;
+                                sleep(2);//delay execution by 1 second.
+
+                                $client = new \GuzzleHttp\Client();
+                                $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
+                                if ($response11->getStatusCode() == 200) {
+                                    $reviewsArray[$i] = json_decode($response11->getBody());
+                                    $i++;
+                                }
+                            } else {
+                                $client = new \GuzzleHttp\Client();
+                                $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
+                                if ($response11->getStatusCode() == 200) {
+                                    $reviewsArray[$i] = json_decode($response11->getBody());
+                                    $i++;
+                                }
                             }
                         }
                     }

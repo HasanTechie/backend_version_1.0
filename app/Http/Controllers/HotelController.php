@@ -31,20 +31,7 @@ class HotelController extends Controller
      */
     public function create()
     {
-        // Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
-        // soliDPS => AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg
-        $key = 'AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY';
-
-
-
-        $text = "";
-        $text = htmlspecialchars($text);
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$text&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=$key"); //free but only one result
-
-
         /*
-
         // for merging data of tourpedia and google
         ini_set('memory_limit', '8192M');
         $places = DB::table('places')->get();
@@ -105,8 +92,10 @@ class HotelController extends Controller
 
 
         */
-// Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
-//        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
+
+        // Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
+        // soliDPS => AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg
+        // $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
 
         /*
         session_start();

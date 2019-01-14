@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Airport;
+use App\Plane;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class AirportsTest extends TestCase
+class PlanesTest extends TestCase
 {
     /**
      * A basic test example.
@@ -18,14 +18,14 @@ class AirportsTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function a_user_can_browse_airports()
+    public function a_user_can_browse_planes()
     {
-        $airport = Airport::latest()->first();
+        $plane = Plane::latest()->first();
 
-        $response = $this->get('/airports/');
+        $response = $this->get('/planes/');
 
         $response->assertStatus(200);
 
-        $response->assertSee($airport);
+        $response->assertSee($plane);
     }
 }

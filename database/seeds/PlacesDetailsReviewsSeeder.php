@@ -31,7 +31,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
 
 
                         foreach ($response1->reviews as $id) {
-                            sleep(0.5);//delay execution by 1 second.
+                            sleep(0.4);//delay execution by 1 second.
                             $client = new \GuzzleHttp\Client();
                             $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
                             if ($response11->getStatusCode() == 200) {
@@ -69,6 +69,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                         'detailed_reviews' => (isset($reviewsArray) ? serialize($reviewsArray) : 'Not Available'),
                         'all_data_detailed' => serialize($response1)
                     ]);
+                echo $response1->id . ' ';
             }
         }
     }

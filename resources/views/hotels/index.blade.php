@@ -11,9 +11,8 @@
         <tr>
             <th>ID</th>
             <th>Hotel Name</th>
-            <th>Phone Number</th>
             <th>International Phone Number</th>
-            <th>Locality</th>
+            <th>City</th>
             <th>Country</th>
             <th>Hotel Address</th>
             <th>Rating</th>
@@ -27,17 +26,32 @@
 
                 <td>{{$hotel->id}}</td>
                 <td><a href="/hotels/{{$hotel->id}}">{{$hotel->name}}</a></td>
-                <td><nobr>{{$hotel->phone}}</nobr></td>
                 <td>{{$hotel->international_phone}}</td>
-                <td><nobr>{{$hotel->locality}}</nobr></td>
-                <td><nobr>{{$hotel->country}}</nobr></td>
+                <td>
+                    <nobr>{{$hotel->city}}</nobr>
+                </td>
+                <td>
+                    <nobr>{{$hotel->country}}</nobr>
+                </td>
                 <td>{{$hotel->address}}</td>
-                <td>{{$hotel->rating}}</td>
-                <td>{{$hotel->total_ratings}}</td>
+                <td>@if(!empty($hotel->rating))
+                        {{$hotel->rating}}
+                    @else
+                        {{($hotel->tourpedia_polarity)/2}}
+                    @endif
+                </td>
+                <td>
+                    @if(!empty($hotel->total_ratings))
+                        {{$hotel->total_ratings}}
+                    @else
+                        {{$hotel->tourpedia_numReviews}}
+                    @endif
+                </td>
                 <td>{{$hotel->hotel_id}}</td>
             </tr>
         @endforeach
 
         </tbody>
     </table>
+    {{ $hotels->links() }}
 @endsection

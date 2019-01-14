@@ -19,7 +19,7 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = Hotel::orderBy('total_ratings', 'desc')->get();
+        $hotels = Hotel::orderBy('total_ratings', 'desc')->paginate(25);;
         return view('hotels.index', compact('hotels'));
     }
 
@@ -31,42 +31,53 @@ class HotelController extends Controller
      */
     public function create()
     {
+        // Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
+        // soliDPS => AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg
+        $key = 'AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY';
 
-        echo phpinfo();
-//
-//        $places = DB::table('places')->limit(10)->get();
-//        foreach ($places as $place){
-//            if(strcasecmp($place->subCategory, 'hotel')) // case insensitive comparison
-//            DB::table('hotels')->insert([
-//                'name' => (isset($place->name) ? $place->name : 'Not Available'),
-//                'tourpedia_id' => (isset($place->place_id) ? $place->place_id : null),
-//                'total_rooms' => (isset($place->totalrooms) ? $place->totalrooms : null),
-//                'country' => (isset($place->country) ? $place->country : 'Not Available'),
-//                'city' => (isset($place->location) ? $place->location : 'Not Available'),
-//                'address' => $place->address,
-//                'international_phone' => (isset($place->international_phone_number) ? $place->international_phone_number : 'Not Available'),
-//                'latitude' => $place->lat,
-//                'longitude' => $place->lat,
-//                'tourpedia_numReviews' => $place->numReviews,
-//                'tourpedia_reviews' => $place->reviews,
-//                'tourpedia_polarity' => $place->polarity,
-//                'tourpedia_details' => $place->details,
-//                'tourpedia_originalId' => $place->originalId,
-//                'source' => $place->source,
-//                'phone' => $place->phone_number,
-//                'website' => $place->website,
-//                'description' => $place->description,
-//                'tourpedia_external_urls' => $place->external_urls,
-//                'tourpedia_statistics' => $place->statistics,
-//                'tourpedia_reviews_ids' => $place->reviews_ids,
-//                'tourpedia_detailed_reviews' => $place->detailed_reviews,
-//                'all_data' => serialize($place),
-//                'created_at' => DB::raw('now()'),
-//                'updated_at' => DB::raw('now()')
-//            ]);
-//
-//            dd($place);
 
+
+        $text = "";
+        $text = htmlspecialchars($text);
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$text&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=$key"); //free but only one result
+
+
+        /*
+
+        // for merging data of tourpedia and google
+        ini_set('memory_limit', '8192M');
+        $places = DB::table('places')->get();
+        foreach ($places as $place){
+            if((strcasecmp($place->subCategory, 'hotel') == 0) || (stripos(strtolower($place->name),'hotel') !== false)) // case insensitive comparisons
+                DB::table('hotels')->insert([
+                    'name' => (isset($place->name) ? $place->name : 'Not Available'),
+                    'tourpedia_id' => (isset($place->place_id) ? $place->place_id : null),
+                    'total_rooms' => (isset($place->totalrooms) ? $place->totalrooms : null),
+                    'country' => (isset($place->country) ? $place->country : 'Not Available'),
+                    'city' => (isset($place->location) ? $place->location : 'Not Available'),
+                    'address' => $place->address,
+                    'international_phone' => (isset($place->international_phone_number) ? $place->international_phone_number : 'Not Available'),
+                    'latitude' => $place->lat,
+                    'longitude' => $place->lat,
+                    'tourpedia_numReviews' => $place->numReviews,
+                    'tourpedia_reviews' => $place->reviews,
+                    'tourpedia_polarity' => $place->polarity,
+                    'tourpedia_details' => $place->details,
+                    'tourpedia_originalId' => $place->originalId,
+                    'source' => $place->source,
+                    'phone' => $place->phone_number,
+                    'website' => $place->website,
+                    'description' => $place->description,
+                    'tourpedia_external_urls' => $place->external_urls,
+                    'tourpedia_statistics' => $place->statistics,
+                    'tourpedia_reviews_ids' => $place->reviews_ids,
+                    'tourpedia_detailed_reviews' => $place->detailed_reviews,
+                    'all_data' => serialize($place),
+                    'created_at' => DB::raw('now()'),
+                    'updated_at' => DB::raw('now()')
+                ]);
+            }
             /*
              * !tourpedia_id = place_id
              * name = name
@@ -90,9 +101,11 @@ class HotelController extends Controller
              * !tourpedia_reviews_ids = reviews_ids
              * !tourpedia_detailed_reviews = detailed_reviews
              * all_data = all_data
-             */
-//        }
+             *
 
+
+        */
+// Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
 //        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
 
         /*

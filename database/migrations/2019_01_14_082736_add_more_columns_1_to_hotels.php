@@ -30,6 +30,7 @@ class AddMoreColumns1ToHotels extends Migration
             $table->longText('tourpedia_statistics')->nullable();
             $table->longText('tourpedia_reviews_ids')->nullable();
             $table->longText('tourpedia_detailed_reviews')->nullable();
+            $table->longText('google_all_data')->nullable();
         });
     }
 

@@ -65,6 +65,7 @@ class RouteController extends Controller
 
         $data= json_decode($response->getBody());
 
+//        dd($data);
         return view('routes.create',compact('data'));
     }
 

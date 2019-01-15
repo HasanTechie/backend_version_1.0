@@ -25,7 +25,7 @@ class MergeHotelPlacesDataSeeder extends Seeder
                     'address' => $place->address,
                     'international_phone' => (isset($place->international_phone_number) ? $place->international_phone_number : 'Not Available'),
                     'latitude' => $place->lat,
-                    'longitude' => $place->lat,
+                    'longitude' => $place->lng,
                     'tourpedia_numReviews' => $place->numReviews,
                     'tourpedia_reviews' => $place->reviews,
                     'tourpedia_polarity' => $place->polarity,

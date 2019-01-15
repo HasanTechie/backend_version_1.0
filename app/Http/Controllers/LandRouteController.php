@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\LandRoute;
 use Illuminate\Http\Request;
 
+use DB;
+
 class LandRouteController extends Controller
 {
     /**
@@ -29,9 +31,14 @@ class LandRouteController extends Controller
 //        dd($data);
 
 
+        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->get();
 
+        $attractions = DB::table('places')->where([
+            ['category', '=', 'attraction'],
+            ['location', '=', 'berlin'],
+        ])->get();
 
-        return view('landroutes.index',compact(['data','key']));
+        return view('landroutes.index',compact(['hotels','attractions','key']));
     }
 
     /**

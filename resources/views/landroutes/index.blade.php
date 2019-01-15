@@ -323,26 +323,42 @@
         <h4 class="subtitle is-4">Find land routes between hotels and attractions</h4>
         <h6 class="is-6">Select <b>Starting Point</b> and <b>Ending Point</b> from given menu</h6>
     </div>
-    <div class="box" style="height: 50%;">
-        <div id="floating-panel">
-            <strong>Start:</strong>
-            <select id="start">
-                <option value="Hotel Petit Wannsee Berlin, Germany">Hotel Petit Wannsee</option>
-                <option value="Berlin, Germany">Berlin</option>
-                <option value="Munich, Germany">Munich</option>
-                <option value="Hamburg, Germany">Hamburg</option>
+    <div class="box" style="height: 80%;">
+        <div id="floating-panel" style="width: 20rem">
+            <label class="label">Source</label>
+            <div class="select" style="margin-bottom: 2%;">
+            <select id="start" style="width:14rem">
+                @foreach($hotels as $hotel)
+                    @php
+                        $pieces = explode(" ", $hotel->name);
+                        $first_part = implode(" ", array_splice($pieces, 0, 3));
+                    @endphp
+                    <option value="{{$hotel->name . ', '. $hotel->city}}">{{$first_part . ', '. $hotel->city}}</option>
+                @endforeach
+            </select>
+            </div>
+            <label class="label">Destination</label>
+            <div class="select" style="margin-bottom: 2%;">
+            <select id="end" style="width:14rem">
+                @foreach($attractions as $attraction)
+                    @php
+                        $pieces1 = explode(" ", $attraction->name);
+                        $first_part1 = implode(" ", array_splice($pieces1, 0, 3));
+                    @endphp
+                    <option value="{{$attraction->name . ', '. $attraction->location}}">{{$first_part1 . ', '. $attraction->location}}</option>
+                @endforeach
 
             </select>
-            <br>
-            <strong>End:</strong>
-            <select id="end">
-                <option value="Berlin, Germany">Berlin</option>
-                <option value="Munich, Germany">Munich</option>
-                <option value="Park Inn by Radisson Berlin Alexanderplatz Hotel Berlin, Germany">Park Inn by Radisson
-                </option>
-                <option value="Hamburg, Germany">Hamburg</option>
-
+            </div>
+            <label class="label">Mode of Travel</label>
+            <div class="select" style="margin-bottom: 4%;">
+            <select id="mode" style="width:14rem">
+                <option value="DRIVING">Driving</option>
+                <option value="WALKING">Walking</option>
+                <option value="BICYCLING">Bicycling</option>
+                <option value="TRANSIT">Transit</option>
             </select>
+            </div>
         </div>
         <div id="right-panel"></div>
         <div id="map"></div>
@@ -367,15 +383,17 @@
             };
             document.getElementById('start').addEventListener('change', onChangeHandler);
             document.getElementById('end').addEventListener('change', onChangeHandler);
+            document.getElementById('mode').addEventListener('change', onChangeHandler);
         }
 
         function calculateAndDisplayRoute(directionsService, directionsDisplay) {
             var start = document.getElementById('start').value;
             var end = document.getElementById('end').value;
+            var mode = document.getElementById('mode').value;
             directionsService.route({
                 origin: start,
                 destination: end,
-                travelMode: 'TRANSIT'
+                travelMode: mode
             }, function (response, status) {
                 if (status === 'OK') {
                     directionsDisplay.setDirections(response);

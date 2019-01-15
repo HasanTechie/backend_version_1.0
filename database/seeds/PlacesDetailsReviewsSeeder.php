@@ -12,7 +12,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
     public function run()
     {
         //
-        $places = DB::table('places')->select(['place_id', 'id'])->get();
+        $places = DB::table('places')->select(['place_id', 'id'])->where('numReviews', '>', 20)->get();
         foreach ($places as $place) {
 
             $place1 = $place->place_id;

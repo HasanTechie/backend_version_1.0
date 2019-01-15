@@ -40,6 +40,8 @@ class PlacesDetailsReviewsSeeder extends Seeder
                                     $reviewsArray[$i] = json_decode($response11->getBody());
                                     $i++;
                                 }
+
+                                echo 'y ' .$i;
                             } else {
                                 $client = new \GuzzleHttp\Client();
                                 $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
@@ -47,6 +49,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                                     $reviewsArray[$i] = json_decode($response11->getBody());
                                     $i++;
                                 }
+                                echo 'n ' .$i;
                             }
                         }
                     }
@@ -79,7 +82,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                         'detailed_reviews' => (isset($reviewsArray) ? serialize($reviewsArray) : 'Not Available'),
                         'all_data_detailed' => serialize($response1)
                     ]);
-                echo $place->id . ' ';
+                echo ' ' . $place->id . ' ';
             }
         }
     }

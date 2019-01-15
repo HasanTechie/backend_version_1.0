@@ -35,6 +35,7 @@ Route::get('/flights/test', 'FlightController@test');
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');
 Route::get('/routes', 'RouteController@index');
+Route::get('/routes/create', 'RouteController@create');
 Route::get('/planes', 'PlaneController@index');
 
 Auth::routes();

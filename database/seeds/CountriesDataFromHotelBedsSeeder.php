@@ -78,6 +78,8 @@ class CountriesDataFromHotelBedsSeeder extends Seeder
                 'number_of_states' => count($instance->states),
                 'states' => serialize($instance->states),
                 'all_data' => serialize($instance),
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
             ]);
         }
     }

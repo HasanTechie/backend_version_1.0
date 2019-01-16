@@ -25,7 +25,8 @@ Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
 Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
 Route::get('/hotels/{hotel}', 'HotelController@show');
 
-Route::get('/landroutes/index', 'LandRouteController@index');
+Route::get('/landroutes/', 'LandRouteController@index');
+Route::get('/landroutes/test1', 'LandRouteController@test1');
 
 Route::get('/flights', 'FlightController@index');
 Route::get('/flights/create', 'FlightController@create');

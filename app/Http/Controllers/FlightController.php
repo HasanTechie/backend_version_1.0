@@ -14,6 +14,10 @@ use Orchestra\Parser\Xml\Facade as XmlParser;
 
 class FlightController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *

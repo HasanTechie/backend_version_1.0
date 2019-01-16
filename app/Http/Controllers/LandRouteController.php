@@ -9,6 +9,10 @@ use DB;
 
 class LandRouteController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -31,14 +35,14 @@ class LandRouteController extends Controller
 //        dd($data);
 
 
-        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->get();
+        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->orderBy('total_ratings', 'DESC')->get();
 
         $attractions = DB::table('places')->where([
             ['category', '=', 'attraction'],
             ['location', '=', 'berlin'],
-        ])->get();
+        ])->orderBy('numReviews', 'DESC')->get();
 
-        return view('landroutes.index',compact(['hotels','attractions','key']));
+        return view('landroutes.index', compact(['hotels', 'attractions', 'key']));
     }
 
     /**
@@ -51,10 +55,21 @@ class LandRouteController extends Controller
         //
     }
 
+    public function test1()
+    {
+        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJ685WIFYViEgRHlHvBbiD5nE&destination=place_id:ChIJA01I-8YVhkgRGJb0fW4UX7Y&departure_time=now&key=$key"); //free but only one result
+
+        $data = json_decode($response->getBody());
+
+        dd($data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,7 +80,7 @@ class LandRouteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\LandRoute  $landRoute
+     * @param  \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function show(LandRoute $landRoute)
@@ -76,7 +91,7 @@ class LandRouteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\LandRoute  $landRoute
+     * @param  \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function edit(LandRoute $landRoute)
@@ -87,8 +102,8 @@ class LandRouteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\LandRoute  $landRoute
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, LandRoute $landRoute)
@@ -99,7 +114,7 @@ class LandRouteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\LandRoute  $landRoute
+     * @param  \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function destroy(LandRoute $landRoute)

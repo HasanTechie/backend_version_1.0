@@ -324,9 +324,9 @@
         <h6 class="is-6">Select <b>Starting Point</b> and <b>Ending Point</b> from given menu</h6>
     </div>
     <div class="box" style="height: 80%;">
-        <div id="floating-panel" style="width: 20rem">
-            <label class="label">Source</label>
-            <div class="select" style="margin-bottom: 2%;">
+        <div id="floating-panel" style="width: 15rem;">
+            <label class="label" style="margin-bottom: 0">Source</label>
+            <div class="select" style="margin-bottom: 1%;">
             <select id="start" style="width:14rem">
                 @foreach($hotels as $hotel)
                     @php
@@ -337,8 +337,8 @@
                 @endforeach
             </select>
             </div>
-            <label class="label">Destination</label>
-            <div class="select" style="margin-bottom: 2%;">
+            <label class="label" style="margin-bottom: 0">Destination</label>
+            <div class="select" style="margin-bottom: 1%;">
             <select id="end" style="width:14rem">
                 @foreach($attractions as $attraction)
                     @php
@@ -350,8 +350,8 @@
 
             </select>
             </div>
-            <label class="label">Mode of Travel</label>
-            <div class="select" style="margin-bottom: 4%;">
+            <label class="label" style="margin-bottom: 0">Mode of Travel</label>
+            <div class="select" style="margin-bottom: 1%;">
             <select id="mode" style="width:14rem">
                 <option value="DRIVING">Driving</option>
                 <option value="WALKING">Walking</option>

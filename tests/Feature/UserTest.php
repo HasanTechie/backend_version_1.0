@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Flight;
+use App\User;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class FlightsTest extends TestCase
+class UserTest extends TestCase
 {
     /**
      * A basic test example.
@@ -18,15 +19,11 @@ class FlightsTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function a_user_can_browse_flights()
+    public function a_authenticated_user_test()
     {
+        $user = factory(User::class)->create();
 
-        $flight = Flight::latest()->first();
-
-        $response = $this->get('/flights/');
-
-        $response->assertStatus(200);
-
-        $response->assertSee($flight);
+        $response = $this->actingAs($user)
+            ->get('/');
     }
 }

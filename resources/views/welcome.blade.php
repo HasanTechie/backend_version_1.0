@@ -91,6 +91,7 @@
                     <a href="/hotels">Hotels</a>
                     <a href="/planes">Planes</a>
                     <a href="/routes">Routes</a>
+                    <a href="/landroutes">Land Routes</a>
                 </div>
             </div>
         </div>

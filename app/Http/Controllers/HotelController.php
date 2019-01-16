@@ -11,6 +11,12 @@ use SKAgarwal\GoogleApi\PlacesApi;
 
 class HotelController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +37,7 @@ class HotelController extends Controller
      */
     public function create()
     {
+
         /*
         // for merging data of tourpedia and google
         ini_set('memory_limit', '8192M');

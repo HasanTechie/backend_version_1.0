@@ -40,7 +40,7 @@ class HotelDataFromHoteBedsAPISeeder extends Seeder
             if ($i == 1) {
                 $first = $i;
             } else {
-                $first = $second;
+                $first = $second+1;
             }
 
             $second = $i * 1000;
@@ -89,13 +89,20 @@ class HotelDataFromHoteBedsAPISeeder extends Seeder
             }
 
             foreach ($response->hotels as $instance) {
-                DB::table('tests')->insert([
-                    'whole_request' => serialize($response),
-                    'all_data' => serialize($instance),
+                DB::table('hotelbeds_content')->insert([
+                    'whole_request' => gzcompress(serialize($response), 6),
+                    'name' => (isset($instance->name->content) ? $instance->name->content : 'Not Available'),
+                    'country_code' => (isset($instance->countryCode) ? $instance->countryCode : 'Not Available'),
+                    'destination_code' => (isset($instance->destinationCode) ? $instance->destinationCode : 'Not Available'),
+                    'address' => (isset($instance->address->content) ? $instance->address->content : 'Not Available'),
+                    'city' => (isset($instance->city->content) ? $instance->city->content : 'Not Available'),
+                    'postal_code' => (isset($instance->postalCode) ? $instance->postalCode : 'Not Available'),
+                    'website' => (isset($instance->web) ? $instance->web : 'Not Available'),
                     'created_at' => DB::raw('now()'),
                     'updated_at' => DB::raw('now()')
                 ]);
             }
+            dd($instance);
         }
 
     }

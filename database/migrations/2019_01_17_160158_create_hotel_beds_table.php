@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHotelbedsApiContent extends Migration
+class CreateHotelBedsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHotelbedsApiContent extends Migration
      */
     public function up()
     {
-        Schema::create('hotelbeds_api_content', function (Blueprint $table) {
+        Schema::create('hotel_beds', function (Blueprint $table) {
             $table->increments('id');
             $table->longText('all_data')->nullable();
             $table->string('name')->default('Not Available');
@@ -34,6 +34,6 @@ class CreateHotelbedsApiContent extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hotelbeds_api_content');
+        Schema::dropIfExists('hotel_beds');
     }
 }

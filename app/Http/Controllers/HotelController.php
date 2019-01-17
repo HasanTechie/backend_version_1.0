@@ -40,15 +40,12 @@ class HotelController extends Controller
     {
         //
 
-
-
-
     }
 
 
     public function test1()
     {
-        $results = DB::select('select * from hotelbeds_api_content where destination_code = :destination_code', ['destination_code' => 'BER']);
+        $results = DB::select('select * from hotel_beds where destination_code = :destination_code', ['destination_code' => 'BER']);
 
         dd(unserialize($results[0]->all_data));
 

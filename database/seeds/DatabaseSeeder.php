@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('MergeHotelPlacesDataSeeder');
 //        $this->call('CountriesDataFromHotelBedsSeeder');
 //        $this->call('HotelDataFromHotelBedsAPISeeder');
-        $this->call('UpdateFlightsData1');
+//        $this->call('UpdateFlightsData1');
 
     }
 }

@@ -61,7 +61,7 @@ class UpdateFlightsData1 extends Seeder
                         foreach ($json->features as $value) {
 
                             if ($value) {
-                                DB::table('hotels')->insert([
+                                DB::table('flights_data')->insert([
                                     'all_data' => serialize($value),
                                     'source' => 'api.laminardata.aero'
                                 ]);

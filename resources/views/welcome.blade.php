@@ -89,6 +89,7 @@
                     <a href="/flights">Flights</a>
                     <a href="/airlines">Airlines</a>
                     <a href="/hotels">Hotels</a>
+                    <a href="/hotelbeds">New Hotels</a>
                     <a href="/planes">Planes</a>
                     <a href="/routes">Routes</a>
                     <a href="/landroutes">Land Routes</a>

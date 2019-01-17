@@ -25,6 +25,10 @@ Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
 Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
 Route::get('/hotels/{hotel}', 'HotelController@show');
 
+
+Route::get('/hotelbeds', 'HotelBedController@index');
+Route::get('/hotelbeds/{hotelbed}', 'HotelBedController@show');
+
 Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');
 

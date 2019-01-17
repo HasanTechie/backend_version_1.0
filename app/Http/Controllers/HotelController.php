@@ -40,6 +40,9 @@ class HotelController extends Controller
     {
         //
 
+
+
+
     }
 
 

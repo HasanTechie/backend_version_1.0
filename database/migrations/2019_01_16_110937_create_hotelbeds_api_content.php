@@ -15,7 +15,7 @@ class CreateHotelbedsApiContent extends Migration
     {
         Schema::create('hotelbeds_api_content', function (Blueprint $table) {
             $table->increments('id');
-            $table->longText('whole_request')->nullable();
+            $table->longText('all_data')->nullable();
             $table->string('name')->default('Not Available');
             $table->string('country_code')->default('Not Available');
             $table->string('destination_code')->default('Not Available');

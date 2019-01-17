@@ -18,29 +18,6 @@ class PlaneController extends Controller
      */
     public function index()
     {
-        //
-//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/planes.dat";
-//
-//        $contenta = file_get_contents($url);
-//
-//        $contentb = explode("\n", $contenta);
-//
-//        foreach ($contentb as $line){
-//            $content = explode(",",$line);
-//        }
-
-//        foreach ($content as $line) {
-//            $plane = new Plane();
-//
-//            $plane->name = $line;
-//            $plane->IATA = 'testing';
-//            $plane->ICAO = 'testing';
-//
-//            $plane->save();
-//        }
-
-//        return $content;
-
         $planes = Plane::take(2000)->get();; //limit to 2000
         return view('planes.index', compact('planes'));
     }

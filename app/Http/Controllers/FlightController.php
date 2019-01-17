@@ -75,23 +75,25 @@ class FlightController extends Controller
 
                 $flights->whereRaw('departure_airport_scheduled="' . $request['icao_b'] . '" AND arrival_airport_scheduled="' . $request['icao_a'] . '"
                                     OR arrival_airport_scheduled="' . $request['icao_b'] . '" AND departure_airport_scheduled="' . $request['icao_a'] . '"');
-//                $flights
-//                    ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
-//                        global $request;
-//                        $query->where('departure_airport_scheduled', $icaoa);
-//                        $query->where('arrival_airport_scheduled', $request['icao_b']);
-//                        $query->where('arrival_airport_scheduled', $request['icao_b']);
-//                        $query->where('departure_airport_scheduled', $request['icao_a']);
-//                        return $query;
-//                    });
+                /*
+                $flights
+                    ->when($icaoa = $request['icao_a'], function ($query, $icaoa) {
+                    global $request;
+                    $query->where('departure_airport_scheduled', $icaoa);
+                    $query->where('arrival_airport_scheduled', $request['icao_b']);
+                    $query->where('arrival_airport_scheduled', $request['icao_b']);
+                    $query->where('departure_airport_scheduled', $request['icao_a']);
+                    return $query;
+                });
 
-//                $flights
-//                    ->when($icaob = $request['icao_b'], function ($query, $icaob) {
-//                        global $request;
-//                        $query->where('arrival_airport_scheduled', $icaob);
-//                        $query->where('departure_airport_scheduled', $request['icao_a']);
-//                        return $query;
-//                    });
+                $flights
+                    ->when($icaob = $request['icao_b'], function ($query, $icaob) {
+                        global $request;
+                        $query->where('arrival_airport_scheduled', $icaob);
+                        $query->where('departure_airport_scheduled', $request['icao_a']);
+                        return $query;
+                    });
+                */
             }
 
             $flights
@@ -134,12 +136,7 @@ class FlightController extends Controller
      */
     public function create()
     {
-
-        //client id : hw8f6mrv3n5cahxm568a79d9
-        //client secret : WQKAz7tdrt
-        //Access Token: pjt89wh2gudguzshdrr86k7c
-
-
+        //
 
     }
 

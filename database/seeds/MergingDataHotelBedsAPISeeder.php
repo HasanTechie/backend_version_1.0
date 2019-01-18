@@ -36,13 +36,15 @@ class MergingDataHotelBedsAPISeeder extends Seeder
                         }
                     }
 
-                    $country = DB::table('countries')->where('country_code', '=', $instance->country_code)->get();
+                    if (isset($instance->country_code)) {
+                        $country = DB::table('countries')->where('country_code', '=', $instance->country_code)->get();
+                    }
 
                     DB::table('hotels')->insert([
-                        'name' => $instance->name,
-                        'address' => $instance->address,
-                        'city' => $instance->city,
-                        'country' => $country[0]->name,
+                        'name' => isset($instance->name) ? $instance->name : null,
+                        'address' => isset($instance->address) ? $instance->address : null,
+                        'city' => isset($instance->city) ? $instance->city : null,
+                        'country' => isset($country[0]->name) ? $country[0]->name : null,
                         'phone' => isset($phone) ? $phone : null,
                         'website' => isset($instance->website) ? $instance->website : null,
                         'latitude' => isset(unserialize($instance->all_data)->coordinates->latitude) ? unserialize($instance->all_data)->coordinates->latitude : null,
@@ -55,7 +57,6 @@ class MergingDataHotelBedsAPISeeder extends Seeder
                 }
             }
         }
-
 
 
     }

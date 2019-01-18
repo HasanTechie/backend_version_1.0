@@ -17,29 +17,28 @@ class MergingDataTourPediaAPISeeder extends Seeder
 
                 $results = DB::table('places')->where('id', $i)->get();
 
-
                 foreach ($results as $instance) {
                     if ((strcasecmp($instance->subCategory, 'hotel') == 0) || (stripos(strtolower($instance->name), 'hotel') !== false)) { // case insensitive comparisons
 
-                        if (unserialize($instance->all_data_detailed)->location == 'Berlin') {
+                        if ($instance->location == 'Berlin') {
                             $country = 'Germany';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'Amsterdam') {
+                        if ($instance->location == 'Amsterdam') {
                             $country = 'Netherlands';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'Barcelona') {
+                        if ($instance->location == 'Barcelona') {
                             $country = 'Spain';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'Dubai') {
+                        if ($instance->location == 'Dubai') {
                             $country = 'United Arab Emirates';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'London') {
+                        if ($instance->location == 'London') {
                             $country = 'United Kingdom';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'Paris') {
+                        if ($instance->location == 'Paris') {
                             $country = 'France';
                         }
-                        if (unserialize($instance->all_data_detailed)->location == 'Rome' || unserialize($instance->all_data_detailed)->location == 'Tuscany') {
+                        if ($instance->location == 'Rome' || $instance->location == 'Tuscany') {
                             $country = 'Italy';
                         }
 
@@ -51,11 +50,10 @@ class MergingDataTourPediaAPISeeder extends Seeder
                             }
                         }
 
-
                         DB::table('hotels')->insert([
-                            'name' => unserialize($instance->all_data_detailed)->name,
-                            'address' => unserialize($instance->all_data_detailed)->address,
-                            'city' => unserialize($instance->all_data_detailed)->location,
+                            'name' => isset(unserialize($instance->all_data_detailed)->name) ? unserialize($instance->all_data_detailed)->name : null,
+                            'address' => isset(unserialize($instance->all_data_detailed)->address) ? unserialize($instance->all_data_detailed)->address : null,
+                            'city' =>  isset(unserialize($instance->all_data_detailed)->location) ? unserialize($instance->all_data_detailed)->location : null,
                             'country' => $country,
                             'phone' => isset($phone) ? $phone : null,
                             'website' => isset(unserialize($instance->all_data_detailed)->website) ? unserialize($instance->all_data_detailed)->website : null,

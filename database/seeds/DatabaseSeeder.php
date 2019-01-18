@@ -16,12 +16,14 @@ class DatabaseSeeder extends Seeder
 //        $this->call('AirborneFlightsSeeder');
 //        $this->call('HotelDetailsSeeder');
 //        $this->call('PlacesSeeder');
-        $this->call('PlacesDetailsReviewsSeeder');
+//        $this->call('PlacesDetailsReviewsSeeder');
 //        $this->call('SingaporeHotelDataSeeder');
 //        $this->call('MergeHotelPlacesDataSeeder');
 //        $this->call('CountriesDataFromHotelBedsSeeder');
 //        $this->call('HotelDataFromHotelBedsAPISeeder');
 //        $this->call('UpdateFlightsData1');
+//        $this->call('MergingDataHotelBedsSeeder');
+        $this->call('MergingDataGoogleMapsAPISeeder');
 
     }
 }

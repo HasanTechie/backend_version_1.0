@@ -39,6 +39,18 @@ class HotelController extends Controller
     public function create()
     {
         //
+//        $results = DB::table('hotel_beds_test')->first();
+//        dd(unserialize(gzuncompress($results->all_data)));
+
+//        $results = DB::table('places')->first();
+////
+//        dd(unserialize($results->all_data_detailed));
+//        dd(unserialize($results->geometry)->location->lat);
+
+
+        
+
+
 
     }
 

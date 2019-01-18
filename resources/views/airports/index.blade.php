@@ -31,14 +31,14 @@
                 <td>{{$airport->name}}</td>
                 <td>{{$airport->city}}</td>
                 <td>{{$airport->country}}</td>
-                <td>{{$airport->IATA}}</td>
-                <td>{{$airport->ICAO}}</td>
+                <td>{{$airport->iata}}</td>
+                <td>{{$airport->icao}}</td>
                 <td>{{$airport->latitude}}</td>
                 <td>{{$airport->longitude}}</td>
                 <td>{{$airport->altitude}}</td>
                 <td>{{$airport->timezone}}</td>
-                <td>{{$airport->DST}}</td>
-                <td>{{$airport->Tz_database_time_zone}}</td>
+                <td>{{$airport->dst}}</td>
+                <td>{{$airport->tz_database_time_zone}}</td>
                 <td>{{$airport->type}}</td>
                 <td>{{$airport->source}}</td>
             </tr>

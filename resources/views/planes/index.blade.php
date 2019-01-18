@@ -19,8 +19,8 @@
             <tr>
                 <th scope="row">{{$plane->id}}</th>
                 <td>{{$plane->name}}</td>
-                <td>{{$plane->IATA}}</td>
-                <td>{{$plane->ICAO}}</td>
+                <td>{{$plane->iata}}</td>
+                <td>{{$plane->icao}}</td>
             </tr>
         @endforeach
         </tbody>

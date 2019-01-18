@@ -15,7 +15,6 @@
             <th scope="col">Source Airport ID</th>
             <th scope="col">Destination Airport</th>
             <th scope="col">Destination Airport ID</th>
-            <th scope="col">Codeshare</th>
             <th scope="col">Stops</th>
             <th scope="col">Equipment</th>
         </tr>
@@ -30,7 +29,6 @@
                 <td>{{$route->source_airport_id}}</td>
                 <td>{{$route->destination_airport}}</td>
                 <td>{{$route->destination_airport_id}}</td>
-                <td>{{$route->codeshare}}</td>
                 <td>{{$route->stops}}</td>
                 <td>{{$route->equipment}}</td>
             </tr>

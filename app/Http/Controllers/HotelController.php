@@ -26,7 +26,7 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = Hotel::orderBy('total_ratings', 'desc')->paginate(25);;
+        $hotels = Hotel::paginate(25);;
         return view('hotels.index', compact('hotels'));
     }
 
@@ -46,11 +46,6 @@ class HotelController extends Controller
 ////
 //        dd(unserialize($results->all_data_detailed));
 //        dd(unserialize($results->geometry)->location->lat);
-
-
-        
-
-
 
     }
 

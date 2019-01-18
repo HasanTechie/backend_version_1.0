@@ -12,6 +12,7 @@ class MergeHotelPlacesDataSeeder extends Seeder
     public function run()
     {
         //
+        /*
         ini_set('memory_limit', '8192M');
         $places = DB::table('places')->get();
         foreach ($places as $place){
@@ -43,6 +44,8 @@ class MergeHotelPlacesDataSeeder extends Seeder
                     'created_at' => DB::raw('now()'),
                     'updated_at' => DB::raw('now()')
                 ]);
+        }
+        */
 
             /*
              * !tourpedia_id = place_id
@@ -68,6 +71,5 @@ class MergeHotelPlacesDataSeeder extends Seeder
              * !tourpedia_detailed_reviews = detailed_reviews
              * all_data = all_data
              */
-        }
     }
 }

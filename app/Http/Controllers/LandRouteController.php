@@ -35,7 +35,7 @@ class LandRouteController extends Controller
 //        dd($data);
 
 
-        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->orderBy('total_ratings', 'DESC')->get();
+        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->get();
 
         $attractions = DB::table('places')->where([
             ['category', '=', 'attraction'],

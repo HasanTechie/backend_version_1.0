@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MergingDataHotelBedsSeeder extends Seeder
+class MergingDataHotelBedsAPISeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,6 @@ class MergingDataHotelBedsSeeder extends Seeder
     public function run()
     {
         //
-        ini_set('memory_limit', -1);
 
         for ($i = 1; $i <= 200000; $i++) {
             if (DB::table('hotel_beds')->where('id', $i)->exists()) {
@@ -56,6 +55,7 @@ class MergingDataHotelBedsSeeder extends Seeder
                 }
             }
         }
+
 
 
     }

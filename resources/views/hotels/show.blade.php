@@ -3,7 +3,7 @@
 @section('title',$hotel->name)
 @section('content')
 
-    @if(!($hotel->id > 400))
+    @if(!($hotel->id > 0))
         <div class="block">
             <div class="box" style="margin-bottom: 20rem;">
                 <h1 class="title">{{$hotel->name}}</h1>
@@ -166,7 +166,7 @@
 
         </div>
     @else
-        {{dd($hotel->toArray())}}
+        {{dd(unserialize(gzuncompress($hotel->all_data)))}}
     @endif
 
 @endsection

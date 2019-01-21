@@ -85,10 +85,11 @@
                 </div>
 
                 <div class="links">
-                    <a href="/landroutes">Search Land Routes</a>
+                    <a href="/landroutes">Search LandRoutes</a>
                     <a href="/hotels">Hotels</a>
-                    <a href="/flights">Flights</a>
+                    <a href="/flights">All Flights</a>
                     <a href="/flights/search">Search Flights</a>
+                    <a href="/places/">Places</a>
                     <a href="/airports">Airports</a>
                     <a href="/airlines">Airlines</a>
                     <a href="/planes">Planes</a>

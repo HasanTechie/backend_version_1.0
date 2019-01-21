@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class UpdateFlightsData1 extends Seeder
+class UpdateFlightsData extends Seeder
 {
     /**
      * Run the database seeds.

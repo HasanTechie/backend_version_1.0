@@ -13,40 +13,64 @@ class testSeeder1 extends Seeder
     {
         //
 
-//        for ($i = 1; $i <= 250000; $i++) {
-//            if (DB::table('flights_data')->where('id', $i)->exists()) {
-//                $results = DB::table('flights_data')->where('id', $i)->get();
-//
-//
-//                foreach ($results as $instance) {
-//
-//                    DB::table('flights_test')->insert([
-//                        'all_data' => gzcompress($instance->all_data),
-//                        'source' => 'developer.laminardata.aero',
-//                        'created_at' => DB::raw('now()'),
-//                        'updated_at' => DB::raw('now()')
-//                    ]);
-//                }
-//            }
-//        }
 
-//        for ($i = 1; $i <= 250000; $i++) {
-//            $i = rand(0,250000);
-//            if (DB::table('flights_data')->where('id', $i)->exists()) {
-//                $results = DB::table('flights_data')->where('id', $i)->get();
-//
-//                foreach ($results as $instance) {
-//
-//                    if (DB::table('flights')->where('flight_id', unserialize($instance->all_data)->id )->exists()) {
-//                        echo 'yes ' . unserialize($instance->all_data)->id . '  ' .  $i .  "\n ";
-//                    } else {
-//                        echo 'no ' . unserialize($instance->all_data)->id . '  ' .  $i . "\n ";
-//                    }
-//                }
-//            }
-//        }
+        /*
+        for ($i = 1; $i <= 250000; $i++) {
+            if (DB::table('flights_data')->where('id', $i)->exists()) {
+                $results = DB::table('flights_data')->where('id', $i)->get();
 
 
+                foreach ($results as $instance) {
+
+                    DB::table('flights_test')->insert([
+                        'all_data' => gzcompress($instance->all_data),
+                        'source' => 'developer.laminardata.aero',
+                        'created_at' => DB::raw('now()'),
+                        'updated_at' => DB::raw('now()')
+                    ]);
+                }
+            }
+        }
+        */
+
+        /*
+        for ($i = 1; $i <= 250000; $i++) {
+            $i = rand(0,250000);
+            if (DB::table('flights_data')->where('id', $i)->exists()) {
+                $results = DB::table('flights_data')->where('id', $i)->get();
+
+                foreach ($results as $instance) {
+
+                    if (DB::table('flights')->where('flight_id', unserialize($instance->all_data)->id )->exists()) {
+                        echo 'yes ' . unserialize($instance->all_data)->id . '  ' .  $i .  "\n ";
+                    } else {
+                        echo 'no ' . unserialize($instance->all_data)->id . '  ' .  $i . "\n ";
+                    }
+                }
+            }
+        }
+        */
+
+
+        /*
+        for ($i = 1; $i <= 500000; $i++) {
+            $i = rand(0,250000);
+            if (DB::table('hotels')->where('id', $i)->exists()) {
+                $results = DB::table('hotels')->where('id', $i)->get();
+
+                foreach ($results as $instance) {
+
+                    DB::table('flights')
+                        ->where('id', $instance->id)
+                        ->update([
+
+                        ]);
+                }
+            }
+        }
+        */
+
+        /*
         for ($i = 1; $i <= 600000; $i++) {
             if (DB::table('hotels')->where('id', $i)->exists()) {
 
@@ -82,6 +106,7 @@ class testSeeder1 extends Seeder
                 }
             }
         }
+        */
 
 
     }

@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/places', 'PlaceController@index');
+Route::get('/places/{place}', 'PlaceController@show');
+
 Route::get('/hotels', 'HotelController@index');
 Route::get('/hotels/create', 'HotelController@create');
 Route::get('/hotels/test1', 'HotelController@test1');

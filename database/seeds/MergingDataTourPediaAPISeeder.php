@@ -48,7 +48,7 @@ class MergingDataTourPediaAPISeeder extends Seeder
                             'address' => isset($instance->address) ? $instance->address : null,
                             'city' =>  isset($instance->location) ? $instance->location : null,
                             'country' => $country,
-                            'phone' => isset($instance->phone) ? $instance->phone : null,
+                            'phone' => isset($instance->phone_number) ? $instance->phone_number : null,
                             'website' => isset(unserialize($instance->all_data_detailed)->website) ? unserialize($instance->all_data_detailed)->website : null,
                             'latitude' => isset(unserialize($instance->all_data_detailed)->lat) ? unserialize($instance->all_data_detailed)->lat : null,
                             'longitude' => isset(unserialize($instance->all_data_detailed)->lng) ? unserialize($instance->all_data_detailed)->lng : null,

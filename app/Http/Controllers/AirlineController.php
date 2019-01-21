@@ -46,7 +46,7 @@ class AirlineController extends Controller
 
 //        return $content;
 
-        $airlines = Airline::take(2000)->get();; //limit to 2000
+        $airlines = Airline::paginate(25); //limit to 2000
         return view('airlines.index', compact('airlines'));
     }
 

@@ -5,6 +5,7 @@
 @section('content')
 
     <h1>Planes</h1>
+    <h2 class="subtitle">Total number of planes : <b>{{number_format($planes->total())}}</b></h2>
     <table class="table table-bordered table-hover table-striped">
         <thead>
         <tr>
@@ -12,6 +13,7 @@
             <th scope="col">NAME</th>
             <th scope="col">IATA</th>
             <th scope="col">ICAO</th>
+            <th scope="col">Passenger Capacity</th>
         </tr>
         </thead>
         <tbody>
@@ -21,8 +23,10 @@
                 <td>{{$plane->name}}</td>
                 <td>{{$plane->iata}}</td>
                 <td>{{$plane->icao}}</td>
+                <td>{{$plane->capacity}}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
+    {{ $planes->links() }}
 @endsection

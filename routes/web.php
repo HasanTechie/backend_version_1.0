@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/places', 'PlaceController@index');
 Route::get('/places/{place}', 'PlaceController@show');
 
+
 Route::get('/hotels', 'HotelController@index');
 Route::get('/hotels/create', 'HotelController@create');
 Route::get('/hotels/test1', 'HotelController@test1');
@@ -26,6 +27,8 @@ Route::get('/hotels/test3', 'HotelController@test3');
 Route::get('/hotels/getPlaces', 'HotelController@getPlaces');
 Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
 Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
+Route::get('/hotels/search', 'HotelController@search');
+Route::post('/hotels/search', 'HotelController@search');
 Route::get('/hotels/{hotel}', 'HotelController@show');
 
 

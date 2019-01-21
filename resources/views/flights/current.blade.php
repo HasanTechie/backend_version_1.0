@@ -6,7 +6,7 @@
 
 
     <h1 class="title is-1">Flights</h1>
-    <h2 class="subtitle">total number of records : {{$flights->total()}}</h2>
+    <h2 class="subtitle">total number of records : <b>{{number_format($flights->total())}}</b></h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>

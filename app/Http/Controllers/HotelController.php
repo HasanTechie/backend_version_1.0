@@ -26,8 +26,14 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = Hotel::paginate(25);;
+        $hotels = Hotel::paginate(25);
         return view('hotels.index', compact('hotels'));
+    }
+
+    public function search(){
+//        dd('s');
+//        return view('hotels.search');
+        return redirect('/');;
     }
 
 

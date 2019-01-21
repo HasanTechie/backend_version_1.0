@@ -5,6 +5,7 @@
 @section('content')
 
     <h1>Routes</h1>
+    <h2 class="subtitle">Total number of routes : <b>{{number_format($routes->total())}}</b></h2>
     <table class="table table-bordered table-hover table-striped">
         <thead>
         <tr>
@@ -35,5 +36,6 @@
         @endforeach
         </tbody>
     </table>
+    {{ $routes->links() }}
 @endsection
 

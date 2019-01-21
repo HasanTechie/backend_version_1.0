@@ -18,7 +18,7 @@ class PlaneController extends Controller
      */
     public function index()
     {
-        $planes = Plane::take(2000)->get();; //limit to 2000
+        $planes = Plane::orderBy('capacity', 'desc')->paginate(25); //limit to 2000
         return view('planes.index', compact('planes'));
     }
 

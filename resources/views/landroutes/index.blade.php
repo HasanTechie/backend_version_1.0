@@ -345,7 +345,7 @@
                         $pieces1 = explode(" ", $attraction->name);
                         $first_part1 = implode(" ", array_splice($pieces1, 0, 3));
                     @endphp
-                    <option value="{{$attraction->name . ', '. $attraction->location}}">{{$first_part1 . ', '. $attraction->location}}</option>
+                    <option value="{{$attraction->name . ', '. $attraction->city}}">{{$first_part1 . ', '. $attraction->city}}</option>
                 @endforeach
 
             </select>

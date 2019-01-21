@@ -5,6 +5,7 @@
 @section('content')
 
     <h1>Airports</h1>
+    <h2 class="subtitle">Total number of Airports : <b>{{number_format($airports->total())}}</b></h2>
     <table class="table table-bordered table-hover table-striped">
         <thead>
         <tr>
@@ -45,4 +46,5 @@
         @endforeach
         </tbody>
     </table>
+    {{ $airports->links() }}
 @endsection

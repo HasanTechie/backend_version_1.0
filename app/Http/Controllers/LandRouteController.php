@@ -39,8 +39,8 @@ class LandRouteController extends Controller
 
         $attractions = DB::table('places')->where([
             ['category', '=', 'attraction'],
-            ['location', '=', 'berlin'],
-        ])->orderBy('numReviews', 'DESC')->get();
+            ['city', '=', 'berlin'],
+        ])->get();
 
         return view('landroutes.index', compact(['hotels', 'attractions', 'key']));
     }

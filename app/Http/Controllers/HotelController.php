@@ -48,20 +48,20 @@ class HotelController extends Controller
 //        dd(unserialize($results->geometry)->location->lat);
 
 
-        for ($i = 1; $i <= 250000; $i++) {
-            if (DB::table('flights_data')->where('id', $i)->exists()) {
-                $results = DB::table('flights_data')->where('id', $i)->get();
-
-                foreach ($results as $instance) {
-                    dd(unserialize($instance->all_data)->id);
-
-                    if (DB::table('flights')->where('flight_id', unserialize($instance->all_data)->id)->exists()) {
-
-                    }
-                }
-
-            }
-        }
+//        for ($i = 1; $i <= 250000; $i++) {
+//            if (DB::table('flights_data')->where('id', $i)->exists()) {
+//                $results = DB::table('flights_data')->where('id', $i)->get();
+//
+//                foreach ($results as $instance) {
+//                    dd(unserialize($instance->all_data)->id);
+//
+//                    if (DB::table('flights')->where('flight_id', unserialize($instance->all_data)->id)->exists()) {
+//
+//                    }
+//                }
+//
+//            }
+//        }
     }
 
 

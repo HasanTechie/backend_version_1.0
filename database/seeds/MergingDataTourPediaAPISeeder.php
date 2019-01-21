@@ -42,20 +42,13 @@ class MergingDataTourPediaAPISeeder extends Seeder
                             $country = 'Italy';
                         }
 
-                        if (!empty(unserialize($instance->all_data_detailed)->phone_number)) {
-                            $phone = unserialize($instance->all_data_detailed)->phone_number;
-                        } else {
-                            if (!empty(unserialize($instance->all_data_detailed)->international_phone_number)) {
-                                $phone = unserialize($instance->all_data_detailed)->international_phone_number;
-                            }
-                        }
 
                         DB::table('hotels')->insert([
-                            'name' => isset(unserialize($instance->all_data_detailed)->name) ? unserialize($instance->all_data_detailed)->name : null,
-                            'address' => isset(unserialize($instance->all_data_detailed)->address) ? unserialize($instance->all_data_detailed)->address : null,
-                            'city' =>  isset(unserialize($instance->all_data_detailed)->location) ? unserialize($instance->all_data_detailed)->location : null,
+                            'name' => isset($instance->name) ? $instance->name : null,
+                            'address' => isset($instance->address) ? $instance->address : null,
+                            'city' =>  isset($instance->location) ? $instance->location : null,
                             'country' => $country,
-                            'phone' => isset($phone) ? $phone : null,
+                            'phone' => isset($instance->phone) ? $instance->phone : null,
                             'website' => isset(unserialize($instance->all_data_detailed)->website) ? unserialize($instance->all_data_detailed)->website : null,
                             'latitude' => isset(unserialize($instance->all_data_detailed)->lat) ? unserialize($instance->all_data_detailed)->lat : null,
                             'longitude' => isset(unserialize($instance->all_data_detailed)->lng) ? unserialize($instance->all_data_detailed)->lng : null,
@@ -64,9 +57,13 @@ class MergingDataTourPediaAPISeeder extends Seeder
                             'created_at' => DB::raw('now()'),
                             'updated_at' => DB::raw('now()')
                         ]);
+
+                        echo $i . ' ';
                     }
                 }
             }
         }
+
+
     }
 }

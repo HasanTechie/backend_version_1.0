@@ -4,8 +4,110 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e714060c20471eeee8bd70b3650f7c76",
+    "content-hash": "0807cbdf3771729df63162af78f4ea39",
     "packages": [
+        {
+            "name": "comodojo/exceptions",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/comodojo/exceptions.git",
+                "reference": "fdd690054dafd3d5a8fb7feb93dd124e1ae2f5c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/comodojo/exceptions/zipball/fdd690054dafd3d5a8fb7feb93dd124e1ae2f5c1",
+                "reference": "fdd690054dafd3d5a8fb7feb93dd124e1ae2f5c1",
+                "shasum": ""
+            },
+            "require": {
+                "psr/cache": "^1.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0",
+                "scrutinizer/ocular": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Comodojo\\Exception\\": "src/Comodojo/Exception"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Giovinazzi",
+                    "email": "marco.giovinazzi@comodojo.org",
+                    "homepage": "http://jme.altervista.org"
+                }
+            ],
+            "description": "Common exceptions for comodojo libs and frameworks",
+            "homepage": "https://comodojo.org",
+            "keywords": [
+                "comodojo",
+                "exception"
+            ],
+            "time": "2018-02-08T13:11:13+00:00"
+        },
+        {
+            "name": "comodojo/httprequest",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/comodojo/httprequest.git",
+                "reference": "a318129aafe4cf7dc33754109bc9ab79e331902c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/comodojo/httprequest/zipball/a318129aafe4cf7dc33754109bc9ab79e331902c",
+                "reference": "a318129aafe4cf7dc33754109bc9ab79e331902c",
+                "shasum": ""
+            },
+            "require": {
+                "comodojo/exceptions": "^1.0",
+                "league/url": "^3.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0",
+                "scrutinizer/ocular": "^1.0"
+            },
+            "suggest": {
+                "ext-curl": "Make requests using curl instead of stream"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Comodojo\\Httprequest\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Giovinazzi",
+                    "email": "marco.giovinazzi@comodojo.org",
+                    "homepage": "http://jme.altervista.org"
+                }
+            ],
+            "description": "HTTP request library",
+            "homepage": "https://comodojo.org",
+            "keywords": [
+                "NTLM",
+                "basic",
+                "comodojo",
+                "http",
+                "proxy",
+                "request"
+            ],
+            "time": "2018-12-05T21:27:46+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -1157,6 +1259,61 @@
             "time": "2018-11-23T23:41:29+00:00"
         },
         {
+            "name": "league/url",
+            "version": "3.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/url.git",
+                "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/url/zipball/1ae2c3ce29a7c5438339ff6388225844e6479da8",
+                "reference": "1ae2c3ce29a7c5438339ff6388225844e6479da8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.0",
+                "true/punycode": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Url\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://github.com/nyamsprod/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "League/url is a lightweight PHP Url manipulating library",
+            "homepage": "http://url.thephpleague.com",
+            "keywords": [
+                "parse_url",
+                "php",
+                "url"
+            ],
+            "abandoned": "league/uri",
+            "time": "2015-07-15T08:24:12+00:00"
+        },
+        {
             "name": "mashape/unirest-php",
             "version": "v3.0.4",
             "source": {
@@ -1768,6 +1925,52 @@
                 "promise"
             ],
             "time": "2016-01-26T13:27:02+00:00"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/container",
@@ -3326,6 +3529,52 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "true/punycode",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/true/php-punycode.git",
+                "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/true/php-punycode/zipball/a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
+                "reference": "a4d0c11a36dd7f4e7cd7096076cab6d3378a071e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/polyfill-mbstring": "^1.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.7",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TrueBV\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Renan Gonçalves",
+                    "email": "renan.saddam@gmail.com"
+                }
+            ],
+            "description": "A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)",
+            "homepage": "https://github.com/true/php-punycode",
+            "keywords": [
+                "idna",
+                "punycode"
+            ],
+            "time": "2016-11-16T10:37:54+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

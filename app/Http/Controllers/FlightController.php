@@ -18,7 +18,7 @@ class FlightController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     /**
@@ -142,194 +142,7 @@ class FlightController extends Controller
     {
         //
 
-        $apiKey = '4kmnf3mnrk5ne5s53hk6xqvx';
 
-//        $headers = [
-//            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
-//            'accept-language' => 'en-US',
-//            'afkl-travel-country' => 'NL',
-//            'afkl-travel-host' => 'AF',
-//            'api-key' => $apiKey,
-//            'content-type' => 'application/json',
-//        ];
-//
-//        $body = [
-//            "cabinClass" => "ECONOMY",
-//            "discountCode" => "",
-//            "passengerCount" => [
-//                "YOUNG_ADULT" => 1,
-//                "INFANT" => 2,
-//                "CHILD" => 1,
-//                "ADULT" => 2
-//            ],
-//            "currency" => "EUR",
-//            "minimumAccuracy" => 90,
-//            "requestedConnections" => [
-//                [
-//                    "origin" => [
-//                        "airport" => [
-//                            "code" => "FRA"
-//                        ]
-//                    ],
-//                    "destination" => [
-//                        "airport" => [
-//                            "code" => "LHR"
-//                        ]
-//                    ],
-//                    "departureDate" => "2019-01-29"
-//                ]
-//            ],
-//            "shortest" => false
-//        ];
-//
-//        $client = new Client([
-//            'headers' => $headers,
-//            'form_params' => $body
-//        ]);
-//
-//
-//        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
-//
-//        $response = json_decode($r->getBody()->getContents());
-//        $response = $r->getBody();
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.klm.com/opendata/flightoffers/available-offers",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "{\r\n  \"cabinClass\":\"ECONOMY\",\r\n  \"discountCode\":\"\",\r\n  \"passengerCount\":{\r\n    \"YOUNG_ADULT\":1,\r\n    \"INFANT\":2,\r\n    \"CHILD\":1,\r\n    \"ADULT\":2\r\n  },\r\n  \"currency\":\"EUR\",\r\n  \"minimumAccuracy\":90,\r\n  \"requestedConnections\":[\r\n    {\r\n      \"origin\":{\r\n        \"airport\":{\r\n          \"code\":\"FRA\"\r\n        }\r\n      },\r\n      \"destination\":{\r\n        \"airport\":{\r\n          \"code\":\"LHR\"\r\n        }\r\n      },\r\n      \"departureDate\":\"2019-01-29\"\r\n    }\r\n  ],\r\n  \"shortest\":true\r\n}",
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/json",
-                "Postman-Token: da38a54d-942f-43fb-9d90-681cd453f512",
-                "accept: application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8",
-                "accept-language: en-US",
-                "afkl-travel-country: NL",
-                "afkl-travel-host: AF",
-                "api-key: 4kmnf3mnrk5ne5s53hk6xqvx",
-                "cache-control: no-cache"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            dd( json_decode($response));
-        }
-//
-//        $headers = [
-//            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
-//            'accept-language' => 'en-US',
-//            'afkl-travel-country' => 'NL',
-//            'afkl-travel-host' => 'AF',
-//            'api-key' => $apiKey,
-//            'content-type' => 'application/json',
-//        ];
-//
-//        $body = [
-//            "cabinClass" => "ECONOMY",
-//            "discountCode" => "",
-//            "passengerCount" => [
-//                "YOUNG_ADULT" => 1,
-//                "INFANT" => 2,
-//                "CHILD" => 1,
-//                "ADULT" => 2
-//            ],
-//            "currency" => "EUR",
-//            "minimumAccuracy" => 90,
-//            "requestedConnections" => [
-//                [
-//                    "origin" => [
-//                        "airport" => [
-//                            "code" => "FRA"
-//                        ]
-//                    ],
-//                    "destination" => [
-//                        "airport" => [
-//                            "code" => "LHR"
-//                        ]
-//                    ],
-//                    "departureDate" => "2019-01-29"
-//                ]
-//            ],
-//            "shortest" => true
-//        ];
-//
-//
-//        $client = new Client([
-//            'headers' => $headers,
-//            'form_params' => $body
-//        ]);
-//
-//
-//        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
-//
-//        $response = json_decode($r->getBody()->getContents());
-//        $response = $r->getBody();
-//
-//
-
-        // Another Way
-//        $client = new Client();
-//        $response = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers', ['headers' => $headers, 'form_params' => $body]);
-//
-//        dd(json_decode($response->getBody()->getContents()));
-
-        /*
-        $endpoint = "https://api.klm.com/opendata/flightoffers/reference-data?country=NL";
-
-        $apikey = '4kmnf3mnrk5ne5s53hk6xqvx';
-
-        sleep(2);
-
-        // Example of call to the API
-        try {
-            // Get cURL resource
-            $curl = curl_init();
-            // Set some options
-            curl_setopt_array($curl, array(
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => $endpoint,
-                CURLOPT_HTTPHEADER => ['Accept:application/json', 'Api-Key:' . $apikey ]
-            ));
-            // Send the request & save response to $resp
-            $resp = curl_exec($curl);
-
-            // Check HTTP status code
-            if (!curl_errno($curl)) {
-                switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
-                    case 200:  # OK
-                        //                        echo "Server JSON Response:" . $resp;
-                        $response = (json_decode($resp));
-                        break;
-                    default:
-                        echo 'Unexpected HTTP code: ', $http_code, "\n";
-                        echo $resp;
-                }
-            }
-
-            // Close request to clear up some resources
-            curl_close($curl);
-
-
-        } catch (Exception $ex) {
-
-            printf("Error while sending request, reason: %s\n", $ex->getMessage());
-
-        }
-
-        dd($resp);
-        */
 
     }
 
@@ -392,7 +205,7 @@ class FlightController extends Controller
 
 
 /*
-                $xml = XmlParser::extract(Storage::disk('public')->get("/reports/".$new_fileName.""));
+        $xml = XmlParser::extract(Storage::disk('public')->get("/reports/".$new_fileName.""));
         $response = Unirest\Request::get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/{sessionkey}?pageIndex=0&pageSize=10",
             array(
                 "X-RapidAPI-Key" => "8f65541bd4msh250fb44b82f4382p1d499fjsn956b443fb6ce"
@@ -693,3 +506,162 @@ class FlightController extends Controller
         foreach ($response as $item) {
         }
         */
+
+/*
+        $client = new Client([
+            'headers' => $headers,
+            'form_params' => $body
+        ]);
+
+
+        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
+
+        $response = json_decode($r->getBody()->getContents());
+        $response = $r->getBody();
+
+        dd($response);
+
+
+
+        $headers = [
+            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
+            'accept-language' => 'en-US',
+            'afkl-travel-country' => 'NL',
+            'afkl-travel-host' => 'AF',
+            'api-key' => $apiKey,
+            'content-type' => 'application/json',
+        ];
+
+        $body = [
+            "cabinClass" => "ECONOMY",
+            "discountCode" => "",
+            "passengerCount" => [
+                "YOUNG_ADULT" => 1,
+                "INFANT" => 2,
+                "CHILD" => 1,
+                "ADULT" => 2
+            ],
+            "currency" => "EUR",
+            "minimumAccuracy" => 90,
+            "requestedConnections" => [
+                [
+                    "origin" => [
+                        "airport" => [
+                            "code" => "FRA"
+                        ]
+                    ],
+                    "destination" => [
+                        "airport" => [
+                            "code" => "LHR"
+                        ]
+                    ],
+                    "departureDate" => "2019-01-29"
+                ]
+            ],
+            "shortest" => true
+        ];
+
+
+        $client = new Client([
+            'headers' => $headers,
+            'form_params' => $body
+        ]);
+
+
+        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
+
+        $response = json_decode($r->getBody()->getContents());
+        $response = $r->getBody();
+*/
+
+/*
+        // Another Way
+        $client = new Client();
+        $response = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers',
+            [
+                'headers' => [
+                    'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
+                    'accept-language' => 'en-US',
+                    'afkl-travel-country' => 'NL',
+                    'afkl-travel-host' => 'AF',
+                    'api-key' => $apiKey,
+                    'content-type' => 'application/json',
+                ],
+                'form_params' => [
+                    "cabinClass" => "ECONOMY",
+                    "discountCode" => "",
+                    "passengerCount" => [
+                        "YOUNG_ADULT" => 1,
+                        "INFANT" => 1,
+                        "CHILD" => 1,
+                        "ADULT" => 2
+                    ],
+                    "currency" => "EUR",
+                    "minimumAccuracy" => 90,
+                    "requestedConnections" => [
+                        [
+                            "origin" => [
+                                "airport" => [
+                                    "code" => "CDG"
+                                ]
+                            ],
+                            "destination" => [
+                                "airport" => [
+                                    "code" => "JFK"
+                                ]
+                            ],
+                            "departureDate" => "2019-01-31"
+                        ]
+                    ],
+                    "shortest" => true
+                ]
+            ]);
+
+        dd(json_decode($response->getBody()->getContents()));
+*/
+
+/*
+    $endpoint = "https://api.klm.com/opendata/flightoffers/reference-data?country=NL";
+
+    $apikey = '4kmnf3mnrk5ne5s53hk6xqvx';
+
+    sleep(2);
+
+    // Example of call to the API
+    try {
+        // Get cURL resource
+        $curl = curl_init();
+        // Set some options
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $endpoint,
+            CURLOPT_HTTPHEADER => ['Accept:application/json', 'Api-Key:' . $apikey ]
+        ));
+        // Send the request & save response to $resp
+        $resp = curl_exec($curl);
+
+        // Check HTTP status code
+        if (!curl_errno($curl)) {
+            switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+                case 200:  # OK
+                    //                        echo "Server JSON Response:" . $resp;
+                    $response = (json_decode($resp));
+                    break;
+                default:
+                    echo 'Unexpected HTTP code: ', $http_code, "\n";
+                    echo $resp;
+            }
+        }
+
+        // Close request to clear up some resources
+        curl_close($curl);
+
+
+    } catch (Exception $ex) {
+
+        printf("Error while sending request, reason: %s\n", $ex->getMessage());
+
+    }
+
+    dd($resp);
+*/

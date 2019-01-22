@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('MergingDataTourPediaAPISeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
 //        $this->call('testSeeder1');
-        $this->call('MergingDataLaminarAPISeeder');
+//        $this->call('MergingDataLaminarAPISeeder');
+        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
     }
 }

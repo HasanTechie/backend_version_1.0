@@ -20,6 +20,7 @@ class FlightController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -131,6 +132,7 @@ class FlightController extends Controller
         return view('flights.search', compact('flights', 'total_capacity', 'is_submitted'));
 
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -142,39 +144,146 @@ class FlightController extends Controller
 
         $apiKey = '4kmnf3mnrk5ne5s53hk6xqvx';
 
-        $headers = [
-            'accept' => 'application/hal+json',
-            'accept-language' => 'en-US',
-            'afkl-travel-country' => 'NL',
-            'afkl-travel-host' => 'KL',
-            'api-key' => $apiKey,
-        ];
-
-        $client = new Client([
-            'headers' => $headers
-        ]);
-
-
-        $r = $client->request('GET', 'https://api.klm.com/opendata/flightoffers/reference-data');
-
-        $response = json_decode($r->getBody()->getContents());
+//        $headers = [
+//            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
+//            'accept-language' => 'en-US',
+//            'afkl-travel-country' => 'NL',
+//            'afkl-travel-host' => 'AF',
+//            'api-key' => $apiKey,
+//            'content-type' => 'application/json',
+//        ];
+//
+//        $body = [
+//            "cabinClass" => "ECONOMY",
+//            "discountCode" => "",
+//            "passengerCount" => [
+//                "YOUNG_ADULT" => 1,
+//                "INFANT" => 2,
+//                "CHILD" => 1,
+//                "ADULT" => 2
+//            ],
+//            "currency" => "EUR",
+//            "minimumAccuracy" => 90,
+//            "requestedConnections" => [
+//                [
+//                    "origin" => [
+//                        "airport" => [
+//                            "code" => "FRA"
+//                        ]
+//                    ],
+//                    "destination" => [
+//                        "airport" => [
+//                            "code" => "LHR"
+//                        ]
+//                    ],
+//                    "departureDate" => "2019-01-29"
+//                ]
+//            ],
+//            "shortest" => false
+//        ];
+//
+//        $client = new Client([
+//            'headers' => $headers,
+//            'form_params' => $body
+//        ]);
+//
+//
+//        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
+//
+//        $response = json_decode($r->getBody()->getContents());
 //        $response = $r->getBody();
 
-        dd($response);
+        $curl = curl_init();
 
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.klm.com/opendata/flightoffers/available-offers",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "{\r\n  \"cabinClass\":\"ECONOMY\",\r\n  \"discountCode\":\"\",\r\n  \"passengerCount\":{\r\n    \"YOUNG_ADULT\":1,\r\n    \"INFANT\":2,\r\n    \"CHILD\":1,\r\n    \"ADULT\":2\r\n  },\r\n  \"currency\":\"EUR\",\r\n  \"minimumAccuracy\":90,\r\n  \"requestedConnections\":[\r\n    {\r\n      \"origin\":{\r\n        \"airport\":{\r\n          \"code\":\"FRA\"\r\n        }\r\n      },\r\n      \"destination\":{\r\n        \"airport\":{\r\n          \"code\":\"LHR\"\r\n        }\r\n      },\r\n      \"departureDate\":\"2019-01-29\"\r\n    }\r\n  ],\r\n  \"shortest\":true\r\n}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Postman-Token: da38a54d-942f-43fb-9d90-681cd453f512",
+                "accept: application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8",
+                "accept-language: en-US",
+                "afkl-travel-country: NL",
+                "afkl-travel-host: AF",
+                "api-key: 4kmnf3mnrk5ne5s53hk6xqvx",
+                "cache-control: no-cache"
+            ),
+        ));
 
-        /* Another Way
-        $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', 'https://api.klm.com/opendata/flightoffers/reference-data', [
-            'headers' => [
-                'accept' => 'application/hal+json',
-                'accept-language' => 'en-US',
-                'afkl-travel-country' => 'NL',
-                'afkl-travel-host' => 'KL',
-                'api-key' => '4kmnf3mnrk5ne5s53hk6xqvx'
-            ]
-        ]);
-        */
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            dd( json_decode($response));
+        }
+//
+//        $headers = [
+//            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
+//            'accept-language' => 'en-US',
+//            'afkl-travel-country' => 'NL',
+//            'afkl-travel-host' => 'AF',
+//            'api-key' => $apiKey,
+//            'content-type' => 'application/json',
+//        ];
+//
+//        $body = [
+//            "cabinClass" => "ECONOMY",
+//            "discountCode" => "",
+//            "passengerCount" => [
+//                "YOUNG_ADULT" => 1,
+//                "INFANT" => 2,
+//                "CHILD" => 1,
+//                "ADULT" => 2
+//            ],
+//            "currency" => "EUR",
+//            "minimumAccuracy" => 90,
+//            "requestedConnections" => [
+//                [
+//                    "origin" => [
+//                        "airport" => [
+//                            "code" => "FRA"
+//                        ]
+//                    ],
+//                    "destination" => [
+//                        "airport" => [
+//                            "code" => "LHR"
+//                        ]
+//                    ],
+//                    "departureDate" => "2019-01-29"
+//                ]
+//            ],
+//            "shortest" => true
+//        ];
+//
+//
+//        $client = new Client([
+//            'headers' => $headers,
+//            'form_params' => $body
+//        ]);
+//
+//
+//        $r = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers');
+//
+//        $response = json_decode($r->getBody()->getContents());
+//        $response = $r->getBody();
+//
+//
+
+        // Another Way
+//        $client = new Client();
+//        $response = $client->request('POST', 'https://api.klm.com/opendata/flightoffers/available-offers', ['headers' => $headers, 'form_params' => $body]);
+//
+//        dd(json_decode($response->getBody()->getContents()));
 
         /*
         $endpoint = "https://api.klm.com/opendata/flightoffers/reference-data?country=NL";

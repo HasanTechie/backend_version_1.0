@@ -106,11 +106,42 @@ class MergingDataLaminarAPISeeder extends Seeder
                         }
 
 
-                        if (DB::table('flights')->where('iata_flight_number', $value->properties->iataFlightNumber)->exists()) {
+                        if(!empty($value->properties->iataFlightNumber)) {
 
-                            DB::table('flights')
-                                ->where('iata_flight_number', $iata_flight_number)
-                                ->update([
+
+                            if (DB::table('flights')->where('iata_flight_number', $value->properties->iataFlightNumber)->exists()) {
+
+                                DB::table('flights')
+                                    ->where('iata_flight_number', $iata_flight_number)
+                                    ->update([
+                                        'flight_id' => $flight_id,
+                                        'iata_flight_number' => $iata_flight_number,
+                                        'flight_status' => $flight_status,
+                                        'aircraft_code' => $aircraft_code,
+                                        'aircraft_registration' => $aircraft_registration,
+                                        'airline' => $airline,
+                                        'arrival_airport_scheduled' => $arrival_airport_scheduled,
+                                        'arrival_airport_initial' => $arrival_airport_initial,
+                                        'arrival_runway_time_initial_date' => $arrival_runway_time_initial_date,
+                                        'arrival_runway_time_initial_time' => $arrival_runway_time_initial_time,
+                                        'arrival_runway_time_estimated_date' => $arrival_runway_time_estimated_date,
+                                        'arrival_runway_time_estimated_time' => $arrival_runway_time_estimated_time,
+                                        'callsign' => $callsign,
+                                        'departure_airport_scheduled' => $departure_airport_scheduled,
+                                        'departure_airport_initial' => $departure_airport_initial,
+                                        'departure_runway_time_initial_date' => $departure_runway_time_initial_date,
+                                        'departure_runway_time_initial_time' => $departure_runway_time_initial_time,
+                                        'departure_runway_time_estimated_date' => $departure_runway_time_estimated_date,
+                                        'departure_runway_time_estimated_time' => $departure_runway_time_estimated_time,
+                                        'timestamp_processed_date' => $timestamp_processed_date,
+                                        'timestamp_processed_time' => $timestamp_processed_time,
+                                        'updated_at' => DB::raw('now()')
+                                    ]);
+                                echo 'updated :' . $i . "\n";
+
+                            } else {
+
+                                DB::table('flights')->insert([
                                     'flight_id' => $flight_id,
                                     'iata_flight_number' => $iata_flight_number,
                                     'flight_status' => $flight_status,
@@ -132,37 +163,11 @@ class MergingDataLaminarAPISeeder extends Seeder
                                     'departure_runway_time_estimated_time' => $departure_runway_time_estimated_time,
                                     'timestamp_processed_date' => $timestamp_processed_date,
                                     'timestamp_processed_time' => $timestamp_processed_time,
+                                    'created_at' => DB::raw('now()'),
                                     'updated_at' => DB::raw('now()')
                                 ]);
-                            echo 'updated :' . $i . "\n";
-                        } else {
-
-                            DB::table('flights')->insert([
-                                'flight_id' => $flight_id,
-                                'iata_flight_number' => $iata_flight_number,
-                                'flight_status' => $flight_status,
-                                'aircraft_code' => $aircraft_code,
-                                'aircraft_registration' => $aircraft_registration,
-                                'airline' => $airline,
-                                'arrival_airport_scheduled' => $arrival_airport_scheduled,
-                                'arrival_airport_initial' => $arrival_airport_initial,
-                                'arrival_runway_time_initial_date' => $arrival_runway_time_initial_date,
-                                'arrival_runway_time_initial_time' => $arrival_runway_time_initial_time,
-                                'arrival_runway_time_estimated_date' => $arrival_runway_time_estimated_date,
-                                'arrival_runway_time_estimated_time' => $arrival_runway_time_estimated_time,
-                                'callsign' => $callsign,
-                                'departure_airport_scheduled' => $departure_airport_scheduled,
-                                'departure_airport_initial' => $departure_airport_initial,
-                                'departure_runway_time_initial_date' => $departure_runway_time_initial_date,
-                                'departure_runway_time_initial_time' => $departure_runway_time_initial_time,
-                                'departure_runway_time_estimated_date' => $departure_runway_time_estimated_date,
-                                'departure_runway_time_estimated_time' => $departure_runway_time_estimated_time,
-                                'timestamp_processed_date' => $timestamp_processed_date,
-                                'timestamp_processed_time' => $timestamp_processed_time,
-                                'created_at' => DB::raw('now()'),
-                                'updated_at' => DB::raw('now()')
-                            ]);
-                            echo 'inserted :' . $i . "\n";
+                                echo 'inserted :' . $i . "\n";
+                            }
                         }
                     }
                 }

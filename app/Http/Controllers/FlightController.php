@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Flight;
 use Illuminate\Http\Request;
 
-use Storage;
-use Unirest;
+use GuzzleHttp\Client;
+
+//use Storage;
+//use Unirest;
 
 use DB;
 
@@ -137,6 +139,88 @@ class FlightController extends Controller
     public function create()
     {
         //
+
+        $apiKey = '4kmnf3mnrk5ne5s53hk6xqvx';
+
+        $headers = [
+            'accept' => 'application/hal+json',
+            'accept-language' => 'en-US',
+            'afkl-travel-country' => 'NL',
+            'afkl-travel-host' => 'KL',
+            'api-key' => $apiKey,
+        ];
+
+        $client = new Client([
+            'headers' => $headers
+        ]);
+
+
+        $r = $client->request('GET', 'https://api.klm.com/opendata/flightoffers/reference-data');
+
+        $response = json_decode($r->getBody()->getContents());
+//        $response = $r->getBody();
+
+        dd($response);
+
+
+        /* Another Way
+        $client = new GuzzleHttp\Client();
+        $response = $client->request('GET', 'https://api.klm.com/opendata/flightoffers/reference-data', [
+            'headers' => [
+                'accept' => 'application/hal+json',
+                'accept-language' => 'en-US',
+                'afkl-travel-country' => 'NL',
+                'afkl-travel-host' => 'KL',
+                'api-key' => '4kmnf3mnrk5ne5s53hk6xqvx'
+            ]
+        ]);
+        */
+
+        /*
+        $endpoint = "https://api.klm.com/opendata/flightoffers/reference-data?country=NL";
+
+        $apikey = '4kmnf3mnrk5ne5s53hk6xqvx';
+
+        sleep(2);
+
+        // Example of call to the API
+        try {
+            // Get cURL resource
+            $curl = curl_init();
+            // Set some options
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $endpoint,
+                CURLOPT_HTTPHEADER => ['Accept:application/json', 'Api-Key:' . $apikey ]
+            ));
+            // Send the request & save response to $resp
+            $resp = curl_exec($curl);
+
+            // Check HTTP status code
+            if (!curl_errno($curl)) {
+                switch ($http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+                    case 200:  # OK
+                        //                        echo "Server JSON Response:" . $resp;
+                        $response = (json_decode($resp));
+                        break;
+                    default:
+                        echo 'Unexpected HTTP code: ', $http_code, "\n";
+                        echo $resp;
+                }
+            }
+
+            // Close request to clear up some resources
+            curl_close($curl);
+
+
+        } catch (Exception $ex) {
+
+            printf("Error while sending request, reason: %s\n", $ex->getMessage());
+
+        }
+
+        dd($resp);
+        */
 
     }
 

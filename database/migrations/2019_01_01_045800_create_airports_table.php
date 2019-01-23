@@ -16,7 +16,7 @@ class CreateAirportsTable extends Migration
         Schema::create('airports', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
-            $table->string('airport_id')->unique();
+
             $table->string('name');
             $table->string('city')->nullable();
             $table->string('country');
@@ -30,7 +30,9 @@ class CreateAirportsTable extends Migration
             $table->string('tz_database_time_zone')->nullable();
             $table->string('type');
             $table->string('their_source');
+
             $table->string('source');
+
             $table->timestamps();
         });
     }

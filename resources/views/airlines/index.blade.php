@@ -20,7 +20,7 @@
         <tbody>
         @foreach ($airlines as $airline)
             <tr>
-                <th scope="row">{{$airline->id}}</th>
+                <th scope="row">{{$airline->uid}}</th>
                 <td>{{$airline->name}}</td>
                 <td>{{$airline->icao}}</td>
                 <td>{{$airline->callsign}}</td>

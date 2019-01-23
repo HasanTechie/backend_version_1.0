@@ -16,7 +16,7 @@ class CreateAirlinesTable extends Migration
         Schema::create('airlines', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
-            $table->string('airline_id')->unique();
+
             $table->string('name')->nullable();
             $table->string('alias')->nullable();
             $table->string('iata')->nullable();
@@ -24,7 +24,9 @@ class CreateAirlinesTable extends Migration
             $table->string('callsign')->nullable();
             $table->string('country')->nullable();
             $table->string('active');
+
             $table->string('source');
+
             $table->timestamps();
         });
     }

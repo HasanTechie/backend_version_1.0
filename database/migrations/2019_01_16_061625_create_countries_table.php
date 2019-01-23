@@ -16,13 +16,16 @@ class CreateCountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
+
             $table->string('country_code');
             $table->string('iso_code');
             $table->string('name');
             $table->integer('number_of_states');
             $table->text('states');
             $table->text('all_data');
+
             $table->string('source');
+
             $table->timestamps();
         });
     }

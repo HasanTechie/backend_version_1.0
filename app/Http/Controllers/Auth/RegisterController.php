@@ -46,7 +46,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -61,12 +61,13 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \App\User
      */
     protected function create(array $data)
     {
         return User::create([
+            'uid' => $data['uid'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -77,7 +78,14 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create([
+            "_token" => $request->input('_token'),
+            "uid" => uniqid(),
+            "name" => $request->input('name'),
+            "email" => $request->input('email'),
+            "password" => $request->input('password'),
+            "password_confirmation" => $request->input('password_confirmation'),
+        ])));
 
 //        $this->guard()->login($user);
 

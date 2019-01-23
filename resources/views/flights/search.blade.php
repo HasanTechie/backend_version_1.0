@@ -19,7 +19,7 @@
                         <div class="control has-icons-left">
                             <div class="select is-fullwidth">
                                 {{--                                {{dd($flights[0]->arrival_airport_scheduled)}}--}}
-                                @if($airports = DB::table('airports')->select('id','name','city','icao','country','icao')->get())
+                                @if($airports = DB::table('airports')->select('uid','name','city','icao','country','icao')->get())
 
                                     <select name="icao_a" required>
                                         <option value="">Select Airport A</option>

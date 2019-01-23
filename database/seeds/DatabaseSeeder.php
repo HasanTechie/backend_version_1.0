@@ -27,11 +27,14 @@ class DatabaseSeeder extends Seeder
 //        $this->call('MergingDataTourPediaAPISeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
 //        $this->call('MergingDataLaminarAPISeeder');
-//        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
+        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
 //        $this->call('CreateUniqueIdSeeder'); //running
 //        $this->call('UncompressingDataSeeder'); //running
 //        $this->call('UncompressingDataSeeder2'); //running
 //        $this->call('testSeeder1');
+//        $this->call('testSeeder2');
+//        $this->call('testSeeder3');
+//        $this->call('GatheringAirfranceKLMAPIReferenceDataSeeder');
 
     }
 }

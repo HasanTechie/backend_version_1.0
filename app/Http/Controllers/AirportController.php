@@ -61,6 +61,7 @@ class AirportController extends Controller
     public function create()
     {
         //
+
     }
 
     /**

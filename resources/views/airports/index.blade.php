@@ -28,7 +28,7 @@
         <tbody>
         @foreach ($airports as $airport)
             <tr>
-                <th scope="row">{{$airport->id}}</th>
+                <th scope="row">{{$airport->uid}}</th>
                 <td>{{$airport->name}}</td>
                 <td>{{$airport->city}}</td>
                 <td>{{$airport->country}}</td>

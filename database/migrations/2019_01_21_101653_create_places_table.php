@@ -16,6 +16,7 @@ class CreatePlacesTable extends Migration
         Schema::create('places', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
+
             $table->double('place_id')->nullable();
             $table->string('name')->nullable();
             $table->string('address')->nullable();
@@ -28,7 +29,9 @@ class CreatePlacesTable extends Migration
             $table->text('website')->nullable();
             $table->binary('all_data')->nullable();
             $table->binary('all_data_detailed')->nullable();
+
             $table->string('source')->nullable();
+
             $table->timestamps();
         });
 

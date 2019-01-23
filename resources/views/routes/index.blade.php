@@ -10,12 +10,9 @@
         <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Airline</th>
-            <th scope="col">Airline ID</th>
-            <th scope="col">Source Airport</th>
-            <th scope="col">Source Airport ID</th>
-            <th scope="col">Destination Airport</th>
-            <th scope="col">Destination Airport ID</th>
+            <th scope="col">Airline IATA</th>
+            <th scope="col">Source Airport IATA</th>
+            <th scope="col">Destination Airport IATA</th>
             <th scope="col">Stops</th>
             <th scope="col">Equipment</th>
         </tr>
@@ -23,13 +20,10 @@
         <tbody>
         @foreach ($routes as $route)
             <tr>
-                <th scope="row">{{$route->id}}</th>
-                <td>{{$route->airline}}</td>
-                <td>{{$route->airline_id}}</td>
-                <td>{{$route->source_airport}}</td>
-                <td>{{$route->source_airport_id}}</td>
+                <th scope="row">{{$route->uid}}</th>
+                <td>{{$route->airline_iata}}</td>
+                <td>{{$route->source_airport_iata}}</td>
                 <td>{{$route->destination_airport}}</td>
-                <td>{{$route->destination_airport_id}}</td>
                 <td>{{$route->stops}}</td>
                 <td>{{$route->equipment}}</td>
             </tr>

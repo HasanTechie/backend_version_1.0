@@ -21,7 +21,6 @@ class MergingDataHotelBedsAPISeeder extends Seeder
 
                     if (isset(unserialize($instance->all_data)->phones)) {
 
-
                         foreach (unserialize($instance->all_data)->phones as $componentInstance) {
                             if (!is_array($componentInstance)) {
                                 if ($componentInstance->phoneType == 'PHONEHOTEL') {

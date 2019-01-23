@@ -16,6 +16,7 @@ class CreateHotelsUncompressedTable extends Migration
         Schema::create('hotels_uncompressed', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
+
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
@@ -25,7 +26,9 @@ class CreateHotelsUncompressedTable extends Migration
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->longText('all_data')->nullable();
+
             $table->string('source')->nullable();
+
             $table->timestamps();
         });
     }

@@ -16,13 +16,12 @@ class CreateUniqueIdSeeder extends Seeder
 
         $j=0;
         for ($i = 1; $i <= 400000; $i++) {
-            $j++;
             if (DB::table('flights_1')->where('id', $i)->exists()) {
 
                 $results = DB::table('flights_1')->where('id', $i)->get();
 
                 foreach ($results as $instance) {
-
+                    $j++;
                     DB::table('flights')->insert([
                         'uid' => uniqid(),
                         's_no' => $j,

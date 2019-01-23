@@ -26,7 +26,7 @@
         @foreach ($flights as $flight)
             <tr>
 
-                <td>{{$flight->id}}</td>
+                <td>{{$flight->uid}}</td>
                 <td><a href="https://www.google.com/search?q={{$flight->iata_flight_number}} flight">{{$flight->iata_flight_number}}</a></td>
                 @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
                     <td>{{$airport->name}}</td>

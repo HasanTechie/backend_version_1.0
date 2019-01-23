@@ -26,8 +26,8 @@
         @foreach ($places as $place)
             <tr>
 
-                <td>{{$place->id}}</td>
-                <td><a href="/places/{{$place->id}}">{{$place->name}}</a></td>
+                <td>{{$place->uid}}</td>
+                <td><a href="/places/{{$place->uid}}">{{$place->name}}</a></td>
                 <td>{{$place->address}}</td>
                 <td>{{$place->city}}</td>
                 <td>{{$place->country}}</td>

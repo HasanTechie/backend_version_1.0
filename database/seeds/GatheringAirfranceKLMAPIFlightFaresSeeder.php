@@ -28,8 +28,10 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
             'United Kingdom' => 'London',
             'Italy' => 'Rome',
             'Spain' => 'Barcelona',
-            'Romania' => 'Bucharest'];
+            'Romania' => 'Bucharest'
+        ];
 
+        $j=0;
         foreach ($cities as $city) {
             foreach ($dest_cities as $country => $city2) {
 
@@ -46,9 +48,9 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
                 $airline[0] = 'AF';
                 $airline[1] = 'KL';
-                for ($j = 0; $j <= 1; $j++) {
+                for ($k = 0; $k <= 1; $k++) {
 
-                    $currentAirline = $airline[$j];
+                    $currentAirline = $airline[$k];
 
 
                     foreach ($airports[0] as $airport1) {
@@ -65,7 +67,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                             date_default_timezone_set('UTC');
 
                             // Start date
-                            $date = '2019-01-01';
+                            $date = '2019-02-01';
                             // End date
                             $end_date = '2019-03-31';
 
@@ -121,11 +123,13 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
                                 } catch (\Exception $ex) {
-                                    echo 'Incompleted =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . "\n";
+                                    echo 'Incompleted =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date .' '. "\n";
                                 }
                                 if (isset($response)) {
                                     foreach ($response->flightProducts as $instance) {
-                                        DB::table('flights_afklm_api')->insert([
+                                        DB::table('flights_afklm')->insert([
+                                            'uid' => uniqid(),
+                                            's_no' => ++$j,
                                             'airline_code' => $currentAirline,
                                             'origin_name' => $name1,
                                             'origin_iata' => $iata1,
@@ -133,11 +137,11 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                             'destination_iata' => $iata1,
                                             'flight_date' => $date,
                                             'all_data' => serialize($instance),
-                                            'source' => 'api.klm.com/opendata/flightoffers/',
+                                            'source' => 'api.klm.com/opendata/flightoffers/available-offers',
                                             'created_at' => DB::raw('now()'),
                                             'updated_at' => DB::raw('now()')
                                         ]);
-                                        echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . "\n";
+                                        echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date .' '. "\n";
                                     }
                                 }
                                 $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));

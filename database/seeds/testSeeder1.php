@@ -13,32 +13,23 @@ class testSeeder1 extends Seeder
     {
         //
 
-        $j=0;
+        $j = 0;
         for ($i = 1; $i <= 100000; $i++) {
-            $j++;
-            if (DB::table('routes_1')->where('id', $i)->exists()) {
+            if (DB::table('airlines')->where('s_no', $i)->exists()) {
 
-                $results = DB::table('routes_1')->where('id', $i)->get();
+                $results = DB::table('airlines')->where('s_no', $i)->get();
 
                 foreach ($results as $instance) {
 
-                    DB::table('routes')->insert([
-                        'uid' => uniqid(),
-                        's_no' => $j,
-                        'airline_iata' => $instance->airline,
-                        'source_airport_iata' => $instance->source_airport,
-                        'destination_airport_iata' => $instance->destination_airport,
-                        'codeshare' => $instance->codeshare,
-                        'stops' => $instance->stops,
-                        'equipment' => $instance->equipment,
-                        'source' => 'tour-pedia.org/api/',
-                        'created_at' => DB::raw('now()'),
-                        'updated_at' => DB::raw('now()')
+
+                    DB::table('airlines')->where('s_no', $instance->s_no)->update([
+                        's_no' => ++$j,
                     ]);
-                    echo 'routes '. $j . "\n";
+                    echo 'airlines ' . $j . "\n";
                 }
             }
         }
+
     }
 }
 

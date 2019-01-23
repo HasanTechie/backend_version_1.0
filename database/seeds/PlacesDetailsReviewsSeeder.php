@@ -12,7 +12,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
     public function run()
     {
         //
-        $places = DB::table('places')->select(['place_id', 'id'])->where('numReviews', '>', 20)
+        $places = DB::table('places_test')->select(['place_id', 'id'])->where('numReviews', '>', 20)
                 ->WhereNull('detailed_reviews')->get();
 
         foreach ($places as $place) {
@@ -59,7 +59,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
 
 //            dd(serialize($reviewsArray));
 
-                DB::table('places')
+                DB::table('places_test')
                     ->where('place_id', $response1->id)
                     ->update([
                         'name' => (isset($response1->name) ? $response1->name : 'Not Available'),

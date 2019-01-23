@@ -14,7 +14,8 @@ class CreateFlightsTable extends Migration
     public function up()
     {
         Schema::create('flights', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('uid')->unique();
+            $table->increments('s_no');
             $table->string('flight_id')->nullable();
             $table->string('iata_flight_number')->nullable();
             $table->string('flight_status')->nullable();

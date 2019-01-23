@@ -14,7 +14,8 @@ class CreateRoutesTable extends Migration
     public function up()
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('uid')->unique();
+            $table->increments('s_no');
             $table->string('airline');
             $table->string('airline_id')->nullable();
             $table->string('source_airport')->nullable();

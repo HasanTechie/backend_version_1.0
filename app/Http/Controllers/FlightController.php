@@ -35,6 +35,16 @@ class FlightController extends Controller
 
     }
 
+    public function test1($id)
+    {
+        //
+
+        $results = DB::select('select * from flights_afklm_api where id = :id', ['id' => $id]);
+
+        dd(unserialize($results[0]->all_data));
+
+    }
+
     public function current()
     {
         $flights = Flight::inRandomOrder()->where('flight_status', 'Airborne')->paginate(25); //limit to 2000

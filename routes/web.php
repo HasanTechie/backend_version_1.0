@@ -45,6 +45,8 @@ Route::get('/flights/search', 'FlightController@search');
 Route::post('/flights/search', 'FlightController@search');
 Route::get('/flights/test', 'FlightController@test');
 
+Route::get('/flights/test1/{id}', 'FlightController@test1');
+
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');
 Route::get('/routes', 'RouteController@index');

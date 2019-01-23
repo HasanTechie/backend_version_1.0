@@ -15,7 +15,7 @@ class CreateHotelsUncompressedTable extends Migration
     {
         Schema::create('hotels_uncompressed', function (Blueprint $table) {
             $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->unsignedInteger('s_no');
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();

@@ -15,7 +15,7 @@ class CreatePlacesUncompressedTable extends Migration
     {
         Schema::create('places_uncompressed', function (Blueprint $table) {
             $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->unsignedInteger('s_no');
             $table->double('place_id')->nullable();
             $table->string('name')->nullable();
             $table->string('address')->nullable();

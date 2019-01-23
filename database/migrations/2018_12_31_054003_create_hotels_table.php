@@ -14,8 +14,8 @@ class CreateHotelsTable extends Migration
     public function up()
     {
         Schema::create('hotels', function (Blueprint $table) {
-            $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->string('uid')->unique()->primary();
+            $table->unsignedInteger('s_no');
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();

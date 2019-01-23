@@ -15,7 +15,7 @@ class CreateRoutesTable extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->unsignedInteger('s_no');
             $table->string('airline');
             $table->string('airline_id')->nullable();
             $table->string('source_airport')->nullable();

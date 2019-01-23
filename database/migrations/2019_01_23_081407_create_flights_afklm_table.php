@@ -15,7 +15,7 @@ class CreateFlightsAfklmTable extends Migration
     {
         Schema::create('flights_afklm', function (Blueprint $table) {
             $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->unsignedInteger('s_no');
             $table->string('origin_name');
             $table->string('origin_iata');
             $table->string('destination_name');

@@ -15,7 +15,7 @@ class CreateFlightsTable extends Migration
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->unsignedInteger('s_no');
             $table->string('flight_id')->nullable();
             $table->string('iata_flight_number')->nullable();
             $table->string('flight_status')->nullable();

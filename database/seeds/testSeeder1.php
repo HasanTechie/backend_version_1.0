@@ -12,46 +12,6 @@ class testSeeder1 extends Seeder
     public function run()
     {
         //
-
-        for ($i = 1; $i <= 600000; $i++) {
-            if (DB::table('hotels')->where('id', $i)->exists()) {
-
-                $results = DB::table('hotels')->where('id', $i)->get();
-
-                foreach ($results as $instance) {
-
-                    dd(unserialize(gzuncompress($instance->all_data)));
-
-
-                    if (!empty(unserialize($instance->all_data_detailed)->phone_number)) {
-                        $phone = unserialize($instance->all_data_detailed)->phone_number;
-                    } else {
-                        if (!empty(unserialize($instance->all_data_detailed)->international_phone_number)) {
-                            $phone = unserialize($instance->all_data_detailed)->international_phone_number;
-                        }
-                    }
-
-                    DB::table('hotels')->insert([
-                        'name' => isset(unserialize($instance->all_data_detailed)->name) ? unserialize($instance->all_data_detailed)->name : null,
-                        'address' => isset(unserialize($instance->all_data_detailed)->address) ? unserialize($instance->all_data_detailed)->address : null,
-                        'city' => isset($instance->location) ? $instance->location : null,
-                        'country' => $country,
-                        'phone' => isset($phone) ? $phone : null,
-                        'website' => isset(unserialize($instance->all_data_detailed)->website) ? unserialize($instance->all_data_detailed)->website : null,
-                        'latitude' => isset(unserialize($instance->all_data_detailed)->lat) ? unserialize($instance->all_data_detailed)->lat : null,
-                        'longitude' => isset(unserialize($instance->all_data_detailed)->lng) ? unserialize($instance->all_data_detailed)->lng : null,
-                        'all_data' => gzcompress($instance->all_data),
-                        'source' => 'tour-pedia.org/api/',
-                        'created_at' => DB::raw('now()'),
-                        'updated_at' => DB::raw('now()')
-                    ]);
-                }
-            }
-        }
-
-
-
-
     }
 }
 

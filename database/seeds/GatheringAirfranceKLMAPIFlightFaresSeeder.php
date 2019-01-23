@@ -50,21 +50,26 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
                     $currentAirline = $airline[$j];
 
-                    for ($i = 1; $i <= 28; $i++) {
-                        foreach ($airports[0] as $airport1) {
-                            foreach ($airports[1] as $airport2) {
 
-                                $iata1 = $airport1->iata;
-                                $iata2 = $airport2->iata;
+                    foreach ($airports[0] as $airport1) {
+                        foreach ($airports[1] as $airport2) {
 
-                                $name1 = $airport1->name;
-                                $name2 = $airport2->name;
+                            $iata1 = $airport1->iata;
+                            $iata2 = $airport2->iata;
 
-                                if ($i < 10) {
-                                    $date = "2019-02-0$i";
-                                } else {
-                                    $date = "2019-02-$i";
-                                }
+                            $name1 = $airport1->name;
+                            $name2 = $airport2->name;
+
+
+                            // Set timezone
+                            date_default_timezone_set('UTC');
+
+                            // Start date
+                            $date = '2019-01-01';
+                            // End date
+                            $end_date = '2019-03-31';
+
+                            while (strtotime($date) <= strtotime($end_date)) {
 
                                 $headers = [
                                     'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
@@ -135,12 +140,14 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                         echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . "\n";
                                     }
                                 }
+                                $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
                             }
                         }
                     }
                 }
             }
         }
+
 
 
     }

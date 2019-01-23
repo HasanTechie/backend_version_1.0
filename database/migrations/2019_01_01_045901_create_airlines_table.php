@@ -14,10 +14,10 @@ class CreateAirlinesTable extends Migration
     public function up()
     {
         Schema::create('airlines', function (Blueprint $table) {
-            $table->string('uid')->unique();
-            $table->increments('s_no');
+            $table->string('uid')->unique()->primary();
+            $table->unsignedInteger('s_no');
             $table->string('airline_id')->unique();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('alias')->nullable();
             $table->string('iata')->nullable();
             $table->string('icao')->nullable();

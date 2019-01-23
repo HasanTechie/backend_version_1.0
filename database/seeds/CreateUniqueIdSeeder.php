@@ -12,6 +12,52 @@ class CreateUniqueIdSeeder extends Seeder
     public function run()
     {
         //
+
+
+        $j=0;
+        for ($i = 1; $i <= 400000; $i++) {
+            $j++;
+            if (DB::table('flights_1')->where('id', $i)->exists()) {
+
+                $results = DB::table('flights_1')->where('id', $i)->get();
+
+                foreach ($results as $instance) {
+
+                    DB::table('flights')->insert([
+                        'uid' => uniqid(),
+                        's_no' => $j,
+                        'flight_id' => $instance->flight_id,
+                        'iata_flight_number' => $instance->iata_flight_number,
+                        'flight_status' => $instance->flight_status,
+                        'aircraft_code' => $instance->aircraft_code,
+                        'aircraft_registration' => $instance->aircraft_registration,
+                        'airline' => $instance->airline,
+                        'arrival_airport_scheduled' => $instance->arrival_airport_scheduled,
+                        'arrival_airport_initial' => $instance->arrival_airport_initial,
+                        'arrival_runway_time_initial_date' => $instance->arrival_runway_time_initial_date,
+                        'arrival_runway_time_initial_time' => $instance->arrival_runway_time_initial_time,
+                        'arrival_runway_time_estimated_date' => $instance->arrival_runway_time_estimated_date,
+                        'arrival_runway_time_estimated_time' => $instance->arrival_runway_time_estimated_time,
+                        'callsign' => $instance->callsign,
+                        'departure_airport_scheduled' => $instance->departure_airport_scheduled,
+                        'departure_airport_initial' => $instance->departure_airport_initial,
+                        'departure_runway_time_initial_date' => $instance->departure_runway_time_initial_date,
+                        'departure_runway_time_initial_time' => $instance->departure_runway_time_initial_time,
+                        'departure_runway_time_estimated_date' => $instance->departure_runway_time_estimated_date,
+                        'departure_runway_time_estimated_time' => $instance->departure_runway_time_estimated_time,
+                        'timestamp_processed_date' => $instance->timestamp_processed_date,
+                        'timestamp_processed_time' => $instance->timestamp_processed_time,
+                        'source' => 'developer.laminardata.aero',
+                        'updated_at' => DB::raw('now()')
+                    ]);
+                    echo 'flights '. $j . "\n";
+                }
+            }
+        }
+
+
+
+        /*
         $j=0;
         for ($i = 1; $i <= 600000; $i++) {
             $j++;
@@ -37,12 +83,14 @@ class CreateUniqueIdSeeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo $j . ' ';
+                    echo '1 '. $j . "\n";
                 }
             }
         }
+        */
 
 
+        /*
         $j=0;
         for ($i = 1; $i <= 600000; $i++) {
             $j++;
@@ -72,9 +120,11 @@ class CreateUniqueIdSeeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo $j . ' ';
+                    echo '2 '. $j . "\n";
                 }
             }
         }
+        */
+
     }
 }

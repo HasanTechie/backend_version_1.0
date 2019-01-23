@@ -14,12 +14,14 @@ class CreatePlanesTable extends Migration
     public function up()
     {
         Schema::create('planes', function (Blueprint $table) {
-            $table->string('uid')->unique();
+            $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
             $table->string('name');
             $table->string('iata')->nullable();
             $table->string('icao')->nullable();
             $table->integer('capacity')->nullable();
+            $table->string('source');
+            $table->timestamps();
         });
     }
 

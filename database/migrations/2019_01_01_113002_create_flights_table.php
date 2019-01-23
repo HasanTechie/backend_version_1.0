@@ -14,7 +14,7 @@ class CreateFlightsTable extends Migration
     public function up()
     {
         Schema::create('flights', function (Blueprint $table) {
-            $table->string('uid')->unique();
+            $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
             $table->string('flight_id')->nullable();
             $table->string('iata_flight_number')->nullable();
@@ -37,6 +37,7 @@ class CreateFlightsTable extends Migration
             $table->string('departure_runway_time_estimated_time')->nullable();
             $table->string('timestamp_processed_date')->nullable();
             $table->string('timestamp_processed_time')->nullable();
+            $table->string('source');
             $table->timestamps();
         });
     }

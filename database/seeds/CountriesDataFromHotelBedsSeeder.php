@@ -69,15 +69,18 @@ class CountriesDataFromHotelBedsSeeder extends Seeder
             printf("Error while sending request, reason: %s\n",$ex->getMessage());
 
         }
-
+        $i=0;
         foreach($response->countries as $instance){
             DB::table('countries')->insert([
+                'uid' => uniqid(),
+                's_no' => ++$i,
                 'country_code' => $instance->code,
                 'iso_code' => $instance->isoCode,
                 'name' => $instance->description->content,
                 'number_of_states' => count($instance->states),
                 'states' => serialize($instance->states),
                 'all_data' => serialize($instance),
+                'source' => 'developer.hotelbeds.com',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);

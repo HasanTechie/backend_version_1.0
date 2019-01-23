@@ -24,6 +24,7 @@ class CreateAirlinesTable extends Migration
             $table->string('callsign')->nullable();
             $table->string('country')->nullable();
             $table->string('active');
+            $table->string('source');
             $table->timestamps();
         });
     }

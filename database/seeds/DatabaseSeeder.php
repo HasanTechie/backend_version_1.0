@@ -26,10 +26,12 @@ class DatabaseSeeder extends Seeder
 //        $this->call('SingaporeHotelDataSeeder');
 //        $this->call('MergingDataTourPediaAPISeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
-        $this->call('testSeeder1');
 //        $this->call('MergingDataLaminarAPISeeder');
 //        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
-//        $this->call('CreateUniqueIdSeeder');
+//        $this->call('CreateUniqueIdSeeder'); //running
+//        $this->call('UncompressingDataSeeder'); //running
+//        $this->call('UncompressingDataSeeder2'); //running
+//        $this->call('testSeeder1');
 
     }
 }

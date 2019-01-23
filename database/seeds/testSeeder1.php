@@ -12,6 +12,33 @@ class testSeeder1 extends Seeder
     public function run()
     {
         //
+
+        $j=0;
+        for ($i = 1; $i <= 100000; $i++) {
+            $j++;
+            if (DB::table('routes_1')->where('id', $i)->exists()) {
+
+                $results = DB::table('routes_1')->where('id', $i)->get();
+
+                foreach ($results as $instance) {
+
+                    DB::table('routes')->insert([
+                        'uid' => uniqid(),
+                        's_no' => $j,
+                        'airline_iata' => $instance->airline,
+                        'source_airport_iata' => $instance->source_airport,
+                        'destination_airport_iata' => $instance->destination_airport,
+                        'codeshare' => $instance->codeshare,
+                        'stops' => $instance->stops,
+                        'equipment' => $instance->equipment,
+                        'source' => 'tour-pedia.org/api/',
+                        'created_at' => DB::raw('now()'),
+                        'updated_at' => DB::raw('now()')
+                    ]);
+                    echo 'routes '. $j . "\n";
+                }
+            }
+        }
     }
 }
 

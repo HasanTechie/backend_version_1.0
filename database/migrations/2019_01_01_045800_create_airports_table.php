@@ -29,6 +29,7 @@ class CreateAirportsTable extends Migration
             $table->string('dst')->nullable();
             $table->string('tz_database_time_zone')->nullable();
             $table->string('type');
+            $table->string('their_source');
             $table->string('source');
             $table->timestamps();
         });

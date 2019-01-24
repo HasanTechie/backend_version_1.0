@@ -16,33 +16,27 @@ class UncompressingDataSeeder2 extends Seeder
         for ($i = 1; $i <= 600000; $i++) {
 
 
-            $results = DB::table('places_test')->where('id', $i)->get();
+            $results = DB::table('flights_afklm')->where('s_no', $i)->get();
 
             if (!empty($results[0])) {
 
                 foreach ($results as $instance) {
 
-                    DB::table('places_uncompressed')->insert([
-                        'uid' => uniqid(),
-                        's_no' => ++$j,
-                        'place_id' => isset($instance->place_id) ? $instance->place_id : null,
-                        'name' => isset($instance->name) ? $instance->name : null,
-                        'address' => isset($instance->address) ? $instance->address : null,
-                        'category' => isset($instance->category) ? $instance->category : null,
-                        'city' => isset($instance->city) ? $instance->city : null,
-                        'country' => isset($instance->country) ? $instance->country : null,
-                        'phone' => isset($instance->phone) ? $instance->phone : null,
-                        'website' => isset($instance->website) ? $instance->website : null,
-                        'latitude' => isset($instance->latitude) ? $instance->latitude : null,
-                        'longitude' => isset($instance->longitude) ? $instance->longitude : null,
-                        'all_data' => $instance->all_data,
-                        'all_data_detailed' => $instance->all_data_detailed,
-                        'all_data_detailed_reviews' => $instance->detailed_reviews,
-                        'source' => 'tour-pedia.org/api/',
+                    DB::table('flights_afklm_uncompressed')->insert([
+                        'uid' => isset($instance->uid) ? $instance->uid : null,
+                        's_no' => isset($instance->s_no) ? $instance->s_no : null,
+                        'airline_code' => isset($instance->airline_code) ? $instance->airline_code : null,
+                        'origin_name' => isset($instance->origin_name) ? $instance->origin_name : null,
+                        'origin_iata' => isset($instance->origin_iata) ? $instance->origin_iata : null,
+                        'destination_name' => isset($instance->destination_name) ? $instance->uid : null,
+                        'destination_iata' => isset($instance->destination_iata) ? $instance->destination_iata : null,
+                        'flight_date' => isset($instance->flight_date) ? $instance->flight_date : null,
+                        'all_data' => serialize(isset($instance->all_data) ? $instance->all_data : null),
+                        'source' => 'api.klm.com/opendata/flightoffers/available-offers',
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo 'places_test -> places_uncompressed ' . $j . "\n";
+                    echo 'flights_afklm -> flights_afklm_uncompressed ' . $i . "\n";
                 }
             }
         }

@@ -13,25 +13,19 @@ class testSeeder3 extends Seeder
     {
         //
         $j = 0;
-        for ($i = 1; $i <= 300000; $i++) {
-            if (DB::table('flights')->where('s_no', $i)->exists()) {
+//        for ($i = 1; $i <= 300000; $i++) {
 
-                $results = DB::table('flights')->select('s_no')->where('s_no', $i)->get();
-
+            $results = DB::table('hotels_uncompressed')->select('uid')->get();
+            if (!empty($results[0])) {
                 foreach ($results as $instance) {
-                    $j++;
-
-                    if ($j != $instance->s_no) {
-                        DB::table('flights')->where('s_no', $instance->s_no)->update([
-                            's_no' => $j,
+                    DB::table('hotels_uncompressed')->where('uid', $instance->uid)->update([
+                        's_no' => ++$j,
                         ]);
 
-                        echo ' done ';
-                    }
-                    echo 'flights ' . $j . "\n";
+                    echo 'hotels_uncompressed ' .'->' . $j . "\n";
                 }
             }
-        }
+//        }
 
 
     }

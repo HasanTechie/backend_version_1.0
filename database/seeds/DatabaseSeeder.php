@@ -21,13 +21,13 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CountriesDataFromHotelBedsSeeder');
 //        $this->call('HotelDataFromHotelBedsAPISeeder');
 //        $this->call('UpdateFlightsData1');
-//        $this->call('MergingDataGoogleMapsAPISeeder');
-//        $this->call('MergingDataHotelBedsAPISeeder');
-//        $this->call('SingaporeHotelDataSeeder');
-//        $this->call('MergingDataTourPediaAPISeeder');
-//        $this->call('MergingDataTourPediaAPIplacesSeeder');
+        $this->call('MergingDataGoogleMapsAPISeeder'); // neet to run at 136
+        $this->call('MergingDataHotelBedsAPISeeder');
+        $this->call('MergingDataTourPediaAPISeeder');
+        $this->call('SingaporeHotelDataSeeder');
+//        $this->call('MergingDataTourPediaAPIplacesSeeder'); //running at 208
 //        $this->call('MergingDataLaminarAPISeeder');
-        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
+//        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
 //        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder2');
 //        $this->call('CreateUniqueIdSeeder'); //running
 //        $this->call('UncompressingDataSeeder'); //running

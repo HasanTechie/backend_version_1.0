@@ -16,7 +16,6 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
         //
         $apiKey = '4kmnf3mnrk5ne5s53hk6xqvx';
 
-        $url1 = 'https://api.klm.com/opendata/flightoffers/reference-data';
         $url2 = 'https://api.klm.com/opendata/flightoffers/available-offers';
 
         $airports = [];
@@ -136,8 +135,8 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                     'content-type' => 'application/json',
                                 ];
 
-                                $iata1 = 'TXL';
-                                $iata2 = 'CDG';
+                                $iata1 = 'HAM';
+                                $iata2 = 'BCN';
 
                                 $body = '{
                                   "cabinClass":"ECONOMY",
@@ -188,81 +187,67 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                 if (isset($response)) {
 
                                     foreach ($response->flightProducts as $instance) {
-                                        echo ($instance->connections[0]->duration) . "\n";
-                                        echo ($instance->connections[0]->numberOfSeatsAvailable) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->arrivalDateTime) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->departureDateTime) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->destination->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->destination->city->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->destination->city->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->destination->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->carrier->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->carrier->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->numberOfStops) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->equipmentType->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->equipmentType->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->equipmentType->acvCode) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->cabin->class) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->carrier->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->operatingFlight->carrier->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->sellingClass->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->marketingFlight->number) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->origin->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->origin->city->name) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->origin->city->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->origin->code) . "\n";
-                                        echo ($instance->connections[0]->segments[0]->farebase->code) . "\n";
-                                        echo ($instance->passengers[0]->id) . "\n";
-                                        echo ($instance->passengers[0]->type) . "\n";
-                                        echo ($instance->passengers[1]->id) . "\n";
-                                        echo ($instance->passengers[1]->type) . "\n";
-                                        echo ($instance->passengers[2]->id) . "\n";
-                                        echo ($instance->passengers[2]->type) . "\n";
-                                        echo ($instance->passengers[3]->id) . "\n";
-                                        echo ($instance->passengers[3]->type) . "\n";
-                                        echo ($instance->price->displayPrice) . "\n";
-                                        echo ($instance->price->totalPrice) . "\n";
-                                        echo ($instance->price->accuracy) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[0]->passengerType) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[0]->fare) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[0]->taxes) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[1]->passengerType) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[1]->fare) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[1]->taxes) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[2]->passengerType) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[2]->fare) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[2]->taxes) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[3]->passengerType) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[3]->fare) . "\n";
-                                        echo ($instance->price->pricePerPassengerTypes[3]->taxes) . "\n";
-                                        echo ($instance->price->flexibilityWaiver) . "\n";
-                                        echo ($instance->price->displayType) . "\n";
 
 
+                                        foreach ($instance->connections[0]->segments as $segment) {
 
 
+                                            DB::table('flights_afklm')->insert([
+                                                'uid' => uniqid(),
+                                                's_no' => ++$j,
 
+                                                'flight_number' => ($segment->marketingFlight->number),
+                                                'flight_duration' => ($instance->connections[0]->duration),
+                                                'number_of_seats_available' => ($instance->connections[0]->numberOfSeatsAvailable),
 
+                                                'arrival_date_time' => ($segment->arrivalDateTime),
+                                                'departure_date_time' => ($segment->departureDateTime),
+                                                'destination_airport' => ($segment->destination->name),
+                                                'destination_city' => ($segment->destination->city->name),
+                                                'destination_city_code' => ($segment->destination->city->code),
+                                                'destination_airport_iata' => ($segment->destination->code),
+                                                'carrier_name' => ($segment->marketingFlight->carrier->name),
+                                                'carrier_code' => ($segment->marketingFlight->carrier->code),
+                                                'number_of_stops' => ($segment->marketingFlight->numberOfStops),
+                                                'equipmenttype_code' => ($segment->marketingFlight->operatingFlight->equipmentType->code),
+                                                'equipmenttype_name' => ($segment->marketingFlight->operatingFlight->equipmentType->name),
+                                                'equipmenttype_acvCode' => ($segment->marketingFlight->operatingFlight->equipmentType->acvCode),
+                                                'cabin_name' => ($segment->marketingFlight->operatingFlight->cabin->class),
+                                                'flight_carrier_name' => ($segment->marketingFlight->operatingFlight->carrier->name),
+                                                'flight_carrier_code' => ($segment->marketingFlight->operatingFlight->carrier->code),
+                                                'selling_class_code' => ($segment->marketingFlight->sellingClass->code),
+                                                'origin_airport' => ($segment->origin->name),
+                                                'origin_city' => ($segment->origin->city->name),
+                                                'origin_city_code' => ($segment->origin->city->code),
+                                                'origin_airport_iata' => ($segment->origin->code),
+                                                'farebase_code' => ($segment->farebase->code),
+                                                'transfer_time' => ($segment->transferTime),
 
+                                                'total_displayPrice' => ($instance->price->displayPrice),
+                                                'total_totalPrice' => ($instance->price->totalPrice),
+                                                'total_accuracy' => ($instance->price->accuracy),
+                                                'total_passenger_1_type' => ($instance->price->pricePerPassengerTypes[0]->passengerType),
+                                                'total_passenger_1_fare' => ($instance->price->pricePerPassengerTypes[0]->fare),
+                                                'total_passenger_1_taxes' => ($instance->price->pricePerPassengerTypes[0]->taxes),
+                                                'total_passenger_2_type' => ($instance->price->pricePerPassengerTypes[1]->passengerType),
+                                                'total_passenger_2_fare' => ($instance->price->pricePerPassengerTypes[1]->fare),
+                                                'total_passenger_2_taxes' => ($instance->price->pricePerPassengerTypes[1]->taxes),
+                                                'total_passenger_3_type' => ($instance->price->pricePerPassengerTypes[2]->passengerType),
+                                                'total_passenger_3_fare' => ($instance->price->pricePerPassengerTypes[2]->fare),
+                                                'total_passenger_3_taxes' => ($instance->price->pricePerPassengerTypes[2]->taxes),
+                                                'total_passenger_4_type' => ($instance->price->pricePerPassengerTypes[3]->passengerType),
+                                                'total_passenger_4_fare' => ($instance->price->pricePerPassengerTypes[3]->fare),
+                                                'total_passenger_4_taxes' => ($instance->price->pricePerPassengerTypes[3]->taxes),
+                                                'flexibility_waiver' => ($instance->price->flexibilityWaiver),
+                                                'currency' => ($instance->price->currency),
+                                                'display_type' => ($instance->price->displayType),
 
-
-
-
-                                        DB::table('flights_afklm')->insert([
-                                            'uid' => uniqid(),
-                                            's_no' => ++$j,
-                                            'flight_date' => $date,
-                                            'airline_code' => $currentAirline,
-                                            'origin_name' => $name1,
-                                            'origin_iata' => $iata1,
-                                            'destination_name' => $name2,
-                                            'destination_iata' => $iata2,
-                                            'all_data' => serialize($instance),
-                                            'source' => 'api.klm.com/opendata/flightoffers/available-offers',
-                                            'created_at' => DB::raw('now()'),
-                                            'updated_at' => DB::raw('now()')
-                                        ]);
-                                        echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
+                                                'source' => 'api.klm.com/opendata/flightoffers/available-offers',
+                                                'created_at' => DB::raw('now()'),
+                                                'updated_at' => DB::raw('now()')
+                                            ]);
+                                            echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
+                                        }
                                     }
                                 }
                                 $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
@@ -276,3 +261,58 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
     }
 }
+
+
+/*
+                                            echo ($instance->connections[0]->duration) . "\n";
+                                            echo ($instance->connections[0]->numberOfSeatsAvailable) . "\n";
+
+                                            echo ($segment->arrivalDateTime) . "\n";
+                                            echo ($segment->departureDateTime) . "\n";
+                                            echo ($segment->destination->name) . "\n";
+                                            echo ($segment->destination->city->name) . "\n";
+                                            echo ($segment->destination->city->code) . "\n";
+                                            echo ($segment->destination->code) . "\n";
+                                            echo ($segment->marketingFlight->carrier->name) . "\n";
+                                            echo ($segment->marketingFlight->carrier->code) . "\n";
+                                            echo ($segment->marketingFlight->numberOfStops) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->equipmentType->code) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->equipmentType->name) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->equipmentType->acvCode) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->cabin->class) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->carrier->name) . "\n";
+                                            echo ($segment->marketingFlight->operatingFlight->carrier->code) . "\n";
+                                            echo ($segment->marketingFlight->sellingClass->code) . "\n";
+                                            echo ($segment->marketingFlight->number) . "\n";
+                                            echo ($segment->origin->name) . "\n";
+                                            echo ($segment->origin->city->name) . "\n";
+                                            echo ($segment->origin->city->code) . "\n";
+                                            echo ($segment->origin->code) . "\n";
+                                            echo ($segment->farebase->code) . "\n";
+
+                                            echo ($instance->passengers[0]->id) . "\n";
+                                            echo ($instance->passengers[0]->type) . "\n";
+                                            echo ($instance->passengers[1]->id) . "\n";
+                                            echo ($instance->passengers[1]->type) . "\n";
+                                            echo ($instance->passengers[2]->id) . "\n";
+                                            echo ($instance->passengers[2]->type) . "\n";
+                                            echo ($instance->passengers[3]->id) . "\n";
+                                            echo ($instance->passengers[3]->type) . "\n";
+                                            echo ($instance->price->displayPrice) . "\n";
+                                            echo ($instance->price->totalPrice) . "\n";
+                                            echo ($instance->price->accuracy) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[0]->passengerType) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[0]->fare) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[0]->taxes) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[1]->passengerType) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[1]->fare) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[1]->taxes) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[2]->passengerType) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[2]->fare) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[2]->taxes) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[3]->passengerType) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[3]->fare) . "\n";
+                                            echo ($instance->price->pricePerPassengerTypes[3]->taxes) . "\n";
+                                            echo ($instance->price->flexibilityWaiver) . "\n";
+                                            echo ($instance->price->displayType) . "\n";
+ */

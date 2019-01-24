@@ -12,11 +12,13 @@ class MergingDataTourPediaAPIplacesSeeder extends Seeder
     public function run()
     {
         //
+        $j = 0;
         for ($i = 1; $i <= 600000; $i++) {
-            if (DB::table('places_test')->where('id', $i)->exists()) {
 
-                $results = DB::table('places_test')->where('id', $i)->get();
 
+            $results = DB::table('places_test')->where('id', $i)->get();
+
+            if (!empty($results[0])) {
                 foreach ($results as $instance) {
 
                     if ($instance->location == 'Berlin') {
@@ -42,7 +44,9 @@ class MergingDataTourPediaAPIplacesSeeder extends Seeder
                     }
 
 
-                    DB::table('places')->insert([
+                    DB::table('places_uncompressed')->insert([
+                        'uid' => uniqid(),
+                        's_no' => ++$j,
                         'place_id' => isset($instance->place_id) ? $instance->place_id : null,
                         'name' => isset($instance->name) ? $instance->name : null,
                         'address' => isset($instance->address) ? $instance->address : null,
@@ -53,20 +57,20 @@ class MergingDataTourPediaAPIplacesSeeder extends Seeder
                         'website' => isset(unserialize($instance->all_data_detailed)->website) ? unserialize($instance->all_data_detailed)->website : null,
                         'latitude' => isset(unserialize($instance->all_data_detailed)->lat) ? unserialize($instance->all_data_detailed)->lat : null,
                         'longitude' => isset(unserialize($instance->all_data_detailed)->lng) ? unserialize($instance->all_data_detailed)->lng : null,
-                        'all_data_detailed_reviews' => gzcompress($instance->detailed_reviews),
-                        'all_data_detailed' => gzcompress($instance->all_data_detailed),
-                        'all_data' => gzcompress($instance->all_data),
+                        'all_data_detailed_reviews' => ($instance->detailed_reviews),
+                        'all_data_detailed' => ($instance->all_data_detailed),
+                        'all_data' => ($instance->all_data),
                         'source' => 'tour-pedia.org/api/',
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
+                    echo 'places_test->places_uncompressed ' . $j . "\n";
 
-                    echo $i . ' ';
                 }
             }
         }
-
-
-
     }
+
+
+
 }

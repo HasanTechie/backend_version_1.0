@@ -12,18 +12,19 @@ class UncompressingDataSeeder2 extends Seeder
     public function run()
     {
         //
-        $j=0;
+        $j = 0;
         for ($i = 1; $i <= 600000; $i++) {
-            $j++;
-            if (DB::table('places')->where('s_no', $i)->exists()) {
 
-                $results = DB::table('places')->where('s_no', $i)->get();
+
+            $results = DB::table('places_test')->where('id', $i)->get();
+
+            if (!empty($results[0])) {
 
                 foreach ($results as $instance) {
 
                     DB::table('places_uncompressed')->insert([
-                        'uid' => $instance->uid,
-                        's_no' => $instance->s_no,
+                        'uid' => uniqid(),
+                        's_no' => ++$j,
                         'place_id' => isset($instance->place_id) ? $instance->place_id : null,
                         'name' => isset($instance->name) ? $instance->name : null,
                         'address' => isset($instance->address) ? $instance->address : null,
@@ -34,14 +35,14 @@ class UncompressingDataSeeder2 extends Seeder
                         'website' => isset($instance->website) ? $instance->website : null,
                         'latitude' => isset($instance->latitude) ? $instance->latitude : null,
                         'longitude' => isset($instance->longitude) ? $instance->longitude : null,
-                        'all_data' => gzuncompress($instance->all_data),
-                        'all_data_detailed' => gzuncompress($instance->all_data_detailed),
-                        'all_data_detailed_reviews' => gzuncompress($instance->all_data_detailed_reviews),
+                        'all_data' => $instance->all_data,
+                        'all_data_detailed' => $instance->all_data_detailed,
+                        'all_data_detailed_reviews' => $instance->detailed_reviews,
                         'source' => 'tour-pedia.org/api/',
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo '2 '. $j . "\n";
+                    echo 'places_test -> places_uncompressed ' . $j . "\n";
                 }
             }
         }

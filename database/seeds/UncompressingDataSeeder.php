@@ -12,13 +12,13 @@ class UncompressingDataSeeder extends Seeder
     public function run()
     {
         //
-        $j=0;
+        $j = 0;
         for ($i = 1; $i <= 600000; $i++) {
             $j++;
-            if (DB::table('hotels')->where('s_no', $i)->exists()) {
 
-                $results = DB::table('hotels')->where('s_no', $i)->get();
 
+            $results = DB::table('hotels')->where('s_no', $i)->get();
+            if (!empty($results[0])) {
                 foreach ($results as $instance) {
 
                     DB::table('hotels_uncompressed')->insert([
@@ -37,7 +37,7 @@ class UncompressingDataSeeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo '1 '. $j . "\n";
+                    echo '1 ' . $j . "\n";
                 }
             }
         }

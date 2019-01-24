@@ -31,7 +31,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
             'Romania' => 'Bucharest'
         ];
 
-        $j=0;
+        $j = 0;
         foreach ($cities as $city) {
             foreach ($dest_cities as $country => $city2) {
 
@@ -67,9 +67,9 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                             date_default_timezone_set('UTC');
 
                             // Start date
-                            $date = '2019-02-01';
+                            $date = '2019-04-01';
                             // End date
-                            $end_date = '2019-03-31';
+                            $end_date = '2019-07-31';
 
                             while (strtotime($date) <= strtotime($end_date)) {
 
@@ -123,7 +123,9 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
                                 } catch (\Exception $ex) {
-                                    echo 'Incompleted =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date .' '. "\n";
+                                    if (!empty($ex)) {
+                                        echo 'Incompleted =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
+                                    }
                                 }
                                 if (isset($response)) {
                                     foreach ($response->flightProducts as $instance) {
@@ -141,7 +143,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                             'created_at' => DB::raw('now()'),
                                             'updated_at' => DB::raw('now()')
                                         ]);
-                                        echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date .' '. "\n";
+                                        echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
                                     }
                                 }
                                 $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
@@ -151,7 +153,6 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                 }
             }
         }
-
 
 
     }

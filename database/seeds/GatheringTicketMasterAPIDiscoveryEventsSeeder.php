@@ -58,11 +58,11 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
         }
 
 
-        /*
-         * For Gathering all Events in Germany
+
+         /* For Gathering all Events in Germany
         $j = 0;
         $k=0;
-        for ($i = 5; $i <= 250; $i++) {
+        for ($i = 0; $i <= 250; $i++) {
 
             if ($i % 5 == 0 && $i !=0) {
                 $k++;
@@ -131,7 +131,8 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                 }
             }
         }
-        */
+         */
+
 
 
     }

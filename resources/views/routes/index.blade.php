@@ -23,7 +23,7 @@
                 <th scope="row">{{$route->uid}}</th>
                 <td>{{$route->airline_iata}}</td>
                 <td>{{$route->source_airport_iata}}</td>
-                <td>{{$route->destination_airport}}</td>
+                <td>{{$route->destination_airport_iata}}</td>
                 <td>{{$route->stops}}</td>
                 <td>{{$route->equipment}}</td>
             </tr>

@@ -1,84 +1,84 @@
 @extends ('layouts/header')
 
-@section('title',$place->name)
+@section('title',$event->name)
 @section('content')
 
-    @if(1 > 2)
+    @if(1 < 0)
         <div class="block">
             <div class="box" style="margin-bottom: 20rem;">
-                <h1 class="title">{{$place->name}}</h1>
+                <h1 class="title">{{$event->name}}</h1>
 
                 <table style="width: 60%;" class="table is-bordered is-striped is-narrow is-hoverable">
                     <tr>
-                        <th>place Google ID</th>
-                        <td>{{$place->place_id}}</td>
+                        <th>Hotel Google ID</th>
+                        <td>{{$event->hotel_id}}</td>
                     </tr>
                     <tr>
                         <th>Ratings</th>
-                        <td>{{sprintf("%.1f", $place->rating)}}</td>
+                        <td>{{sprintf("%.1f", $event->rating)}}</td>
                     </tr>
                     <tr>
                         <th>Total Number of Ratings</th>
-                        <td>{{$place->total_ratings}}</td>
+                        <td>{{$event->total_ratings}}</td>
                     </tr>
                     <tr>
-                        <th>place Address</th>
-                        <td>{{$place->address}}</td>
+                        <th>Hotel Address</th>
+                        <td>{{$event->address}}</td>
                     </tr>
                     <tr>
                         <th>Street Number</th>
-                        <td>{{$place->street_number}}</td>
+                        <td>{{$event->street_number}}</td>
                     </tr>
                     <tr>
                         <th>Route</th>
-                        <td>{{$place->route}}</td>
+                        <td>{{$event->route}}</td>
                     </tr>
                     <tr>
                         <th>Sub Locality</th>
-                        <td>{{$place->sublocality}}</td>
+                        <td>{{$event->sublocality}}</td>
                     </tr>
                     <tr>
                         <th>Postal Code</th>
-                        <td>{{$place->postal_code}}</td>
+                        <td>{{$event->postal_code}}</td>
                     </tr>
                     <tr>
                         <th>Locality</th>
-                        <td>{{$place->city}}</td>
+                        <td>{{$event->city}}</td>
                     </tr>
                     <tr>
                         <th>Country</th>
-                        <td>{{$place->country}}</td>
+                        <td>{{$event->country}}</td>
                     </tr>
                     <tr>
                         <th>Vicnity</th>
-                        <td>{{$place->vicinity}}</td>
+                        <td>{{$event->vicinity}}</td>
                     </tr>
                     <tr>
                         <th>Google Maps URL</th>
-                        <td><a href="{{$place->maps_url}}">{{$place->maps_url}}</a></td>
+                        <td><a href="{{$event->maps_url}}">{{$event->maps_url}}</a></td>
                     </tr>
                     <tr>
                         <th>Website URL</th>
-                        <td><a href="{{$place->website}}">{{$place->website}}</a></td>
+                        <td><a href="{{$event->website}}">{{$event->website}}</a></td>
                     </tr>
                     <tr>
                         <th>Phone Number</th>
-                        <td>{{$place->phone}}</td>
+                        <td>{{$event->phone}}</td>
                     </tr>
                     <tr>
                         <th>International Phone Number</th>
-                        <td>{{$place->international_phone}}</td>
+                        <td>{{$event->international_phone}}</td>
                     </tr>
                     <tr>
                         <th>Latitude</th>
                         <td>
-                            <a href="https://www.google.com/maps/place/{{unserialize($place->geometry)->location->lat}},{{unserialize($place->geometry)->location->lng}}">{{unserialize($place->geometry)->location->lat}}</a>
+                            <a href="https://www.google.com/maps/place/{{unserialize($event->geometry)->location->lat}},{{unserialize($event->geometry)->location->lng}}">{{unserialize($event->geometry)->location->lat}}</a>
                         </td>
                     </tr>
                     <tr>
                         <th>Longitude</th>
                         <td>
-                            <a href="https://www.google.com/maps/place/{{unserialize($place->geometry)->location->lat}},{{unserialize($place->geometry)->location->lng}}">{{unserialize($place->geometry)->location->lng}}</a>
+                            <a href="https://www.google.com/maps/place/{{unserialize($event->geometry)->location->lat}},{{unserialize($event->geometry)->location->lng}}">{{unserialize($event->geometry)->location->lng}}</a>
                         </td>
                     </tr>
                     <tr>
@@ -88,8 +88,8 @@
                             <button type="button" data-html="true" class="btn btn-primary btn-sm" data-toggle="popover"
                                     title="Opening Hours"
                                     data-content="
-                                @if($place->opening_hours != 'Not Available')
-                                    @foreach(unserialize($place->opening_hours)->weekday_text as $week)
+                                @if($event->opening_hours != 'Not Available')
+                                    @foreach(unserialize($event->opening_hours)->weekday_text as $week)
                                     {{$week . "</br>"}}
                                     @endforeach
                                     @endif
@@ -105,7 +105,7 @@
                             @php
                                 $i=0;
                             @endphp
-                            @foreach(unserialize($place->reviews) as $review)
+                            @foreach(unserialize($event->reviews) as $review)
                                 <button type="button btn-sm" class="btn btn-primary" data-toggle="modal"
                                         data-target="#myModal{{++$i}}">
                                     Review {{$i}}
@@ -119,7 +119,7 @@
             @php
                 $k=0;
             @endphp
-            @foreach(unserialize($place->reviews) as $review)
+            @foreach(unserialize($event->reviews) as $review)
                 <!-- The Modal -->
                     <div class="modal fade" id="myModal{{++$k}}">
                         <div class="modal-dialog modal-dialog-centered">
@@ -166,7 +166,7 @@
 
         </div>
     @else
-        {{dd(unserialize(gzuncompress($place->all_data)))}}
+        {{dd(unserialize($event->all_data))}}
     @endif
 
 @endsection

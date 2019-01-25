@@ -13,6 +13,7 @@ class CreateFlightsAfklmTable extends Migration
      */
     public function up()
     {
+
         Schema::create('flights_afklm', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
@@ -57,7 +58,7 @@ class CreateFlightsAfklmTable extends Migration
             $table->string('total_passenger_4_type')->nullable();
             $table->double('total_passenger_4_fare')->default(0);
             $table->double('total_passenger_4_taxes')->default(0);
-            $table->string('flexibility_waiver')->nullable();
+            $table->boolean('flexibility_waiver')->default(false);
             $table->string('currency')->nullable();
             $table->string('display_type')->nullable();
 
@@ -65,6 +66,7 @@ class CreateFlightsAfklmTable extends Migration
 
             $table->timestamps();
         });
+
     }
 
     /**

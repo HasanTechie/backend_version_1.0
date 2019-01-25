@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Plane extends Model
+class Event extends Model
 {
     //
     protected $primaryKey = 'uid';

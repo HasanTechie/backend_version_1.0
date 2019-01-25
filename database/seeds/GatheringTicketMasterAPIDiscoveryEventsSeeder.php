@@ -14,15 +14,29 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
     public function run()
     {
         //
-        $apiKey = 'dgIOGoQ4AcSAOApXx59AuXI53bKqKTpW';
 
+        $apiArray = Array(
+            "dgIOGoQ4AcSAOApXx59AuXI53bKqKTpW",
+            "Q7VcIDLY2qRMsGqlwNJVU4UWDMDNaXcv",
+            "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG"
+        );
+
+
+        /*
         $j = 0;
-        for ($i = 0; $i <= 250; $i++) {
-            $i++;
+        $k=0;
+        for ($i = 5; $i <= 250; $i++) {
 
-            $url = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=DE&apikey=$apiKey&page=$i&size=200";
+            if ($i % 5 == 0 && $i !=0) {
+                $k++;
+            }
+
+            $url = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=DE&apikey=$apiArray[$k]&page=$i&size=200";
+
+            echo $url . "\n";
 
             try {
+                usleep(500000);
                 $client = new Client();
                 $response = $client->request('GET', $url);
 
@@ -30,50 +44,57 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 
             } catch (\Exception $ex) {
                 if (!empty($ex)) {
-                    echo 'Incompleted';
+                    echo 'Incompleted' . "\n";
+                    $response='';
                 }
             }
 
-            if (isset($response)) {
+            if (!empty($response)) {
 
 
                 foreach ($response->_embedded->events as $event) {
-                    echo ($event->name) . "\n";
-                    echo ($event->id) . "\n";
-                    echo ($event->url) . "\n";
 
-                    $standedPrice=0;
-                    $standedPriceIncludingFees=0;
+                    $standedPrice = 0;
+                    $standedPriceIncludingFees = 0;
 
-                    foreach ($event->priceRanges as $price) {
-                        if (isset($price->type)) {
-                            if ($price->type == 'standard') {
-                                $standedPrice = $price->max . "\n";
-                            }
-                            if ($price->type == 'standard including fees') {
-                                $standedPriceIncludingFees = $price->max . " inf\n";
+                    if (isset($event->priceRanges)) {
+
+
+                        foreach ($event->priceRanges as $price) {
+                            if (isset($price->type)) {
+                                if ($price->type == 'standard') {
+                                    $standedPrice = $price->max;
+                                }
+                                if ($price->type == 'standard including fees') {
+                                    $standedPriceIncludingFees = $price->max;
+                                }
                             }
                         }
+
+                        DB::table('events')->insert([
+                            'uid' => uniqid(),
+                            's_no' => ++$j,
+
+                            'name' => isset($event->name) ? ($event->name) : null,
+                            'id' => isset($event->id) ? ($event->id) : null,
+                            'url' => isset($event->url) ? ($event->url) : null,
+                            'standard_price' => $standedPrice,
+                            'standard_price_including_fees' => $standedPriceIncludingFees,
+
+                            'all_data' => serialize($event),
+
+                            'source' => 'app.ticketmaster.com/discovery/v2/events',
+                            'created_at' => DB::raw('now()'),
+                            'updated_at' => DB::raw('now()')
+                        ]);
+
+//                        echo 'events ' . $j . "\n";
                     }
-
-                    DB::table('events')->insert([
-                        'uid' => uniqid(),
-                        's_no' => ++$j,
-
-                        'name' => isset($event->name) ? ($event->name) : null ,
-                        'id' => isset($event->id) ? ($event->id) : null ,
-                        'url' => isset($event->url) ? ($event->url) : null ,
-                        'standard_price' => $standedPrice,
-                        'standard_price_including_fees' => $standedPriceIncludingFees,
-
-                        'all_data' => serialize($event),
-
-                        'source' => 'app.ticketmaster.com/discovery/v2/events',
-                        'created_at' => DB::raw('now()'),
-                        'updated_at' => DB::raw('now()')
-                    ]);
                 }
             }
         }
+        */
+
+
     }
 }

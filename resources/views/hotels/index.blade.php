@@ -1,7 +1,6 @@
 @extends ('layouts/header')
 
 @section('title','Hotels')
-{{--{{phpinfo()}}--}}
 @section('content')
 
 
@@ -25,7 +24,6 @@
         <tbody>
         @foreach ($hotels as $hotel)
             <tr>
-
                 <td>{{$hotel->uid}}</td>
                 <td><a href="/hotels/{{$hotel->uid}}">{{$hotel->name}}</a></td>
                 <td>{{$hotel->address}}</td>
@@ -35,7 +33,7 @@
                 <td><a href="{{$hotel->website}}" class="button is-link is-outlined">Website</a></td>
                 <td>{{$hotel->latitude}}</td>
                 <td>{{$hotel->longitude}}</td>
-                <td><a href="/hotels/{{$hotel->id}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/hotels/{{$hotel->uid}}" class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
         </tbody>

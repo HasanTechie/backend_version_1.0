@@ -27,15 +27,15 @@ class CreatePlacesTable extends Migration
             $table->double('longitude')->nullable();
             $table->string('phone')->nullable();
             $table->text('website')->nullable();
-            $table->binary('all_data')->nullable();
-            $table->binary('all_data_detailed')->nullable();
+            $table->longText('all_data')->nullable();
+            $table->longText('all_data_detailed')->nullable();
+            $table->longText('all_data_detailed_reviews')->nullable();
 
             $table->string('source')->nullable();
 
             $table->timestamps();
         });
 
-        DB::statement("ALTER TABLE places ADD all_data_detailed_reviews LONGBLOB");
     }
 
     /**

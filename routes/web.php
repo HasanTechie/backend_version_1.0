@@ -20,6 +20,7 @@ Route::get('/places/{place}', 'PlaceController@show');
 
 
 Route::get('/hotels', 'HotelController@index');
+Route::get('/hotels/{hotel}', 'HotelController@show');
 Route::get('/hotels/create', 'HotelController@create');
 Route::get('/hotels/test1', 'HotelController@test1');
 Route::get('/hotels/test2', 'HotelController@test2');
@@ -29,11 +30,10 @@ Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
 Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
 Route::get('/hotels/search', 'HotelController@search');
 Route::post('/hotels/search', 'HotelController@search');
-Route::get('/hotels/{hotel}', 'HotelController@show');
 
+Route::get('/events', 'EventController@index');
+Route::get('/events/{event}', 'EventController@show');
 
-Route::get('/hotelbeds', 'HotelBedController@index');
-Route::get('/hotelbeds/{hotelbed}', 'HotelBedController@show');
 
 Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');

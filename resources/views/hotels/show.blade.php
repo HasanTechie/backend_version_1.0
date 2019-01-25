@@ -3,7 +3,7 @@
 @section('title',$hotel->name)
 @section('content')
 
-    @if(!($hotel->id > 0))
+    @if(1 < 0)
         <div class="block">
             <div class="box" style="margin-bottom: 20rem;">
                 <h1 class="title">{{$hotel->name}}</h1>

@@ -19,7 +19,7 @@
         <tbody>
         @foreach ($planes as $plane)
             <tr>
-                <th scope="row">{{$plane->id}}</th>
+                <th scope="row">{{$plane->uid}}</th>
                 <td>{{$plane->name}}</td>
                 <td>{{$plane->iata}}</td>
                 <td>{{$plane->icao}}</td>

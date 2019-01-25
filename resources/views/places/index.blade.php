@@ -25,7 +25,6 @@
         <tbody>
         @foreach ($places as $place)
             <tr>
-
                 <td>{{$place->uid}}</td>
                 <td><a href="/places/{{$place->uid}}">{{$place->name}}</a></td>
                 <td>{{$place->address}}</td>
@@ -35,7 +34,7 @@
                 <td><a href="{{$place->website}}" class="button is-link is-outlined">Website</a></td>
                 <td>{{$place->latitude}}</td>
                 <td>{{$place->longitude}}</td>
-                <td><a href="/places/{{$place->id}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/places/{{$place->uid}}" class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
         </tbody>

@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events;
+use App\Event;
 use Illuminate\Http\Request;
 
-class EventsController extends Controller
+class EventController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +20,8 @@ class EventsController extends Controller
     public function index()
     {
         //
+        $events = Event::paginate(25);
+        return view('events.index', compact('events'));
     }
 
     /**
@@ -41,21 +48,22 @@ class EventsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Events  $events
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Events $events)
+    public function show(Event $event)
     {
         //
+        return view('events.show', compact('event'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Events  $events
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Events $events)
+    public function edit(Event $event)
     {
         //
     }
@@ -64,10 +72,10 @@ class EventsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Events  $events
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Events $events)
+    public function update(Request $request, Event $event)
     {
         //
     }
@@ -75,10 +83,10 @@ class EventsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Events  $events
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Events $events)
+    public function destroy(Event $event)
     {
         //
     }

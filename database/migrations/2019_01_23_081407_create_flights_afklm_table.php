@@ -19,10 +19,13 @@ class CreateFlightsAfklmTable extends Migration
             $table->unsignedInteger('s_no');
 
             $table->string('flight_number')->nullable();
-            $table->double('flight_duration')->default(0);
-            $table->double('number_of_seats_available')->default(0);
-            $table->string('arrival_date_time')->nullable();
-            $table->string('departure_date_time')->nullable();
+            $table->double('total_flight_duration')->default(0);
+            $table->string('arrival_date')->nullable();
+            $table->string('arrival_time')->nullable();
+            $table->string('arrival_day')->nullable();
+            $table->string('departure_date')->nullable();
+            $table->string('departure_time')->nullable();
+            $table->string('departure_day')->nullable();
             $table->string('destination_airport')->nullable();
             $table->string('destination_city')->nullable();
             $table->string('destination_city_code')->nullable();
@@ -58,9 +61,11 @@ class CreateFlightsAfklmTable extends Migration
             $table->string('total_passenger_4_type')->nullable();
             $table->double('total_passenger_4_fare')->default(0);
             $table->double('total_passenger_4_taxes')->default(0);
+            $table->double('total_number_of_seats_available')->default(0);
             $table->boolean('flexibility_waiver')->default(false);
             $table->string('currency')->nullable();
             $table->string('display_type')->nullable();
+            $table->string('fid')->unique();
 
             $table->string('source');
 

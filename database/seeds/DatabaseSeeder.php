@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('SingaporeHotelDataSeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
 //        $this->call('MergingDataLaminarAPISeeder');
-//        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder'); //running
+        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder'); //running
 //        $this->call('GatheringAirfranceKLMAPIReferenceDataSeeder');
 //        $this->call('CreateUniqueIdSeeder');
 //        $this->call('UncompressingDataSeeder');
@@ -35,6 +35,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
-        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');
+//        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');
     }
 }

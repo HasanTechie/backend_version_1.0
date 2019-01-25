@@ -87,6 +87,7 @@
                 <div class="links">
                     <a href="/landroutes">Search LandRoutes</a>
                     <a href="/hotels">Hotels</a>
+                    <a href="/events">Events</a>
                     <a href="/flights">All Flights</a>
                     <a href="/flights/search">Search Flights</a>
                     <a href="/places/">Places</a>

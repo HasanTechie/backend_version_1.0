@@ -20,9 +20,46 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             "Q7VcIDLY2qRMsGqlwNJVU4UWDMDNaXcv",
             "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG"
         );
+        $k = 0;
+
+        $events = DB::table('events')->select('*')->get();
+
+        foreach ($events as $event) {
+
+            $url = "https://app.ticketmaster.com/discovery/v2/events/$event->id.json?countryCode=DE&apikey=$apiArray[$k]";
+
+
+            echo $url . "\n";
+
+            try {
+                usleep(500000);
+                $client = new Client();
+                $response = $client->request('GET', $url);
+
+                $response = json_decode($response->getBody());
+
+            } catch (\Exception $ex) {
+                if (!empty($ex)) {
+                    echo 'Incompleted' . "\n";
+                    $response = '';
+                }
+            }
+
+            if (!empty($response)) {
+
+                DB::table('events')
+                    ->where('id', $response->id)
+                    ->update(['all_data' => serialize($response)]);
+
+
+                echo 'Completed' . ' ' . $event->id . "\n";
+
+            }
+        }
 
 
         /*
+         * For Gathering all Events in Germany
         $j = 0;
         $k=0;
         for ($i = 5; $i <= 250; $i++) {
@@ -38,6 +75,7 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             try {
                 usleep(500000);
                 $client = new Client();
+                $response='';
                 $response = $client->request('GET', $url);
 
                 $response = json_decode($response->getBody());

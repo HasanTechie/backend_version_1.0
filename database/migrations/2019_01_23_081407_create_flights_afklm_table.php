@@ -67,6 +67,9 @@ class CreateFlightsAfklmTable extends Migration
             $table->string('display_type')->nullable();
             $table->string('fid')->unique();
 
+            $table->string('ignore_oiata');//initial origin
+            $table->string('ignore_diata');//final desitination
+
             $table->string('source');
 
             $table->timestamps();

@@ -72,14 +72,6 @@ class HotelController extends Controller
     }
 
 
-    public function test1()
-    {
-        $results = DB::select('select * from hotel_beds where destination_code = :destination_code', ['destination_code' => 'BER']);
-
-        dd(unserialize($results[0]->all_data));
-
-    }
-
     public function test2()
     {
         $results = DB::select('select * from hotels where id = :id', ['id' => '1']);

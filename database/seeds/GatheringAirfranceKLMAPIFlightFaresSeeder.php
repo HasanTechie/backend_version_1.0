@@ -96,9 +96,9 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
         // Start date
-        $date = '2019-02-02';
+        $date = '2019-02-09';
         //$end_date = '2019-02-07';
-        $end_date = '2019-02-08';
+        $end_date = '2019-07-31';
 
         // Set timezone
         date_default_timezone_set('UTC');
@@ -111,17 +111,18 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
         $m = 0;
 
         $requestCount = 0;
+
         while (strtotime($date) <= strtotime($end_date)) {
 
-            foreach ($cities as $city1) { //from here
-                foreach ($dest_cities as $city2) { //to here
+//            foreach ($cities as $city1) { //from here
+//                foreach ($dest_cities as $city2) { //to here
 
 
-                    $airports[0] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city1)->distinct()->get();
-//                    $airports[0] = DB::table('flights_afklm')->select(['origin_airport_initial'])->distinct()->get();
+//                    $airports[0] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city1)->distinct()->get();
+                    $airports[0] = DB::table('flights_afklm')->select(['origin_airport_initial'])->distinct()->get();
 
-                    $airports[1] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city2)->distinct()->get();
-//                    $airports[1] = DB::table('flights_afklm')->select(['destination_airport_final'])->distinct()->get();
+//                    $airports[1] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city2)->distinct()->get();
+                    $airports[1] = DB::table('flights_afklm')->select(['destination_airport_final'])->distinct()->get();
 
                     $airline[0] = 'AF';
                     $airline[1] = 'KL';
@@ -133,11 +134,11 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                         foreach ($airports[0] as $airport1) {
                             foreach ($airports[1] as $airport2) {
 
-                                $iata1 = $airport1->iata;
-                                $iata2 = $airport2->iata;
+                                $iata1 = $airport1->origin_airport_initial;
+                                $iata2 = $airport2->destination_airport_final;
 
-                                $name1 = $airport1->name;
-                                $name2 = $airport2->name;
+//                                $name1 = $airport1->name;
+//                                $name2 = $airport2->name;
 
                                 $continue = 1;
 //                                $result2 = DB::table('flights_afklm')->where([
@@ -350,8 +351,8 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                             }
                         }
                     }
-                }
-            }
+//                }
+//            }
 
 
             $date = date("Y-m-d", strtotime("+2 day", strtotime($date)));

@@ -55,3 +55,38 @@ class CreateFlightsTable extends Migration
         Schema::dropIfExists('flights');
     }
 }
+
+/*
+ * $table->string('uid')->unique()->primary();
+            $table->unsignedInteger('s_no');
+
+            $table->string('flight_number')->nullable();
+
+            $table->string('flight_status')->nullable();
+
+            $table->string('aircraft_code')->nullable();
+            $table->string('aircraft_name')->nullable();
+            $table->string('aircraft_registration')->nullable();
+            $table->string('aircraft_acvCode')->nullable();
+            $table->string('airline')->nullable();
+
+            $table->string('origin_airport')->nullable();
+            $table->string('origin_city')->nullable();
+            $table->string('origin_airport_iata')->nullable();
+            $table->string('departure_date')->nullable();
+            $table->string('departure_time')->nullable();
+
+            $table->string('destination_airport')->nullable();
+            $table->string('destination_city')->nullable();
+            $table->string('destination_airport_iata')->nullable();
+            $table->string('arrival_date')->nullable();
+            $table->string('arrival_time')->nullable();
+
+            $table->string('carrier_name')->nullable();
+
+            $table->longText('all_data')->nullable();
+
+            $table->string('source');
+
+            $table->timestamps();
+ */

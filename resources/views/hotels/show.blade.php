@@ -166,7 +166,7 @@
 
         </div>
     @else
-        {{dd(unserialize(gzuncompress($hotel->all_data)))}}
+        {{dd(unserialize($hotel->all_data))}}
     @endif
 
 @endsection

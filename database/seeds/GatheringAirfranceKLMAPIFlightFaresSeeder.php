@@ -16,19 +16,19 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
         //
 
         $apiArray = Array(
-            array("4kmnf3mnrk5ne5s53hk6xqvx", "maxbiocca"), //OK 3
-            array("khdkrw2pvvaqcs3pks96d5ve", "hasanabbax"), //OK
-            array("4cxszedpevyer3h3fwja3wq3", "unbeatabil"), //OK
-            array("q2w2dqn6ehfbevv7pst7mwpr", "haasan") //OK
+            array("q2w2dqn6ehfbevv7pst7mwpr", "haasan"),
+            array("4cxszedpevyer3h3fwja3wq3", "unbeatabil"),
+            array("khdkrw2pvvaqcs3pks96d5ve", "hasanabbax"),
+            array("4kmnf3mnrk5ne5s53hk6xqvx", "maxbiocca")
         );
 
         $url2 = 'https://api.klm.com/opendata/flightoffers/available-offers';
 
         $airports = [];
 
-        $cities = ['Berlin', 'Frankfurt', 'Hamburg', 'Munich', 'Cologne'];
+        $dest_cities = ['Berlin', 'Frankfurt', 'Hamburg', 'Munich', 'Cologne'];
 
-        $dest_cities = [
+        $cities = [
             'London',
             'Paris',
             'Munich',
@@ -96,9 +96,9 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
         // Start date
-        $date = '2019-02-01';
+        $date = '2019-02-02';
         //$end_date = '2019-02-07';
-        $end_date = '2019-02-02';
+        $end_date = '2019-02-08';
 
         // Set timezone
         date_default_timezone_set('UTC');
@@ -118,8 +118,10 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
                     $airports[0] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city1)->distinct()->get();
+//                    $airports[0] = DB::table('flights_afklm')->select(['origin_airport_initial'])->distinct()->get();
 
                     $airports[1] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city2)->distinct()->get();
+//                    $airports[1] = DB::table('flights_afklm')->select(['destination_airport_final'])->distinct()->get();
 
                     $airline[0] = 'AF';
                     $airline[1] = 'KL';
@@ -249,6 +251,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
                                                 $flightArray = [];
                                                 $fidsegments = '';
+                                                $totalNumberOfFlights = 0;
 
                                                 $flightCarriers = '';
                                                 $flightNumbers = '';
@@ -285,6 +288,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
                                                     $flightCarriers .= $segment->marketingFlight->carrier->code;
                                                     $flightNumbers .= $segment->marketingFlight->number;
+                                                    $totalNumberOfFlights++;
                                                 }
 
                                                 $fid = $fidsegments . $instance->connections[0]->duration . '&' . $instance->price->totalPrice . '&' .
@@ -296,26 +300,27 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                                         'uid' => $id,
                                                         's_no' => ++$j,
                                                         'fid' => $fid,
-                                                        'total_flight_duration' => isset($instance->connections[0]->duration) ? ($instance->connections[0]->duration) : 0,
-                                                        'total_number_of_seats_available' => isset($instance->connections[0]->numberOfSeatsAvailable) ? ($instance->connections[0]->numberOfSeatsAvailable) : null,
+                                                        'flights_duration' => isset($instance->connections[0]->duration) ? ($instance->connections[0]->duration) : 0,
+                                                        'number_of_flights' => $totalNumberOfFlights,
+                                                        'number_of_seats_available' => isset($instance->connections[0]->numberOfSeatsAvailable) ? ($instance->connections[0]->numberOfSeatsAvailable) : null,
 
                                                         'flights_data' => serialize($flightArray),
 
-                                                        'total_displayPrice' => isset($instance->price->displayPrice) ? ($instance->price->displayPrice) : 0,
-                                                        'total_totalPrice' => isset($instance->price->totalPrice) ? ($instance->price->totalPrice) : 0,
-                                                        'total_accuracy' => isset($instance->price->accuracy) ? ($instance->price->accuracy) : 0,
-                                                        'total_passenger_1_type' => isset($instance->price->pricePerPassengerTypes[0]->passengerType) ? ($instance->price->pricePerPassengerTypes[0]->passengerType) : null,
-                                                        'total_passenger_1_fare' => isset($instance->price->pricePerPassengerTypes[0]->fare) ? ($instance->price->pricePerPassengerTypes[0]->fare) : 0,
-                                                        'total_passenger_1_taxes' => isset($instance->price->pricePerPassengerTypes[0]->taxes) ? ($instance->price->pricePerPassengerTypes[0]->taxes) : 0,
-                                                        'total_passenger_2_type' => isset($instance->price->pricePerPassengerTypes[1]->passengerType) ? ($instance->price->pricePerPassengerTypes[1]->passengerType) : null,
-                                                        'total_passenger_2_fare' => isset($instance->price->pricePerPassengerTypes[1]->fare) ? ($instance->price->pricePerPassengerTypes[1]->fare) : 0,
-                                                        'total_passenger_2_taxes' => isset($instance->price->pricePerPassengerTypes[1]->taxes) ? ($instance->price->pricePerPassengerTypes[1]->taxes) : 0,
-                                                        'total_passenger_3_type' => isset($instance->price->pricePerPassengerTypes[2]->passengerType) ? ($instance->price->pricePerPassengerTypes[2]->passengerType) : null,
-                                                        'total_passenger_3_fare' => isset($instance->price->pricePerPassengerTypes[2]->fare) ? ($instance->price->pricePerPassengerTypes[2]->fare) : 0,
-                                                        'total_passenger_3_taxes' => isset($instance->price->pricePerPassengerTypes[2]->taxes) ? ($instance->price->pricePerPassengerTypes[2]->taxes) : 0,
-                                                        'total_passenger_4_type' => isset($instance->price->pricePerPassengerTypes[3]->passengerType) ? ($instance->price->pricePerPassengerTypes[3]->passengerType) : null,
-                                                        'total_passenger_4_fare' => isset($instance->price->pricePerPassengerTypes[3]->fare) ? ($instance->price->pricePerPassengerTypes[3]->fare) : 0,
-                                                        'total_passenger_4_taxes' => isset($instance->price->pricePerPassengerTypes[3]->taxes) ? ($instance->price->pricePerPassengerTypes[3]->taxes) : 0,
+                                                        'display_price' => isset($instance->price->displayPrice) ? ($instance->price->displayPrice) : 0,
+                                                        'total_price' => isset($instance->price->totalPrice) ? ($instance->price->totalPrice) : 0,
+                                                        'accuracy' => isset($instance->price->accuracy) ? ($instance->price->accuracy) : 0,
+                                                        'passenger_1_type' => isset($instance->price->pricePerPassengerTypes[0]->passengerType) ? ($instance->price->pricePerPassengerTypes[0]->passengerType) : null,
+                                                        'passenger_1_fare' => isset($instance->price->pricePerPassengerTypes[0]->fare) ? ($instance->price->pricePerPassengerTypes[0]->fare) : 0,
+                                                        'passenger_1_taxes' => isset($instance->price->pricePerPassengerTypes[0]->taxes) ? ($instance->price->pricePerPassengerTypes[0]->taxes) : 0,
+                                                        'passenger_2_type' => isset($instance->price->pricePerPassengerTypes[1]->passengerType) ? ($instance->price->pricePerPassengerTypes[1]->passengerType) : null,
+                                                        'passenger_2_fare' => isset($instance->price->pricePerPassengerTypes[1]->fare) ? ($instance->price->pricePerPassengerTypes[1]->fare) : 0,
+                                                        'passenger_2_taxes' => isset($instance->price->pricePerPassengerTypes[1]->taxes) ? ($instance->price->pricePerPassengerTypes[1]->taxes) : 0,
+                                                        'passenger_3_type' => isset($instance->price->pricePerPassengerTypes[2]->passengerType) ? ($instance->price->pricePerPassengerTypes[2]->passengerType) : null,
+                                                        'passenger_3_fare' => isset($instance->price->pricePerPassengerTypes[2]->fare) ? ($instance->price->pricePerPassengerTypes[2]->fare) : 0,
+                                                        'passenger_3_taxes' => isset($instance->price->pricePerPassengerTypes[2]->taxes) ? ($instance->price->pricePerPassengerTypes[2]->taxes) : 0,
+                                                        'passenger_4_type' => isset($instance->price->pricePerPassengerTypes[3]->passengerType) ? ($instance->price->pricePerPassengerTypes[3]->passengerType) : null,
+                                                        'passenger_4_fare' => isset($instance->price->pricePerPassengerTypes[3]->fare) ? ($instance->price->pricePerPassengerTypes[3]->fare) : 0,
+                                                        'passenger_4_taxes' => isset($instance->price->pricePerPassengerTypes[3]->taxes) ? ($instance->price->pricePerPassengerTypes[3]->taxes) : 0,
                                                         'flexibility_waiver' => isset($instance->price->flexibilityWaiver) ? ($instance->price->flexibilityWaiver) : false,
                                                         'currency' => isset($instance->price->currency) ? ($instance->price->currency) : null,
                                                         'display_type' => isset($instance->price->displayType) ? ($instance->price->displayType) : null,

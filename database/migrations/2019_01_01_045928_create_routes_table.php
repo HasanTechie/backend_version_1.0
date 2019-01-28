@@ -17,12 +17,12 @@ class CreateRoutesTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('airline_iata');
-            $table->string('source_airport_iata')->nullable();
-            $table->string('destination_airport_iata')->nullable();
+            $table->string('airline');
+            $table->string('source_airport')->nullable();
+            $table->string('destination_airport')->nullable();
             $table->string('codeshare')->nullable();
             $table->string('stops');
-            $table->string('equipment')->nullable();
+            $table->string('aircraft_code')->nullable();
 
             $table->string('source');
 

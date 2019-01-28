@@ -18,8 +18,8 @@ class CreateFlightsAfklmTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('flight_number')->nullable();
-            $table->double('total_flight_duration')->default(0);
+            $table->double('flights_duration')->default(0);
+            $table->double('number_of_flights')->default(0);
 
 //            $table->string('arrival_date')->nullable();
 //            $table->string('arrival_time')->nullable();
@@ -49,22 +49,22 @@ class CreateFlightsAfklmTable extends Migration
 //            $table->double('transfer_time')->default(0);
 
             $table->longText('flights_data')->nullable();
-            $table->double('total_displayPrice')->default(0);
-            $table->double('total_totalPrice')->default(0);
-            $table->double('total_accuracy')->default(0);
-            $table->string('total_passenger_1_type')->nullable();
-            $table->double('total_passenger_1_fare')->default(0);
-            $table->double('total_passenger_1_taxes')->default(0);
-            $table->string('total_passenger_2_type')->nullable();
-            $table->double('total_passenger_2_fare')->default(0);
-            $table->double('total_passenger_2_taxes')->default(0);
-            $table->string('total_passenger_3_type')->nullable();
-            $table->double('total_passenger_3_fare')->default(0);
-            $table->double('total_passenger_3_taxes')->default(0);
-            $table->string('total_passenger_4_type')->nullable();
-            $table->double('total_passenger_4_fare')->default(0);
-            $table->double('total_passenger_4_taxes')->default(0);
-            $table->double('total_number_of_seats_available')->default(0);
+            $table->double('display_price')->default(0);
+            $table->double('total_price')->default(0);
+            $table->double('accuracy')->default(0);
+            $table->string('passenger_1_type')->nullable();
+            $table->double('passenger_1_fare')->default(0);
+            $table->double('passenger_1_taxes')->default(0);
+            $table->string('passenger_2_type')->nullable();
+            $table->double('passenger_2_fare')->default(0);
+            $table->double('passenger_2_taxes')->default(0);
+            $table->string('passenger_3_type')->nullable();
+            $table->double('passenger_3_fare')->default(0);
+            $table->double('passenger_3_taxes')->default(0);
+            $table->string('passenger_4_type')->nullable();
+            $table->double('passenger_4_fare')->default(0);
+            $table->double('passenger_4_taxes')->default(0);
+            $table->double('number_of_seats_available')->default(0);
             $table->boolean('flexibility_waiver')->default(false);
             $table->string('currency')->nullable();
             $table->string('display_type')->nullable();

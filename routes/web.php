@@ -39,6 +39,7 @@ Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');
 
 Route::get('/flights', 'FlightController@index');
+Route::get('/flights/{flight}', 'FlightController@show');
 Route::get('/flights/create', 'FlightController@create');
 Route::get('/flights/current', 'FlightController@current');
 Route::get('/flights/search', 'FlightController@search');
@@ -46,6 +47,10 @@ Route::post('/flights/search', 'FlightController@search');
 Route::get('/flights/test', 'FlightController@test');
 
 Route::get('/flights/test1/{id}', 'FlightController@test1');
+
+Route::get('/flightsprices', 'FlightController@flightPrices');
+Route::get('/flightsprices/{flight}', 'FlightController@flightPricesShow');
+Route::get('/flightsprices/totalflights/{flight}', 'FlightController@flightsShow');
 
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');

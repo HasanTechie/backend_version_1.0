@@ -29,10 +29,34 @@ class FlightController extends Controller
     public function index()
     {
         //
-
         $flights = Flight::paginate(25); //limit to 2000
         return view('flights.index', compact('flights'));
 
+    }
+
+    public function flightPrices(){
+        $flights = DB::table('flights_afklm')->orderBy('number_of_flights', 'ASC')
+            ->paginate(20);
+        return view('flights_afklm.index', compact('flights'));
+    }
+
+    public function flightPricesShow($id){
+
+        $flights = DB::table('flights_afklm')->where('uid', '=', $id)->get();
+
+        dd($flights[0]);
+    }
+    public function flightsShow($id){
+
+        $flights = DB::table('flights_afklm')->where('uid', '=', $id)->get();
+
+        $flightArray= [];
+        $i=0;
+        foreach(unserialize($flights[0]->flights_data) as $flight){
+            $flightArray[$i++] = unserialize($flight);
+        }
+
+        dd($flightArray);
     }
 
     public function test1($id)
@@ -174,6 +198,7 @@ class FlightController extends Controller
     public function show(Flight $flight)
     {
         //
+        dd($flight->getAttributes());
     }
 
     /**

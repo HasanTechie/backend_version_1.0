@@ -31,7 +31,7 @@
         </tbody>
     </table>
     <div class="block" align="center" style="margin-bottom: 2.5rem;">
-        <div class="box" style="width: 34%;">
+        <div class="box" style="width: 50%;">
             {{ $routes->links() }}
         </div>
     </div>

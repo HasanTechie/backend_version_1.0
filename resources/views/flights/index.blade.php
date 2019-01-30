@@ -19,6 +19,8 @@
             <th>Departure Runwaytime Initial</th>
             <th>Flight Status</th>
             <th>Aircraft Code</th>
+            <th>Details</th>
+
         </tr>
         </thead>
         <tbody>
@@ -53,13 +55,14 @@
                 </td>
                 <td>{{$flight->flight_status}}</td>
                 <td>{{$flight->aircraft_code}}</td>
+                <td><a href="/flights/{{$flight->uid}}" class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
 
         </tbody>
     </table>
     <div class="block" align="center" style="margin-bottom: 2.5rem;">
-        <div class="box" style="width: 34%;">
+        <div class="box" style="width: 50%;">
             {{ $flights->links() }}
         </div>
     </div>

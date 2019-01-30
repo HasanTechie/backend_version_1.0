@@ -16,8 +16,8 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
         //
 
         $apiArray = Array(
-            "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG",
             "Q7VcIDLY2qRMsGqlwNJVU4UWDMDNaXcv",
+            "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG",
             "dgIOGoQ4AcSAOApXx59AuXI53bKqKTpW",
             "9U3YZf3HN3CCEaAIje3mOGK9o5ouAUyB"
         );
@@ -25,7 +25,7 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 
         $k = 0;
 
-        $events = DB::table('events')->select('*')->where('s_no', '>', 3770)->get();
+        $events = DB::table('events')->select('*')->where('s_no', '>', 10074)->get();
 
         $requestCount = 0;
 
@@ -52,7 +52,6 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 
             if (!empty($response)) {
 
-
                 $standardPriceMin = 0;
                 $standardPriceMax = 0;
                 $standardPriceIncludingFeesMin = 0;
@@ -60,7 +59,6 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                 $currency = '';
 
                 if (isset($response->priceRanges)) {
-
 
                     foreach ($response->priceRanges as $price) {
                         if (isset($price->type)) {
@@ -85,13 +83,18 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                         }
                     }
                 }
+
                 if (isset($response->_embedded->venues[0]->address)) {
 
                     if (isset($response->_embedded->venues[0]->address)) {
                         if (isset($response->_embedded->venues[0]->address->line1)) {
                             $address = $response->_embedded->venues[0]->address->line1;
                         } else {
-                            $address = $response->_embedded->venues[0]->address;
+                            if (is_object($response->_embedded->venues[0]->address)) {
+                                $address = null;
+                            } else {
+                                $address = $response->_embedded->venues[0]->address;
+                            }
                         }
                         if (isset($response->_embedded->venues[0]->address->line2)) {
                             $address = $response->_embedded->venues[0]->address->line1 . $response->_embedded->venues[0]->address->line2;

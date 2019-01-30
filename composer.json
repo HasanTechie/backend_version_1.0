@@ -17,7 +17,8 @@
         "laravel/tinker": "^1.0",
         "mashape/unirest-php": "^3.0",
         "orchestra/parser": "^3.7",
-        "skagarwal/google-places-api": "^1.3"
+        "skagarwal/google-places-api": "^1.3",
+        "x-fran/g-trends": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

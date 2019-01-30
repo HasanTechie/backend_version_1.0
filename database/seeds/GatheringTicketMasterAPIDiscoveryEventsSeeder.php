@@ -21,12 +21,14 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG",
             "9U3YZf3HN3CCEaAIje3mOGK9o5ouAUyB"
         );
-        /*
+
+        $k = 0;
+
         $events = DB::table('events')->select('*')->get();
 
         foreach ($events as $event) {
 
-            $url = "https://app.ticketmaster.com/discovery/v2/events/$event->id.json?countryCode=DE&apikey=$apiArray[$k]";
+            $url = "https://app.ticketmaster.com/discovery/v2/events/$event->id.json?&apikey=$apiArray[$k]";
 
 
             echo $url . "\n";
@@ -47,6 +49,9 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 
             if (!empty($response)) {
 
+
+                dd($response);
+
                 DB::table('events')
                     ->where('id', $response->id)
                     ->update(['all_data' => serialize($response)]);
@@ -57,8 +62,9 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             }
         }
 
-        */
 
+        /*
+        // for gathering basic events data of all countries.
         $countries = DB::table('countries')->select(['iso_code', 'name'])->distinct()->get();
 
         // For Gathering all Events in Germany
@@ -125,39 +131,37 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                                     }
                                 }
 
-                                if (!(DB::table('events')->where('id', '=', $event->id)->exists())) {
+//                                if (!(DB::table('events')->where('id', '=', $event->id)->exists())) {
 
-                                    DB::table('events')->insert([
-                                        'uid' => uniqid(),
-                                        's_no' => ++$j,
+                                DB::table('events')->insert([
+                                    'uid' => uniqid(),
+                                    's_no' => ++$j,
 
-                                        'name' => isset($event->name) ? ($event->name) : null,
-                                        'id' => isset($event->id) ? ($event->id) : null,
-                                        'url' => isset($event->url) ? ($event->url) : null,
-                                        'standard_price' => $standedPrice,
-                                        'standard_price_including_fees' => $standedPriceIncludingFees,
-                                        'country' => $countryName,
+                                    'name' => isset($event->name) ? ($event->name) : null,
+                                    'id' => isset($event->id) ? ($event->id) : null,
+                                    'url' => isset($event->url) ? ($event->url) : null,
+                                    'standard_price' => $standedPrice,
+                                    'standard_price_including_fees' => $standedPriceIncludingFees,
+                                    'country' => $countryName,
 
-                                        'all_data' => serialize($event),
+                                    'all_data' => serialize($event),
 
-                                        'source' => 'app.ticketmaster.com/discovery/v2/events',
-                                        'created_at' => DB::raw('now()'),
-                                        'updated_at' => DB::raw('now()')
-                                    ]);
+                                    'source' => 'app.ticketmaster.com/discovery/v2/events',
+                                    'created_at' => DB::raw('now()'),
+                                    'updated_at' => DB::raw('now()')
+                                ]);
 
-                                    echo 'events ' . $j . "\n";
-                                } else {
-                                    echo 'existed ' . $j . "\n";
-                                }
+                                echo 'events ' . $j . "\n";
                             }
                         }
-                    }else{
+                    } else {
                         break;
                     }
                     echo ++$requestCount . ' $reponse not empty' . "\n";
                 }
             }
         }
+        */
 
 
     }

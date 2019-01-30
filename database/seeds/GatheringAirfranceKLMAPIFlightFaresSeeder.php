@@ -97,7 +97,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
         // Start date
-        $date = '2019-02-24';
+        $date = '2019-03-14';
         //$end_date = '2019-02-07';
         $end_date = '2019-07-31';
 

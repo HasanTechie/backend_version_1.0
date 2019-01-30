@@ -22,9 +22,12 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             "9U3YZf3HN3CCEaAIje3mOGK9o5ouAUyB"
         );
 
+
         $k = 0;
 
         $events = DB::table('events')->select('*')->get();
+
+        $requestCount = 0;
 
         foreach ($events as $event) {
 
@@ -50,14 +53,70 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
             if (!empty($response)) {
 
 
-                dd($response);
+                $standardPriceMin = 0;
+                $standardPriceMax = 0;
+                $standardPriceIncludingFeesMin = 0;
+                $standardPriceIncludingFeesMax = 0;
+                $currency = '';
+
+                if (isset($response->priceRanges)) {
+
+
+                    foreach ($response->priceRanges as $price) {
+                        if (isset($price->type)) {
+                            if ($price->type == 'standard') {
+                                if (isset($price->min)) {
+                                    $standardPriceMin = $price->min;
+                                }
+                                if (isset($price->max)) {
+                                    $standardPriceMax = $price->max;
+                                    $currency = $price->currency;
+                                }
+                            }
+                            if ($price->type == 'standard including fees') {
+                                if (isset($price->min)) {
+                                    $standardPriceIncludingFeesMin = $price->min;
+                                }
+                                if (isset($price->max)) {
+                                    $standardPriceIncludingFeesMax = $price->max;
+                                    $currency = $price->currency;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (isset($response->_embedded->venues[0]->address)) {
+
+                    if (isset($response->_embedded->venues[0]->address)) {
+                        if (isset($response->_embedded->venues[0]->address->line1)) {
+                            $address = $response->_embedded->venues[0]->address->line1;
+                        } else {
+                            $address = $response->_embedded->venues[0]->address;
+                        }
+                        if (isset($response->_embedded->venues[0]->address->line2)) {
+                            $address = $response->_embedded->venues[0]->address->line1 . $response->_embedded->venues[0]->address->line2;
+                        }
+                    }
+                } else {
+                    $address = null;
+                }
 
                 DB::table('events')
                     ->where('id', $response->id)
-                    ->update(['all_data' => serialize($response)]);
+                    ->update([
+                        'standard_price_min' => $standardPriceMin,
+                        'standard_price_max' => $standardPriceMax,
+                        'standard_price_including_fees_min' => $standardPriceIncludingFeesMin,
+                        'standard_price_including_fees_max' => $standardPriceIncludingFeesMax,
+                        'currency' => $currency,
+                        'venue_name' => $response->_embedded->venues[0]->name,
+                        'venue_address' => $address,
+                        'city' => $response->_embedded->venues[0]->city->name,
+                        'all_data' => serialize($response)
+                    ]);
 
 
-                echo 'Completed' . ' ' . $event->id . "\n";
+                echo ++$requestCount . ' Completed ' . $event->s_no . ' ' . $event->id . "\n";
 
             }
         }
@@ -110,8 +169,10 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 
                         foreach ($response->_embedded->events as $event) {
 
-                            $standedPrice = 0;
-                            $standedPriceIncludingFees = 0;
+                            $standardPriceMin = 0;
+                            $standardPriceMax = 0;
+                            $standardPriceIncludingFeesMin = 0;
+                            $standardPriceIncludingFeesMax = 0;
 
                             if (isset($event->priceRanges)) {
 
@@ -120,39 +181,41 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                                     if (isset($price->type)) {
                                         if ($price->type == 'standard') {
                                             if (isset($price->max)) {
-                                                $standedPrice = $price->max;
+                                                $standardPriceMax = $price->max;
                                             }
                                         }
                                         if ($price->type == 'standard including fees') {
                                             if (isset($price->max)) {
-                                                $standedPriceIncludingFees = $price->max;
+                                                $standardPriceIncludingFeesMax = $price->max;
                                             }
                                         }
                                     }
                                 }
+                            }
 
 //                                if (!(DB::table('events')->where('id', '=', $event->id)->exists())) {
 
-                                DB::table('events')->insert([
-                                    'uid' => uniqid(),
-                                    's_no' => ++$j,
+                            DB::table('events')->insert([
+                                'uid' => uniqid(),
+                                's_no' => ++$j,
 
-                                    'name' => isset($event->name) ? ($event->name) : null,
-                                    'id' => isset($event->id) ? ($event->id) : null,
-                                    'url' => isset($event->url) ? ($event->url) : null,
-                                    'standard_price' => $standedPrice,
-                                    'standard_price_including_fees' => $standedPriceIncludingFees,
-                                    'country' => $countryName,
+                                'name' => isset($event->name) ? ($event->name) : null,
+                                'id' => isset($event->id) ? ($event->id) : null,
+                                'url' => isset($event->url) ? ($event->url) : null,
+                                'standard_price_min' => $standardPriceMin,
+                                'standard_price_max' => $standardPriceMax,
+                                'standard_price_including_fees_min' => $standardPriceIncludingFeesMin,
+                                'standard_price_including_fees_max' => $standardPriceIncludingFeesMax,
+                                'country' => $countryName,
 
-                                    'all_data' => serialize($event),
+                                'all_data' => serialize($event),
 
-                                    'source' => 'app.ticketmaster.com/discovery/v2/events',
-                                    'created_at' => DB::raw('now()'),
-                                    'updated_at' => DB::raw('now()')
-                                ]);
+                                'source' => 'app.ticketmaster.com/discovery/v2/events',
+                                'created_at' => DB::raw('now()'),
+                                'updated_at' => DB::raw('now()')
+                            ]);
 
-                                echo 'events ' . $j . "\n";
-                            }
+                            echo 'events ' . $j . "\n";
                         }
                     } else {
                         break;

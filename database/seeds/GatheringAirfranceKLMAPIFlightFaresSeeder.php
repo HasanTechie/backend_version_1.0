@@ -16,10 +16,11 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
         //
 
         $apiArray = Array(
+            array("gsj2x293zdacgezgf2hv5hhv", "sayyid"),
+            array("khdkrw2pvvaqcs3pks96d5ve", "hasanabbax"),
+            array("4kmnf3mnrk5ne5s53hk6xqvx", "maxbiocca"),
             array("q2w2dqn6ehfbevv7pst7mwpr", "haasan"),
             array("4cxszedpevyer3h3fwja3wq3", "unbeatabil"),
-            array("khdkrw2pvvaqcs3pks96d5ve", "hasanabbax"),
-            array("4kmnf3mnrk5ne5s53hk6xqvx", "maxbiocca")
         );
 
         $url2 = 'https://api.klm.com/opendata/flightoffers/available-offers';
@@ -96,7 +97,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
         // Start date
-        $date = '2019-02-09';
+        $date = '2019-02-24';
         //$end_date = '2019-02-07';
         $end_date = '2019-07-31';
 

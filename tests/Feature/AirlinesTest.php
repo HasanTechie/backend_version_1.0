@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Airline;
+use App\User;
+
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

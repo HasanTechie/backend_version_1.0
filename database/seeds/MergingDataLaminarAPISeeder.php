@@ -106,7 +106,7 @@ class MergingDataLaminarAPISeeder extends Seeder
                         }
 
 
-                        if(!empty($value->properties->iataFlightNumber)) {
+                        if (!empty($value->properties->iataFlightNumber)) {
 
 
                             if (DB::table('flights')->where('iata_flight_number', $value->properties->iataFlightNumber)->exists()) {

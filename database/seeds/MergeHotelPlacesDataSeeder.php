@@ -47,29 +47,29 @@ class MergeHotelPlacesDataSeeder extends Seeder
         }
         */
 
-            /*
-             * !tourpedia_id = place_id
-             * name = name
-             * address = address
-             * !!category
-             * city = location
-             * latitude = lat
-             * longitude = lng
-             * !tourpedia_numReviews = numReviews
-             * !tourpedia_reviews = reviews
-             * !tourpedia_polarity = polarity
-             * !tourpedia_details = details
-             * !tourpedia_originalId = originalId
-             * !source = source
-             * phone = phone_number
-             * international_phone = international_phone_number
-             * website = website
-             * !description = description
-             * !tourpedia_external_urls = external_urls
-             * !tourpedia_statistics = statistics
-             * !tourpedia_reviews_ids = reviews_ids
-             * !tourpedia_detailed_reviews = detailed_reviews
-             * all_data = all_data
-             */
+        /*
+         * !tourpedia_id = place_id
+         * name = name
+         * address = address
+         * !!category
+         * city = location
+         * latitude = lat
+         * longitude = lng
+         * !tourpedia_numReviews = numReviews
+         * !tourpedia_reviews = reviews
+         * !tourpedia_polarity = polarity
+         * !tourpedia_details = details
+         * !tourpedia_originalId = originalId
+         * !source = source
+         * phone = phone_number
+         * international_phone = international_phone_number
+         * website = website
+         * !description = description
+         * !tourpedia_external_urls = external_urls
+         * !tourpedia_statistics = statistics
+         * !tourpedia_reviews_ids = reviews_ids
+         * !tourpedia_detailed_reviews = detailed_reviews
+         * all_data = all_data
+         */
     }
 }

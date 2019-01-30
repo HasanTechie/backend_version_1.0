@@ -55,11 +55,10 @@ class MergingDataHotelBedsAPISeeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo 'hotel_beds->hotels_uncompressed '. $j . "\n";
+                    echo 'hotel_beds->hotels_uncompressed ' . $j . "\n";
                 }
             }
         }
-
 
 
     }

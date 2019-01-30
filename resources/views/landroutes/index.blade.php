@@ -94,37 +94,39 @@
         <div id="floating-panel" style="width: 15rem;">
             <label class="label" style="margin-bottom: 0">Source</label>
             <div class="select" style="margin-bottom: 1%;">
-            <select id="start" style="width:14rem">
-                @foreach($hotels as $hotel)
-                    @php
-                        $pieces = explode(" ", $hotel->name);
-                        $first_part = implode(" ", array_splice($pieces, 0, 3));
-                    @endphp
-                    <option value="{{$hotel->name . ', '. $hotel->city}}">{{$first_part . ', '. $hotel->city}}</option>
-                @endforeach
-            </select>
+                <select id="start" style="width:14rem">
+                    @foreach($hotels as $hotel)
+                        @php
+                            $pieces = explode(" ", $hotel->name);
+                            $first_part = implode(" ", array_splice($pieces, 0, 3));
+                        @endphp
+                        <option
+                            value="{{$hotel->name . ', '. $hotel->city}}">{{$first_part . ', '. $hotel->city}}</option>
+                    @endforeach
+                </select>
             </div>
             <label class="label" style="margin-bottom: 0">Destination</label>
             <div class="select" style="margin-bottom: 1%;">
-            <select id="end" style="width:14rem">
-                @foreach($attractions as $attraction)
-                    @php
-                        $pieces1 = explode(" ", $attraction->name);
-                        $first_part1 = implode(" ", array_splice($pieces1, 0, 3));
-                    @endphp
-                    <option value="{{$attraction->name . ', '. $attraction->city}}">{{$first_part1 . ', '. $attraction->city}}</option>
-                @endforeach
+                <select id="end" style="width:14rem">
+                    @foreach($attractions as $attraction)
+                        @php
+                            $pieces1 = explode(" ", $attraction->name);
+                            $first_part1 = implode(" ", array_splice($pieces1, 0, 3));
+                        @endphp
+                        <option
+                            value="{{$attraction->name . ', '. $attraction->city}}">{{$first_part1 . ', '. $attraction->city}}</option>
+                    @endforeach
 
-            </select>
+                </select>
             </div>
             <label class="label" style="margin-bottom: 0">Mode of Travel</label>
             <div class="select" style="margin-bottom: 1%;">
-            <select id="mode" style="width:14rem">
-                <option value="DRIVING">Driving</option>
-                <option value="WALKING">Walking</option>
-                <option value="BICYCLING">Bicycling</option>
-                <option value="TRANSIT">Transit</option>
-            </select>
+                <select id="mode" style="width:14rem">
+                    <option value="DRIVING">Driving</option>
+                    <option value="WALKING">Walking</option>
+                    <option value="BICYCLING">Bicycling</option>
+                    <option value="TRANSIT">Transit</option>
+                </select>
             </div>
         </div>
         <div id="right-panel"></div>

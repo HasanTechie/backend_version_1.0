@@ -2,18 +2,30 @@
 
 namespace Tests\Unit;
 
+use App\User;
+use App\Plane;
+
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
+    use DatabaseMigrations;
+
+    public function testApplication()
     {
-        $this->assertTrue(true);
+        $user = factory(User::class)->create();
+
+        $plane = Plane::latest()->first();
+
+        $response =
+            $this->actingAs($user)
+                ->get('/planes')
+                ->assertSeeText('Total number of planes')
+                ->assertStatus(200)
+                ->assertSee($plane); //i
     }
+
 }

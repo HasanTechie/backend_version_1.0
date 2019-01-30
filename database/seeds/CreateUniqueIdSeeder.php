@@ -14,7 +14,7 @@ class CreateUniqueIdSeeder extends Seeder
         //
 
 
-        $j=0;
+        $j = 0;
         for ($i = 1; $i <= 400000; $i++) {
             if (DB::table('flights_1')->where('id', $i)->exists()) {
 
@@ -49,11 +49,10 @@ class CreateUniqueIdSeeder extends Seeder
                         'source' => 'developer.laminardata.aero',
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo 'flights '. $j . "\n";
+                    echo 'flights ' . $j . "\n";
                 }
             }
         }
-
 
 
         /*

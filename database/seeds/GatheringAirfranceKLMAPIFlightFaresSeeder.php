@@ -120,28 +120,28 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
 //                    $airports[0] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city1)->distinct()->get();
-                    $airports[0] = DB::table('flights_afklm')->select(['origin_airport_initial'])->distinct()->get();
+            $airports[0] = DB::table('flights_afklm')->select(['origin_airport_initial'])->distinct()->get();
 
 //                    $airports[1] = DB::table('airports')->select(['iata', 'name'])->where('city', '=', $city2)->distinct()->get();
-                    $airports[1] = DB::table('flights_afklm')->select(['destination_airport_final'])->distinct()->get();
+            $airports[1] = DB::table('flights_afklm')->select(['destination_airport_final'])->distinct()->get();
 
-                    $airline[0] = 'AF';
-                    $airline[1] = 'KL';
+            $airline[0] = 'AF';
+            $airline[1] = 'KL';
 
-                    for ($k = 0; $k <= 1; $k++) {
+            for ($k = 0; $k <= 1; $k++) {
 
-                        $currentAirline = $airline[$k];
+                $currentAirline = $airline[$k];
 
-                        foreach ($airports[0] as $airport1) {
-                            foreach ($airports[1] as $airport2) {
+                foreach ($airports[0] as $airport1) {
+                    foreach ($airports[1] as $airport2) {
 
-                                $iata1 = $airport1->origin_airport_initial;
-                                $iata2 = $airport2->destination_airport_final;
+                        $iata1 = $airport1->origin_airport_initial;
+                        $iata2 = $airport2->destination_airport_final;
 
 //                                $name1 = $airport1->name;
 //                                $name2 = $airport2->name;
 
-                                $continue = 1;
+                        $continue = 1;
 //                                $result2 = DB::table('flights_afklm')->where([
 //                                    ['ignore_oiata', '=', $iata1],
 //                                    ['ignore_diata', '=', $iata2]
@@ -183,18 +183,18 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 //                                }
 
 
-                                if ($continue == 1) {
-                                    if (isset($iata1) && isset($iata2)) {
-                                        $headers = [
-                                            'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
-                                            'accept-language' => 'en-US',
-                                            'afkl-travel-country' => 'DE',
-                                            'afkl-travel-host' => $currentAirline,
-                                            'api-key' => $apiArray[$m][0],
-                                            'content-type' => 'application/json',
-                                        ];
+                        if ($continue == 1) {
+                            if (isset($iata1) && isset($iata2)) {
+                                $headers = [
+                                    'accept' => 'application/hal+json;profile=com.afklm.b2c.flightoffers.available-offers.v1;charset=utf8',
+                                    'accept-language' => 'en-US',
+                                    'afkl-travel-country' => 'DE',
+                                    'afkl-travel-host' => $currentAirline,
+                                    'api-key' => $apiArray[$m][0],
+                                    'content-type' => 'application/json',
+                                ];
 
-                                        $body = '{
+                                $body = '{
                                               "cabinClass":"ECONOMY",
                                               "discountCode":"",
                                               "passengerCount":{
@@ -223,135 +223,135 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                               "shortest":true
                                             }';
 
-                                        try {
-                                            usleep(250000);
-                                            $client = new Client();
-                                            $response = '';
-                                            $response = $client->request('POST', $url2, [
-                                                'json' => json_decode($body),
-                                                'headers' => $headers
+                                try {
+                                    usleep(250000);
+                                    $client = new Client();
+                                    $response = '';
+                                    $response = $client->request('POST', $url2, [
+                                        'json' => json_decode($body),
+                                        'headers' => $headers
+                                    ]);
+
+                                    $response = json_decode($response->getBody());
+
+                                } catch (\Exception $ex) {
+                                    if (!empty($ex)) {
+
+                                        if (stripos($ex->getMessage(), "Developer Over Rate") !== false) {
+                                            echo "Overate Reached" . "\n";
+                                            $m++;
+                                        }
+                                        $incomplete = ++$requestCount . ' Incompleted =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
+                                        $response = '';
+                                        echo $incomplete;
+                                    }
+                                }
+
+                                if (!empty($response)) {
+
+                                    foreach ($response->flightProducts as $instance) {
+
+                                        $flightArray = [];
+                                        $fidsegments = '';
+                                        $totalNumberOfFlights = 0;
+
+                                        $flightCarriers = '';
+                                        $flightNumbers = '';
+                                        $l = 0;
+
+                                        foreach ($instance->connections[0]->segments as $segment) {
+
+                                            $id = uniqid();
+
+                                            $arrivalDate = $arrivalTime = $arrivalDayOfWeek = null;
+                                            if (isset($segment->arrivalDateTime)) {
+
+                                                $arrivalDateTime = $segment->arrivalDateTime;
+                                                $arrivalArray = explode("T", $arrivalDateTime);
+                                                $arrivalDate = $arrivalArray[0];
+                                                $arrivalTime = $arrivalArray[1];
+                                                $arrivalDayOfWeek = date("l", strtotime($arrivalDate));
+                                            }
+
+                                            $departureDate = $departureTime = $departureDayOfWeek = null;
+                                            if (isset($segment->departureDateTime)) {
+
+                                                $departureDateTime = $segment->departureDateTime;
+                                                $departureArray = explode("T", $departureDateTime);
+                                                $departureDate = $departureArray[0];
+                                                $departureTime = $departureArray[1];
+                                                $departureDayOfWeek = date("l", strtotime($departureDate));
+                                            }
+
+                                            $fidsegments .= $segment->marketingFlight->carrier->code . '&' . $segment->marketingFlight->number . '&' . $segment->origin->code
+                                                . '&' . $segment->destination->code . '&' . $departureDateTime . '&' . $arrivalDateTime;
+
+                                            $flightArray[$l++] = serialize($segment);
+
+                                            $flightCarriers .= $segment->marketingFlight->carrier->code;
+                                            $flightNumbers .= $segment->marketingFlight->number;
+                                            $totalNumberOfFlights++;
+                                        }
+
+                                        $fid = $fidsegments . $instance->connections[0]->duration . '&' . $instance->price->totalPrice . '&' .
+                                            $instance->connections[0]->numberOfSeatsAvailable . '&' . $instance->price->displayPrice;
+
+                                        if (!(DB::table('flights_afklm')->where('fid', '=', $fid)->exists())) {
+
+                                            DB::table('flights_afklm')->insert([
+                                                'uid' => $id,
+                                                's_no' => ++$j,
+                                                'fid' => $fid,
+                                                'flights_duration' => isset($instance->connections[0]->duration) ? ($instance->connections[0]->duration) : 0,
+                                                'number_of_flights' => $totalNumberOfFlights,
+                                                'number_of_seats_available' => isset($instance->connections[0]->numberOfSeatsAvailable) ? ($instance->connections[0]->numberOfSeatsAvailable) : null,
+
+                                                'flights_data' => serialize($flightArray),
+
+                                                'display_price' => isset($instance->price->displayPrice) ? ($instance->price->displayPrice) : 0,
+                                                'total_price' => isset($instance->price->totalPrice) ? ($instance->price->totalPrice) : 0,
+                                                'accuracy' => isset($instance->price->accuracy) ? ($instance->price->accuracy) : 0,
+                                                'passenger_1_type' => isset($instance->price->pricePerPassengerTypes[0]->passengerType) ? ($instance->price->pricePerPassengerTypes[0]->passengerType) : null,
+                                                'passenger_1_fare' => isset($instance->price->pricePerPassengerTypes[0]->fare) ? ($instance->price->pricePerPassengerTypes[0]->fare) : 0,
+                                                'passenger_1_taxes' => isset($instance->price->pricePerPassengerTypes[0]->taxes) ? ($instance->price->pricePerPassengerTypes[0]->taxes) : 0,
+                                                'passenger_2_type' => isset($instance->price->pricePerPassengerTypes[1]->passengerType) ? ($instance->price->pricePerPassengerTypes[1]->passengerType) : null,
+                                                'passenger_2_fare' => isset($instance->price->pricePerPassengerTypes[1]->fare) ? ($instance->price->pricePerPassengerTypes[1]->fare) : 0,
+                                                'passenger_2_taxes' => isset($instance->price->pricePerPassengerTypes[1]->taxes) ? ($instance->price->pricePerPassengerTypes[1]->taxes) : 0,
+                                                'passenger_3_type' => isset($instance->price->pricePerPassengerTypes[2]->passengerType) ? ($instance->price->pricePerPassengerTypes[2]->passengerType) : null,
+                                                'passenger_3_fare' => isset($instance->price->pricePerPassengerTypes[2]->fare) ? ($instance->price->pricePerPassengerTypes[2]->fare) : 0,
+                                                'passenger_3_taxes' => isset($instance->price->pricePerPassengerTypes[2]->taxes) ? ($instance->price->pricePerPassengerTypes[2]->taxes) : 0,
+                                                'passenger_4_type' => isset($instance->price->pricePerPassengerTypes[3]->passengerType) ? ($instance->price->pricePerPassengerTypes[3]->passengerType) : null,
+                                                'passenger_4_fare' => isset($instance->price->pricePerPassengerTypes[3]->fare) ? ($instance->price->pricePerPassengerTypes[3]->fare) : 0,
+                                                'passenger_4_taxes' => isset($instance->price->pricePerPassengerTypes[3]->taxes) ? ($instance->price->pricePerPassengerTypes[3]->taxes) : 0,
+                                                'flexibility_waiver' => isset($instance->price->flexibilityWaiver) ? ($instance->price->flexibilityWaiver) : false,
+                                                'currency' => isset($instance->price->currency) ? ($instance->price->currency) : null,
+                                                'display_type' => isset($instance->price->displayType) ? ($instance->price->displayType) : null,
+
+                                                'origin_airport_initial' => $iata1,
+                                                'destination_airport_final' => $iata2,
+                                                'source' => 'api.klm.com/opendata/flightoffers/available-offers',
+                                                'created_at' => DB::raw('now()'),
+                                                'updated_at' => DB::raw('now()')
                                             ]);
 
-                                            $response = json_decode($response->getBody());
-
-                                        } catch (\Exception $ex) {
-                                            if (!empty($ex)) {
-
-                                                if (stripos($ex->getMessage(), "Developer Over Rate") !== false) {
-                                                    echo "Overate Reached" . "\n";
-                                                    $m++;
-                                                }
-                                                $incomplete = ++$requestCount . ' Incompleted =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
-                                                $response = '';
-                                                echo $incomplete;
-                                            }
-                                        }
-
-                                        if (!empty($response)) {
-
-                                            foreach ($response->flightProducts as $instance) {
-
-                                                $flightArray = [];
-                                                $fidsegments = '';
-                                                $totalNumberOfFlights = 0;
-
-                                                $flightCarriers = '';
-                                                $flightNumbers = '';
-                                                $l = 0;
-
-                                                foreach ($instance->connections[0]->segments as $segment) {
-
-                                                    $id = uniqid();
-
-                                                    $arrivalDate = $arrivalTime = $arrivalDayOfWeek = null;
-                                                    if (isset($segment->arrivalDateTime)) {
-
-                                                        $arrivalDateTime = $segment->arrivalDateTime;
-                                                        $arrivalArray = explode("T", $arrivalDateTime);
-                                                        $arrivalDate = $arrivalArray[0];
-                                                        $arrivalTime = $arrivalArray[1];
-                                                        $arrivalDayOfWeek = date("l", strtotime($arrivalDate));
-                                                    }
-
-                                                    $departureDate = $departureTime = $departureDayOfWeek = null;
-                                                    if (isset($segment->departureDateTime)) {
-
-                                                        $departureDateTime = $segment->departureDateTime;
-                                                        $departureArray = explode("T", $departureDateTime);
-                                                        $departureDate = $departureArray[0];
-                                                        $departureTime = $departureArray[1];
-                                                        $departureDayOfWeek = date("l", strtotime($departureDate));
-                                                    }
-
-                                                    $fidsegments .= $segment->marketingFlight->carrier->code . '&' . $segment->marketingFlight->number . '&' . $segment->origin->code
-                                                        . '&' . $segment->destination->code . '&' . $departureDateTime . '&' . $arrivalDateTime;
-
-                                                    $flightArray[$l++] = serialize($segment);
-
-                                                    $flightCarriers .= $segment->marketingFlight->carrier->code;
-                                                    $flightNumbers .= $segment->marketingFlight->number;
-                                                    $totalNumberOfFlights++;
-                                                }
-
-                                                $fid = $fidsegments . $instance->connections[0]->duration . '&' . $instance->price->totalPrice . '&' .
-                                                    $instance->connections[0]->numberOfSeatsAvailable . '&' . $instance->price->displayPrice;
-
-                                                if (!(DB::table('flights_afklm')->where('fid', '=', $fid)->exists())) {
-
-                                                    DB::table('flights_afklm')->insert([
-                                                        'uid' => $id,
-                                                        's_no' => ++$j,
-                                                        'fid' => $fid,
-                                                        'flights_duration' => isset($instance->connections[0]->duration) ? ($instance->connections[0]->duration) : 0,
-                                                        'number_of_flights' => $totalNumberOfFlights,
-                                                        'number_of_seats_available' => isset($instance->connections[0]->numberOfSeatsAvailable) ? ($instance->connections[0]->numberOfSeatsAvailable) : null,
-
-                                                        'flights_data' => serialize($flightArray),
-
-                                                        'display_price' => isset($instance->price->displayPrice) ? ($instance->price->displayPrice) : 0,
-                                                        'total_price' => isset($instance->price->totalPrice) ? ($instance->price->totalPrice) : 0,
-                                                        'accuracy' => isset($instance->price->accuracy) ? ($instance->price->accuracy) : 0,
-                                                        'passenger_1_type' => isset($instance->price->pricePerPassengerTypes[0]->passengerType) ? ($instance->price->pricePerPassengerTypes[0]->passengerType) : null,
-                                                        'passenger_1_fare' => isset($instance->price->pricePerPassengerTypes[0]->fare) ? ($instance->price->pricePerPassengerTypes[0]->fare) : 0,
-                                                        'passenger_1_taxes' => isset($instance->price->pricePerPassengerTypes[0]->taxes) ? ($instance->price->pricePerPassengerTypes[0]->taxes) : 0,
-                                                        'passenger_2_type' => isset($instance->price->pricePerPassengerTypes[1]->passengerType) ? ($instance->price->pricePerPassengerTypes[1]->passengerType) : null,
-                                                        'passenger_2_fare' => isset($instance->price->pricePerPassengerTypes[1]->fare) ? ($instance->price->pricePerPassengerTypes[1]->fare) : 0,
-                                                        'passenger_2_taxes' => isset($instance->price->pricePerPassengerTypes[1]->taxes) ? ($instance->price->pricePerPassengerTypes[1]->taxes) : 0,
-                                                        'passenger_3_type' => isset($instance->price->pricePerPassengerTypes[2]->passengerType) ? ($instance->price->pricePerPassengerTypes[2]->passengerType) : null,
-                                                        'passenger_3_fare' => isset($instance->price->pricePerPassengerTypes[2]->fare) ? ($instance->price->pricePerPassengerTypes[2]->fare) : 0,
-                                                        'passenger_3_taxes' => isset($instance->price->pricePerPassengerTypes[2]->taxes) ? ($instance->price->pricePerPassengerTypes[2]->taxes) : 0,
-                                                        'passenger_4_type' => isset($instance->price->pricePerPassengerTypes[3]->passengerType) ? ($instance->price->pricePerPassengerTypes[3]->passengerType) : null,
-                                                        'passenger_4_fare' => isset($instance->price->pricePerPassengerTypes[3]->fare) ? ($instance->price->pricePerPassengerTypes[3]->fare) : 0,
-                                                        'passenger_4_taxes' => isset($instance->price->pricePerPassengerTypes[3]->taxes) ? ($instance->price->pricePerPassengerTypes[3]->taxes) : 0,
-                                                        'flexibility_waiver' => isset($instance->price->flexibilityWaiver) ? ($instance->price->flexibilityWaiver) : false,
-                                                        'currency' => isset($instance->price->currency) ? ($instance->price->currency) : null,
-                                                        'display_type' => isset($instance->price->displayType) ? ($instance->price->displayType) : null,
-
-                                                        'origin_airport_initial' => $iata1,
-                                                        'destination_airport_final' => $iata2,
-                                                        'source' => 'api.klm.com/opendata/flightoffers/available-offers',
-                                                        'created_at' => DB::raw('now()'),
-                                                        'updated_at' => DB::raw('now()')
-                                                    ]);
-
-                                                    $response = '';
-                                                    echo ' Completed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
-                                                } else {
-                                                    echo ' Existed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
-                                                }
-                                            }
-
-                                            echo ++$requestCount . ' $reponse not empty' . "\n";
+                                            $response = '';
+                                            echo ' Completed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
                                         } else {
-                                            if (empty($incomplete)) {
-                                                echo ++$requestCount . ' NullResponse =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
-                                            }
+                                            echo ' Existed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
                                         }
+                                    }
+
+                                    echo ++$requestCount . ' $reponse not empty' . "\n";
+                                } else {
+                                    if (empty($incomplete)) {
+                                        echo ++$requestCount . ' NullResponse =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
                                     }
                                 }
                             }
                         }
                     }
+                }
+            }
 //                }
 //            }
 

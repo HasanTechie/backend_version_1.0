@@ -34,15 +34,14 @@ Route::post('/hotels/search', 'HotelController@search');
 Route::get('/events', 'EventController@index');
 Route::get('/events/{event}', 'EventController@show');
 
-
 Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');
 
+Route::get('/flights/search', 'FlightController@search');
 Route::get('/flights', 'FlightController@index');
 Route::get('/flights/{flight}', 'FlightController@show');
 Route::get('/flights/create', 'FlightController@create');
 Route::get('/flights/current', 'FlightController@current');
-Route::get('/flights/search', 'FlightController@search');
 Route::post('/flights/search', 'FlightController@search');
 Route::get('/flights/test', 'FlightController@test');
 

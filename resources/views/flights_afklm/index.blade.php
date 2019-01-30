@@ -21,7 +21,7 @@
             <th>Total Flights Duration</th>
             <th>Number of Total Flights</th>
             <th>Total Price <br/>
-                <small> Adult, Young 14, Child & Infant</small>
+                <small>(Adult, Young 14, Child & Infant)</small>
             </th>
             <th>Details</th>
         </tr>

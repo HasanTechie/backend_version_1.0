@@ -16,16 +16,16 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
         //
 
         $apiArray = Array(
-            "dgIOGoQ4AcSAOApXx59AuXI53bKqKTpW",
-            "Q7VcIDLY2qRMsGqlwNJVU4UWDMDNaXcv",
             "jjSpfuTbaXPnacVm2YGopbIIaf7A8NFG",
+            "Q7VcIDLY2qRMsGqlwNJVU4UWDMDNaXcv",
+            "dgIOGoQ4AcSAOApXx59AuXI53bKqKTpW",
             "9U3YZf3HN3CCEaAIje3mOGK9o5ouAUyB"
         );
 
 
         $k = 0;
 
-        $events = DB::table('events')->select('*')->get();
+        $events = DB::table('events')->select('*')->where('s_no', '>', 3770)->get();
 
         $requestCount = 0;
 

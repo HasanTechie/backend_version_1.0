@@ -37,7 +37,7 @@ class SingaporeHotelDataSeeder extends Seeder
                 'updated_at' => DB::raw('now()')
             ]);
 
-            echo 'singapore api -> hotels_uncompressed '.$j . "\n";
+            echo 'singapore api -> hotels_uncompressed ' . $j . "\n";
         }
     }
 }

@@ -13,7 +13,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
     {
         //
         $places = DB::table('places_test')->select(['place_id', 'id'])->where('numReviews', '>', 20)
-                ->WhereNull('detailed_reviews')->get();
+            ->WhereNull('detailed_reviews')->get();
 
         foreach ($places as $place) {
 
@@ -43,7 +43,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                                     $i++;
                                 }
 
-                                echo 'y ' .$i;
+                                echo 'y ' . $i;
                             } else {
                                 $client = new \GuzzleHttp\Client();
                                 $response11 = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=$id"); //free
@@ -51,7 +51,7 @@ class PlacesDetailsReviewsSeeder extends Seeder
                                     $reviewsArray[$i] = json_decode($response11->getBody());
                                     $i++;
                                 }
-                                echo 'n ' .$i;
+                                echo 'n ' . $i;
                             }
                         }
                     }

@@ -72,5 +72,4 @@ class MergingDataTourPediaAPIplacesSeeder extends Seeder
     }
 
 
-
 }

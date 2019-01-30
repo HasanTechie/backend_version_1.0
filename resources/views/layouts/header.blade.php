@@ -25,7 +25,7 @@
 </head>
 <body>
 {{--<a class="button" href="/" role="button">Go back</a>--}}
-<a style="margin-bottom: 1rem;" class="button" href="/" >Go to MainPage</a>
+<a style="margin-bottom: 1rem;" class="button" href="/">Go to MainPage</a>
 <script>
     function goBack() {
         window.history.back();

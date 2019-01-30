@@ -15,11 +15,11 @@ class UpdateFlightsData extends Seeder
         //Laminar Data API
 
         $apiArray = Array(
-            'scheduled','completed','airborne'
+            'scheduled', 'completed', 'airborne'
         );
 
 
-        foreach($apiArray as $instance) {
+        foreach ($apiArray as $instance) {
 
             $titles = DB::table('airports')->pluck('ICAO');
 

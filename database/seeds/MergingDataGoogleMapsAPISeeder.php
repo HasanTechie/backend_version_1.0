@@ -36,7 +36,7 @@ class MergingDataGoogleMapsAPISeeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    echo 'hotels_1->hotels_uncompressed '. $j . "\n";
+                    echo 'hotels_1->hotels_uncompressed ' . $j . "\n";
                 }
             }
         }

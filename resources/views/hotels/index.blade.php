@@ -38,5 +38,9 @@
         @endforeach
         </tbody>
     </table>
-    {{ $hotels->links() }}
+    <div class="block" align="center" style="margin-bottom: 2.5rem;">
+        <div class="box" style="width: 34%;">
+            {{ $hotels->links() }}
+        </div>
+    </div>
 @endsection

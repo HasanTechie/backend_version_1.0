@@ -30,7 +30,7 @@ class FlightController extends Controller
     {
         //
 
-        $flights = Flight::inRandomOrder()->paginate(25); //limit to 2000
+        $flights = Flight::paginate(25); //limit to 2000
         return view('flights.index', compact('flights'));
 
     }
@@ -49,7 +49,7 @@ class FlightController extends Controller
     {
         $flights = Flight::inRandomOrder()->where('flight_status', 'Airborne')->paginate(25); //limit to 2000
 
-//        $flights = Flight::inRandomOrder()->paginate(25); //limit to 2000
+//        $flights = Flight::inRandomOrder()->inRandomOrder()->paginate(25); //limit to 2000
         return view('flights.current', compact('flights'));
     }
 
@@ -125,7 +125,7 @@ class FlightController extends Controller
                 ->selectRaw('flights.* , planes.*');
 
             $total_capacity = $flights->sum('capacity');
-            $flights = $flights->paginate(25);
+            $flights = $flights->paginate(10);
 
             $is_submitted = 1;
         } else {
@@ -134,7 +134,7 @@ class FlightController extends Controller
                 ->select('flights.*', 'planes.*');
 
             $total_capacity = $flights->sum('capacity');
-            $flights = $flights->paginate(25);
+            $flights = $flights->paginate(10);
 
             $is_submitted = 0;
         }
@@ -152,78 +152,6 @@ class FlightController extends Controller
     {
         //
 
-//
-        $apiKey = '4kmnf3mnrk5ne5s53hk6xqvx';
-
-        $url1 = 'https://api.klm.com/opendata/flightoffers/reference-data';
-        $url2 = 'https://api.klm.com/opendata/flightoffers/available-offers';
-
-
-        $airline[0] = 'AF';
-        $airline[1] = 'KL';
-        for ($j = 0; $j <= 1; $j++) {
-
-            $currentAirline = $airline[$j];
-
-
-            $headers = [
-                'api-key' => $apiKey,
-                'afkl-travel-host' => 'AF',
-                'accept-language' => 'en-US',
-                'accept' => 'application/hal+json'
-            ];
-
-            try {
-                $client = new Client();
-                $response = $client->request('GET', $url1, [
-                    'headers' => $headers
-                ]);
-
-                $response = json_decode($response->getBody());
-
-
-            } catch (\Exception $ex) {
-                echo 'Incompleted =  ' . $currentAirline . "\n";
-            }
-            if (isset($response)) {
-                foreach ($response->continents as $continent) {
-
-                    foreach ($continent->countries as $country) {
-//                        dd($continent->code);
-//                        dd($continent->name);
-
-
-//                        dd($country->code);
-//                        dd($country->name);
-//                        dd($country->settings);
-
-                        foreach($country->cities as $city){
-                            dd($city->code);
-                            dd($city->name);
-                            dd($city->isOrigin);
-                            foreach($city->airports as $airport){
-
-                            }
-                        }
-                    }
-                }
-                foreach ($response->flightProducts as $instance) {
-                    DB::table('aiports_afklm')->insert([
-                        'airline_code' => $currentAirline,
-                        'origin_name' => $name1,
-                        'origin_iata' => $iata1,
-                        'destination_name' => $name2,
-                        'destination_iata' => $iata1,
-                        'flight_date' => $date,
-                        'all_data' => serialize($instance),
-                        'source' => 'api.klm.com/opendata/flightoffers/',
-                        'created_at' => DB::raw('now()'),
-                        'updated_at' => DB::raw('now()')
-                    ]);
-                    echo 'Completed =  ' . $currentAirline . ' ' . $name1 . ' (' . $iata1 . ') & ' . $name2 . '(' . $iata2 . ')' . "\n";
-                }
-            }
-        }
     }
 
     /**

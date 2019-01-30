@@ -20,7 +20,7 @@ class RouteController extends Controller
     {
         //
 
-        $routes = Route::paginate(25); //limit to 2000
+        $routes = Route::inRandomOrder()->paginate(25); //limit to 2000
         return view('routes.index', compact('routes'));
     }
 

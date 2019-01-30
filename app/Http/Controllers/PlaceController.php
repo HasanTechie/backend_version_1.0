@@ -19,7 +19,7 @@ class PlaceController extends Controller
     public function index()
     {
         //
-        $places = Place::paginate(25);;
+        $places = Place::paginate(25);
         return view('places.index', compact('places'));
     }
 

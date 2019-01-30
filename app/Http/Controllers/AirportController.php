@@ -49,7 +49,7 @@ class AirportController extends Controller
 
 //        return $content;
 
-        $airports = Airport::paginate(25); //limit to 2000
+        $airports = Airport::inRandomOrder()->paginate(25); //limit to 2000
         return view('airports.index', compact('airports'));
     }
 

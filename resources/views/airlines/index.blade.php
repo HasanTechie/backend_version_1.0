@@ -30,5 +30,10 @@
         @endforeach
         </tbody>
     </table>
-    {{ $airlines->links() }}
+    <div class="block" align="center" style="margin-bottom: 2.5rem;">
+        <div class="box" style="width: 34%;">
+            {{ $airlines->links() }}
+        </div>
+    </div>
+
 @endsection

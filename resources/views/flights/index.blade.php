@@ -27,7 +27,9 @@
             <tr>
 
                 <td>{{$flight->uid}}</td>
-                <td><a href="https://www.google.com/search?q={{$flight->iata_flight_number}} flight">{{$flight->iata_flight_number}}</a></td>
+                <td>
+                    <a href="https://www.google.com/search?q={{$flight->iata_flight_number}} flight">{{$flight->iata_flight_number}}</a>
+                </td>
                 @if ($airport = DB::table('airports')->select('name')->where('ICAO', $flight->departure_airport_scheduled)->first())
                     <td>{{$airport->name}}</td>
                 @else
@@ -56,5 +58,9 @@
 
         </tbody>
     </table>
-        {{ $flights->links() }}
+    <div class="block" align="center" style="margin-bottom: 2.5rem;">
+        <div class="box" style="width: 34%;">
+            {{ $flights->links() }}
+        </div>
+    </div>
 @endsection

@@ -46,5 +46,10 @@
         @endforeach
         </tbody>
     </table>
-    {{ $airports->links() }}
+
+    <div class="block" align="center" style="margin-bottom: 2.5rem;">
+        <div class="box" style="width: 34%;">
+            {{ $airports->links() }}
+        </div>
+    </div>
 @endsection

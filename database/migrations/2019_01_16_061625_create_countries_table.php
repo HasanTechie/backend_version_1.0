@@ -17,12 +17,22 @@ class CreateCountriesTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('country_code');
-            $table->string('iso_code');
+            $table->string('country_code')->nullable();
             $table->string('name');
-            $table->integer('number_of_states');
-            $table->text('states');
-            $table->text('all_data');
+            $table->string('capital')->nullable();
+            $table->string('currency')->nullable();
+            $table->string('fips_code')->nullable();
+            $table->integer('iso_numeric')->nullable();
+            $table->double('north')->nullable();
+            $table->double('south')->nullable();
+            $table->double('east')->nullable();
+            $table->double('west')->nullable();
+            $table->string('continent')->nullable();
+            $table->string('continent_code')->nullable();
+            $table->string('languages')->nullable();
+            $table->string('iso_alpha3')->nullable();
+            $table->string('geoname_id')->nullable();
+
 
             $table->string('source');
 

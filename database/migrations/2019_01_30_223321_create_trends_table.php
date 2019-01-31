@@ -18,8 +18,15 @@ class CreateTrendsTable extends Migration
             $table->unsignedInteger('s_no');
 
             $table->longText('all_data')->nullable();
+            $table->string('keyword')->nullable();
+            $table->string('keyword_language')->nullable();
+            $table->string('api_preferred_language')->nullable();
+            $table->string('country_code')->nullable();
+            $table->string('country_name')->nullable();
+            $table->string('time')->nullable();
 
             $table->string('source');
+
             $table->timestamps();
         });
     }

@@ -37,6 +37,10 @@ Route::get('/events/{event}', 'EventController@show');
 Route::get('/trends', 'TrendController@index');
 Route::get('/trends/create', 'TrendController@create');
 Route::get('/trends/{trend}', 'TrendController@show');
+Route::get('/trends/interestovertime/{trend}', 'TrendController@interestovertime');
+Route::get('/trends/interestbysubregion/{trend}', 'TrendController@interestbysubregion');
+Route::get('/trends/relatedtopics/{trend}', 'TrendController@relatedtopics');
+Route::get('/trends/relatedqueries/{trend}', 'TrendController@relatedqueries');
 
 Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');

@@ -18,6 +18,8 @@ class TrendController extends Controller
     public function index()
     {
         //
+        $trends = Trend::paginate(25);
+        return view('trends.index', compact('trends'));
 
     }
 
@@ -28,91 +30,119 @@ class TrendController extends Controller
      */
     public function create()
     {
-        $countries = [
-            'United States',
-            'France',
-            'Germany',
-            'Russia',
-            'Netherlands',
-            'Brazil',
-            'United Kingdom',
-            'Canada',
-            'India',
-            'China',
-            'Japan',
-            'Australia',
-            'Austria',
-            'Belgium',
-            'Bulgaria',
-            'Croatia',
-            'Cyprus',
-            'Czech Republic',
-            'Slovakia',
-            'Slovenia',
-            'Spain',
-            'Sweden',
-            'Ukraine',
-            'Denmark',
-            'Estonia',
-            'Finland',
-            'Greece',
-            'Hungary',
-            'Ireland',
-            'Italy',
-            'Latvia',
-            'Lithuania',
-            'Luxembourg',
-            'Malta',
-            'Poland',
-            'Portugal',
-            'Romania',
-            'Egypt',
-            'Indonesia',
-            'Thailand',
-            'Pakistan',
-            'Mexico',
-            'Israel',
-            'South Africa',
-            'Chile',
-            'Argentina'
-        ];
 
-        foreach ($countries as $country) {
-            $countrycode = DB::table('countries')->select('iso_code', 'name')->where('name', '=', $country)->get();
-//            echo $countrycode[0]->name . " ";
-//            echo $countrycode[0]->iso_code . "<br>";
-
-            # This options are by default if none provided
-            $options = [
-                'hl' => 'en-US',
-                'tz' => 0, # UTC
-                'geo' => $countrycode[0]->iso_code
-            ];
-
-            $keywords = DB::table('keywords')->where('language', '=', 'EN')->get();
-
-
-            $i = 0;
-            $keywordsArray = [];
-            foreach ($keywords as $keyword) {
-
-                if ($i % 5 == 0 && $i != 0) {
-
-                    $gt = new GTrends($options);
-                    $data1 = $gt->explore($keywordsArray, 0, 'today 5-y');
-
-                    dd($data1);
-
-                    $keywordsArray = [];
-                    $i = 0;
-
-                } else {
-                    $keywordsArray[$i++] = $keyword->keyword;
-                }
-
-
-            }
-        }
+//        $options = [
+//            'hl' => 'en-US',
+//            'tz' => 0, # UTC
+//            'geo' => ''
+//        ];
+//        $gt = new GTrends($options);
+//
+//        //returns empty array
+//        $data = $gt->explore('hotel');
+//
+//        dd($data); //var_dump equivalent in laravel
+//
+//
+//        $keywordsArray[0]='hotel';
+//        $keywordsArray[1]='car';
+//        $keywordsArray[2]='facebook';
+//        $keywordsArray[3]='ideas';
+//        $keywordsArray[4]='ticket';
+//
+//        $countries = [
+//            'United States',
+//            'France',
+//            'Germany',
+//            'Russia',
+//            'Netherlands',
+//            'Brazil',
+//            'United Kingdom',
+//            'Canada',
+//            'India',
+//            'China',
+//            'Japan',
+//            'Australia',
+//            'Austria',
+//            'Belgium',
+//            'Bulgaria',
+//            'Croatia',
+//            'Cyprus',
+//            'Czech Republic',
+//            'Slovakia',
+//            'Slovenia',
+//            'Spain',
+//            'Sweden',
+//            'Ukraine',
+//            'Denmark',
+//            'Estonia',
+//            'Finland',
+//            'Greece',
+//            'Hungary',
+//            'Ireland',
+//            'Italy',
+//            'Latvia',
+//            'Lithuania',
+//            'Luxembourg',
+//            'Malta',
+//            'Poland',
+//            'Portugal',
+//            'Romania',
+//            'Egypt',
+//            'Indonesia',
+//            'Thailand',
+//            'Pakistan',
+//            'Mexico',
+//            'Israel',
+//            'South Africa',
+//            'Chile',
+//            'Argentina'
+//        ];
+//
+//        foreach ($countries as $country) {
+//            $countrycode = DB::table('countries')->select('iso_code', 'name')->where('name', '=', $country)->get();
+////            echo $countrycode[0]->name . " ";
+////            echo $countrycode[0]->iso_code . "<br>";
+//
+//            # This options are by default if none provided
+//            $options = [
+//                'hl' => 'en-US',
+//                'tz' => 0, # UTC
+//                'geo' => ''
+//            ];
+//
+//            $keywords = DB::table('keywords')->where('language', '=', 'EN')->get();
+//
+//
+//            $i = 0;
+//            $keywordsArray = [];
+//            foreach ($keywords as $keyword) {
+//
+//                if ($i % 5 == 0 && $i != 0) {
+//
+//                    $gt = new GTrends($options);
+//
+//                    $keywordsArray[0]='hotel';
+//                    $keywordsArray[1]='car';
+//                    $keywordsArray[2]='facebook';
+//                    $keywordsArray[3]='ideas';
+//                    $keywordsArray[4]='ticket';
+//
+//                    $data1 = $gt->explore($keywordsArray, 0, 'today 5-y');
+//
+//                    print_r($keywordsArray);
+//                    dd($data1);
+//
+//                    $keywordsArray = [];
+//                    $i = 0;
+//
+//                } else {
+//                    $keywordsArray[$i++] = $keyword->keyword;
+//                }
+//
+//
+//            }
+//        }
 
 
     }
@@ -123,8 +153,7 @@ class TrendController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         //
     }
@@ -135,10 +164,30 @@ class TrendController extends Controller
      * @param  \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
-    public
-    function show(Trend $trend)
+    public function show(Trend $trend)
     {
         //
+        dd(unserialize($trend->all_data));
+    }
+
+    public function interestovertime(Trend $trend)
+    {
+        dd(unserialize($trend->all_data)['TIMESERIES']);
+    }
+
+    public function interestbysubregion(Trend $trend)
+    {
+        dd(unserialize($trend->all_data)['GEO_MAP']);
+    }
+
+    public function relatedtopics(Trend $trend)
+    {
+        dd(unserialize($trend->all_data)['RELATED_TOPICS']);
+    }
+
+    public function relatedqueries(Trend $trend)
+    {
+        dd(unserialize($trend->all_data)['RELATED_QUERIES']);
     }
 
     /**
@@ -147,8 +196,7 @@ class TrendController extends Controller
      * @param  \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit(Trend $trend)
+    public function edit(Trend $trend)
     {
         //
     }
@@ -160,8 +208,7 @@ class TrendController extends Controller
      * @param  \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, Trend $trend)
+    public function update(Request $request, Trend $trend)
     {
         //
     }
@@ -172,8 +219,7 @@ class TrendController extends Controller
      * @param  \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy(Trend $trend)
+    public function destroy(Trend $trend)
     {
         //
     }

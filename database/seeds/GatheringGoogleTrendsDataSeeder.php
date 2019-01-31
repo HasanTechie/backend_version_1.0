@@ -68,7 +68,7 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
             $j = 0;
         }
 
-        $i=0;
+        $i = 0;
         foreach ($countries as $country) {
             $countrycode = DB::table('countries')->select('iso_code', 'name')->where('name', '=', $country)->get();
 
@@ -79,7 +79,10 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                 'geo' => $countrycode[0]->iso_code
             ];
 
-            $keywords = DB::table('keywords')->where('language', '=', 'EN')->get();
+            $keywords = DB::table('keywords')->where([
+                ['language', '=', 'EN'],
+                ['s_no', '>', '181']
+            ])->get();
 
             foreach ($keywords as $keyword) {
 
@@ -87,41 +90,48 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                     ['country_code', '=', $countrycode[0]->iso_code],
                     ['keyword', '=', $keyword->keyword]
                 ])->exists()) {
+
                     try {
 
+                        sleep(1);
                         $gt = new GTrends($options);
 
                         $data = $gt->explore($keyword->keyword, 0, 'today 5-y');
 
-                        DB::table('trends')->insert([
-                            'uid' => uniqid(),
-                            's_no' => ++$j,
+                        if (isset($data)) {
 
-                            'all_data' => serialize($data),
-                            'keyword' => $keyword->keyword,
-                            'keyword_language' => 'EN',
-                            'api_preferred_language' => 'en-US',
-                            'country_code' => $countrycode[0]->iso_code,
-                            'country_name' => $countrycode[0]->name,
-                            'time' => 'today 5-y',
+                            DB::table('trends')->insert([
+                                'uid' => uniqid(),
+                                's_no' => ++$j,
 
-                            'source' => 'trends.google.com/trends/api/explore',
+                                'all_data' => serialize($data),
+                                'keyword' => $keyword->keyword,
+                                'keyword_language' => 'EN',
+                                'api_preferred_language' => 'en-US',
+                                'country_code' => $countrycode[0]->iso_code,
+                                'country_name' => $countrycode[0]->name,
+                                'time' => 'today 5-y',
 
-                            'created_at' => DB::raw('now()'),
-                            'updated_at' => DB::raw('now()')
-                        ]);
+                                'source' => 'trends.google.com/trends/api/explore',
 
-                        $mytime = Carbon\Carbon::now();
+                                'created_at' => DB::raw('now()'),
+                                'updated_at' => DB::raw('now()')
+                            ]);
+                            echo ++$i . ' Completed :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                        }
 
-                        echo ++$i.' Completed :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . $mytime->toDateTimeString() . "\n";
 
                     } catch (\Exception $ex) {
                         if (!empty($ex)) {
-                            echo ++$i.' Incomplete :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . $mytime->toDateTimeString() . "\n";
+                            $data = null;
+                            $gt = null;
+                            echo ++$i . ' Incomplete :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+//                            echo $ex . "\n";
+
                         }
                     }
                 } else {
-                    echo ++$i.' Exists :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ')' . "\n";
+                    echo ++$i . ' Exists :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                 }
             }
         }

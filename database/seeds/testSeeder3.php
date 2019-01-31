@@ -13,19 +13,20 @@ class testSeeder3 extends Seeder
     {
         //
         $j = 0;
-//        for ($i = 1; $i <= 300000; $i++) {
 
-        $results = DB::table('hotels_uncompressed')->select('uid')->get();
-        if (!empty($results[0])) {
-            foreach ($results as $instance) {
-                DB::table('hotels_uncompressed')->where('uid', $instance->uid)->update([
-                    's_no' => ++$j,
-                ]);
+        $results = DB::table('cities_1')->select('*')->get();
 
-                echo 'hotels_uncompressed ' . '->' . $j . "\n";
-            }
+        foreach ($results as $instance) {
+            DB::table('cities')->insert([
+                'uid' => uniqid(),
+                's_no' => ++$j,
+                'source' => 'openweathermap.org',
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
+            ]);
+
+            echo 'hotels_uncompressed ' . '->' . $j . "\n";
         }
-//        }
 
 
     }

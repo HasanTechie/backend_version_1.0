@@ -35,6 +35,7 @@ Route::get('/events', 'EventController@index');
 Route::get('/events/{event}', 'EventController@show');
 
 Route::get('/trends', 'TrendController@index');
+Route::get('/trends/create', 'TrendController@create');
 Route::get('/trends/{trend}', 'TrendController@show');
 
 Route::get('/landroutes/', 'LandRouteController@index');

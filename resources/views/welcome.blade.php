@@ -85,12 +85,17 @@
         </div>
 
         <div class="links">
+            <a href="/trends">Google Trends</a>
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/hotels">Hotels</a>
             <a href="/events">Events</a>
             <a href="/flightsprices">Airfrance KLM Flights</a>
             <a href="/flights">Laminar API Flights</a>
             <a href="/flights/search">Search Flights</a>
+
+        </div>
+        <br/>
+        <div class="links">
             <a href="/places/">Places</a>
             <a href="/airports">Airports</a>
             <a href="/airlines">Airlines</a>

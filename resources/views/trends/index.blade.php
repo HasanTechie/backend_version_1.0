@@ -30,12 +30,16 @@
                 <td>{{$twoTrends->keyword}}</td>
                 <td>{{$twoTrends->keyword_language}}</td>
                 <td>{{$twoTrends->country_name}}</td>
-                <td>{{$twoTrends->time}}</td>
+                <td>@if($twoTrends->time == 'today 5-y') {{'5 years data'}} @endif</td>
                 <td><a href="/trends/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/interestovertime/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/interestbysubregion/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/relatedtopics/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/relatedqueries/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/trends/interestovertime/{{$twoTrends->uid}}"
+                       class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/trends/interestbysubregion/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a>
+                </td>
+                <td><a href="/trends/relatedtopics/{{$twoTrends->uid}}"
+                       class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/trends/relatedqueries/{{$twoTrends->uid}}"
+                       class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
         </tbody>

@@ -14,39 +14,33 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
         //
         $j = 0;
 
+        //source = 'https://simplemaps.com/data/world-cities'
+
         $results = DB::table('cities_world_population')->select('*')->get();
 
         foreach ($results as $instance) {
 
-            $results1=DB::table('cities')->select('*')->where('name','=',$instance->city)->get();
-            dd($results1);
+            $results1 = DB::table('cities')->select('*')->where([
+                ['name', '=', $instance->city_ascii],
+                ['country_code', '=', $instance->iso2]
+            ])->whereNull('name_ascii')->get();
 
-            DB::table('cities')
-                ->where([
-                    ['name', $instance->city],
-                    ['country_code', $instance->iso2],
+            if (count($results1) == 1) {
+                DB::table('cities')
+                    ->where([
+                        ['name', $instance->city],
+                        ['country_code', $instance->iso2],
                     ])
-                ->update([
-                    'administrative_name' => $instance->admin_name,
-                    'name_ascii' => $instance->city_ascii,
-                    'population' => $instance->population,
-                ]);
-
-//            DB::table('cities')->insert([
-//                'uid' => uniqid(),
-//                's_no' => ++$j,
-//                'id' => $instance->id,
-//                'name' => $instance->name,
-//                'country_code' => (isset($results1[0]->country_code) ? $results1[0]->country_code : null),
-//                'country' => (isset($results1[0]->name) ? $results1[0]->name : null),
-//                'latitude' => $instance->coordlat,
-//                'longitude' => $instance->coordlon,
-//                'source' => 'openweathermap.org',
-//                'created_at' => DB::raw('now()'),
-//                'updated_at' => DB::raw('now()')
-//            ]);
-
-            echo $j++ . ' city-> ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                    ->update([
+                        'administrative_name' => $instance->admin_name,
+                        'name_ascii' => $instance->city_ascii,
+                        'population' => $instance->population,
+                    ]);
+                echo $results1[0]->s_no . ' done -> ' . $instance->city . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+            }
+            if (count($results1) > 1) {
+                echo $results1[0]->s_no . ' not done -> ' . $instance->city . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+            }
         }
     }
 }
@@ -54,11 +48,11 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
 
 /*
 
-$results = DB::table('cities_1')->select('*')->get();
+$results = DB::table('cities_1')->select(' * ')->get();
 
         foreach ($results as $instance) {
 
-            $results1 = DB::table('countries')->select('*')->where('country_code', '=', $instance->country)->get();
+            $results1 = DB::table('countries')->select(' * ')->where('country_code', ' = ', $instance->country)->get();
 
             DB::table('cities')->insert([
                 'uid' => uniqid(),
@@ -69,7 +63,7 @@ $results = DB::table('cities_1')->select('*')->get();
                 'country' => (isset($results1[0]->name) ? $results1[0]->name : null),
                 'latitude' => $instance->coordlat,
                 'longitude' => $instance->coordlon,
-                'source' => 'openweathermap.org',
+                'source' => 'openweathermap . org',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);
@@ -80,7 +74,7 @@ $results = DB::table('cities_1')->select('*')->get();
 */
 
 /*
-        $results = DB::table('apps_countries_detailed')->select('*')->get();
+        $results = DB::table('apps_countries_detailed')->select(' * ')->get();
 
         foreach ($results as $instance) {
             DB::table('countries')->insert([
@@ -101,7 +95,7 @@ $results = DB::table('cities_1')->select('*')->get();
                 'languages' => $instance->languages,
                 'iso_alpha3' => $instance->isoAlpha3,
                 'geoname_id' => $instance->geonameId,
-                'source' => 'github.com/raramuridesign/mysql-country-list/blob/master/mysql-country-list-detailed-info.sql',
+                'source' => 'github . com / raramuridesign / mysql - country - list/blob / master / mysql - country - list-detailed - info . sql',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);

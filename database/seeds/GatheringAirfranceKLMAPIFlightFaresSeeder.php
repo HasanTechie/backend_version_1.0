@@ -16,12 +16,12 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
         //
 
         $apiArray = Array(
-            array("gsj2x293zdacgezgf2hv5hhv", "sayyid"),
+            array("vxm2gshpczmyxx6fjenec9se", "aweinbacha"),
+            array("4cxszedpevyer3h3fwja3wq3", "unbeatabil"),
+            array("q2w2dqn6ehfbevv7pst7mwpr", "haasan"),
             array("khdkrw2pvvaqcs3pks96d5ve", "hasanabbax"),
             array("4kmnf3mnrk5ne5s53hk6xqvx", "maxbiocca"),
-            array("q2w2dqn6ehfbevv7pst7mwpr", "haasan"),
-            array("4cxszedpevyer3h3fwja3wq3", "unbeatabil"),
-            array("vxm2gshpczmyxx6fjenec9se", "aweinbacha"),
+            array("gsj2x293zdacgezgf2hv5hhv", "sayyid"),
         );
 
         $url2 = 'https://api.klm.com/opendata/flightoffers/available-offers';
@@ -98,7 +98,7 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
 
 
         // Start date
-        $date = '2019-04-23';
+        $date = '2019-05-03';
         //$end_date = '2019-02-07';
         $end_date = '2019-07-31';
 
@@ -139,50 +139,52 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                         $iata1 = $airport1->origin_airport_initial;
                         $iata2 = $airport2->destination_airport_final;
 
-//                                $name1 = $airport1->name;
-//                                $name2 = $airport2->name;
-
                         $continue = 1;
-//                                $result2 = DB::table('flights_afklm')->where([
-//                                    ['ignore_oiata', '=', $iata1],
-//                                    ['ignore_diata', '=', $iata2]
-//                                ])->orderBy('s_no', 'desc')->first();
-//
-//
-//                                if (isset($result2)) {
-//
-//
-//
-//                                    //sdate = 2jun depdate = 4jun -> skip
-//                                    //sdate = 5jun depdate = 4jun -> continue
-//
-//                                    //edate = 8 depdate = 4 ->continue
-//                                    //edate = 3 depdate = 4 ->skip
-//
-//                                    if ((strtotime($result2->departure_date) < strtotime($end_date)) && $result2->ignore_oiata == $iata1 && $result2->ignore_diata) {
-//
-//
-//                                        if ((strtotime($result2->departure_date) < strtotime($date)) && $result2->ignore_oiata == $iata1 && $result2->ignore_diata) {
-//
-//                                            $iata1 = $result2->ignore_oiata;
-//                                            $iata2 = $result2->ignore_diata;
-//
-//
-//                                            $date = $result2->departure_date;
-//
-////                                                $date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
-//
-//                                            $continue = 1;
-//                                        } else {
-//                                            $continue = 1;
-//                                        }
-//                                    } else {
-//                                        $continue = 1;
-//                                    }
-//                                } else {
-//                                    $continue = 1;
-//                                }
 
+                        /*
+                                $name1 = $airport1->name;
+                                $name2 = $airport2->name;
+
+                                $result2 = DB::table('flights_afklm')->where([
+                                    ['ignore_oiata', '=', $iata1],
+                                    ['ignore_diata', '=', $iata2]
+                                ])->orderBy('s_no', 'desc')->first();
+
+
+                                if (isset($result2)) {
+
+
+
+                                    //sdate = 2jun depdate = 4jun -> skip
+                                    //sdate = 5jun depdate = 4jun -> continue
+
+                                    //edate = 8 depdate = 4 ->continue
+                                    //edate = 3 depdate = 4 ->skip
+
+                                    if ((strtotime($result2->departure_date) < strtotime($end_date)) && $result2->ignore_oiata == $iata1 && $result2->ignore_diata) {
+
+
+                                        if ((strtotime($result2->departure_date) < strtotime($date)) && $result2->ignore_oiata == $iata1 && $result2->ignore_diata) {
+
+                                            $iata1 = $result2->ignore_oiata;
+                                            $iata2 = $result2->ignore_diata;
+
+
+                                            $date = $result2->departure_date;
+
+//                                                $date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
+
+                                            $continue = 1;
+                                        } else {
+                                            $continue = 1;
+                                        }
+                                    } else {
+                                        $continue = 1;
+                                    }
+                                } else {
+                                    $continue = 1;
+                                }
+                        */
 
                         if ($continue == 1) {
                             if (isset($iata1) && isset($iata2)) {
@@ -336,16 +338,16 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
                                             ]);
 
                                             $response = '';
-                                            echo ' Completed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
+                                            echo ' Completed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                                         } else {
-                                            echo ' Existed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . "\n";
+                                            echo ' Existed =' . $j . ' ' . $currentAirline . $flightNumbers . $flightCarriers . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . '   ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                                         }
                                     }
 
                                     echo ++$requestCount . ' $reponse not empty' . "\n";
                                 } else {
                                     if (empty($incomplete)) {
-                                        echo ++$requestCount . ' NullResponse =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . "\n";
+                                        echo ++$requestCount . ' NullResponse =  ' . $currentAirline . ' ' . ' (' . $iata1 . ') & ' . '(' . $iata2 . ')' . ' ' . $date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                                     }
                                 }
                             }
@@ -355,7 +357,6 @@ class GatheringAirfranceKLMAPIFlightFaresSeeder extends Seeder
             }
 //                }
 //            }
-
 
             $date = date("Y-m-d", strtotime("+2 day", strtotime($date)));
         }

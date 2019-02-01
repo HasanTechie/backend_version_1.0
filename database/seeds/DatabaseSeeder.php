@@ -37,8 +37,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('testSeeder3');
 //        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');
 //        $this->call('CorrectingSourceSeeder');
-//        $this->call('GatheringGoogleTrendsDataSeeder');
-//        $this->call('MigratingDataFromOneTableToAnotherSeeder');
-        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
+//        $this->call('GatheringGoogleTrendsDataSeeder'); //running
+        $this->call('MigratingDataFromOneTableToAnotherSeeder');
+//        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
     }
 }

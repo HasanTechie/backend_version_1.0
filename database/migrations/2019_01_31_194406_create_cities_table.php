@@ -19,10 +19,18 @@ class CreateCitiesTable extends Migration
 
             $table->unsignedInteger('id')->nullable();
             $table->string('name')->nullable();
+
+
+
             $table->string('country_code')->nullable();
             $table->string('country')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+
+            $table->string('administrative_name')->nullable();
+            $table->string('name_ascii')->nullable();
+            $table->string('type')->nullable();
+            $table->string('population')->nullable();
 
             $table->string('source');
 

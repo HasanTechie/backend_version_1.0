@@ -14,8 +14,47 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
         //
         $j = 0;
 
+        $results = DB::table('cities_world_population')->select('*')->get();
 
-        $results = DB::table('cities_1')->select('*')->get();
+        foreach ($results as $instance) {
+
+            $results1=DB::table('cities')->select('*')->where('name','=',$instance->city)->get();
+            dd($results1);
+
+            DB::table('cities')
+                ->where([
+                    ['name', $instance->city],
+                    ['country_code', $instance->iso2],
+                    ])
+                ->update([
+                    'administrative_name' => $instance->admin_name,
+                    'name_ascii' => $instance->city_ascii,
+                    'population' => $instance->population,
+                ]);
+
+//            DB::table('cities')->insert([
+//                'uid' => uniqid(),
+//                's_no' => ++$j,
+//                'id' => $instance->id,
+//                'name' => $instance->name,
+//                'country_code' => (isset($results1[0]->country_code) ? $results1[0]->country_code : null),
+//                'country' => (isset($results1[0]->name) ? $results1[0]->name : null),
+//                'latitude' => $instance->coordlat,
+//                'longitude' => $instance->coordlon,
+//                'source' => 'openweathermap.org',
+//                'created_at' => DB::raw('now()'),
+//                'updated_at' => DB::raw('now()')
+//            ]);
+
+            echo $j++ . ' city-> ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+        }
+    }
+}
+
+
+/*
+
+$results = DB::table('cities_1')->select('*')->get();
 
         foreach ($results as $instance) {
 
@@ -37,9 +76,8 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
 
             echo $j . ' city-> ' . $instance->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
         }
-    }
-}
 
+*/
 
 /*
         $results = DB::table('apps_countries_detailed')->select('*')->get();

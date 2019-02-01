@@ -17,6 +17,12 @@ class CreateWeathersTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
+            $table->integer('city_id')->nullable();
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('weather_data');
 
             $table->string('source');
 

@@ -20,10 +20,10 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
             'Russia',
             'Netherlands',
             'Brazil',
-            'United Kingdom',
-            'Canada',
-            'Spain',
-            'Sweden',
+            'United Kingdom of Great Britain and Northern Ireland',
+//            'Canada',
+//            'Spain',
+//            'Sweden',
 //            'Australia',
 //            'India',
 //            'China',
@@ -70,24 +70,25 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
 
         $i = 0;
         foreach ($countries as $country) {
-            $countrycode = DB::table('countries')->select('iso_code', 'name')->where('name', '=', $country)->get();
+            $countrycode = DB::table('countries')->select('country_code', 'name')->where('name', '=', $country)->get();
 
             # This options are by default if none provided
             $options = [
                 'hl' => 'en-US',
                 'tz' => 0, # UTC
-                'geo' => $countrycode[0]->iso_code
+                'geo' => $countrycode[0]->country_code
             ];
 
+            echo $countrycode[0]->country_code;
             $keywords = DB::table('keywords')->where([
-                ['language', '=', 'EN'],
-                ['s_no', '>', '181']
+                ['language', '=', 'EN']
+//                ['s_no', '>', '181']
             ])->get();
 
             foreach ($keywords as $keyword) {
 
                 if (!DB::table('trends')->where([
-                    ['country_code', '=', $countrycode[0]->iso_code],
+                    ['country_code', '=', $countrycode[0]->country_code],
                     ['keyword', '=', $keyword->keyword]
                 ])->exists()) {
 
@@ -108,7 +109,7 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                                 'keyword' => $keyword->keyword,
                                 'keyword_language' => 'EN',
                                 'api_preferred_language' => 'en-US',
-                                'country_code' => $countrycode[0]->iso_code,
+                                'country_code' => $countrycode[0]->country_code,
                                 'country_name' => $countrycode[0]->name,
                                 'time' => 'today 5-y',
 
@@ -117,7 +118,7 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                                 'created_at' => DB::raw('now()'),
                                 'updated_at' => DB::raw('now()')
                             ]);
-                            echo ++$i . ' Completed :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                            echo ++$i . ' Completed :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->country_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                         }
 
 
@@ -125,13 +126,13 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                         if (!empty($ex)) {
                             $data = null;
                             $gt = null;
-                            echo ++$i . ' Incomplete :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                            echo ++$i . ' Incomplete :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->country_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 //                            echo $ex . "\n";
 
                         }
                     }
                 } else {
-                    echo ++$i . ' Exists :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->iso_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                    echo ++$i . ' Exists :' . $j . ' (' . $keyword->keyword . ') ' . $countrycode[0]->country_code . ' (' . $countrycode[0]->name . ') ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                 }
             }
         }

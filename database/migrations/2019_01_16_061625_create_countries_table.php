@@ -33,7 +33,6 @@ class CreateCountriesTable extends Migration
             $table->string('iso_alpha3')->nullable();
             $table->string('geoname_id')->nullable();
 
-
             $table->string('source');
 
             $table->timestamps();

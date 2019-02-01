@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-
-use App\Weather;
+use App\Country;
 use Illuminate\Http\Request;
 
-class WeatherController extends Controller
+class CountryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,7 +30,7 @@ class WeatherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -43,10 +41,10 @@ class WeatherController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Weather $weather
+     * @param  \App\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function show(Weather $weather)
+    public function show(Country $country)
     {
         //
     }
@@ -54,10 +52,10 @@ class WeatherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Weather $weather
+     * @param  \App\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function edit(Weather $weather)
+    public function edit(Country $country)
     {
         //
     }
@@ -65,11 +63,11 @@ class WeatherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Weather $weather
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Weather $weather)
+    public function update(Request $request, Country $country)
     {
         //
     }
@@ -77,10 +75,10 @@ class WeatherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Weather $weather
+     * @param  \App\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Weather $weather)
+    public function destroy(Country $country)
     {
         //
     }

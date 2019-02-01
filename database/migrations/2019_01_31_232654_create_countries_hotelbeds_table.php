@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCountriesHotelBedsTable extends Migration
+class CreateCountriesHotelbedsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCountriesHotelBedsTable extends Migration
      */
     public function up()
     {
-        Schema::create('countries_hotel_beds', function (Blueprint $table) {
+        Schema::create('countries_hotelbeds', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
@@ -37,6 +37,6 @@ class CreateCountriesHotelBedsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('countries_hotel_beds');
+        Schema::dropIfExists('countries_hotelbeds');
     }
 }

@@ -20,44 +20,55 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
         );
 
         $k = 0;
-        $j = 0;
 
-        $cities = DB::table('cities')->select('*')->where('country_code', '=', 'DE')->get();
+        if ($result1 = DB::table('weathers')->orderBy('s_no', 'desc')->first()) {
+            $j = $result1->s_no;
+        } else {
+            $j = 0;
+        }
+
+        $cities = DB::table('cities')->select('*')->where('country_code', '=', 'DE')->orderBy('population', 'desc')->get();
 
         foreach ($cities as $city) {
 
-            try {
-                $client = new Client();
-                $res = $client->request('GET', "https://api.openweathermap.org/data/2.5/forecast?id=$city->id&appid=" . $apiArray[$k][0], [
-                    'auth' => ['user', 'pass']
-                ]);
-                $response = json_decode($res->getBody());
+            if (!(DB::table('weathers')->where('city_id', '=', $city->id)->exists())) {
+                try {
+                    $client = new Client();
+                    $res = $client->request('GET', "https://api.openweathermap.org/data/2.5/forecast?id=$city->id&appid=" . $apiArray[$k][0], [
+                        'auth' => ['user', 'pass']
+                    ]);
+                    $response = json_decode($res->getBody());
 
-            } catch (\Exception $ex) {
-                if (!empty($ex)) {
-                    $k++;
-                    echo $ex->getMessage();
+                } catch (\Exception $ex) {
+                    if (!empty($ex)) {
+                        $k++;
+                        echo $ex->getMessage();
+                    }
                 }
-            }
 
 
-            if (!empty($response) && $res->getStatusCode() == 200) {
-                DB::table('weather')->insert([
-                    'uid' => uniqid(),
-                    's_no' => ++$j,
-                    'city_id' => $city->id,
-                    'city' => $city->name,
-                    'country' => $city->country,
-                    'latitude' => $city->latitude,
-                    'longitude' => $city->longitude,
-                    'weather_data' => serialize($response),
-                    'source' => 'openweathermap.org',
-                    'created_at' => DB::raw('now()'),
-                    'updated_at' => DB::raw('now()')
-                ]);
+                if (!empty($response) && $res->getStatusCode() == 200) {
 
-                echo $j . ' city-> ' . $city->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                    DB::table('weathers')->insert([
+                        'uid' => uniqid(),
+                        's_no' => ++$j,
+                        'city_id' => $city->id,
+                        'city' => $city->name,
+                        'location_type' => $city->type,
+                        'country' => $city->country,
+                        'latitude' => $city->latitude,
+                        'longitude' => $city->longitude,
+                        'weather_data' => serialize($response),
+                        'source' => 'openweathermap.org',
+                        'created_at' => DB::raw('now()'),
+                        'updated_at' => DB::raw('now()')
+                    ]);
 
+                    echo $j . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Completed city-> ' . $city->name . ' population ->' . $city->population . "\n";
+
+                }
+            } else {
+                echo $j . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd city-> ' . $city->name . ' population ->' . $city->population . "\n";
             }
         }
     }

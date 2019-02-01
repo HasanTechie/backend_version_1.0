@@ -14,37 +14,47 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
         //
         $j = 0;
 
-        //source = 'https://simplemaps.com/data/world-cities'
+        //http://www.freecountrymaps.com/databases/germany/
+        $results1 = DB::table('z_ignore_germany_population')->select('*')->where('population', '<>', 0)->inRandomOrder()->get();
 
-        $results = DB::table('cities_world_population')->select('*')->get();
+        $array = [];
 
-        foreach ($results as $instance) {
+        foreach ($results1 as $instance1) {
 
-            $results1 = DB::table('cities')->select('*')->where([
-                ['name', '=', $instance->city_ascii],
-                ['country_code', '=', $instance->iso2]
+            $results2 = DB::table('cities')->select('*')->where([
+                ['name', '=', $instance1->name],
+                ['country_code', '=', $instance1->country_code]
             ])->whereNull('name_ascii')->get();
 
-            if (count($results1) == 1) {
-                DB::table('cities')
-                    ->where([
-                        ['name', $instance->city],
-                        ['country_code', $instance->iso2],
-                    ])
-                    ->update([
-                        'administrative_name' => $instance->admin_name,
-                        'name_ascii' => $instance->city_ascii,
-                        'population' => $instance->population,
-                    ]);
-                echo $results1[0]->s_no . ' done -> ' . $instance->city . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-            }
-            if (count($results1) > 1) {
-                echo $results1[0]->s_no . ' not done -> ' . $instance->city . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+            foreach ($results2 as $instance2) {
+                $lat1 = round($instance1->latitude, 2);
+                $lng1 = round($instance1->longitude, 2);
+
+                $lat2 = round($instance2->latitude, 2);
+                $lng2 = round($instance2->longitude, 2);
+
+                if (($lat1 == $lat2) && ($lng1 == $lng2)) {
+                    $array[0] = $instance1;
+                    $array[1] = $instance2;
+
+                    DB::table('cities')
+                        ->where([
+                            ['name', $instance1->name],
+                            ['country_code', $instance1->country_code],
+                        ])
+                        ->update([
+                            'type' => $instance1->type,
+                            'population' => $instance1->population,
+                        ]);
+
+                    echo $instance2->s_no . ' done -> ' . $instance2->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                }
             }
         }
+
+
     }
 }
-
 
 /*
 

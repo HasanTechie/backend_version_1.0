@@ -1,7 +1,5 @@
 <?php
-
 use Illuminate\Database\Seeder;
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -39,7 +37,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CorrectingSourceSeeder');
 //        $this->call('GatheringGoogleTrendsDataSeeder'); //running
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder');
-        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
+//        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
 //        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
     }
 }

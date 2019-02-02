@@ -14,20 +14,16 @@ class testSeeder1 extends Seeder
         //
 
         $j = 0;
-        for ($i = 1; $i <= 100000; $i++) {
-            if (DB::table('airlines')->where('s_no', $i)->exists()) {
+        $duplicates = DB::table('cities')
+            ->select('name','latitude','longitude', DB::raw('COUNT(*) as `count`'))
+                ->groupBy('name', 'latitude','longitude')
+                ->having('count', '>', 1)
+                ->get();
 
-                $results = DB::table('airlines')->where('s_no', $i)->get();
 
-                foreach ($results as $instance) {
+        foreach($duplicates as $duplicate){
 
-
-                    DB::table('airlines')->where('s_no', $instance->s_no)->update([
-                        's_no' => ++$j,
-                    ]);
-                    echo 'airlines ' . $j . "\n";
-                }
-            }
+            dd($duplicate);
         }
 
     }

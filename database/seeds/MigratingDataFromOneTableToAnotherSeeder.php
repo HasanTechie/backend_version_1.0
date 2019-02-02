@@ -41,6 +41,7 @@ class MigratingDataFromOneTableToAnotherSeeder extends Seeder
                         ->where([
                             ['name', $instance1->name],
                             ['country_code', $instance1->country_code],
+                            ['id', $instance2->id],
                         ])
                         ->update([
                             'type' => $instance1->type,
@@ -73,7 +74,7 @@ $results = DB::table('cities_1')->select(' * ')->get();
                 'country' => (isset($results1[0]->name) ? $results1[0]->name : null),
                 'latitude' => $instance->coordlat,
                 'longitude' => $instance->coordlon,
-                'source' => 'openweathermap . org',
+                'source' => 'openweathermap.org',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);
@@ -110,4 +111,4 @@ $results = DB::table('cities_1')->select(' * ')->get();
                 'updated_at' => DB::raw('now()')
             ]);
         }
-        */
+*/

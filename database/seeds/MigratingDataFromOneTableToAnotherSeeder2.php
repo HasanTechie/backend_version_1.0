@@ -16,7 +16,7 @@ class MigratingDataFromOneTableToAnotherSeeder2 extends Seeder
         $results1 = DB::table('z_ignore_cities_world_population')->select('*')->where('population', '<>', 0)->inRandomOrder()->get();
 
         $array = [];
-
+        $i = 0;
         foreach ($results1 as $instance1) {
 
             $results2 = DB::table('cities')->select('*')->where([
@@ -35,18 +35,21 @@ class MigratingDataFromOneTableToAnotherSeeder2 extends Seeder
                     $array[0] = $instance1;
                     $array[1] = $instance2;
 
+
                     DB::table('cities')
                         ->where([
                             ['name', $instance1->city_ascii],
                             ['country_code', $instance2->country_code],
+                            ['id', $instance2->id],
                         ])
                         ->update([
                             'administrative_name' => $instance1->admin_name,
                             'name_ascii' => $instance1->city_ascii,
                             'population' => $instance1->population,
+                            'source' => 'openweathermap.org, simplemaps.com/data/world-cities',
                         ]);
 
-                    echo $instance2->s_no . ' done -> ' . $instance2->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                    echo ++$i . ' ' . $instance2->s_no . ' done -> ' . $instance2->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                 }
             }
         }

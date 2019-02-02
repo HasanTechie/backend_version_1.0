@@ -41,9 +41,9 @@ class DatabaseSeeder extends Seeder
 
 
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder1');
-//        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
-//        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
-//        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
+        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
+        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
+        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
 
 //        $this->call('MigratingAndMergingDataBetweenTablesSeeder1');
     }

@@ -21,24 +21,24 @@ class MigratingDataFromOneTableToAnotherSeeder3 extends Seeder
 
             $results2 = DB::table('cities')->select('*')->where([
                 ['name', '=', $instance1->name],
-                ['country_code', '=', $instance1->country_code]
-            ])->whereNull('population')->get();
+                ['country_code', '=', $instance1->country_code],
+                ['population', '=', null]
+            ])->get();
 
             foreach ($results2 as $instance2) {
-                $lat1 = round($instance1->latitude, 2);
-                $lng1 = round($instance1->longitude, 2);
+                $lat1 = round($instance1->latitude, 1);
+                $lng1 = round($instance1->longitude, 1);
 
-                $lat2 = round($instance2->latitude, 2);
-                $lng2 = round($instance2->longitude, 2);
+                $lat2 = round($instance2->latitude, 1);
+                $lng2 = round($instance2->longitude, 1);
 
                 if (($lat1 == $lat2) && ($lng1 == $lng2)) {
-                    $array[0] = $instance1;
-                    $array[1] = $instance2;
+//                    $array[0] = $instance1;
+//                    $array[1] = $instance2;
 
                     DB::table('cities')
                         ->where([
                             ['country_code', $instance2->country_code],
-                            ['id', $instance2->id],
                             ['cid', $instance2->cid],
                         ])
                         ->update([

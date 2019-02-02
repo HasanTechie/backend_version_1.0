@@ -35,9 +35,7 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
                 try {
                     usleep(500000);
                     $client = new Client();
-                    $res = $client->request('GET', "https://api.openweathermap.org/data/2.5/forecast?id=$city->id&appid=" . $apiArray[$k][0], [
-                        'auth' => ['user', 'pass']
-                    ]);
+                    $res = $client->request('GET', "https://api.openweathermap.org/data/2.5/forecast?id=$city->id&appid=" . $apiArray[$k][0]);
                     $response = json_decode($res->getBody());
 
                 } catch (\Exception $ex) {

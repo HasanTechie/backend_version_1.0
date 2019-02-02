@@ -23,22 +23,22 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($trends as $twoTrends)
+        @foreach ($trends as $trend)
             <tr>
-                <th scope="row">{{$twoTrends->uid}}</th>
-                <td>{{$twoTrends->s_no}}</td>
-                <td>{{$twoTrends->keyword}}</td>
-                <td>{{$twoTrends->keyword_language}}</td>
-                <td>{{$twoTrends->country_name}}</td>
-                <td>@if($twoTrends->time == 'today 5-y') {{'5 years data'}} @endif</td>
-                <td><a href="/trends/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/interestovertime/{{$twoTrends->uid}}"
+                <th scope="row">{{$trend->uid}}</th>
+                <td>{{$trend->s_no}}</td>
+                <td>{{$trend->keyword}}</td>
+                <td>{{$trend->keyword_language}}</td>
+                <td>{{$trend->country_name}}</td>
+                <td>@if($trend->time == 'today 5-y') {{'5 years data'}} @endif</td>
+                <td><a href="/trends/{{$trend->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/trends/interestovertime/{{$trend->uid}}"
                        class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/interestbysubregion/{{$twoTrends->uid}}" class="button is-primary is-outlined">Details</a>
+                <td><a href="/trends/interestbysubregion/{{$trend->uid}}" class="button is-primary is-outlined">Details</a>
                 </td>
-                <td><a href="/trends/relatedtopics/{{$twoTrends->uid}}"
+                <td><a href="/trends/relatedtopics/{{$trend->uid}}"
                        class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/relatedqueries/{{$twoTrends->uid}}"
+                <td><a href="/trends/relatedqueries/{{$trend->uid}}"
                        class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach

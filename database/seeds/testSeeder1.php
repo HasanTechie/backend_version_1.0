@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Client;
+
 use Illuminate\Database\Seeder;
 
 class testSeeder1 extends Seeder
@@ -13,18 +15,18 @@ class testSeeder1 extends Seeder
     {
         //
 
-        $j = 0;
-        $duplicates = DB::table('cities')
-            ->select('name', 'latitude', 'longitude', DB::raw('COUNT(*) as `count`'))
-            ->groupBy('name', 'latitude', 'longitude')
-            ->having('count', '>', 1)
-            ->get();
-
-
-        foreach ($duplicates as $duplicate) {
-
-            dd($duplicate);
-        }
+//        $j = 0;
+//        $duplicates = DB::table('cities')
+//            ->select('name', 'latitude', 'longitude', DB::raw('COUNT(*) as `count`'))
+//            ->groupBy('name', 'latitude', 'longitude')
+//            ->having('count', '>', 1)
+//            ->get();
+//
+//
+//        foreach ($duplicates as $duplicate) {
+//
+//            dd($duplicate);
+//        }
 
     }
 }

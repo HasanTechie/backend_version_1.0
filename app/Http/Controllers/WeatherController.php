@@ -17,6 +17,8 @@ class WeatherController extends Controller
     public function index()
     {
         //
+        $weathers = Weather::paginate(25);
+        return view('weathers.index', compact('weathers'));
     }
 
     /**
@@ -49,6 +51,7 @@ class WeatherController extends Controller
     public function show(Weather $weather)
     {
         //
+        dd(unserialize($weather->weather_data)->list);
     }
 
     /**

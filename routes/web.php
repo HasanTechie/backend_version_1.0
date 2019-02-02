@@ -42,6 +42,10 @@ Route::get('/trends/interestbysubregion/{trend}', 'TrendController@interestbysub
 Route::get('/trends/relatedtopics/{trend}', 'TrendController@relatedtopics');
 Route::get('/trends/relatedqueries/{trend}', 'TrendController@relatedqueries');
 
+
+Route::get('/weathers', 'WeatherController@index');
+Route::get('/weathers/{weather}', 'WeatherController@show');
+
 Route::get('/landroutes/', 'LandRouteController@index');
 Route::get('/landroutes/test1', 'LandRouteController@test1');
 

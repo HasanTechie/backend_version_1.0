@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class KeywordController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +35,7 @@ class KeywordController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +46,7 @@ class KeywordController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Keyword  $keyword
+     * @param  \App\Keyword $keyword
      * @return \Illuminate\Http\Response
      */
     public function show(Keyword $keyword)
@@ -52,7 +57,7 @@ class KeywordController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Keyword  $keyword
+     * @param  \App\Keyword $keyword
      * @return \Illuminate\Http\Response
      */
     public function edit(Keyword $keyword)
@@ -63,8 +68,8 @@ class KeywordController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Keyword  $keyword
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Keyword $keyword
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Keyword $keyword)
@@ -75,7 +80,7 @@ class KeywordController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Keyword  $keyword
+     * @param  \App\Keyword $keyword
      * @return \Illuminate\Http\Response
      */
     public function destroy(Keyword $keyword)

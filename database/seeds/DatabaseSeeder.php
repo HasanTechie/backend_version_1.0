@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CreateUniqueIdSeeder');
 //        $this->call('UncompressingDataSeeder');
 //        $this->call('UncompressingDataSeeder2');
-        $this->call('testSeeder1');
+//        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
 //        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');

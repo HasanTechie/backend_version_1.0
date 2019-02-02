@@ -12,11 +12,12 @@ class MigratingDataFromOneTableToAnotherSeeder2 extends Seeder
     public function run()
     {
         //
-        //source = 'https://simplemaps.com/data/world-cities'
-        $results1 = DB::table('z_ignore_cities_world_population')->select('*')->where('population', '<>', 0)->inRandomOrder()->get();
+
+        //simplemaps.com/data/world-cities
+        $results1 = DB::table('z_ignore_cities_world_population')->select('*')->where('population', '>', 0)->get();
 
         $array = [];
-        $i = 0;
+
         foreach ($results1 as $instance1) {
 
             $results2 = DB::table('cities')->select('*')->where([
@@ -35,11 +36,10 @@ class MigratingDataFromOneTableToAnotherSeeder2 extends Seeder
                     $array[0] = $instance1;
                     $array[1] = $instance2;
 
-
                     DB::table('cities')
                         ->where([
-                            ['name', $instance1->city_ascii],
-                            ['country_code', $instance2->country_code],
+                            ['country_code', $instance1->iso2],
+                            ['cid', $instance2->cid],
                             ['id', $instance2->id],
                         ])
                         ->update([
@@ -49,9 +49,10 @@ class MigratingDataFromOneTableToAnotherSeeder2 extends Seeder
                             'source' => 'openweathermap.org, simplemaps.com/data/world-cities',
                         ]);
 
-                    echo ++$i . ' ' . $instance2->s_no . ' done -> ' . $instance2->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                    echo $instance2->s_no . ' done -> ' . $instance2->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                 }
             }
         }
+
     }
 }

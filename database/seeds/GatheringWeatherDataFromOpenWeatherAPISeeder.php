@@ -27,12 +27,13 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
             $j = 0;
         }
 
-        $cities = DB::table('cities')->select('*')->where('country_code', '=', 'DE')->orderBy('population', 'desc')->get();
+        $cities = DB::table('cities')->select('*')->orderBy('population', 'desc')->get();
 
         foreach ($cities as $city) {
 
             if (!(DB::table('weathers')->where('city_id', '=', $city->id)->exists())) {
                 try {
+                    usleep(500000);
                     $client = new Client();
                     $res = $client->request('GET', "https://api.openweathermap.org/data/2.5/forecast?id=$city->id&appid=" . $apiArray[$k][0], [
                         'auth' => ['user', 'pass']
@@ -53,6 +54,7 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
                         'uid' => uniqid(),
                         's_no' => ++$j,
                         'city_id' => $city->id,
+                        'city_cid' => $city->cid,
                         'city' => $city->name,
                         'location_type' => $city->type,
                         'country' => $city->country,

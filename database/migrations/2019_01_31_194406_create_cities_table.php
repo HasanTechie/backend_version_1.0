@@ -32,6 +32,8 @@ class CreateCitiesTable extends Migration
             $table->string('type')->nullable();
             $table->double('population')->nullable();
 
+            $table->string('cid')->unique();
+
             $table->string('source');
 
             $table->timestamps();

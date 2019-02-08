@@ -24,7 +24,7 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Website</th>
-            <th>Room Type Prices and Details</th>
+            <th>All Details</th>
         </tr>
         </thead>
         <tbody>

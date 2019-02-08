@@ -15,6 +15,7 @@
             <th>Day</th>
             <th>Month</th>
             <th>Price</th>
+            <th>Room Name</th>
             <th>Hotel Name</th>
             <th>Hotel Address</th>
             <th>Phone</th>

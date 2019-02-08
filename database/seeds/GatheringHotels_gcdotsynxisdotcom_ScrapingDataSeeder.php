@@ -117,8 +117,10 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
 
                 $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
+                $url = "https://gc.synxis.com/rez.aspx?Chain=" . $hotels['chain_id'] . "&Hotel=" . $hotels['id'] . "&Shell=RBE&Template=RBE&arrive=$checkInDate&depart=$checkOutDate&adult=1&rooms=&promo=&start=availresults&locale=en-US";
                 global $checkInDate, $checkOutDate, $hotels;
-                $url = "https://gc.synxis.com/rez.aspx?Chain= " . $hotels['chain_id'] . "&Hotel=" . $hotels['id'] . "&Shell=RBE&Template=RBE&arrive=$checkInDate&depart=$checkOutDate&adult=1&rooms=&promo=&start=availresults&locale=en-US";
+
+                dd($url);
 
                 sleep(1);
 
@@ -131,9 +133,7 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
 
                         $da['rate_type'] = $node->filter('.Bg6.Br1')->each(function ($node1) {
 
-                            $da['short_description'] = ($node1->filter('.ProductShortDesc')->count() > 0) ? $node1->filter('.ProductShortDesc')->text() : null; //short description
-                            $da['description'] = ($node1->filter('.ProductLongDesc.Mrgn6')->count() > 0) ? $node1->filter('.ProductLongDesc.Mrgn6')->text() : null; //description
-                            $da['strikedprice'] = ($node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->count() > 0) ? $node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->text() : null; //striked price with currCode
+                            $da['strikedprice'] = ($node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->count() > 0) ? str_replace(' ', '', trim(str_replace(array("\r", "\n"), '', $node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->text()))) : null; //striked price with currCode
                             $da['displayprice'] = ($node1->filter('div.ProductPriceGroup> span:nth-child(3)')->count() > 0) ? $node1->filter('div.ProductPriceGroup> span:nth-child(3)')->text() : null; //display price
 
                             $da['currency'] = ($node1->filter('.span.CurrCode.tBold.tSmall')->count() > 0) ? $node1->filter('.span.CurrCode.tBold.tSmall')->text() : null; //Currency
@@ -144,6 +144,11 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
                             $da['tax'] = ($node1->filter('td.PDtlTTValue.PDtlTax.Bg1.Br2.Pdng5 > span:first-child')->count() > 0) ? $node1->filter('td.PDtlTTValue.PDtlTax.Bg1.Br2.Pdng5 > span:first-child')->text() : null; //tax
                             $da['total_including_tax'] = ($node1->filter('td.PDtlTTValue.PDtlTotal.Bg2.Br2.Pdng5 > .hSize4.tBold')->count() > 0) ? $node1->filter('td.PDtlTTValue.PDtlTotal.Bg2.Br2.Pdng5 > .hSize4.tBold')->text() : null; //total_including_tax
                             $da['date_from_field'] = ($node1->filter('span.PerDayDayLabel')->count() > 0) ? $node1->filter('span.PerDayDayLabel')->text() : null; //date_from_field
+                            $da['short_description'] = ($node1->filter('.ProductShortDesc')->count() > 0) ? trim(str_replace(array("\r", "\n"), '', $node1->filter('.ProductShortDesc')->text())) : null; //short description
+                            $da['description'] = ($node1->filter('.ProductLongDesc.Mrgn6')->count() > 0) ? trim(str_replace(array("\r", "\n"), '', $node1->filter('.ProductLongDesc.Mrgn6')->text())) : null; //description
+
+
+                            dd($node1->filter('.span.CurrCode.tBold.tSmall')->text());
 
 
                             if (!empty($da['displayprice'])) {

@@ -101,7 +101,6 @@
             <a href="/flightsprices">Airfrance KLM Flights</a>
             <a href="/flights/search">Search Flights</a>
             <a href="/landroutes">Search LandRoutes</a>
-            <a href="/weathers">Weather</a>
             <a href="/hotels">Hotels</a>
             <a href="/events">Events</a>
             <a href="/flightsprices">Airfrance KLM Flights</a>

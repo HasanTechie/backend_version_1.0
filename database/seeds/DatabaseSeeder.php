@@ -47,9 +47,9 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_bookhypensecuredotcom_ScrapingDataSeeder');
-//        $this->call('GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder');
+        $this->call('GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
-        $this->call('GatheringHotels_roomclouddotnet_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_roomclouddotnet_ScrapingDataSeeder');
 
 
 
@@ -57,5 +57,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
+//        $this->call('StripingTagsOfDataSeeder');
     }
 }

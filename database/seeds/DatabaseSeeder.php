@@ -39,15 +39,16 @@ class DatabaseSeeder extends Seeder
 
 
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder1');
-        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
-        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
-        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
+//        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
+//        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
+//        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
 
 //        $this->call('MigratingAndMergingDataBetweenTablesSeeder1');
 
 //        $this->call('GatheringHotels_hoteleasyreservations_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_bookhypensecure_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_gcdotsynxis_ScrapingDataSeeder');
+        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
 
 
 

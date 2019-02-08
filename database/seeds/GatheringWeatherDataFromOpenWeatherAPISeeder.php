@@ -71,5 +71,6 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
                 echo $j . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd city-> ' . $city->name . ' population ->' . $city->population . "\n";
             }
         }
+
     }
 }

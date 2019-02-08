@@ -20,8 +20,10 @@ class GatheringHotels_bookhypensecure_ScrapingDataSeeder extends Seeder
 
         $crawler = $client->request('GET', $url);
 
-//        $crawler->filter('#fb-results')->each(function ($node) {
-//            print $node->text()."\n";
-//        });
+        dd($crawler);
+
+        $crawler->filter('#accommodation-DOUBLE-FOR-SINGLE-USE')->each(function ($node) {
+            print $node->text()."\n";
+        });
     }
 }

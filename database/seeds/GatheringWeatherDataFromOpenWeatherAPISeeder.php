@@ -31,7 +31,7 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
 
         foreach ($cities as $city) {
 
-            if (!(DB::table('weathers')->where('city_id', '=', $city->id)->exists())) {
+            if (!(DB::table('weathers')->where('city_cid', '=', $city->cid)->exists())) {
                 try {
                     usleep(500000);
                     $client = new Client();

@@ -166,7 +166,7 @@
 
         </div>
     @else
-        {{dd(unserialize($hotel->all_data))}}
+        {{dd(json_encode(unserialize($hotel->all_data)))}}
     @endif
 
 @endsection

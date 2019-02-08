@@ -85,6 +85,20 @@
         </div>
 
         <div class="links">
+            <a href="/roomsprices/hotel1">BAGLIONI HOTELS Rooms Prices </a>
+            <a href="/roomsprices/hotel2">hotelaquaeductus.it Rooms Prices </a>
+            <a href="/trends">Rooms Prices hotelaquaeductus.it</a>
+            <a href="/landroutes">Search LandRoutes</a>
+            <a href="/weathers">Weather</a>
+            <a href="/hotels">Hotels</a>
+            <a href="/events">Events</a>
+            <a href="/flightsprices">Airfrance KLM Flights</a>
+            <a href="/flights/search">Search Flights</a>
+
+        </div>
+        <br/>
+
+        <div class="links">
             <a href="/trends">Google Trends</a>
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/weathers">Weather</a>

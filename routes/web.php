@@ -63,6 +63,13 @@ Route::get('/flightsprices', 'FlightController@flightPrices');
 Route::get('/flightsprices/{flight}', 'FlightController@flightPricesShow');
 Route::get('/flightsprices/totalflights/{flight}', 'FlightController@flightsShow');
 
+
+Route::get('/roomsprices/hotel1/', 'PriceController@hotel1Prices');
+Route::get('/roomsprices/hotel1/{id}', 'PriceController@hotel1Show');
+Route::get('/roomsprices/hotel2/', 'PriceController@hotel2Prices');
+Route::get('/roomsprices/hotel2/{id}', 'PriceController@hotel2Show');
+
+
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');
 Route::get('/routes', 'RouteController@index');

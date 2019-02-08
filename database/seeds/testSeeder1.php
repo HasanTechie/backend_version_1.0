@@ -1,6 +1,6 @@
 <?php
 
-use GuzzleHttp\Client;
+use Goutte\Client;
 
 use Illuminate\Database\Seeder;
 
@@ -15,22 +15,46 @@ class testSeeder1 extends Seeder
     {
         //
 
-//        $j = 0;
-//        $duplicates = DB::table('cities')
-//            ->select('name', 'latitude', 'longitude', DB::raw('COUNT(*) as `count`'))
-//            ->groupBy('name', 'latitude', 'longitude')
-//            ->having('count', '>', 1)
-//            ->get();
-//
-//
-//        foreach ($duplicates as $duplicate) {
-//
-//            dd($duplicate);
-//        }
 
     }
 }
 
+
+
+/*
+$client = new Client();
+
+        $crawler = $client->request('GET', 'https://www.hoteleasyreservations.com/her5th/(S(tbzb5vh2t4limkkftcdiskdd))/her/pren1.aspx?_ga=2.199339693.2049225604.1549354551-1627713159.1549354551&EASYCHATSESSION=');
+
+
+//        $crawler->filter('.flexible-row > .cellflex')->each(function ($node,$i=0) {
+        $crawler->filter('.cellflex')->each(function ($node, $i = 0) {
+            print $node->text() . "\n";
+
+            $day = $node->filter('.weekDayFlex')->text();
+            $month = $node->filter('.ddmonthFlex')->text();
+            $price = $node->filter('#spanPriceFlex0')->text();
+
+            dd($price);
+        });
+
+//        dd($crawler);
+ */
+
+/*
+        $j = 0;
+        $duplicates = DB::table('cities')
+            ->select('name', 'latitude', 'longitude', DB::raw('COUNT(*) as `count`'))
+            ->groupBy('name', 'latitude', 'longitude')
+            ->having('count', '>', 1)
+            ->get();
+
+
+        foreach ($duplicates as $duplicate) {
+
+            dd($duplicate);
+        }
+*/
 
 /*
         for ($i = 1; $i <= 250000; $i++) {

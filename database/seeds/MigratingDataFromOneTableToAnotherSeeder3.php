@@ -13,7 +13,7 @@ class MigratingDataFromOneTableToAnotherSeeder3 extends Seeder
     {
         //
         //freecountrymaps.com/databases/germany
-        $results1 = DB::table('z_ignore_germany_population')->select('*')->where('population', '>', 0)->inRandomOrder()->get();
+        $results1 = DB::table('z_ignore_germany_population')->select('*')->where('population', '>', 0)->get();
 
         $array = [];
         $i = 0;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Price;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,38 @@ class PriceController extends Controller
     public function index()
     {
         //
+    }
+
+    public function hotel1Prices()
+    {
+        $prices = DB::table('rooms_prices_hotel_baglioni')
+            ->paginate(20);
+
+        return view('roomsprices.hotel1.index', compact('prices'));
+    }
+
+    public function hotel1Show($id)
+    {
+
+        $prices = DB::table('rooms_prices_hotel_baglioni')->where('uid', '=', $id)->get();
+
+        dd(unserialize($prices[0]->room_all_rates_and_details));
+    }
+
+    public function hotel2Prices()
+    {
+        $prices = DB::table('rooms_prices_hotel_aquaeductus')->inRandomOrder()
+            ->paginate(20);
+
+        return view('roomsprices.hotel2.index', compact('prices'));
+    }
+
+    public function hotel2Show($id)
+    {
+
+        $prices = DB::table('rooms_prices_hotel_aquaeductus')->where('uid', '=', $id)->get();
+
+        dd($prices[0]);
     }
 
     /**

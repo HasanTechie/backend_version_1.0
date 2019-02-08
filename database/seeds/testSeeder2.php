@@ -13,19 +13,16 @@ class testSeeder2 extends Seeder
     {
         //
         $j = 0;
-        for ($i = 1; $i <= 100000; $i++) {
-            if (DB::table('airports')->where('s_no', $i)->exists()) {
 
-                $results = DB::table('airports')->where('s_no', $i)->get();
 
-                foreach ($results as $instance) {
+        $results = DB::table('rooms')->get();
 
-                    DB::table('airports')->where('s_no', $instance->s_no)->update([
-                        's_no' => ++$j,
-                    ]);
-                    echo 'airports ' . $j . "\n";
-                }
-            }
+        foreach ($results as $instance) {
+
+            DB::table('rooms')->where('uid', $instance->uid)->update([
+                's_no' => ++$j,
+            ]);
+            echo 'rooms ' . $j . "\n";
         }
 
 

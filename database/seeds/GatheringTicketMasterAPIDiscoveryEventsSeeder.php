@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
 use GuzzleHttp\Client;
+
+use Illuminate\Database\Seeder;
 
 class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
 {

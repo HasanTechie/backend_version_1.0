@@ -4,7 +4,7 @@ use Goutte\Client;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_gcdotsynxis_ScrapingDataSeeder extends Seeder
+class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +13,6 @@ class GatheringHotels_gcdotsynxis_ScrapingDataSeeder extends Seeder
      */
     public function run()
     {
-        //
         //
         $client = new Client();
 

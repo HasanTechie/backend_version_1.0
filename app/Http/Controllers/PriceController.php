@@ -55,6 +55,23 @@ class PriceController extends Controller
         dd($prices[0]);
     }
 
+    public function hotel3Prices()
+    {
+        $prices = DB::table('rooms_prices_hotel_novecento')->inRandomOrder()
+            ->paginate(20);
+
+        return view('roomsprices.hotel3.index', compact('prices'));
+    }
+
+    public function hotel3Show($id)
+    {
+
+        $prices = DB::table('rooms_prices_hotel_novecento')->where('uid', '=', $id)->get();
+
+        dd($prices[0]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

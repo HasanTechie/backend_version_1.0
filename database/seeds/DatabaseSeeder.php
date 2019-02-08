@@ -45,10 +45,11 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('MigratingAndMergingDataBetweenTablesSeeder1');
 
-//        $this->call('GatheringHotels_hoteleasyreservations_ScrapingDataSeeder');
-//        $this->call('GatheringHotels_bookhypensecure_ScrapingDataSeeder');
-//        $this->call('GatheringHotels_gcdotsynxis_ScrapingDataSeeder');
-        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_bookhypensecuredotcom_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
+        $this->call('GatheringHotels_roomclouddotnet_ScrapingDataSeeder');
 
 
 

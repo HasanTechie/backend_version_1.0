@@ -4,7 +4,7 @@ use Goutte\Client;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_bookhypensecure_ScrapingDataSeeder extends Seeder
+class GatheringHotels_bookhypensecuredotcom_ScrapingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

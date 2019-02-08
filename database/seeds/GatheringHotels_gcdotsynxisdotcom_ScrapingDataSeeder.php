@@ -108,35 +108,39 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
         } else {
             $j = 0;
         }
+
+        $hotels = $checkInDate = $checkOutDate = null;
+
         while (strtotime($date) <= strtotime($end_date)) {
 
-            foreach ($hotelArray as $hotels) {
+            foreach ($hotelArray as $hotels1) {
 
+                global $hotels, $checkInDate, $checkOutDate;
 
                 $checkInDate = $date;
-
+                $hotels = $hotels1;
                 $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
                 $url = "https://gc.synxis.com/rez.aspx?Chain=" . $hotels['chain_id'] . "&Hotel=" . $hotels['id'] . "&Shell=RBE&Template=RBE&arrive=$checkInDate&depart=$checkOutDate&adult=1&rooms=&promo=&start=availresults&locale=en-US";
-                global $checkInDate, $checkOutDate, $hotels;
-
-                dd($url);
-
-                sleep(1);
 
                 $crawler = $client->request('GET', $url);
 
+//                global $checkOutDate, $checkInDate, $hotels, $j;
+
                 try {
+
+                    sleep(1);
+
 
                     $crawler->filter('.ProductsInCategory.Bg3.Br2.Mrgn1.Pdng10')->each(function ($node) {
                         $_SESSION['displayPrice'] = 0;
 
                         $da['rate_type'] = $node->filter('.Bg6.Br1')->each(function ($node1) {
 
-                            $da['strikedprice'] = ($node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->count() > 0) ? str_replace(' ', '', trim(str_replace(array("\r", "\n"), '', $node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->text()))) : null; //striked price with currCode
-                            $da['displayprice'] = ($node1->filter('div.ProductPriceGroup> span:nth-child(3)')->count() > 0) ? $node1->filter('div.ProductPriceGroup> span:nth-child(3)')->text() : null; //display price
+                            $da['striked_price'] = ($node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->count() > 0) ? str_replace(' ', '', trim(str_replace(array("\r", "\n"), '', $node1->filter('span.PromoOriginalPrice.StrikeOut.TxtLt.tLight')->text()))) : null; //striked price with currCode
+                            $da['display_price'] = ($node1->filter('div.ProductPriceGroup> span:nth-child(3)')->count() > 0) ? $node1->filter('div.ProductPriceGroup> span:nth-child(3)')->text() : null; //display price
 
-                            $da['currency'] = ($node1->filter('.span.CurrCode.tBold.tSmall')->count() > 0) ? $node1->filter('.span.CurrCode.tBold.tSmall')->text() : null; //Currency
+                            $da['currency'] = ($node1->filter('span.CurrCode.tBold.tSmall')->count() > 0) ? $node1->filter('span.CurrCode.tBold.tSmall')->text() : null; //Currency
                             $da['pernight'] = ($node1->filter('span.PriceFreq.tSmall.tLight')->count() > 0) ? $node1->filter('span.PriceFreq.tSmall.tLight')->text() : null; //pernight
                             $da['room_type'] = $_SESSION['room_type'] = ($node1->filter('span.PriceInfoValue.Pdng5')->count() > 0) ? $node1->filter('span.PriceInfoValue.Pdng5')->text() : null; //room_type
                             $da['rate_type'] = ($node1->filter('span.RateName')->count() > 0) ? $node1->filter('span.RateName')->text() : null; //rate_type
@@ -148,22 +152,26 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
                             $da['description'] = ($node1->filter('.ProductLongDesc.Mrgn6')->count() > 0) ? trim(str_replace(array("\r", "\n"), '', $node1->filter('.ProductLongDesc.Mrgn6')->text())) : null; //description
 
 
-                            dd($node1->filter('.span.CurrCode.tBold.tSmall')->text());
-
-
-                            if (!empty($da['displayprice'])) {
+                            if (!empty($da['display_price'])) {
                                 if ($_SESSION['displayPrice'] == 0) {
-                                    $_SESSION['displayPrice'] = $da['displayprice'];
+                                    $_SESSION['displayPrice'] = $da['display_price'];
                                 }
-                                if ($_SESSION['displayPrice'] > $da['displayprice']) {
-                                    $_SESSION['displayPrice'] = $da['displayprice'];
+                                if ($_SESSION['displayPrice'] > $da['display_price']) {
+                                    $_SESSION['displayPrice'] = $da['display_price'];
                                 }
                             }
+
+                            if (empty($da['display_price'])) {
+                                if ($_SESSION['displayPrice'] == 0) {
+                                    $_SESSION['displayPrice'] = $da['total_including_tax'];
+                                }
+                            }
+
                             return $da;
                         });
 
 
-                        global $checkInDate, $checkOutDate, $hotels, $j;
+                        global $checkOutDate, $checkInDate, $hotels, $j;
 
                         $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelid' . $hotels['id'] . $_SESSION['room_type']; //Requestdate + CheckInDate + CheckOutDate + HotelId
 

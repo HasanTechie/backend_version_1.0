@@ -41,5 +41,32 @@ class StripingTagsOfDataSeeder extends Seeder
             ]);
             echo $instance1->s_no . "\n";
         }
+
     }
 }
+
+/*
+$results = DB::table('rooms_prices_hotel_baglioni')->get();
+
+        foreach ($results as $instance1) {
+            $i=0;
+
+            foreach (unserialize($instance1->room_all_rates_and_details) as $instance2) {
+
+                $da['total_including_tax'] = $instance2['total_including_tax'];
+
+                $dataArray[$i++]=$da;
+
+                if($instance1->lowest_price ==0){
+                    DB::table('rooms_prices_hotel_baglioni')->where([
+                        ['uid', $instance1->uid],
+                    ])->update([
+                        'lowest_price' => trim(str_replace('EUR', null, $da['total_including_tax'])),
+                    ]);
+                    break;
+                }
+
+            }
+            echo $instance1->s_no . "\n";
+        }
+*/

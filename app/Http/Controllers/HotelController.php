@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Hotel;
-use Illuminate\Http\Request;
-
+use Goutte\Client;
 use DB;
-
 use phpDocumentor\Reflection\Types\Array_;
 use SKAgarwal\GoogleApi\PlacesApi;
+
+use App\Hotel;
+use Illuminate\Http\Request;
 
 class HotelController extends Controller
 {
@@ -46,29 +46,34 @@ class HotelController extends Controller
     public function create()
     {
         //
-//        $results = DB::table('hotel_beds_test')->first();
-//        dd(unserialize(gzuncompress($results->all_data)));
+//        $client = new Client();
+//
+        $url = "https://www.gruppoloan.it/hdc/en/";
+//        $crawler = $client->request('GET', $url);
+//
+//        $form = $crawler->filter('form[name="formFR"]')->form();
+//        $crawler = $client->submit($form, array('datepicker' => date("Y-m-d")));
+//
+//        dd($crawler->text());
 
-//        $results = DB::table('places')->first();
-////
-//        dd(unserialize($results->all_data_detailed));
-//        dd(unserialize($results->geometry)->location->lat);
+        $client = new Client();
+//        $crawler = $client->request('GET', 'https://www.gruppoloan.it/hdc/en/');
+//        // select the form and fill in some values
+//        $form = $crawler->filter('div.col-sm-12.col-md-11.col-md-offset-1.content_fastR > form')->form();
+//        $form['datepicker'] = date("Y-m-d", strtotime("+25 day", strtotime(date("Y-m-d"))));
+//        // submit that form
+//        $crawler = $client->submit($form);
 
 
-//        for ($i = 1; $i <= 250000; $i++) {
-//            if (DB::table('flights_data')->where('id', $i)->exists()) {
-//                $results = DB::table('flights_data')->where('id', $i)->get();
+        $crawler = $client->request('GET', $url);
+        $form = $crawler->filter("div.col-sm-12.col-md-11.col-md-offset-1.content_fastR > form")->form();
+        $form['datepicker'] = date("d/m/Y", strtotime("+25 day", strtotime(date("Y-m-d"))));
+        dd($form);
+        $form['NUMNOTTI'] = 1;
+        $form['NUMCAMERE'] = 1;
+        $form['NUMPERSONE'] = 1;
 //
-//                foreach ($results as $instance) {
-//                    dd(unserialize($instance->all_data)->id);
-//
-//                    if (DB::table('flights')->where('flight_id', unserialize($instance->all_data)->id)->exists()) {
-//
-//                    }
-//                }
-//
-//            }
-//        }
+        $crawler = $client->submit($form);
     }
 
 

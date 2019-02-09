@@ -27,7 +27,7 @@ class GatheringWeatherDataFromOpenWeatherAPISeeder extends Seeder
             $j = 0;
         }
 
-        $cities = DB::table('cities')->select('*')->orderBy('population', 'desc')->get();
+        $cities = DB::table('cities')->select('*')->where('country_code','=', 'DE')->get();
 
         foreach ($cities as $city) {
 

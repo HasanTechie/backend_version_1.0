@@ -88,6 +88,10 @@
             <a href="/roomsprices/hotel1">Baglioni Hotels Prices </a>
             <a href="/roomsprices/hotel2">Hotel Emona AquaeductusPrices </a>
             <a href="/roomsprices/hotel3">Novecento Hotel Prices </a>
+
+        </div>
+
+        <div class="links">
             <a href="/trends">Rooms Prices hotelaquaeductus</a>
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/trends">Google Trends</a>
@@ -96,22 +100,35 @@
 
         </div>
         <br/>
+        <br/>
 
         <div class="links">
             <a href="/flightsprices">Airfrance KLM Flights</a>
             <a href="/flights/search">Search Flights</a>
             <a href="/landroutes">Search LandRoutes</a>
-            <a href="/hotels">Hotels</a>
+
             <a href="/events">Events</a>
+
+
+        </div>
+
+        <div class="links">
+            <a href="/hotels">Hotels</a>
             <a href="/flightsprices">Airfrance KLM Flights</a>
             <a href="/flights/search">Search Flights</a>
 
         </div>
         <br/>
+        <br/>
+
         <div class="links">
             <a href="/flights">Laminar API Flights</a>
             <a href="/places/">Places</a>
             <a href="/airports">Airports</a>
+
+        </div>
+        <div class="links">
+
             <a href="/airlines">Airlines</a>
             <a href="/planes">Planes</a>
             <a href="/routes">Plane Routes</a>

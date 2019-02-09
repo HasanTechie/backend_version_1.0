@@ -68,12 +68,12 @@ class HotelController extends Controller
         $crawler = $client->request('GET', $url);
         $form = $crawler->filter("div.col-sm-12.col-md-11.col-md-offset-1.content_fastR > form")->form();
         $form['datepicker'] = date("d/m/Y", strtotime("+25 day", strtotime(date("Y-m-d"))));
-        dd($form);
         $form['NUMNOTTI'] = 1;
         $form['NUMCAMERE'] = 1;
         $form['NUMPERSONE'] = 1;
-//
         $crawler = $client->submit($form);
+
+        dd($crawler);
     }
 
 

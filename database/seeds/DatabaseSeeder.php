@@ -50,7 +50,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder'); //hotel baglioni
 //        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_roomclouddotnet_ScrapingDataSeeder');
-        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder2');
+//        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder2');
+        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 
 
 
@@ -59,5 +60,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
 //        $this->call('StripingTagsOfDataSeeder');
+//        $this->call('testWebScarpingSeeder');
     }
 }

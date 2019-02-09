@@ -16,9 +16,9 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         $client = new Client();
 
 
-        $date = '2019-03-08';
+        $date = '2019-02-09';
 
-        $end_date = '2020-03-28'; //last checkin date hogi last me
+        $end_date = '2020-12-31'; //last checkin date hogi last me
 
 
         $hotelArray = array
@@ -36,18 +36,16 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         );
 
 
-//        if ($result1 = DB::table('rooms_prices_hotel_portamaggiore')->orderBy('s_no', 'desc')->first()) {
-//            global $j;
-//            $j = $result1->s_no;
-//        } else {
-//            $j = 0;
-//        }
+        if ($result1 = DB::table('rooms_prices_hotel_portamaggiore')->orderBy('s_no', 'desc')->first()) {
+            global $j;
+            $j = $result1->s_no;
+        } else {
+            $j = 0;
+        }
 
         while (strtotime($date) <= strtotime($end_date)) {
 
             foreach ($hotelArray as $hotels) {
-
-                global $checkInDate, $checkOutDate, $hotels;
 
                 $checkInDate = $date;
 
@@ -61,53 +59,54 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
                 try {
 
-                    $data = $crawler->filter('div.blocco_camera.room-box')->each(function ($node) {
+                    $roomsRawData = $crawler->filter('div.blocco_camera.room-box')->each(function ($node) {
 
+                        try {
+                            $da['room'] = $node->filter('div.blocco_camera.room-box > div.descrizione_camera')->each(function ($node) {
 
-                        $da['room'] = $node->filter('div.blocco_camera.room-box > div.descrizione_camera')->each(function ($node) {
-
-                            $da['room'] = $node->filter('.titoletto')->text();
-                            $da['room_description'] = $node->filter('div.descrizione_camera > p')->text();
-                            $da['facilities'] = $node->filter('span.singolo-accessorio')->each(function ($node2) {
-                                return trim($node2->text());
+                                $da['room'] = $node->filter('.titoletto')->text();
+                                $da['room_description'] = $node->filter('div.descrizione_camera > p')->text();
+                                $da['facilities'] = $node->filter('span.singolo-accessorio')->each(function ($node2) {
+                                    return trim($node2->text());
+                                });
+                                return $da;
                             });
-                            return $da;
-                        });
 
-                        $da['offer'] = $node->filter('div.blocco_camera.room-box > div.row > div.container_tariffa')->each(function ($node) {
+                            $da['offer'] = $node->filter('div.blocco_camera.room-box > div.row')->each(function ($node) {
 
-                            $da['offer'] = $node->filter('.rate-details-content.blocco_tariffa')->each(function ($node) {
-                                $da['offer_name'] = $node->filter('span.rate-name')->text();
-                                $da['offer_details'] = $node->filter('p')->text();
-                                $da['price'] = trim(str_replace(array("\r", "\n"), '', $node->filter('span.prezzo.titoletto.rate-price-daily')->text()));
+                                $da['best_price'] = trim($node->filter('strong')->text());
+                                $da['offer'] = $node->filter('div.container_tariffa')->each(function ($node) {
+                                    $da['offer'] = $node->filter('.rate-details-content.blocco_tariffa')->each(function ($node) {
+                                        $da['offer_name'] = $node->filter('span.rate-name')->text();
+                                        $da['offer_details'] = $node->filter('p')->text();
+                                        $da['price'] = trim(str_replace(array("\r", "\n"), '', $node->filter('span.prezzo.titoletto.rate-price-daily')->text()));
+                                        return $da;
+                                    });
+                                    return $da;
+                                });
                                 return $da;
                             });
                             return $da;
-                        });
-                        return $da;
+                        } catch (\Exception $e) {
+                            return $e;
+                        }
                     });
 
-                    $removed = array_shift($data);
+                    array_shift($roomsRawData);
 
-                    global $checkInDate, $checkOutDate, $hotels, $j;
+                    foreach ($roomsRawData as $instance) {
 
-                    foreach ($data as $instance){
+                        $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotels['name'])) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])); //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName
 
-                        dd($hotels);
-//                        dd($instance);
-
-                        $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim($hotels['name']) . $instance['room'][0]['room']; //Requestdate + CheckInDate + CheckOutDate + HotelId
-
-                        dd($rid);
-                        if (!(DB::table('rooms_prices_hotel_novecento')->where('rid', '=', $rid)->exists())) {
-                            DB::table('rooms_prices_hotel_novecento')->insert([
+                        if (!(DB::table('rooms_prices_hotel_portamaggiore')->where('rid', '=', $rid)->exists())) {
+                            DB::table('rooms_prices_hotel_portamaggiore')->insert([
                                 'uid' => uniqid(),
                                 's_no' => ++$j,
-                                'display_price' => $da['display_price'],
-                                'striked_price' => $da['striked_price'],
-                                'room' => $da['room'],
-                                'room_description' => $da['room_description'],
-                                'hotel_id' => $hotels['id'],
+                                'display_price' => $instance['offer'][0]['best_price'],
+                                'room' => $instance['room'][0]['room'],
+                                'room_description' => $instance['room'][0]['room_description'],
+                                'room_facilities' => serialize($instance['room'][0]['facilities']),
+                                'room_rates_based_on_offers' => serialize($instance['offer'][0]['offer'][0]['offer']),
                                 'hotel_name' => $hotels['name'],
                                 'hotel_address' => $hotels['address'],
                                 'hotel_city' => $hotels['city'],
@@ -117,7 +116,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                 'check_in_date' => $checkInDate,
                                 'check_out_date' => $checkOutDate,
                                 'rid' => $rid,
-                                'source' => 'novecentohotel.it->roomcloud.net',
+                                'source' => 'hotelportamaggiore.it->reservations.verticalbooking.com',
                                 'requested_date' => date("Y-m-d"),
                                 'created_at' => DB::raw('now()'),
                                 'updated_at' => DB::raw('now()')
@@ -134,8 +133,6 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                     echo 'InCompleted in->' . $checkInDate . 'out->' . $checkOutDate . ' hotel->' . $hotels['name'] . Carbon\Carbon::now()->toDateTimeString() . "\n";
                     echo $e->getMessage() . $e->getLine();
                 }
-
-
             }
 
             $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));

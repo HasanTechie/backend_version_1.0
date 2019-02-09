@@ -92,10 +92,10 @@
         </div>
 
         <div class="links">
-            <a href="/trends">Rooms Prices hotelaquaeductus</a>
+            <a href="/roomsprices/hotel4">Hotel PortaMaggiore Prices </a>
+            <a href="/weathers">Weather</a>
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/trends">Google Trends</a>
-            <a href="/weathers">Weather</a>
             <a href="/events">Events</a>
 
         </div>

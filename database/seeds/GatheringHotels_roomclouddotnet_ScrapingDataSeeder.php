@@ -72,8 +72,10 @@ class GatheringHotels_roomclouddotnet_ScrapingDataSeeder extends Seeder
 
                         global $checkInDate, $checkOutDate, $hotels, $j;
 
-                        $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelid' . $hotels['id'] . $da['room']; //Requestdate + CheckInDate + CheckOutDate + HotelId
 
+                        $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelid' . $hotels['id'] . $da['room']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName
+
+                        dd('fix room name in rid');
                         if (!(DB::table('rooms_prices_hotel_novecento')->where('rid', '=', $rid)->exists())) {
                             DB::table('rooms_prices_hotel_novecento')->insert([
                                 'uid' => uniqid(),

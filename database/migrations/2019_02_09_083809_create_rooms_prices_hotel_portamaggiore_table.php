@@ -18,10 +18,10 @@ class CreateRoomsPricesHotelPortamaggioreTable extends Migration
             $table->unsignedInteger('s_no');
 
             $table->string('display_price')->nullable();
-            $table->string('striked_price')->nullable();
             $table->string('room')->nullable();
             $table->text('room_description')->nullable();
-            $table->string('hotel_id')->nullable();
+            $table->text('room_facilities')->nullable();
+            $table->text('room_rates_based_on_offers')->nullable();
             $table->string('hotel_name')->nullable();
             $table->string('hotel_address')->nullable();
             $table->string('hotel_city')->nullable();

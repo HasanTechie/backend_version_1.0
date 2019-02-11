@@ -1,10 +1,10 @@
 @extends ('layouts/header')
 
-@section('title','Salute Hotel Group Hotels Prices')
+@section('title','Vertical Booking Hotels Prices')
 @section('content')
 
 
-    <h1 class="title is-1">Salute Hotel Group Hotels Prices</h1>
+    <h1 class="title is-1">Vertical Booking Hotels Prices</h1>
     <h2 class="subtitle">total number of records : <b>{{number_format($prices->total())}}</b></h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
@@ -13,6 +13,7 @@
             <th>S No.</th>
             <th>Price</th>
             <th>Room</th>
+            <th>Request for (n) persons</th>
             <th>Check In Date</th>
             <th>Check Out Date</th>
             <th>Requested Date</th>
@@ -22,6 +23,7 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Website</th>
+            <th>Chain Website</th>
             <th>All Details</th>
         </tr>
         </thead>
@@ -33,15 +35,17 @@
                 <td>{{$instance->s_no}}</td>
                 <td>{{$instance->display_price}}</td>
                 <td>{{$instance->room}}</td>
+                <td>room for {{$instance->number_of_adults_in_room_request}} person(s)</td>
                 <td>{{$instance->check_in_date}}</td>
                 <td>{{$instance->check_out_date}}</td>
-                <td>{{$instance->requested_date}}</td>
+                <td>{{$instance->request_date}}</td>
                 <td>{{$instance->hotel_name}}</td>
                 <td>{{$instance->hotel_address}}</td>
                 <td>{{$instance->hotel_city}}</td>
                 <td>{{$instance->hotel_phone}}</td>
                 <td>{{$instance->hotel_email}}</td>
                 <td>{{$instance->hotel_website}}</td>
+                <td>{{$instance->chain_website}}</td>
                 <td><a href="/roomsprices/hotel4/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach

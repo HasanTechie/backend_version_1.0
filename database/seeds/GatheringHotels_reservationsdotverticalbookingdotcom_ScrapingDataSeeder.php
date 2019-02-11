@@ -16,114 +16,12 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         $client = new Client();
 
 
-        $date = '2019-03-03';
+        $date = '2019-02-11';
 
         $end_date = '2020-12-31'; //last checkin date hogi last me
 
 
-        $hotelArray = array
-        (
-            array(
-                'id_albergo' => 15685,
-                'dc' => 3128,
-                'name' => 'Hotel PortaMaggiore',
-                'address' => 'Piazza di Porta Maggiore, 25, 00185 Roma RM, Italy',
-                'city' => 'Rome',
-                'phone' => '+39 06 7027927',
-                'email' => 'info@shghotelportamaggiore.com',
-                'website' => 'hotelportamaggiore.it'
-            ),
-            array(
-                'id_albergo' => 16102,
-                'dc' => 2391,
-                'name' => 'SHG Hotel Antonella',
-                'address' => 'Via Pontina, 00040 Pomezia RM, Italy',
-                'city' => 'Pomezia',
-                'phone' => '+39 06 911481',
-                'email' => 'info@shghotelantonella.com',
-                'website' => 'shghotelantonella.com'
-            ),
-            array(
-                'id_albergo' => 16834,
-                'dc' => 4753,
-                'name' => 'SHG Hotel Villa Carlotta',
-                'address' => 'Via Mazzini, 121, 28832 Belgirate VB, Italy',
-                'city' => 'Belgirate',
-                'phone' => '+39 0322 76461',
-                'email' => 'info@shghotelvillacarlotta.com',
-                'website' => 'shghotelvillacarlotta.com'
-            ),
-            array(
-                'id_albergo' => 11338,
-                'dc' => 333,
-                'name' => 'SHG Hotel Salute Palace',
-                'address' => 'Dorsoduro 222/a, 30123 Venice VE, Italy',
-                'city' => 'Venice',
-                'phone' => '+39 041 5235404',
-                'email' => 'info@salutepalace.com',
-                'website' => 'salutepalace.com'
-            ),
-            array(
-                'id_albergo' => 5986,
-                'dc' => 158,
-                'name' => 'Villa Porro Pirelli',
-                'address' => 'Via Tabacchi, 20, 21056 Induno Olona VA, Italy',
-                'city' => 'Varese',
-                'phone' => '+39 0332 840540',
-                'email' => 'info@villaporropirelli.com',
-                'website' => 'villaporropirelli.com'
-            ),
-            array(
-                'id_albergo' => 11226,
-                'dc' => 445,
-                'name' => 'SHG Hotel de la Ville',
-                'address' => 'Viale Verona, 12, 36100 Vicenza VI, Italy',
-                'city' => 'Vicenza',
-                'phone' => '+39 0444 549001',
-                'email' => 'info@hoteldelavillevicenza.com',
-                'website' => 'hoteldelavillevicenza.com'
-            ),
-            array(
-                'id_albergo' => 14538,
-                'dc' => 8856,
-                'name' => 'SHG Hotel Catullo',
-                'address' => 'Viale del Lavoro, 35, 37036 San Martino Buon Albergo VR, Italy',
-                'city' => 'Verona',
-                'phone' => '+39 045 99 50 00',
-                'email' => 'info@shghotelcatullo.com',
-                'website' => 'shghotelcatullo.com'
-            ),
-            array(
-                'id_albergo' => 12104,
-                'dc' => 8389,
-                'name' => 'SHG Hotel Verona',
-                'address' => 'Via Unità d\'Italia, 346, 37132 Verona VR, Italy',
-                'city' => 'Verona',
-                'phone' => '+39 045 895 2501',
-                'email' => 'info@shghotelverona.com',
-                'website' => 'shghotelverona.com'
-            ),
-            array(
-                'id_albergo' => 12879,
-                'dc' => 8759,
-                'name' => 'SHG Grand Hotel Milano Malpensa',
-                'address' => 'Via Lazzaretto, 1, 21019 Somma Lombardo VA, Italy',
-                'city' => 'Somma Lombardo',
-                'phone' => '+39 0331 951220',
-                'email' => 'info@milanohotelmalpensa.com',
-                'website' => 'grand-hotelmilanomalpensa.com'
-            ),
-            array(
-                'id_albergo' => 17170,
-                'dc' => 9129,
-                'name' => 'Hotel Bologna',
-                'address' => 'Via Risorgimento, 186, 40069 Zola Predosa BO, Italy',
-                'city' => 'Zola Predosa',
-                'phone' => '+39 051 751 101',
-                'email' => 'info@shghotelbologna.com',
-                'website' => 'shghotelbologna.com'
-            ),
-        );
+        $hotels = DB::table('hotels')->where('source', '=', 'reservations.verticalbooking.com')->get();
 
 
         if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
@@ -135,8 +33,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
         while (strtotime($date) <= strtotime($end_date)) {
 
-
-            foreach ($hotelArray as $hotels) {
+            foreach ($hotels as $hotel) {
 
                 for ($i = 1; $i < 5; $i++) {
 
@@ -144,7 +41,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
                     $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
-                    $url = "https://reservations.verticalbooking.com/reservations/risultato.html?tot_camere=1&tot_adulti=$i&tot_bambini=0&gg=" . date("d", strtotime($checkInDate)) . "&mm=" . date("m", strtotime($checkInDate)) . "&aa=" . date("Y", strtotime($checkInDate)) . "&ggf=&mmf=&aaf=&notti_1=1&id_stile=12443&lingua_int=eng&id_albergo=" . $hotels['id_albergo'] . "&dc=" . $hotels['dc'] . "&converti_valuta=&generic_codice=&countryCode=US&gps_latitude=&gps_longitude=&adulti1=1&bambini1=0";
+                    $url = "https://reservations.verticalbooking.com/reservations/risultato.html?tot_camere=1&tot_adulti=$i&tot_bambini=0&gg=" . date("d", strtotime($checkInDate)) . "&mm=" . date("m", strtotime($checkInDate)) . "&aa=" . date("Y", strtotime($checkInDate)) . "&ggf=&mmf=&aaf=&notti_1=1&id_stile=12443&lingua_int=eng&id_albergo=" . unserialize($hotel->all_data)['id_albergo'] . "&dc=" . unserialize($hotel->all_data)['dc'] . "&converti_valuta=&generic_codice=&countryCode=US&gps_latitude=&gps_longitude=&adulti1=1&bambini1=0";
 
                     sleep(1);
 
@@ -189,13 +86,11 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                             }
                         });
 
-                        dd($roomsRawData);
-
 
                         foreach ($roomsRawData as $instance) {
 
                             if (!empty($instance['room'])) {
-                                $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotels['name'])) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])); //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName
+                                $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotel->name)) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])) . $i; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
 
 
                                 if (!(DB::table('rooms_prices_vertical_booking')->where('rid', '=', $rid)->exists())) {
@@ -208,24 +103,26 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                         'room_description' => $instance['room'][0]['room_description'],
                                         'room_facilities' => serialize($instance['room'][0]['facilities']),
                                         'room_rates_based_on_offers' => serialize($instance['offer'][0]['offer'][0]['offer']),
-                                        'request' => '1 room for ' . $i . ' adults',
-                                        'hotel_name' => $hotels['name'],
-                                        'hotel_address' => $hotels['address'],
-                                        'hotel_city' => $hotels['city'],
-                                        'hotel_phone' => $hotels['phone'],
-                                        'hotel_email' => $hotels['email'],
-                                        'hotel_website' => $hotels['website'],
+                                        'number_of_adults_in_room_request' => $i,
+                                        'hotel_uid' => $hotel->uid,
+                                        'hotel_name' => $hotel->name,
+                                        'hotel_address' => $hotel->address,
+                                        'hotel_city' => $hotel->city,
+                                        'hotel_phone' => $hotel->phone,
+                                        'hotel_website' => $hotel->website,
+                                        'hotel_email' => unserialize($hotel->all_data)['email'],
+                                        'chain_website' => unserialize($hotel->all_data)['chain'],
                                         'check_in_date' => $checkInDate,
                                         'check_out_date' => $checkOutDate,
                                         'rid' => $rid,
                                         'source' => 'reservations.verticalbooking.com',
-                                        'requested_date' => date("Y-m-d"),
+                                        'request_date' => date("Y-m-d"),
                                         'created_at' => DB::raw('now()'),
                                         'updated_at' => DB::raw('now()')
                                     ]);
-                                    echo $j . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotels['name'] . ', ' . $hotels['city'] . "\n";
+                                    echo $j . ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                 } else {
-                                    echo $j . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotels['name'] . ', ' . $hotels['city'] . "\n";
+                                    echo $j . ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                 }
                             }
                         }
@@ -233,7 +130,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                     } catch
                     (\Exception $e) {
 
-                        echo 'InCompleted in->' . $checkInDate . 'out->' . $checkOutDate . ' hotel->' . $hotels['name'] . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                        echo 'InCompleted in->' . $checkInDate . 'out->' . $checkOutDate . ' hotel->' . $hotel->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
                         echo $e->getMessage() . $e->getLine();
                     }
                 }

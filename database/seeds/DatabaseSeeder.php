@@ -58,8 +58,8 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
-//        $this->call('testSeeder3');
+        $this->call('testSeeder3');
 //        $this->call('StripingTagsOfDataSeeder');
-        $this->call('testWebScarpingSeeder');
+//        $this->call('testWebScarpingSeeder');
     }
 }

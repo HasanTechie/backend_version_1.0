@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRoomsPricesHotelPortamaggioreTable extends Migration
+class CreateRoomsPricesChainBaglioni extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateRoomsPricesHotelPortamaggioreTable extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_hotel_portamaggiore', function (Blueprint $table) {
+        Schema::create('rooms_prices_chain_baglioni', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('display_price')->nullable();
+            $table->string('lowest_price')->nullable();
             $table->string('room')->nullable();
-            $table->text('room_description')->nullable();
-            $table->text('room_facilities')->nullable();
-            $table->text('room_rates_based_on_offers')->nullable();
+            $table->longText('room_all_rates_and_details')->nullable();
+            $table->string('hotel_id')->nullable();
             $table->string('hotel_name')->nullable();
-            $table->string('hotel_address')->nullable();
             $table->string('hotel_city')->nullable();
             $table->string('hotel_phone')->nullable();
             $table->string('hotel_email')->nullable();
@@ -46,6 +44,6 @@ class CreateRoomsPricesHotelPortamaggioreTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_hotel_portamaggiore');
+        Schema::dropIfExists('rooms_prices_chain_baglioni');
     }
 }

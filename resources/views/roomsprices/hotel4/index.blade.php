@@ -1,11 +1,10 @@
 @extends ('layouts/header')
 
-@section('title','Hotel PortaMaggiore Prices')
-{{--{{phpinfo()}}--}}
+@section('title','Salute Hotel Group Hotels Prices')
 @section('content')
 
 
-    <h1 class="title is-1">Hotel PortaMaggiore Prices</h1>
+    <h1 class="title is-1">Salute Hotel Group Hotels Prices</h1>
     <h2 class="subtitle">total number of records : <b>{{number_format($prices->total())}}</b></h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>

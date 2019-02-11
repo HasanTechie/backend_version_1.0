@@ -1,7 +1,6 @@
 @extends ('layouts/header')
 
 @section('title','Hotel Aquaeductus Prices')
-{{--{{phpinfo()}}--}}
 @section('content')
 
 

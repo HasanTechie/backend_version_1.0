@@ -126,7 +126,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         );
 
 
-        if ($result1 = DB::table('rooms_prices_chain_shg')->orderBy('s_no', 'desc')->first()) {
+        if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
             global $j;
             $j = $result1->s_no;
         } else {
@@ -198,8 +198,8 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                 $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotels['name'])) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])); //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName
 
 
-                                if (!(DB::table('rooms_prices_chain_shg')->where('rid', '=', $rid)->exists())) {
-                                    DB::table('rooms_prices_chain_shg')->insert([
+                                if (!(DB::table('rooms_prices_vertical_booking')->where('rid', '=', $rid)->exists())) {
+                                    DB::table('rooms_prices_vertical_booking')->insert([
                                         'uid' => uniqid(),
                                         's_no' => ++$j,
                                         'display_price' => $instance['offer'][0]['best_price'],

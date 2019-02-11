@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRoomsPricesChainShg extends Migration
+class CreateRoomsPricesVerticalBooking extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateRoomsPricesChainShg extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_chain_shg', function (Blueprint $table) {
+        Schema::create('rooms_prices_vertical_booking', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
-
             $table->string('display_price')->nullable();
             $table->string('room')->nullable();
             $table->text('room_short_description')->nullable();
@@ -33,9 +32,7 @@ class CreateRoomsPricesChainShg extends Migration
             $table->string('check_out_date')->nullable();
             $table->string('rid')->unique();
             $table->string('requested_date');
-
             $table->string('source');
-
             $table->timestamps();
         });
     }
@@ -47,6 +44,6 @@ class CreateRoomsPricesChainShg extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_chain_shg');
+        Schema::dropIfExists('rooms_prices_vertical_booking');
     }
 }

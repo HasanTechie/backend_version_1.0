@@ -175,43 +175,18 @@ class testSeeder3 extends Seeder
                 'website' => 'sorrisohotel.net',
                 'chain' => 'premierhotels.it'
             ),
-            
-            array(
-                'id_albergo' => 'null',
-                'dc' => 'null',
-                'name' => 'null',
-                'address' => 'null',
-                'city' => 'null',
-                'country' => 'Italy',
-                'phone' => 'null',
-                'email' => 'null',
-                'website' => 'null',
-                'chain' => 'premierhotels.it'
-            ),
-            array(
-                'id_albergo' => 'null',
-                'dc' => 'null',
-                'name' => 'null',
-                'address' => 'null',
-                'city' => 'null',
-                'country' => 'Italy',
-                'phone' => 'null',
-                'email' => 'null',
-                'website' => 'null',
-                'chain' => 'premierhotels.it'
-            ),
-            array(
-                'id_albergo' => 'null',
-                'dc' => 'null',
-                'name' => 'null',
-                'address' => 'null',
-                'city' => 'null',
-                'country' => 'Italy',
-                'phone' => 'null',
-                'email' => 'null',
-                'website' => 'null',
-                'chain' => 'premierhotels.it'
-            ),
+//            array(
+//                'id_albergo' => 'null',
+//                'dc' => 'null',
+//                'name' => 'null',
+//                'address' => 'null',
+//                'city' => 'null',
+//                'country' => 'Italy',
+//                'phone' => 'null',
+//                'email' => 'null',
+//                'website' => 'null',
+//                'chain' => 'premierhotels.it'
+//            ),
 
 
         );

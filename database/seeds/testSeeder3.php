@@ -149,7 +149,6 @@ class testSeeder3 extends Seeder
                 'website' => 'allarocca.com',
                 'chain' => 'premierhotels.it'
             ),
-
             array(
                 'id_albergo' => '997',
                 'dc' => '1810812',

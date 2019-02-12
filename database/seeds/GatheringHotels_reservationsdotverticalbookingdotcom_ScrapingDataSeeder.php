@@ -16,7 +16,8 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         $client = new Client();
 
 
-        $date = '2019-02-11';
+//        $date = '2019-02-11';
+        $date = '2019-04-18';
 
         $end_date = '2020-12-31'; //last checkin date hogi last me
 
@@ -55,9 +56,9 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                             try {
                                 $da['room'] = $node->filter('div.blocco_camera.room-box > div.descrizione_camera')->each(function ($node) {
 
-                                    $da['room'] = $node->filter('.titoletto')->text();
-                                    $da['room_short_description'] = $node->filter('div.descrizione_camera > p')->text();
-                                    $da['room_description'] = trim(str_replace(array("\r", "\n", "\t"), '', $node->filter('.container_dettagli')->text()));
+                                    $da['room'] = ($node->filter('.titoletto')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node->filter('.titoletto')->text())) : null;
+                                    $da['room_short_description'] = ($node->filter('div.descrizione_camera > p')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node->filter('div.descrizione_camera > p')->text())) : null;
+                                    $da['room_description'] = ($node->filter('.container_dettagli')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node->filter('.container_dettagli')->text())) : null;
                                     $da['facilities'] = array_filter($node->filter('span.singolo-accessorio')->each(function ($node2) {
                                         return trim($node2->text());
                                     }));
@@ -88,6 +89,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
 
                         foreach ($roomsRawData as $instance) {
+
 
                             if (!empty($instance['room'])) {
                                 $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotel->name)) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])) . $i; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
@@ -127,12 +129,14 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                             }
                         }
 
+
                     } catch
                     (\Exception $e) {
 
                         echo 'InCompleted in->' . $checkInDate . 'out->' . $checkOutDate . ' hotel->' . $hotel->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
                         echo $e->getMessage() . $e->getLine();
                     }
+
                 }
             }
 

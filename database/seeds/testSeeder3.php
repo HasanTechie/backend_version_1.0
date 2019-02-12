@@ -149,6 +149,7 @@ class testSeeder3 extends Seeder
                 'website' => 'allarocca.com',
                 'chain' => 'premierhotels.it'
             ),
+
             array(
                 'id_albergo' => '997',
                 'dc' => '1810812',
@@ -174,6 +175,20 @@ class testSeeder3 extends Seeder
                 'website' => 'sorrisohotel.net',
                 'chain' => 'premierhotels.it'
             ),
+
+            array(
+                'id_albergo' => 'null',
+                'dc' => 'null',
+                'name' => 'null',
+                'address' => 'null',
+                'city' => 'null',
+                'country' => 'Italy',
+                'phone' => 'null',
+                'email' => 'null',
+                'website' => 'null',
+                'chain' => 'premierhotels.it'
+            ),
+
 //            array(
 //                'id_albergo' => 'null',
 //                'dc' => 'null',

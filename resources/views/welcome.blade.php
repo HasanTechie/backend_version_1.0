@@ -107,8 +107,6 @@
             <a href="/flights/search">Search Flights</a>
             <a href="/landroutes">Search LandRoutes</a>
 
-            <a href="/events">Events</a>
-
 
         </div>
 

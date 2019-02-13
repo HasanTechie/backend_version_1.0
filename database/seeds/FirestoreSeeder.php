@@ -84,6 +84,20 @@ class FirestoreSeeder extends Seeder
                     ])->get();
                 }
 
+
+
+                $events = DB::table('events')->get();
+
+                foreach ($events as $event){
+                    dd($event->standard_price_min);
+                    dd($event->standard_price_max);
+                    dd($event->name);
+                    dd($event->venue_name);
+                    dd(unserialize($event->all_data)->dates->start->localDate);
+                }
+
+
+
                 $client = new Client();
 
                 $res = $client->request('GET', $url);

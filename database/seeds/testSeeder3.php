@@ -13,6 +13,7 @@ class testSeeder3 extends Seeder
     {
         //
 
+        /*
         $hotelArray = array
         (
             array(
@@ -233,5 +234,6 @@ class testSeeder3 extends Seeder
 
         }
 
+        */
     }
 }

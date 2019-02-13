@@ -55,10 +55,10 @@ class DatabaseSeeder extends Seeder
 
 
 //        $this->call('FirebaseSeeder');
-        $this->call('FirestoreSeeder');
+//        $this->call('FirestoreSeeder');
 
 
-//        $this->call('testSeeder1');
+        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
 //        $this->call('StripingTagsOfDataSeeder');

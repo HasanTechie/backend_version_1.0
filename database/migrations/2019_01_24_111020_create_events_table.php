@@ -18,6 +18,7 @@ class CreateEventsTable extends Migration
             $table->unsignedInteger('s_no');
 
             $table->string('name')->nullable();
+            $table->string('event_date')->nullable();
             $table->string('id')->nullable();
             $table->text('url')->nullable();
             $table->double('standard_price_min');

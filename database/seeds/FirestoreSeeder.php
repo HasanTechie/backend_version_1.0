@@ -72,11 +72,13 @@ class FirestoreSeeder extends Seeder
 
 
                 if ($hotel->uid == '5c62bce9f062b') {
+                    $city = 'Berlin';
                     $url = "https://api.openweathermap.org/data/2.5/forecast?id=2950159&appid=" . $apiArray[$k][0]; //Berlin
                     $rooms = DB::table('rooms_prices_hotel_novecento')->where('check_in_date', '=', $date->check_in_date)->get();
                 }
 
                 if ($hotel->uid == '5c615f19c63f8') {
+                    $city = 'Rome';
                     $url = "https://api.openweathermap.org/data/2.5/forecast?id=6691831&appid=" . $apiArray[$k][0]; //Rome
                     $rooms = DB::table('rooms_prices_vertical_booking')->where([
                         ['check_in_date', '=', $date->check_in_date],
@@ -85,18 +87,20 @@ class FirestoreSeeder extends Seeder
                 }
 
 
+                $events = DB::table('events')->where('event_date', '=', $date->check_in_date)->get();
 
-                $events = DB::table('events')->get();
-
-                foreach ($events as $event){
-                    dd($event->standard_price_min);
-                    dd($event->standard_price_max);
-                    dd($event->name);
-                    dd($event->venue_name);
-                    dd(unserialize($event->all_data)->dates->start->localDate);
+                $eventArray = [];
+                $i = 0;
+                foreach ($events as $event) {
+                    $eventArray[$i++] = array(
+                        'event_price_min' => $event->standard_price_min,
+                        'event_price_max' => $event->standard_price_max,
+                        'event_name' => $event->name,
+                        'event_venue_name' => $event->venue_name,
+                        'event_date' => $event->event_date,
+                        'event_city' => $city,
+                    );
                 }
-
-
 
                 $client = new Client();
 
@@ -113,7 +117,6 @@ class FirestoreSeeder extends Seeder
                     if ($weatherTime == '12:00:00' && $weatherDate == $date->check_in_date) {
                         $weather = $instance->weather[0]->description;
                     }
-
                 }
 
                 $d = date("d", strtotime($date->check_in_date));
@@ -123,8 +126,10 @@ class FirestoreSeeder extends Seeder
                 $calendar->set([
                     'date' => Carbon\Carbon::createFromDate($y, $m, $d),
                     'weather' => (!empty($weather) ? $weather : null),
+                    'events' => (count($eventArray) > 0) ? $eventArray : null
                 ]);
 
+                $eventArray = [];
                 $weather = '';
 
                 foreach ($rooms as $room) {
@@ -137,29 +142,29 @@ class FirestoreSeeder extends Seeder
                         ])->first();
 
                         if (!empty($competitor)) {
-//                            $assets = $calendar
-//                                ->collection('assets')//rooms
-//                                ->document($room->uid);
-//
-//                            $assets->set([
-//                                'name' => $room->room,
-//                                'room_description' => $room->room_description,
-//                                'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
-//                            ]);
+                            $assets = $calendar
+                                ->collection('assets')//rooms
+                                ->document($room->uid);
+
+                            $assets->set([
+                                'name' => $room->room,
+                                'room_description' => $room->room_description,
+                                'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
+                            ]);
 
 
-//                            $options = $assets
-//                                ->collection('options')//options
-//                                ->document(uniqid());
+                            $options = $assets
+                                ->collection('options')//options
+                                ->document(uniqid());
 
-//                            $options =
-//                                $options->set([
-//                                    'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
-//                                    'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
-//                                    'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
-//                                    'hint' => $competitor->action,
-//                                    'name' => 'Normal'
-//                                ]);
+                            $options =
+                                $options->set([
+                                    'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
+                                    'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
+                                    'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
+                                    'hint' => $competitor->action,
+                                    'name' => 'Normal'
+                                ]);
                         }
                     }
 
@@ -182,29 +187,29 @@ class FirestoreSeeder extends Seeder
 
 
                             if (!empty($competitor)) {
-//                                $assets = $calendar
-//                                    ->collection('assets')//rooms
-//                                    ->document($room->uid);
-//
-//                                $assets->set([
-//                                    'name' => $room->room,
-//                                    'room_description' => $room->room_description,
-//                                    'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
-//                                ]);
+                                $assets = $calendar
+                                    ->collection('assets')//rooms
+                                    ->document($room->uid);
+
+                                $assets->set([
+                                    'name' => $room->room,
+                                    'room_description' => $room->room_description,
+                                    'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
+                                ]);
 
 
-//                                $options = $assets
-//                                    ->collection('options')//options
-//                                    ->document(uniqid());
+                                $options = $assets
+                                    ->collection('options')//options
+                                    ->document(uniqid());
 
-//                                $options =
-//                                    $options->set([
-//                                        'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
-//                                        'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
-//                                        'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
-//                                        'hint' => $competitor->action,
-//                                        'name' => 'Normal'
-//                                    ]);
+                                $options =
+                                    $options->set([
+                                        'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
+                                        'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
+                                        'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
+                                        'hint' => $competitor->action,
+                                        'name' => 'Normal'
+                                    ]);
                             }
                         }
                     }

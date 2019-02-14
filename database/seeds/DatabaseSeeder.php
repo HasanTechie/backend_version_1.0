@@ -52,11 +52,13 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_bookdotbestwesterndotit_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_roomclouddotnet_ScrapingDataSeeder');
 //        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder2');
-        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
+//        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 
 
 //        $this->call('FirebaseSeeder');
 //        $this->call('FirestoreSeeder');
+
+        $this->call('TrawexSeeder');
 
 
 //        $this->call('testSeeder1');

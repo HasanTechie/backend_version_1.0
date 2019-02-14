@@ -1,6 +1,6 @@
 <?php
 
-use Goutte\Client;
+use GuzzleHttp\Client;
 
 use Illuminate\Database\Seeder;
 
@@ -15,19 +15,21 @@ class testSeeder1 extends Seeder
     {
         //
 
-//        $events = DB::table('events')->get();
-//
-//        foreach ($events as $event){
-//
-//            DB::table('events')
-//                ->where('uid', $event->uid)
-//                ->update([
-//                    'event_date' => unserialize($event->all_data)->dates->start->localDate
-//                ]);
-//        }
     }
 }
 
+/*
+        $events = DB::table('events')->get();
+
+        foreach ($events as $event){
+
+            DB::table('events')
+                ->where('uid', $event->uid)
+                ->update([
+                    'event_date' => unserialize($event->all_data)->dates->start->localDate
+                ]);
+        }
+        */
 
 
 /*

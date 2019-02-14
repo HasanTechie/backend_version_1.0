@@ -16,8 +16,8 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         $client = new Client();
 
 
-//        $date = '2019-02-11';
-        $date = '2019-04-18';
+        $date = '2019-02-14';
+//        $date = '2019-04-18';
 
         $end_date = '2020-12-31'; //last checkin date hogi last me
 

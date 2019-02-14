@@ -13,7 +13,7 @@ class testSeeder3 extends Seeder
     {
         //
 
-        /*
+
         $hotelArray = array
         (
             array(
@@ -178,19 +178,215 @@ class testSeeder3 extends Seeder
             ),
 
             array(
-                'id_albergo' => 'null',
-                'dc' => 'null',
-                'name' => 'null',
-                'address' => 'null',
-                'city' => 'null',
+                'id_albergo' => '985',
+                'dc' => '1810823',
+                'name' => 'Hotel Le Palme Milano Marittima',
+                'address' => 'Traversa VII Mare, 12, 48015 Milano Marittima, Cervia RA, Italy',
+                'city' => 'Milano Marittima',
                 'country' => 'Italy',
-                'phone' => 'null',
-                'email' => 'null',
-                'website' => 'null',
+                'phone' => '+39 0544 994661',
+                'email' => 'lepalme@premierhotels.it',
+                'website' => 'hotellepalme.it',
                 'chain' => 'premierhotels.it'
             ),
 
-//            array(
+            array(
+                'id_albergo' => '1305',
+                'dc' => '27020862',
+                'name' => 'Hotel Premier & Suites Premier Resort Milano Marittima',
+                'address' => 'Via VII Traversa Mare, 15, 48015 Milano Marittima RA, Italy',
+                'city' => 'Milano Marittima',
+                'country' => 'Italy',
+                'phone' => '+39 0544 995839',
+                'email' => 'premiersuites@premierhotels.it',
+                'website' => 'premierandsuites.it',
+                'chain' => 'premierhotels.it'
+            ),
+
+            array(
+                'id_albergo' => '983',
+                'dc' => '1810812',
+                'name' => 'Hotel Waldorf - Premier Resort Milano Marittima',
+                'address' => 'Traversa VII Mare, 17, 48015 Milano Marittima RA, Italy',
+                'city' => 'Milano Marittima',
+                'country' => 'Italy',
+                'phone' => '+39 0544 994343',
+                'email' => 'waldorf@premierhotels.it',
+                'website' => 'hotelwaldorf.it',
+                'chain' => 'premierhotels.it'
+            ),
+
+            //italianhospitalitycollection
+
+            array(
+                'id_albergo' => '6049',
+                'dc' => '543',
+                'name' => 'Chia Laguna Hotel',
+                'address' => 'Viale Belvedere, 09010 Domus De Maria CA, Italy',
+                'city' => 'Sardinia',
+                'country' => 'Italy',
+                'phone' => '+39 070 92391',
+                'email' => 'info@chialagunaresort.com',
+                'website' => 'chialagunaresort.com',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+            array(
+                'id_albergo' => '10333',
+                'dc' => '531',
+                'name' => 'Chia Hotel Spazio Oasi',
+                'address' => 'Viale Belvedere, 09010 Chia, Domus de Maria, Sardinia, Italy',
+                'city' => 'Sardinia',
+                'country' => 'Italy',
+                'phone' => '+39 070 9239 3431',
+                'email' => 'info@chialagunaresort.com',
+                'website' => 'en.chialagunaresort.com/en/our-hotels/hotel-spazio-oasi/description/106-0.html',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+
+            array(
+                'id_albergo' => '6052',
+                'dc' => '237',
+                'name' => 'Chia Laguna - Hotel Village ',
+                'address' => 'Viale Belvedere, 09010 Chia, Domus de Maria, Sardinia, Italy',
+                'city' => 'Sardinia',
+                'country' => 'Italy',
+                'phone' => '+39 070 92391',
+                'email' => 'info@chialagunaresort.com',
+                'website' => 'en.chialagunaresort.com/en/our-hotels/hotel-village/hotel-village/150-0.html',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+            array(
+                'id_albergo' => '6058',
+                'dc' => '781',
+                'name' => 'Chia Laguna - Hotel Baia',
+                'address' => 'Viale Belvedere, 09010 Chia, Domus de Maria, Sardinia, Italy',
+                'city' => 'Sardinia',
+                'country' => 'Italy',
+                'phone' => '+39 070 92391',
+                'email' => 'info@chialagunaresort.com',
+                'website' => 'en.chialagunaresort.com/en/our-hotels/hotel-baia/hotel-baia/151-0.html',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+            array(
+                'id_albergo' => '19122',
+                'dc' => '9629',
+                'name' => 'Le Massif',
+                'address' => 'Strada regionale, 38, 11013 Courmayeur AO, Italy',
+                'city' => 'Courmayeur',
+                'country' => 'Italy',
+                'phone' => '+39 02 843 45 670',
+                'email' => 'null',
+                'website' => 'lemassifcourmayeur.com/en/',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+            array(
+                'id_albergo' => '31',
+                'dc' => '466',
+                'name' => 'Fonteverde',
+                'address' => 'Località Terme, 1, 53040 San Casciano dei Bagni SI, Italy',
+                'city' => 'Tuscany',
+                'country' => 'Italy',
+                'phone' => '+39 0578 57241',
+                'email' => 'info@fonteverdespa.com',
+                'website' => 'fonteverdespa.com',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+            array(
+                'id_albergo' => '487',
+                'dc' => '33',
+                'name' => 'Bagni di Pisa',
+                'address' => 'Largo Shelley, 18, 56017 San Giuliano Terme PI, Italy',
+                'city' => 'Tuscany',
+                'country' => 'Italy',
+                'phone' => '+39 050 88501',
+                'email' => 'info@bagnidipisa.com',
+                'website' => 'bagnidipisa.com',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+
+            array(
+                'id_albergo' => '32',
+                'dc' => '471',
+                'name' => 'Grotta Giusti',
+                'address' => 'Via della Grotta Giusti, 1411, 51015 Monsummano Terme PT, Italy',
+                'city' => 'Tuscany',
+                'country' => 'Italy',
+                'phone' => '+39 0572 90771',
+                'email' => 'info@grottagiustispa.com',
+                'website' => 'grottagiustispa.com',
+                'chain' => 'italianhospitalitycollection.com'
+            ),
+//
+            array(
+                'id_albergo' => '1433',
+                'dc' => '34560',
+                'name' => 'Devero Hotel',
+                'address' => 'Largo Kennedy, 1, 20873 Cavenago di Brianza MB, Italy',
+                'city' => 'Cavenago di Brianza',
+                'country' => 'Italy',
+                'phone' => '+39 02 9533 5412',
+                'email' => ' info@deverohotel.it',
+                'website' => 'deverohotel.it',
+                'chain' => 'null'
+            ),
+//
+            array(
+                'id_albergo' => '2055',
+                'dc' => '123',
+                'name' => 'Hotel Veronesi La Torre',
+                'address' => 'Via Monte Baldo, 22, 37062 Dossobuono di Villafranca VR, Italy',
+                'city' => 'Verona',
+                'country' => 'Italy',
+                'phone' => '+39 045 860 4811',
+                'email' => 'null',
+                'website' => 'hotelveronesilatorre.it/en/',
+                'chain' => 'null'
+            ),
+//
+              array(
+                'id_albergo' => '11987',
+                'dc' => '6361',
+                'name' => 'HOTEL QC Terme Monte Bianco',
+                'address' => '11010 Palleusieux Aosta Valley, Italy',
+                'city' => 'Aosta Valley',
+                'country' => 'Italy',
+                'phone' => '+39 0165 87004',
+                'email' => 'info@qctermemontebianco.it',
+                'website' => 'qctermemontebianco.it',
+                'chain' => 'null'
+            ),
+//
+              array(
+                'id_albergo' => '13435',
+                'dc' => '8907',
+                'name' => 'Camping Village Rocchette',
+                'address' => 'Strada Provinciale delle Rocchette, snc, 58043 Castiglione della Pescaia GR, Italy',
+                'city' => 'Castiglione della Pescaia',
+                'country' => 'Italy',
+                'phone' => '+39 0564 941123',
+                'email' => 'info@rocchette.com',
+                'website' => 'rocchette.com',
+                'chain' => 'null'
+            ),
+//
+              array(
+                'id_albergo' => '146',
+                'dc' => '785',
+                'name' => 'Cosmo Hotel Palace',
+                'address' => 'Via F. de Sanctis, 5, 20092 Cinisello Balsamo MI, Italy',
+                'city' => 'Cinisello Balsamo',
+                'country' => 'Italy',
+                'phone' => '+39 02 617771',
+                'email' => 'palace@hotelcosmo.com',
+                'website' => 'cosmohotelpalace.it',
+                'chain' => 'null'
+            ),
+////              array(
 //                'id_albergo' => 'null',
 //                'dc' => 'null',
 //                'name' => 'null',
@@ -200,7 +396,7 @@ class testSeeder3 extends Seeder
 //                'phone' => 'null',
 //                'email' => 'null',
 //                'website' => 'null',
-//                'chain' => 'premierhotels.it'
+//                'chain' => 'null'
 //            ),
 
 
@@ -212,7 +408,7 @@ class testSeeder3 extends Seeder
             $j = 0;
         }
 
-        foreach ($hotelArray as $hotel){
+        foreach ($hotelArray as $hotel) {
 
             DB::table('hotels')->insert([
                 'uid' => uniqid(),
@@ -230,10 +426,10 @@ class testSeeder3 extends Seeder
                 'source' => 'reservations.verticalbooking.com',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
-                ]);
+            ]);
 
         }
 
-        */
+
     }
 }

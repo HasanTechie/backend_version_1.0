@@ -81,7 +81,7 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
 
             echo $countrycode[0]->country_code;
             $keywords = DB::table('keywords')->where([
-                ['language', '=', 'EN']
+                ['language', '=', 'UK']
 //                ['s_no', '>', '181']
             ])->get();
 

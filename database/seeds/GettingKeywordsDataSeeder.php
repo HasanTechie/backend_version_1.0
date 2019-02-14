@@ -12,13 +12,13 @@ class GettingKeywordsDataSeeder extends Seeder
     public function run()
     {
         //
-        $columns = $this->getTableColumns('mytable');
+        $columns = $this->getTableColumns('keywords_from_csv_new');
 
         $j = 0;
 
         foreach ($columns as $column) {
 
-            $keywords = DB::table('mytable')->select($column)->get();
+            $keywords = DB::table('keywords_from_csv_new')->select($column)->get();
 
             foreach ($keywords as $keyword) {
                 DB::table('keywords')->insert([

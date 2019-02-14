@@ -12,17 +12,17 @@ class testSeeder2 extends Seeder
     public function run()
     {
         //
-        $j = 0;
-
+//        $j = 0;
 //
-//        $results = DB::table('rooms')->get();
+//
+//        $results = DB::table('keywords')->get();
 //
 //        foreach ($results as $instance) {
 //
-//            DB::table('rooms')->where('uid', $instance->uid)->update([
+//            DB::table('keywords')->where('uid', $instance->uid)->update([
 //                's_no' => ++$j,
 //            ]);
-//            echo 'rooms ' . $j . "\n";
+//            echo 'keywords ' . $j . "\n";
 //        }
 
 

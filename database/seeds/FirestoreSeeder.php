@@ -27,7 +27,7 @@ class FirestoreSeeder extends Seeder
             'keyFilePath' => __DIR__ . '/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
 
-        $hotels = DB::table('hotels')->where('website', '=', 'novecentohotel.it')->orWhere('website', '=', 'hotelportamaggiore.it')->get();
+        $hotels = DB::table('hotels')->where('website', '=', 'hotelportamaggiore.it')->orWhere('website', '=', 'novecentohotel.it')->get();
 
 
         foreach ($hotels as $hotel) {
@@ -54,15 +54,16 @@ class FirestoreSeeder extends Seeder
                     'country' => 'Germany',
                 ]);
 
-                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->limit(10)->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
 
-            } elseif ($hotel->uid == '5c615f19c63f8') {
+            }
+            if ($hotel->uid == '5c615f19c63f8') {
                 $properties->set([
                     'name' => '3-star Hotel Rome',
                     'city' => 'Rome',
                     'country' => 'Italy',
                 ]);
-                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->limit(10)->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->orderBy('check_in_date')->get();
             }
 
             foreach ($dates as $date) {
@@ -72,22 +73,25 @@ class FirestoreSeeder extends Seeder
 
 
                 if ($hotel->uid == '5c62bce9f062b') {
-                    $city = 'Berlin';
+                    $events = DB::table('events')->where([
+                        ['event_date', '=', $date->check_in_date],
+                        ['city', '=', 'Berlin']
+                    ])->get();
                     $url = "https://api.openweathermap.org/data/2.5/forecast?id=2950159&appid=" . $apiArray[$k][0]; //Berlin
                     $rooms = DB::table('rooms_prices_hotel_novecento')->where('check_in_date', '=', $date->check_in_date)->get();
                 }
 
                 if ($hotel->uid == '5c615f19c63f8') {
-                    $city = 'Rome';
+                    $events = DB::table('events')->where([
+                        ['event_date', '=', $date->check_in_date],
+                        ['city', '=', 'Rome']
+                    ])->get();
                     $url = "https://api.openweathermap.org/data/2.5/forecast?id=6691831&appid=" . $apiArray[$k][0]; //Rome
                     $rooms = DB::table('rooms_prices_vertical_booking')->where([
                         ['check_in_date', '=', $date->check_in_date],
                         ['hotel_website', '=', 'hotelportamaggiore.it']
                     ])->get();
                 }
-
-
-                $events = DB::table('events')->where('event_date', '=', $date->check_in_date)->get();
 
                 $eventArray = [];
                 $i = 0;
@@ -98,7 +102,8 @@ class FirestoreSeeder extends Seeder
                         'event_name' => $event->name,
                         'event_venue_name' => $event->venue_name,
                         'event_date' => $event->event_date,
-                        'event_city' => $city,
+                        'event_city' => $event->city,
+                        'event_url' => $event->url,
                     );
                 }
 
@@ -106,7 +111,7 @@ class FirestoreSeeder extends Seeder
 
                 $res = $client->request('GET', $url);
                 $response = json_decode($res->getBody());
-
+                $weather = [];
                 foreach ($response->list as $instance) {
 
                     $dateTime = $instance->dt_txt;
@@ -115,22 +120,46 @@ class FirestoreSeeder extends Seeder
                     $weatherDate = $dateArray[0];
 
                     if ($weatherTime == '12:00:00' && $weatherDate == $date->check_in_date) {
-                        $weather = $instance->weather[0]->description;
+                        $weather['avg_temp_in_celsius'] = round(($instance->main->temp - 273.15));
+                        $weather['condition'] = $instance->weather[0]->description;
                     }
                 }
 
                 $d = date("d", strtotime($date->check_in_date));
                 $m = date("m", strtotime($date->check_in_date));
                 $y = date("Y", strtotime($date->check_in_date));
+                $newWeather='';
+                if (!empty($weather['condition'])) {
+
+                    $newWeather = str_replace(' ', '-', $weather['condition']);
+                    $newWeather = 'weather-' . $newWeather;
+                }
+
+                $eventString = '';
+
+                if (count($eventArray) > 0) {
+
+                    foreach ($eventArray as $event) {
+
+                        $eventString .= $event['event_name'] . ' @ ' . $event['event_venue_name'] . ' | ';
+                    }
+                }
+
+                $eventIndicator = [];
+                if (count($eventArray) > 0) {
+                    $eventIndicator [] = 'very-busy';
+                }
+                if (!empty($newWeather)) {
+                    $eventIndicator [] = $newWeather;
+                }
 
                 $calendar->set([
                     'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                    'weather' => (!empty($weather) ? $weather : null),
-                    'events' => (count($eventArray) > 0) ? $eventArray : null
+                    'weather' => ((count($weather) > 0) ? $weather : null),
+                    'events' => (count($eventArray) > 0) ? $eventArray : null,
+                    'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
+                    'comments' => ((count($eventArray) > 0) ? $eventString : null)
                 ]);
-
-                $eventArray = [];
-                $weather = '';
 
                 foreach ($rooms as $room) {
 
@@ -149,7 +178,6 @@ class FirestoreSeeder extends Seeder
                             $assets->set([
                                 'name' => $room->room,
                                 'room_description' => $room->room_description,
-                                'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
                             ]);
 
 
@@ -213,7 +241,6 @@ class FirestoreSeeder extends Seeder
                             }
                         }
                     }
-
 
                     //
                 }

@@ -128,7 +128,7 @@ class FirestoreSeeder extends Seeder
                 $d = date("d", strtotime($date->check_in_date));
                 $m = date("m", strtotime($date->check_in_date));
                 $y = date("Y", strtotime($date->check_in_date));
-                $newWeather='';
+                $newWeather = '';
                 if (!empty($weather['condition'])) {
 
                     $newWeather = str_replace(' ', '-', $weather['condition']);

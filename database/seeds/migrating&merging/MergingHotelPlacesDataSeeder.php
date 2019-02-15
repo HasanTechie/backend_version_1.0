@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MergeHotelPlacesDataSeeder extends Seeder
+class MergingHotelPlacesDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

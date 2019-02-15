@@ -23,7 +23,7 @@ class GatheringHotels_bookhypensecuredotcom_ScrapingDataSeeder extends Seeder
         dd($crawler);
 
         $crawler->filter('#accommodation-DOUBLE-FOR-SINGLE-USE')->each(function ($node) {
-            print $node->text()."\n";
+            print $node->text() . "\n";
         });
     }
 }

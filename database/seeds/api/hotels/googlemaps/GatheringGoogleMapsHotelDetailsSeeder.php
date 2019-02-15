@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class HotelDetailsSeeder extends Seeder
+class GatheringGoogleMapsHotelDetailsSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -348,7 +348,7 @@ class testSeeder3 extends Seeder
                 'chain' => 'null'
             ),
 //
-              array(
+            array(
                 'id_albergo' => '11987',
                 'dc' => '6361',
                 'name' => 'HOTEL QC Terme Monte Bianco',
@@ -361,7 +361,7 @@ class testSeeder3 extends Seeder
                 'chain' => 'null'
             ),
 //
-              array(
+            array(
                 'id_albergo' => '13435',
                 'dc' => '8907',
                 'name' => 'Camping Village Rocchette',
@@ -374,7 +374,7 @@ class testSeeder3 extends Seeder
                 'chain' => 'null'
             ),
 //
-              array(
+            array(
                 'id_albergo' => '146',
                 'dc' => '785',
                 'name' => 'Cosmo Hotel Palace',

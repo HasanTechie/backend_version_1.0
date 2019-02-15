@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class GettingKeywordsDataSeeder extends Seeder
+class MigratingKeywordsDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

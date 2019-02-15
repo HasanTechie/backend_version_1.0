@@ -15,7 +15,7 @@ class StripingTagsOfDataSeeder extends Seeder
         $results = DB::table('rooms_prices_hotel_baglioni')->get();
 
         foreach ($results as $instance1) {
-            $i=0;
+            $i = 0;
 
             foreach (unserialize($instance1->room_all_rates_and_details) as $instance2) {
 
@@ -33,7 +33,7 @@ class StripingTagsOfDataSeeder extends Seeder
                 $da['short_description'] = trim(str_replace(array("\r", "\n"), '', $instance2['short_description']));
                 $da['description'] = trim(str_replace(array("\r", "\n"), '', $instance2['description']));
 
-                $dataArray[$i++]=$da;
+                $dataArray[$i++] = $da;
 
             }
             DB::table('rooms_prices_hotel_baglioni')->where('uid', $instance1->uid)->update([

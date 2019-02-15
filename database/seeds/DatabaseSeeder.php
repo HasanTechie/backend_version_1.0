@@ -14,34 +14,42 @@ class DatabaseSeeder extends Seeder
 //        $this->call('ScheduledFlightsSeeder');
 //        $this->call('CompletedFlightsSeeder');
 //        $this->call('AirborneFlightsSeeder');
-//        $this->call('HotelDetailsSeeder');
-//        $this->call('PlacesSeeder');
-//        $this->call('PlacesDetailsReviewsSeeder');
-//        $this->call('MergeHotelPlacesDataSeeder');
-//        $this->call('CountriesDataFromHotelBedsSeeder');
-//        $this->call('HotelDataFromHotelBedsAPISeeder');
-//        $this->call('UpdateFlightsData1');
+//        $this->call('UpdateFlightsData');
+
+//        $this->call('GatheringGoogleMapsHotelDetailsSeeder');
+
+//        $this->call('GatheringTourPediaPlacesSeeder');
+//        $this->call('GatheringTourPediaPlacesDetailsReviewsSeeder');
+
+//        $this->call('MergingHotelPlacesDataSeeder');
+//        $this->call('GatheringCountriesDataFromHotelBedsSeeder');
+//        $this->call('GatheringHotelDataFromHotelBedsAPISeeder');
+
 //        $this->call('MergingDataGoogleMapsAPISeeder');
 //        $this->call('MergingDataHotelBedsAPISeeder');
 //        $this->call('MergingDataTourPediaAPISeeder');
-//        $this->call('SingaporeHotelDataSeeder');
+//        $this->call('GatheringSingaporeHotelDataSeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
 //        $this->call('MergingDataLaminarAPISeeder');
-//        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder'); //running
+
+//        $this->call('GatheringAirfranceKLMAPIFlightFaresSeeder');
 //        $this->call('GatheringAirfranceKLMAPIReferenceDataSeeder');
+
 //        $this->call('CreateUniqueIdSeeder');
 //        $this->call('UncompressingDataSeeder');
 //        $this->call('UncompressingDataSeeder2');
 
 //        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');
 //        $this->call('CorrectingSourceSeeder');
-//        $this->call('GettingKeywordsDataSeeder');
-        $this->call('GatheringGoogleTrendsDataSeeder'); //running
+
+//        $this->call('MigratingKeywordsDataSeeder');
+//        $this->call('GatheringGoogleTrendsDataSeeder');
 
 
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder1');
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
+
 //        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
 
 //        $this->call('MigratingAndMergingDataBetweenTablesSeeder1');
@@ -54,12 +62,10 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder2');
 //        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 
-
 //        $this->call('FirebaseSeeder');
 //        $this->call('FirestoreSeeder');
 
-        $this->call('TrawexSeeder');
-
+//        $this->call('TrawexSeeder');
 
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');

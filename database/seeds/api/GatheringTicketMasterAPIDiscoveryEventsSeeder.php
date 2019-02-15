@@ -23,109 +23,11 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
         );
 
 
-        $k = 0;
-
-        $events = DB::table('events')->select('*')->where('s_no', '>', 10074)->get();
-
-        $requestCount = 0;
-
-        foreach ($events as $event) {
-
-            $url = "https://app.ticketmaster.com/discovery/v2/events/$event->id.json?&apikey=$apiArray[$k]";
+    }
+}
 
 
-            echo $url . "\n";
-
-            try {
-                usleep(500000);
-                $client = new Client();
-                $response = $client->request('GET', $url);
-
-                $response = json_decode($response->getBody());
-
-            } catch (\Exception $ex) {
-                if (!empty($ex)) {
-                    echo 'Incompleted' . "\n";
-                    $response = '';
-                }
-            }
-
-            if (!empty($response)) {
-
-                $standardPriceMin = 0;
-                $standardPriceMax = 0;
-                $standardPriceIncludingFeesMin = 0;
-                $standardPriceIncludingFeesMax = 0;
-                $currency = '';
-
-                if (isset($response->priceRanges)) {
-
-                    foreach ($response->priceRanges as $price) {
-                        if (isset($price->type)) {
-                            if ($price->type == 'standard') {
-                                if (isset($price->min)) {
-                                    $standardPriceMin = $price->min;
-                                }
-                                if (isset($price->max)) {
-                                    $standardPriceMax = $price->max;
-                                    $currency = $price->currency;
-                                }
-                            }
-                            if ($price->type == 'standard including fees') {
-                                if (isset($price->min)) {
-                                    $standardPriceIncludingFeesMin = $price->min;
-                                }
-                                if (isset($price->max)) {
-                                    $standardPriceIncludingFeesMax = $price->max;
-                                    $currency = $price->currency;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (isset($response->_embedded->venues[0]->address)) {
-
-                    if (isset($response->_embedded->venues[0]->address)) {
-                        if (isset($response->_embedded->venues[0]->address->line1)) {
-                            $address = $response->_embedded->venues[0]->address->line1;
-                        } else {
-                            if (is_object($response->_embedded->venues[0]->address)) {
-                                $address = null;
-                            } else {
-                                $address = $response->_embedded->venues[0]->address;
-                            }
-                        }
-                        if (isset($response->_embedded->venues[0]->address->line2)) {
-                            $address = $response->_embedded->venues[0]->address->line1 . $response->_embedded->venues[0]->address->line2;
-                        }
-                    }
-                } else {
-                    $address = null;
-                }
-
-                DB::table('events')
-                    ->where('id', $response->id)
-                    ->update([
-                        'standard_price_min' => $standardPriceMin,
-                        'standard_price_max' => $standardPriceMax,
-                        'standard_price_including_fees_min' => $standardPriceIncludingFeesMin,
-                        'standard_price_including_fees_max' => $standardPriceIncludingFeesMax,
-                        'currency' => $currency,
-                        'venue_name' => $response->_embedded->venues[0]->name,
-                        'venue_address' => $address,
-                        'city' => $response->_embedded->venues[0]->city->name,
-                        'all_data' => serialize($response)
-                    ]);
-
-
-                echo ++$requestCount . ' Completed ' . $event->s_no . ' ' . $event->id . "\n";
-
-            }
-        }
-
-
-        /*
+/*
         // for gathering basic events data of all countries.
         $countries = DB::table('countries')->select(['iso_code', 'name'])->distinct()->get();
 
@@ -227,8 +129,106 @@ class GatheringTicketMasterAPIDiscoveryEventsSeeder extends Seeder
                 }
             }
         }
-        */
+*/
+
+/*
+        $k = 0;
+        $events = DB::table('events')->select('*')->where('s_no', '>', 10074)->get();
+
+        $requestCount = 0;
+
+        foreach ($events as $event) {
+
+            $url = "https://app.ticketmaster.com/discovery/v2/events/$event->id.json?&apikey=$apiArray[$k]";
 
 
-    }
-}
+            echo $url . "\n";
+
+            try {
+                usleep(500000);
+                $client = new Client();
+                $response = $client->request('GET', $url);
+
+                $response = json_decode($response->getBody());
+
+            } catch (\Exception $ex) {
+                if (!empty($ex)) {
+                    echo 'Incompleted' . "\n";
+                    $response = '';
+                }
+            }
+
+            if (!empty($response)) {
+
+                $standardPriceMin = 0;
+                $standardPriceMax = 0;
+                $standardPriceIncludingFeesMin = 0;
+                $standardPriceIncludingFeesMax = 0;
+                $currency = '';
+
+                if (isset($response->priceRanges)) {
+
+                    foreach ($response->priceRanges as $price) {
+                        if (isset($price->type)) {
+                            if ($price->type == 'standard') {
+                                if (isset($price->min)) {
+                                    $standardPriceMin = $price->min;
+                                }
+                                if (isset($price->max)) {
+                                    $standardPriceMax = $price->max;
+                                    $currency = $price->currency;
+                                }
+                            }
+                            if ($price->type == 'standard including fees') {
+                                if (isset($price->min)) {
+                                    $standardPriceIncludingFeesMin = $price->min;
+                                }
+                                if (isset($price->max)) {
+                                    $standardPriceIncludingFeesMax = $price->max;
+                                    $currency = $price->currency;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (isset($response->_embedded->venues[0]->address)) {
+
+                    if (isset($response->_embedded->venues[0]->address)) {
+                        if (isset($response->_embedded->venues[0]->address->line1)) {
+                            $address = $response->_embedded->venues[0]->address->line1;
+                        } else {
+                            if (is_object($response->_embedded->venues[0]->address)) {
+                                $address = null;
+                            } else {
+                                $address = $response->_embedded->venues[0]->address;
+                            }
+                        }
+                        if (isset($response->_embedded->venues[0]->address->line2)) {
+                            $address = $response->_embedded->venues[0]->address->line1 . $response->_embedded->venues[0]->address->line2;
+                        }
+                    }
+                } else {
+                    $address = null;
+                }
+
+                DB::table('events')
+                    ->where('id', $response->id)
+                    ->update([
+                        'standard_price_min' => $standardPriceMin,
+                        'standard_price_max' => $standardPriceMax,
+                        'standard_price_including_fees_min' => $standardPriceIncludingFeesMin,
+                        'standard_price_including_fees_max' => $standardPriceIncludingFeesMax,
+                        'currency' => $currency,
+                        'venue_name' => $response->_embedded->venues[0]->name,
+                        'venue_address' => $address,
+                        'city' => $response->_embedded->venues[0]->city->name,
+                        'all_data' => serialize($response)
+                    ]);
+
+
+                echo ++$requestCount . ' Completed ' . $event->s_no . ' ' . $event->id . "\n";
+
+            }
+        }
+*/

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class HotelDataFromHotelBedsAPISeeder extends Seeder
+class GatheringHotelDataFromHotelBedsAPISeeder extends Seeder
 {
     /**
      * Run the database seeds.

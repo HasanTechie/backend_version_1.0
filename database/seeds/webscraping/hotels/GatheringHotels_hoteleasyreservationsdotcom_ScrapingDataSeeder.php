@@ -43,7 +43,6 @@ class GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder extends See
             $node->filter('.SelezioneCamereServiziElenco')->each(function ($node1) {
 
 
-
                 global $facilitiesArray;
 
                 $facilitiesArray[] = $node1->filter('.SelezioneCamereServiziElencoVoci')->each(function ($node2) {

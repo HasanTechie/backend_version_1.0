@@ -26,7 +26,7 @@ class FirebaseSeeder extends Seeder
 
         $hotels = DB::table('rooms_prices_hotel_novecento')->limit(100)->get();
 
-        $weathers = DB::table('weathers')->where('country','=','Italy')->get();
+        $weathers = DB::table('weathers')->where('country', '=', 'Italy')->get();
 
 //        foreach($hotels as $hotel){
 //            $database
@@ -75,7 +75,6 @@ class FirebaseSeeder extends Seeder
 //                    'updated_at'=> $weather->updated_at,
 //                ]);
 //        }
-
 
 
 //

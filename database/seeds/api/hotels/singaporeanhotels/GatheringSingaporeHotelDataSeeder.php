@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class SingaporeHotelDataSeeder extends Seeder
+class GatheringSingaporeHotelDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

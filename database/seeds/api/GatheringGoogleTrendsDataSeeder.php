@@ -77,16 +77,16 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
         $options = [
             'hl' => 'en-US',
             'tz' => 0, # UTC
-            'geo' => 'DE'
+            'geo' => 'IT'
         ];
 
 //            echo $countrycode[0]->country_code;
-        $keywords = DB::table('keywords')->where('language', '=', 'DE')->get();
+        $keywords = DB::table('keywords')->where('language', '=', 'IT')->get();
 
         foreach ($keywords as $keyword) {
 
             if (!DB::table('trends')->where([
-                ['country_code', '=', 'DE'],
+                ['country_code', '=', 'IT'],
                 ['keyword', '=', $keyword->keyword]
             ])->exists()) {
 
@@ -107,8 +107,8 @@ class GatheringGoogleTrendsDataSeeder extends Seeder
                             'keyword' => $keyword->keyword,
                             'keyword_language' => 'EN',
                             'api_preferred_language' => 'en-US',
-                            'country_code' => 'DE',
-                            'country_name' => 'Germany',
+                            'country_code' => 'IT',
+                            'country_name' => 'Italy',
                             'time' => 'today 5-y',
 
                             'source' => 'trends.google.com/trends/api/explore',

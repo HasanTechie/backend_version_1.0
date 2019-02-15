@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PlacesDetailsReviewsSeeder extends Seeder
+class GatheringTourPediaPlacesDetailsReviewsSeeder extends Seeder
 {
     /**
      * Run the database seeds.

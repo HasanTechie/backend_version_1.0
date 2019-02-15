@@ -35,8 +35,8 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('GatheringTicketMasterAPIDiscoveryEventsSeeder');
 //        $this->call('CorrectingSourceSeeder');
-//        $this->call('GettingKeywordsDataSeeder'); //running
-//        $this->call('GatheringGoogleTrendsDataSeeder'); //running
+//        $this->call('GettingKeywordsDataSeeder');
+        $this->call('GatheringGoogleTrendsDataSeeder'); //running
 
 
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder1');

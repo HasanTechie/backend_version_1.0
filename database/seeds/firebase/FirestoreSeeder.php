@@ -23,8 +23,8 @@ class FirestoreSeeder extends Seeder
         $k = 0;
 
         $db = new FirestoreClient([
-//            'keyFilePath' => __DIR__ . '/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
-            'keyFilePath' => __DIR__ . '/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
+//            'keyFilePath' => __DIR__ . '/keys/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
+            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
 
         $hotels = DB::table('hotels')->where('website', '=', 'hotelportamaggiore.it')->orWhere('website', '=', 'novecentohotel.it')->get();

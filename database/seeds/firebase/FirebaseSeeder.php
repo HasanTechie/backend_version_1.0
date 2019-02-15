@@ -16,7 +16,7 @@ class FirebaseSeeder extends Seeder
     {
         //
 
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/solidps-backend-analysed-data-firebase-adminsdk-duxjt-82f59033cf.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/keys/solidps-backend-analysed-data-firebase-adminsdk-duxjt-82f59033cf.json');
 
         $firebase = (new Factory)
             ->withServiceAccount($serviceAccount)

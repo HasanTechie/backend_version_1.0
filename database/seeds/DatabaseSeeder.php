@@ -49,6 +49,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder1');
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder2');
 //        $this->call('MigratingDataFromOneTableToAnotherSeeder3');
+//        $this->call('MigratingDataFromOneTableToAnotherSeeder4');
+//        $this->call('MigratingDataFromOneTableToAnotherSeeder5');
 
 //        $this->call('GatheringWeatherDataFromOpenWeatherAPISeeder');
 
@@ -62,6 +64,9 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder2');
 //        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 
+//        $this->call('EnteringHotelsDataSeeder');
+//        $this->call('StripingTagsOfDataSeeder');
+
 //        $this->call('FirebaseSeeder');
 //        $this->call('FirestoreSeeder');
 
@@ -70,7 +75,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
-//        $this->call('StripingTagsOfDataSeeder');
+
 //        $this->call('testWebScarpingSeeder');
     }
 }

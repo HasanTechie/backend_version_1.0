@@ -191,7 +191,7 @@ class FirestoreSeeder extends Seeder
                                     'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
                                     'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
                                     'hint' => $competitor->action,
-                                    'name' => 'Normal'
+                                    'name' => 'Breakfast Included'
                                 ]);
                         }
                     }
@@ -236,7 +236,7 @@ class FirestoreSeeder extends Seeder
                                         'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
                                         'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
                                         'hint' => $competitor->action,
-                                        'name' => 'Normal'
+                                        'name' => 'Breakfast Included'
                                     ]);
                             }
                         }

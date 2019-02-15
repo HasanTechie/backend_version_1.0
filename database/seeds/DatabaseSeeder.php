@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('StripingTagsOfDataSeeder');
 
 //        $this->call('FirebaseSeeder');
-//        $this->call('FirestoreSeeder');
+        $this->call('FirestoreSeeder');
 
 //        $this->call('TrawexSeeder');
 

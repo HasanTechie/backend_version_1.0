@@ -85,14 +85,14 @@
         </div>
 
         <div class="links">
+            <a href="/roomsprices/hotel4">Hotel VerticalBooking Prices </a>
             <a href="/roomsprices/hotel1">Baglioni Hotels Prices </a>
-            <a href="/roomsprices/hotel2">Hotel Emona AquaeductusPrices </a>
             <a href="/roomsprices/hotel3">Novecento Hotel Prices </a>
 
         </div>
 
         <div class="links">
-            <a href="/roomsprices/hotel4">Hotel PortaMaggiore Prices </a>
+            <a href="/roomsprices/hotel2">Hotel EmonaAquaeductus Prices </a>
             <a href="/weathers">Weather</a>
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/trends">Google Trends</a>

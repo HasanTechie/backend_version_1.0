@@ -10,7 +10,7 @@ class PriceController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -25,7 +25,7 @@ class PriceController extends Controller
 
     public function hotel1Prices()
     {
-        $prices = DB::table('rooms_prices_hotel_baglioni')
+        $prices = DB::table('rooms_prices_chain_baglioni')
             ->paginate(20);
 
         return view('roomsprices.hotel1.index', compact('prices'));
@@ -34,7 +34,7 @@ class PriceController extends Controller
     public function hotel1Show($id)
     {
 
-        $prices = DB::table('rooms_prices_hotel_baglioni')->where('uid', '=', $id)->get();
+        $prices = DB::table('rooms_prices_chain_baglioni')->where('uid', '=', $id)->get();
 
         dd(unserialize($prices[0]->room_all_rates_and_details));
     }

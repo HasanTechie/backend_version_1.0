@@ -331,8 +331,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'country' => 'Italy',
                 'phone' => '+39 02 9533 5412',
                 'email' => ' info@deverohotel.it',
-                'website' => 'deverohotel.it',
-                'chain' => 'null'
+                'website' => 'deverohotel.it'
             ),
 //
             array(
@@ -344,8 +343,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'country' => 'Italy',
                 'phone' => '+39 045 860 4811',
                 'email' => 'null',
-                'website' => 'hotelveronesilatorre.it/en/',
-                'chain' => 'null'
+                'website' => 'hotelveronesilatorre.it'
             ),
 //
             array(
@@ -357,8 +355,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'country' => 'Italy',
                 'phone' => '+39 0165 87004',
                 'email' => 'info@qctermemontebianco.it',
-                'website' => 'qctermemontebianco.it',
-                'chain' => 'null'
+                'website' => 'qctermemontebianco.it'
             ),
 //
             array(
@@ -370,8 +367,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'country' => 'Italy',
                 'phone' => '+39 0564 941123',
                 'email' => 'info@rocchette.com',
-                'website' => 'rocchette.com',
-                'chain' => 'null'
+                'website' => 'rocchette.com'
             ),
 //
             array(
@@ -383,9 +379,82 @@ class EnteringHotelsDataSeeder extends Seeder
                 'country' => 'Italy',
                 'phone' => '+39 02 617771',
                 'email' => 'palace@hotelcosmo.com',
-                'website' => 'cosmohotelpalace.it',
-                'chain' => 'null'
+                'website' => 'cosmohotelpalace.it'
             ),
+
+//
+            array(
+                'id_albergo' => '17024',
+                'dc' => '6427',
+                'name' => 'Grand Hotel San Pietro',
+                'address' => 'Via Luigi Pirandello, 50, 98039 Taormina ME, Italy',
+                'city' => 'Taormina',
+                'country' => 'Italy',
+                'phone' => '+39 0942 620711',
+                'email' => 'info.sanpietro@lindberghhotels.it',
+                'website' => 'sanpietrotaormina.com'
+            ),
+//
+            array(
+                'id_albergo' => '175',
+                'dc' => '251',
+                'name' => 'Hotel Le Fontanelle',
+                'address' => 'Km 14, Strada Provinciale 408 di Montevarchi, 53019 Castelnuovo Berardenga SI, Italy',
+                'city' => 'Castelnuovo Berardenga',
+                'country' => 'Italy',
+                'phone' => '+39 0577 35751',
+                'email' => 'info@hotelfontanelle.com',
+                'website' => 'hotelfontanelle.com'
+            ),
+//
+            array(
+                'id_albergo' => '12231',
+                'dc' => '8556',
+                'name' => 'Almar Jesolo Resort & Spa',
+                'address' => 'Via Dante Alighieri, 106, 30016 Lido di Jesolo VE, Italy',
+                'city' => 'Lido di Jesolo',
+                'country' => 'Italy',
+                'phone' => '+39 0421 388111',
+                'email' => 'info@almarjesolo.com',
+                'website' => 'almarjesolo.com'
+            ),
+//
+            array(
+                'id_albergo' => '11059',
+                'dc' => '2320',
+                'name' => 'Hotel Zirmes',
+                'address' => 'Str. de Pecé, 10, 38035 Moena TN, Italy',
+                'city' => 'Moena',
+                'country' => 'Italy',
+                'phone' => '+39 0462 573160',
+                'email' => 'info@hotelzirmesmoena.it',
+                'website' => 'hotelzirmesmoena.it'
+            ),
+//
+            array(
+                'id_albergo' => '6346',
+                'dc' => '216',
+                'name' => 'Grand Hotel Savoia',
+                'address' => 'Via Roma, 62, 32043 Cortina d\'Ampezzo BL, Italy',
+                'city' => 'Cortina d\'Ampezzo',
+                'country' => 'Italy',
+                'phone' => '+39 0436 3201',
+                'email' => 'null',
+                'website' => 'grandhotelsavoiacortina.com'
+            ),
+//
+//            array(
+//                'id_albergo' => 'null',
+//                'dc' => 'null',
+//                'name' => 'null',
+//                'address' => 'null',
+//                'city' => 'null',
+//                'country' => 'Italy',
+//                'phone' => 'null',
+//                'email' => 'null',
+//                'website' => 'null'
+//            ),
+
 ////              array(
 //                'id_albergo' => 'null',
 //                'dc' => 'null',

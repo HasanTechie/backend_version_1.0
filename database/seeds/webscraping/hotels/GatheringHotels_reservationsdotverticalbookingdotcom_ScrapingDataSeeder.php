@@ -22,15 +22,11 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
         $end_date = '2020-12-31'; //last checkin date hogi last me
 
 
-        $hotels = DB::table('hotels')->where('source', '=', 'reservations.verticalbooking.com')->get();
+        $hotels = DB::table('hotels')->where([
+            ['source', '=', 'reservations.verticalbooking.com'],
+            ['s_no', '>', 191434],
+        ])->get();
 
-
-        if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
-            global $j;
-            $j = $result1->s_no;
-        } else {
-            $j = 0;
-        }
 
         while (strtotime($date) <= strtotime($end_date)) {
 
@@ -49,7 +45,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                     $crawler = $client->request('GET', $url);
 
                     try {
-
+                        $roomsRawData = null;
                         $roomsRawData = $crawler->filter('div.blocco_camera.room-box')->each(function ($node) {
 
 
@@ -94,6 +90,13 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                             if (!empty($instance['room'])) {
                                 $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotel->name)) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])) . $i; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
 
+                                if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
+                                    global $j;
+                                    $j = $result1->s_no;
+                                } else {
+                                    $j = 0;
+                                }
+
 
                                 if (!(DB::table('rooms_prices_vertical_booking')->where('rid', '=', $rid)->exists())) {
                                     DB::table('rooms_prices_vertical_booking')->insert([
@@ -113,7 +116,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                         'hotel_phone' => $hotel->phone,
                                         'hotel_website' => $hotel->website,
                                         'hotel_email' => unserialize($hotel->all_data)['email'],
-                                        'chain_website' => unserialize($hotel->all_data)['chain'],
+                                        'chain_website' => (isset(unserialize($hotel->all_data)['chain']) ? unserialize($hotel->all_data)['chain'] : null),
                                         'check_in_date' => $checkInDate,
                                         'check_out_date' => $checkOutDate,
                                         'rid' => $rid,
@@ -133,7 +136,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                     } catch
                     (\Exception $e) {
 
-                        echo 'InCompleted in->' . $checkInDate . 'out->' . $checkOutDate . ' hotel->' . $hotel->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                        echo 'InCompleted in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . Carbon\Carbon::now()->toDateTimeString() . "\n";
                         echo $e->getMessage() . $e->getLine();
                     }
 

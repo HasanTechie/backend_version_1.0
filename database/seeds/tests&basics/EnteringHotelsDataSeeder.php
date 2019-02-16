@@ -16,6 +16,8 @@ class EnteringHotelsDataSeeder extends Seeder
 
         $hotelArray = array
         (
+/*
+            //SHG chain
             array(
                 'id_albergo' => 15685,
                 'dc' => 3128,
@@ -278,7 +280,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'city' => 'Courmayeur',
                 'country' => 'Italy',
                 'phone' => '+39 02 843 45 670',
-                'email' => 'null',
+                'email' => null,
                 'website' => 'lemassifcourmayeur.com/en/',
                 'chain' => 'italianhospitalitycollection.com'
             ),
@@ -342,7 +344,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'city' => 'Verona',
                 'country' => 'Italy',
                 'phone' => '+39 045 860 4811',
-                'email' => 'null',
+                'email' => null,
                 'website' => 'hotelveronesilatorre.it'
             ),
 //
@@ -439,21 +441,208 @@ class EnteringHotelsDataSeeder extends Seeder
                 'city' => 'Cortina d\'Ampezzo',
                 'country' => 'Italy',
                 'phone' => '+39 0436 3201',
-                'email' => 'null',
+                'email' => null,
                 'website' => 'grandhotelsavoiacortina.com'
             ),
-//
-//            array(
-//                'id_albergo' => 'null',
-//                'dc' => 'null',
-//                'name' => 'null',
-//                'address' => 'null',
-//                'city' => 'null',
-//                'country' => 'Italy',
-//                'phone' => 'null',
-//                'email' => 'null',
-//                'website' => 'null'
-//            ),
+
+
+// Escapade-Paris chain
+            array(
+                'id_albergo' => '10959',
+                'dc' => '451',
+                'name' => 'Hôtel Exelmans',
+                'address' => '73 Rue Boileau, 75016 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 42 24 94 66',
+                'email' => 'exelmans@escapade-paris.com',
+                'website' => 'en.escapade-paris.fr',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => '10961',
+                'dc' => '541',
+                'name' => 'Hôtel France Eiffel',
+                'address' => '8 Rue Saint-Charles, 75015 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 45 79 33 35',
+                'email' => 'france-eiffel@escapade-paris.com',
+                'website' => 'en.escapade-paris.fr',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => '10964',
+                'dc' => '752',
+                'name' => 'Hôtel Le Relais Saint Charles',
+                'address' => '72 Boulevard de Grenelle, 75015 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 40 58 00 57',
+                'email' => 'relaissaintcharles@escapade-paris.com',
+                'website' => 'en.escapade-paris.fr',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => '10958',
+                'dc' => '544',
+                'name' => 'Hotel Orquídea',
+                'address' => '65 Rue de l\'Ouest, 75014 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 43 22 70 50',
+                'email' => 'reservation@hotel-orchidee.fr',
+                'website' => 'en.escapade-paris.fr',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Hôtel Alixia Antony',
+                'address' => '1 Avenue de la Providence, 92160 Antony, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 46 74 92 92',
+                'email' => 'accueil@hotelalixia.com',
+                'website' => 'hotelalixia.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => '11301',
+                'dc' => '737',
+                'name' => 'Hotel France Louvre',
+                'address' => '40 Rue de Rivoli, 75004 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 42 71 29 28',
+                'email' => 'hotel@francelouvre.com',
+                'website' => 'francelouvre.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Hôtel de Berny',
+                'address' => '129 Avenue Aristide Briand, 92160 Antony, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 46 11 43 90',
+                'email' => 'accueil@hotelberny.com',
+                'website' => 'hotel-de-berny.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Hôtel Le Relais Montmartre',
+                'address' => '6 Rue Constance, 75018 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 70 64 25 25',
+                'email' => 'contact@relaismontmartre.fr',
+                'website' => 'hotel-relais-montmartre.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => '10962',
+                'dc' => '541',
+                'name' => 'Hôtel des Batignolles',
+                'address' => '26–28 Rue des Batignolles, 75017 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 43 87 70 40',
+                'email' => 'hotel@batignolles.com',
+                'website' => 'batignolles.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Hôtel Splendor',
+                'address' => '38 Rue Cardinet, 75017 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 46 22 07 73',
+                'email' => 'contact@hotel-splendor.com',
+                'website' => 'hotel-splendor.com',
+                'chain' => 'en.escapade-paris.fr'
+            ),
+
+
+// chain TicinoHotelsGroup.com/en/
+            array(
+                'id_albergo' => '91',
+                'dc' => '123',
+                'name' => 'Hotel Villa Principe Leopoldo & Spa',
+                'address' => 'Via Montalbano 5, 6900 Lugano, Switzerland',
+                'city' => 'Lugano',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 985 88 55',
+                'email' => 'info@leopoldohotel.com',
+                'website' => 'leopoldohotel.com/en/',
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+            array(
+                'id_albergo' => '5209',
+                'dc' => '230620096',
+                'name' => 'Villa Sassa Hotel, Residence & Spa',
+                'address' => 'Via Tesserete 10, 6900 Lugano, Switzerland',
+                'city' => 'Lugano',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 911 41 11',
+                'email' => 'info@villasassa.ch',
+                'website' => 'villasassa.ch',
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+            array(
+                'id_albergo' => '10146',
+                'dc' => '842',
+                'name' => 'Kurhaus Cademario Hotel & Spa',
+                'address' => 'Lisone 12, 6936 Cademario, Switzerland',
+                'city' => 'Cademario',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 610 51 11',
+                'email' => 'info@kurhauscademario.com',
+                'website' => 'kurhauscademario.com/en/',
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+            array(
+                'id_albergo' => '13594',
+                'dc' => '9987',
+                'name' => 'Park Hotel Principe',
+                'address' => 'Via Montalbano 19, 6925 Lugano, Switzerland',
+                'city' => 'Lugano',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 985 86 43',
+                'email' => 'info@parkhotelprincipe.com',
+                'website' => 'parkhotelprincipe.com/en/',
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'E-Rooms Minusio',
+                'address' => 'Via delle Vigne 149, 6648 Minusio, Switzerland',
+                'city' => 'Minusio',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 735 85 85',
+                'email' => 'info@eroomsminusio.com',
+                'website' => 'eroomsminusio.com',
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Esplanade Hotel Resort & Spa',
+                'address' => 'Via delle Vigne 149, 6648 Minusio, Switzerland',
+                'city' => 'Minusio',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 911 47 23',
+                'email' => null,
+                'website' => null,
+                'chain' => 'ticinohotelsgroup.com/en/'
+            ),
+*/
 
 ////              array(
 //                'id_albergo' => 'null',
@@ -461,7 +650,7 @@ class EnteringHotelsDataSeeder extends Seeder
 //                'name' => 'null',
 //                'address' => 'null',
 //                'city' => 'null',
-//                'country' => 'Italy',
+//                'country' => 'null',
 //                'phone' => 'null',
 //                'email' => 'null',
 //                'website' => 'null',
@@ -485,7 +674,7 @@ class EnteringHotelsDataSeeder extends Seeder
                 'name' => $hotel['name'],
                 'address' => $hotel['address'],
                 'city' => $hotel['city'],
-                'country' => 'Italy',
+                'country' => $hotel['country'],
                 'phone' => $hotel['phone'],
                 'website' => $hotel['website'],
                 'latitude' => null,

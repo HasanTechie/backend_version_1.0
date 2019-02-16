@@ -17,6 +17,7 @@ class CreateRoomsPricesVerticalBooking extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
             $table->string('display_price')->nullable();
+            $table->string('currency')->nullable();
             $table->string('room')->nullable();
             $table->text('room_short_description')->nullable();
             $table->text('room_description')->nullable();

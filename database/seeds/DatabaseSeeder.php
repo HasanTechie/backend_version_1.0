@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('TrawexSeeder');
 
 //        $this->call('testSeeder1');
-//        $this->call('testSeeder2');
+        $this->call('testSeeder2');
 //        $this->call('testSeeder3');
 
 //        $this->call('testWebScarpingSeeder');

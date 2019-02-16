@@ -24,7 +24,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
         $hotels = DB::table('hotels')->where([
             ['source', '=', 'reservations.verticalbooking.com'],
-            ['s_no', '>', 191439],
+            ['s_no', '>', 191456],
         ])->get();
 
 
@@ -93,16 +93,14 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                 if (!empty($instance['room'])) {
                                     $rid = 'currentdate' . date("Y-m-d") . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $hotel->name)) . 'room' . trim(str_replace(' ', '', $instance['room'][0]['room'])) . $i; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
 
-                                    if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
-                                        global $j;
-                                        $j = $result1->s_no;
-                                    } else {
-                                        $j = 0;
-                                    }
-
-
                                     if (!(DB::table('rooms_prices_vertical_booking')->where('rid', '=', $rid)->exists())) {
                                         $priceArray = explode(" ", $instance['offer'][0]['best_price']);
+                                        if ($result1 = DB::table('rooms_prices_vertical_booking')->orderBy('s_no', 'desc')->first()) {
+                                            global $j;
+                                            $j = $result1->s_no;
+                                        } else {
+                                            $j = 0;
+                                        }
                                         DB::table('rooms_prices_vertical_booking')->insert([
                                             'uid' => uniqid(),
                                             's_no' => ++$j,
@@ -132,7 +130,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                         ]);
                                         echo $j . ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                     } else {
-                                        echo $j . ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
+                                        echo  ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                     }
                                 }
                             }

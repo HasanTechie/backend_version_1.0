@@ -642,8 +642,79 @@ class EnteringHotelsDataSeeder extends Seeder
                 'website' => null,
                 'chain' => 'ticinohotelsgroup.com/en/'
             ),
+//
+              array(
+                'id_albergo' => '170',
+                'dc' => '256',
+                'name' => 'Hotel Lugano Dante Center',
+                'address' => 'Piazza Cioccaro 5, 6900 Lugano, Switzerland',
+                'city' => 'Lugano',
+                'country' => 'Switzerland',
+                'phone' => '+41 91 910 57 00',
+                'email' => 'info@hotel-luganodante.com',
+                'website' => 'hotel-luganodante.com/en/',
+            ),
+//
+            array(
+                'id_albergo' => '11591',
+                'dc' => '7839',
+                'name' => 'Chevre d\'or',
+                'address' => 'Rue du Barri, 06360 Èze, France',
+                'city' => 'Èze',
+                'country' => 'France',
+                'phone' => '+33 4 92 10 66 66',
+                'email' => 'reservation@chevredor.com',
+                'website' => 'chevredor.com',
+            ),
+//
+            array(
+                'id_albergo' => '9584',
+                'dc' => '401',
+                'name' => 'Hotel Royal Garden Villas',
+                'address' => 'Campo de Golf Costa, Calle Alcojora, s/n, 38670 Adeje, Santa Cruz de Tenerife, Spain',
+                'city' => 'Tenerife',
+                'country' => 'Spain',
+                'phone' => '+34 922 71 12 94',
+                'email' => 'recepcion@royalgardenvillas.com',
+                'website' => 'royalgardenvillas.com',
+            ),
+//
+            array(
+                'id_albergo' => null,
+                'dc' => null,
+                'name' => 'Flexistay',
+                'address' => '37 West St, Croydon CR0 1DJ, UK',
+                'city' => 'Croydon',
+                'country' => 'United Kingdom of Great Britain and Northern Ireland',
+                'phone' => '+44 20 3070 1001',
+                'email' => 'info@flexistay.com',
+                'website' => 'flexistay.com',
+            ),
+//
+            array(
+                'id_albergo' => '11138',
+                'dc' => '584',
+                'name' => 'La Villa Saint Germain des Pres',
+                'address' => '29 Rue Jacob, 75006 Paris, France',
+                'city' => 'Paris',
+                'country' => 'France',
+                'phone' => '+33 1 43 26 60 00',
+                'email' => 'hotel@villa-saintgermain.com',
+                'website' => 'villa-saintgermain.com',
+            ),
+//
+            array(
+                'id_albergo' => '13052',
+                'dc' => '5867',
+                'name' => 'Le Floralys',
+                'address' => '2 Avenue de L Ocean, l\'Étang-Salé les Bains, Réunion',
+                'city' => 'L\'Étang-Salé',
+                'country' => 'Réunion',
+                'phone' => '+262 262 91 79 79',
+                'email' => 'reservation@floralys.re',
+                'website' => 'floralys.re',
+            ),
 */
-
 ////              array(
 //                'id_albergo' => 'null',
 //                'dc' => 'null',

@@ -24,7 +24,6 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
 
         $hotels = DB::table('hotels')->where([
             ['source', '=', 'reservations.verticalbooking.com'],
-            ['s_no', '>', 191434],
         ])->get();
 
 

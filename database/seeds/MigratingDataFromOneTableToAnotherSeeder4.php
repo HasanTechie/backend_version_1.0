@@ -12,8 +12,46 @@ class MigratingDataFromOneTableToAnotherSeeder4 extends Seeder
     public function run()
     {
         //
-
         //simplemaps.com/data/world-cities
+        $results1 = DB::table('z_ignore_cities_world_population')->select('*')->get();
+
+        foreach ($results1 as $instance1) {
+
+
+            $cid = round($instance1->lat, 2) . '&' . round($instance1->lng, 2);
+            if ((DB::table('cities')->where('cid', '=', $cid)->doesntExist()) && (DB::table('cities')->where('name', '=', $instance1->city_ascii)->doesntExist())) {
+                if ($result = DB::table('cities')->orderBy('s_no', 'desc')->first()) {
+                    $j = $result->s_no;
+                } else {
+                    $j = 0;
+                }
+                DB::table('cities')->insert([
+                    'uid' => uniqid(),
+                    's_no' => ++$j,
+                    'name' => $instance1->city_ascii,
+                    'country_code' => (isset($instance1->iso2) ? $instance1->iso2 : null),
+                    'country' => (isset($instance1->country) ? $instance1->country : null),
+                    'latitude' => $instance1->lat,
+                    'longitude' => $instance1->lng,
+                    'administrative_name' => $instance1->admin_name,
+                    'name_ascii' => $instance1->city_ascii,
+                    'population' => $instance1->population,
+                    'cid' => $cid,
+                    'source' => 'simplemaps.com/data/world-cities',
+                    'created_at' => DB::raw('now()'),
+                    'updated_at' => DB::raw('now()')
+                ]);
+
+                echo $j . ' Completed city-> ' . Carbon\Carbon::now()->toDateTimeString() . ' ' . $instance1->city_ascii . "\n";
+            }
+        }
+
+
+    }
+}
+
+/*
+//simplemaps.com/data/world-cities
         $results1 = DB::table('z_ignore_cities_world_population')->select('*')->get();
 
         foreach ($results1 as $instance1) {
@@ -59,10 +97,7 @@ class MigratingDataFromOneTableToAnotherSeeder4 extends Seeder
                 }
             }
         }
-
-
-    }
-}
+*/
 
 /*
         //simplemaps.com/data/world-cities

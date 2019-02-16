@@ -57,7 +57,7 @@ class FirestoreSeeder extends Seeder
                 $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
 
             }
-            if ($hotel->uid == '5c615f19c63f8') {
+            if ($hotel->uid == '5c668b2961621') {
                 $properties->set([
                     'name' => '3-star Hotel Rome',
                     'city' => 'Rome',
@@ -81,7 +81,7 @@ class FirestoreSeeder extends Seeder
                     $rooms = DB::table('rooms_prices_hotel_novecento')->where('check_in_date', '=', $date->check_in_date)->get();
                 }
 
-                if ($hotel->uid == '5c615f19c63f8') {
+                if ($hotel->uid == '5c668b2961621') {
                     $events = DB::table('events')->where([
                         ['event_date', '=', $date->check_in_date],
                         ['city', '=', 'Rome']
@@ -135,16 +135,6 @@ class FirestoreSeeder extends Seeder
                     $newWeather = 'weather-' . $newWeather;
                 }
 
-                $eventString = '';
-
-                if (count($eventArray) > 0) {
-
-                    foreach ($eventArray as $event) {
-
-                        $eventString .= $event['event_name'] . ' @ ' . $event['event_venue_name'] . ' | ';
-                    }
-                }
-
                 $eventIndicator = [];
                 if (count($eventArray) > 0) {
                     $eventIndicator [] = 'very-busy';
@@ -158,8 +148,9 @@ class FirestoreSeeder extends Seeder
                     'weather' => ((count($weather) > 0) ? $weather : null),
                     'events' => (count($eventArray) > 0) ? $eventArray : null,
                     'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
-                    'comments' => ((count($eventArray) > 0) ? $eventString : null)
                 ]);
+
+                echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
                 foreach ($rooms as $room) {
 
@@ -191,12 +182,12 @@ class FirestoreSeeder extends Seeder
                                     'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
                                     'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
                                     'hint' => $competitor->action,
-                                    'name' => 'Breakfast Included'
+                                    'name' => 'Normal'
                                 ]);
                         }
                     }
 
-                    if ($hotel->uid == '5c615f19c63f8') {
+                    if ($hotel->uid == '5c668b2961621') {
 
                         if (
                             (($room->room == 'STANDARD QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
@@ -236,7 +227,7 @@ class FirestoreSeeder extends Seeder
                                         'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
                                         'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
                                         'hint' => $competitor->action,
-                                        'name' => 'Breakfast Included'
+                                        'name' => 'Normal'
                                     ]);
                             }
                         }

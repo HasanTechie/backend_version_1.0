@@ -12,18 +12,18 @@ class testSeeder2 extends Seeder
     public function run()
     {
         //
-//        $j = 0;
-//
-//
-//        $results = DB::table('keywords')->get();
-//
-//        foreach ($results as $instance) {
-//
-//            DB::table('keywords')->where('uid', $instance->uid)->update([
-//                's_no' => ++$j,
-//            ]);
-//            echo 'keywords ' . $j . "\n";
-//        }
+        $j = 0;
+
+
+        $results = DB::table('rooms_prices_vertical_booking')->get();
+
+        foreach ($results as $instance) {
+
+            DB::table('rooms_prices_vertical_booking')->where('uid', $instance->uid)->update([
+                's_no' => ++$j,
+            ]);
+            echo 's_no. ' . $j . "\n";
+        }
 
 
     }

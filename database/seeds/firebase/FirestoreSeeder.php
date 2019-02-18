@@ -57,7 +57,8 @@ class FirestoreSeeder extends Seeder
                 $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
 
             }
-            if ($hotel->uid == '5c668b2961621') {
+
+            if ($hotel->uid == '5c67dc940dec1') {
                 $properties->set([
                     'name' => '3-star Hotel Rome',
                     'city' => 'Rome',
@@ -81,7 +82,7 @@ class FirestoreSeeder extends Seeder
                     $rooms = DB::table('rooms_prices_hotel_novecento')->where('check_in_date', '=', $date->check_in_date)->get();
                 }
 
-                if ($hotel->uid == '5c668b2961621') {
+                if ($hotel->uid == '5c67dc940dec1') {
                     $events = DB::table('events')->where([
                         ['event_date', '=', $date->check_in_date],
                         ['city', '=', 'Rome']
@@ -143,13 +144,6 @@ class FirestoreSeeder extends Seeder
                     $eventIndicator [] = $newWeather;
                 }
 
-                $calendar->set([
-                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                    'weather' => ((count($weather) > 0) ? $weather : null),
-                    'events' => (count($eventArray) > 0) ? $eventArray : null,
-                    'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
-                ]);
-
                 echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
                 foreach ($rooms as $room) {
@@ -174,20 +168,27 @@ class FirestoreSeeder extends Seeder
 
                             $options = $assets
                                 ->collection('options')//options
-                                ->document(uniqid());
+                                ->document($room->uid);
 
+                            $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
+                            $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
+                            $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
+
+                            $marketValueOffset = ((($suggestedPrice - $realPrice) / $realPrice) * 100);
+                            $marketValueOffsetArray [] = $marketValueOffset;
                             $options =
                                 $options->set([
-                                    'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
-                                    'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
-                                    'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
+                                    'real_price' => $realPrice,
+                                    'competitor_price' => $competitorPrice,
+                                    'suggested_price' => $suggestedPrice,
+                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
                                     'hint' => $competitor->action,
                                     'name' => 'Normal'
                                 ]);
                         }
                     }
 
-                    if ($hotel->uid == '5c668b2961621') {
+                    if ($hotel->uid == '5c67dc940dec1') {
 
                         if (
                             (($room->room == 'STANDARD QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
@@ -219,27 +220,63 @@ class FirestoreSeeder extends Seeder
 
                                 $options = $assets
                                     ->collection('options')//options
-                                    ->document(uniqid());
+                                    ->document($room->uid);
 
+
+                                $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
+                                $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
+                                $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
+
+                                $marketValueOffset = (($suggestedPrice - $realPrice) / $realPrice) * 100;
+                                $marketValueOffsetArray [] = $marketValueOffset;
                                 $options =
                                     $options->set([
-                                        'real_price' => (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price))),
-                                        'competitor_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now))),
-                                        'suggested_price' => (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should))),
+                                        'real_price' => $realPrice,
+                                        'competitor_price' => $competitorPrice,
+                                        'suggested_price' => $suggestedPrice,
+                                        'market_value_offset_for_room' => round($marketValueOffset, 2),
                                         'hint' => $competitor->action,
                                         'name' => 'Normal'
                                     ]);
                             }
                         }
                     }
-
-                    //
                 }
+
+                $calendar->set([
+                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                    'weather' => ((count($weather) > 0) ? $weather : null),
+                    'events' => (count($eventArray) > 0) ? $eventArray : null,
+                    'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
+                    'market_suggestions' => [
+                        'max_marketvalue_offset' => (count($marketValueOffsetArray)>0) ? round(max($marketValueOffsetArray), 2) : null,
+                        'min_marketvalue_offset' => (count($marketValueOffsetArray)>0) ? round(min($marketValueOffsetArray), 2) : null,
+                    ]
+                ]);
+                $marketValueOffsetArray = [];
             }
 
         }
 
     }
+
+    /*
+room competitor = 34.04
+room real_price = 64
+room suggested_price = 32.42
+
+marketvalue_offset = ((suggested_price-real_price)/real_price)*100
+
+max_marketvalue_offset = -99999999
+
+for (room in calendarday.rooms) {
+int marketvalue_offset = ((suggested_price-real_price)/real_price)*100
+
+if (marketvalue_offset > max_marketvalue_offset) {
+  max_marketvalue_offset = marketvalue_offset
+}
+}
+     */
 }
 
 

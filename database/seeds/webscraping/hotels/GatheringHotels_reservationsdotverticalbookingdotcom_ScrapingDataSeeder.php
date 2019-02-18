@@ -13,7 +13,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
      */
     public function run()
     {
-        $client = new Client();
+
 
 
         $date = '2019-02-16';
@@ -44,6 +44,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                         $url = "https://reservations.verticalbooking.com/reservations/risultato.html?tot_camere=1&tot_adulti=$i&tot_bambini=0&gg=" . date("d", strtotime($checkInDate)) . "&mm=" . date("m", strtotime($checkInDate)) . "&aa=" . date("Y", strtotime($checkInDate)) . "&ggf=&mmf=&aaf=&notti_1=1&id_stile=12443&lingua_int=eng&id_albergo=" . unserialize($hotel->all_data)['id_albergo'] . "&dc=" . unserialize($hotel->all_data)['dc'] . "&converti_valuta=&generic_codice=&countryCode=US&gps_latitude=&gps_longitude=&adulti1=1&bambini1=0";
 
                         sleep(1);
+                        $client = new Client();
 
                         $crawler = $client->request('GET', $url);
 

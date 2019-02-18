@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
+class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,8 +23,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
 
         $adults = 2;
         $currency = 'EUR';
-        $city = 'Berlin';
-        $cityDist = '536';
+        $city = 'Rome';
+        $cityDist = '3023';
         $date = '2019-02-20';
 
         $end_date = '2020-02-20'; //last checkin date hogi last me

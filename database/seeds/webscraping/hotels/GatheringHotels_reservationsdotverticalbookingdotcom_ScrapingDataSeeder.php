@@ -15,7 +15,6 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
     {
 
 
-
         $date = '2019-02-16';
 //        $date = '2019-04-18';
 
@@ -131,7 +130,7 @@ class GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder ex
                                         ]);
                                         echo $j . ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                     } else {
-                                        echo  ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
+                                        echo ' ' . $i . ' ' . Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $hotel->name . ', ' . $hotel->city . "\n";
                                     }
                                 }
                             }

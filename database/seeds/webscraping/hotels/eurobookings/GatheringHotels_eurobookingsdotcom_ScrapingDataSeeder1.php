@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
+class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,9 +23,10 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
 
         $adults = 2;
         $currency = 'EUR';
-        $city = 'London';
-        $cityDist = '2114';
-        $date = '2019-02-20';
+        $city = 'Berlin';
+        $cityDist = '536';
+//        $date = '2019-02-20';
+        $date = '2019-03-22';
 
         $end_date = '2020-02-20'; //last checkin date hogi last me
 
@@ -50,23 +51,33 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
                 $crawler->filter('.clsHotelListAvailable > tr')->each(function ($node) {
 
                     global $da3, $da2;
-                    $da3['hotel_eurobooking_id'] = $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name');
-                    $da3['hotel_eurobooking_img'] = $node->filter('.clsHotelImageDiv > img')->attr('src');
-                    $da3['hotel_stars_category'] = $node->filter('.clsHotelInfoBlokBesideImage > span')->attr('title');
+                    $da3['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
+                    $da3['hotel_eurobooking_img'] = ($node->filter('.clsHotelImageDiv > img')->count() > 0) ? $node->filter('.clsHotelImageDiv > img')->attr('src') : null;
+                    $da3['hotel_stars_category'] = ($node->filter('.clsHotelInfoBlokBesideImage > span')->count() > 0) ? $node->filter('.clsHotelInfoBlokBesideImage > span')->attr('title') : null;
 
-                    $url2 = "https://www.tripadvisor.com/WidgetEmbed-cdspropertydetail?locationId=" . $da3['hotel_eurobooking_id'] . "&lang=en&partnerId=5644224BD98E429BA8E2FC432FEC674B&display=true";
-                    $client2 = new Client();
-                    $crawler2 = $client2->request('GET', $url2);
 
-                    $da2['hotel_ratings_on_tripadvisor'] = $crawler2->filter('.taRating > img')->attr('alt');
-                    $da2['hotel_number_of_ratings_on_tripadvisor'] = $crawler2->filter('.numReviews')->text();
-                    $da2['hotel_ranking_on_tripadvisor'] = $crawler2->filter('.popIndex')->text();
-                    $da2['hotel_badge_on_tripadvisor'] = $crawler2->filter('.cdsBadge')->text();
-                    foreach ($da2 as $key => $instance) {
-                        if (!is_array($instance)) {
-                            $da2[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $instance));
+                    try {
+                        if (!empty($da3['hotel_eurobooking_id'])) {
+
+                            $url2 = "https://www.tripadvisor.com/WidgetEmbed-cdspropertydetail?locationId=" . $da3['hotel_eurobooking_id'] . "&lang=en&partnerId=5644224BD98E429BA8E2FC432FEC674B&display=true";
+                            $client2 = new Client();
+                            $crawler2 = $client2->request('GET', $url2);
+
+                            $da2['hotel_ratings_on_tripadvisor'] = ($crawler2->filter('.taRating > img')->count() > 0) ? $crawler2->filter('.taRating > img')->attr('alt') : null;
+                            $da2['hotel_number_of_ratings_on_tripadvisor'] = ($crawler2->filter('.numReviews')->count() > 0) ? $crawler2->filter('.numReviews')->text() : null;
+                            $da2['hotel_ranking_on_tripadvisor'] = ($crawler2->filter('.popIndex')->count() > 0) ? $crawler2->filter('.popIndex')->text() : null;
+                            $da2['hotel_badge_on_tripadvisor'] = ($crawler2->filter('.cdsBadge')->count() > 0) ? $crawler2->filter('.cdsBadge')->text() : null;
+                            foreach ($da2 as $key => $instance) {
+                                if (!is_array($instance)) {
+                                    $da2[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $instance));
+                                }
+                            }
                         }
+
+                    } catch (\Exception $e) {
+                        print($e->getMessage());
                     }
+
 
                     $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 
@@ -132,7 +143,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
                             $da['request_date'] = $requestDate;
                             $da['source'] = 'eurobookings.com';
 
-                            $da['hotel_eurobooking_id'] = $da3['hotel_eurobooking_img'];
+                            $da['hotel_eurobooking_id'] = $da3['hotel_eurobooking_id'];
                             $da['hotel_eurobooking_img'] = $da3['hotel_eurobooking_img'];
                             $da['hotel_stars_category'] = $da3['hotel_stars_category'];
                             $da['hotel_ratings_on_tripadvisor'] = $da2['hotel_ratings_on_tripadvisor'];
@@ -148,17 +159,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
 
                                     $da['rid'] = $rid;
 
-                                    if ($result1 = DB::table('rooms_prices_eurobookings')->orderBy('s_no', 'desc')->first()) {
-                                        $j = $result1->s_no;
-                                    } else {
-                                        $j = 0;
-                                    }
-
-                                    dd($da);
-
                                     DB::table('rooms_prices_eurobookings')->insert([
                                         'uid' => uniqid(),
-                                        's_no' => ++$j,
+                                        's_no' => null,
                                         'room' => $room['name'],
                                         'price' => $room['price'],
                                         'currency' => $da['currency'],
@@ -167,6 +170,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
                                         'hotel_uid' => $da['hotel_uid'],
                                         'hotel_name' => $da['hotel_name'],
                                         'hotel_address' => $da['hotel_address'],
+                                        'hotel_total_rooms' => $da['hotel_total_rooms'],
                                         'hotel_eurobooking_id' => $da['hotel_eurobooking_id'],
                                         'hotel_eurobooking_img' => $da['hotel_eurobooking_img'],
                                         'hotel_stars_category' => $da['hotel_stars_category'],
@@ -184,9 +188,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
                                         'created_at' => DB::raw('now()'),
                                         'updated_at' => DB::raw('now()')
                                     ]);
-                                    echo Carbon\Carbon::now()->toDateTimeString() . ' ' . $j . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
+                                    echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
                                 } else {
-                                    echo Carbon\Carbon::now()->toDateTimeString() . ' ' . $j . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
+                                    echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
                                 }
                             }
 

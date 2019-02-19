@@ -24,6 +24,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
         $currency = 'EUR';
         $city = 'Munich';
         $cityDist = '2452';
+
+        $cityTotalResults = 361-15;
+
 //        $date = '2019-02-20';
         $date = '2019-03-22';
 
@@ -39,7 +42,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
 
             $client = new Client();
 
-            for ($i = 1; $i <= 703; $i += 15) {
+            for ($i = 1; $i <= $cityTotalResults; $i += 15) {
 
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
 
@@ -160,7 +163,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4 extends Seeder
 
                                     DB::table('rooms_prices_eurobookings')->insert([
                                         'uid' => uniqid(),
-                                        's_no' => null,
+                                        's_no' => 1,
                                         'room' => $room['name'],
                                         'price' => $room['price'],
                                         'currency' => $da['currency'],

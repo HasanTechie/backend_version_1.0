@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
+class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder3 extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,8 +23,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
 
         $adults = 2;
         $currency = 'EUR';
-        $city = 'Berlin';
-        $cityDist = '536';
+        $city = 'Munich';
+        $cityDist = '2452';
         $date = '2019-02-20';
 
         $end_date = '2020-02-20'; //last checkin date hogi last me
@@ -39,7 +39,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
 
             $client = new Client();
 
-            for ($i = 1; $i <= 703; $i += 15) {
+            for ($i = 1; $i <= 1985; $i += 15) {
 
 //            if ($i == 1) {
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
@@ -131,7 +131,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder extends Seeder
                                 } else {
                                     $j = 0;
                                 }
-
                                 DB::table('rooms_prices_eurobookings')->insert([
                                     'uid' => uniqid(),
                                     's_no' => ++$j,

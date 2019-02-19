@@ -39,7 +39,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
 
             $client = new Client();
 
-            for ($i = 1; $i <= 703; $i += 15) {
+            for ($i = 1; $i <= 1985; $i += 15) {
 
 //            if ($i == 1) {
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
@@ -113,11 +113,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                             $rid = $rid = 'currentdate' . $requestDate . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $da['hotel_name'])) . 'room' . trim(str_replace(' ', '', $room['name'])) . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
 
                             if (DB::table('rooms_prices_eurobookings')->where('rid', '=', $rid)->doesntExist()) {
-                                if ($result1 = DB::table('rooms_prices_eurobookings')->orderBy('s_no', 'desc')->first()) {
-                                    $j = $result1->s_no;
-                                } else {
-                                    $j = 0;
-                                }
+
 
                                 $da['hotel_uid'] = uniqid();
                                 $da['currency'] = $currency;
@@ -130,6 +126,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                                 $da['request_date'] = $requestDate;
                                 $da['source'] = 'eurobookings.com';
 
+                                if ($result1 = DB::table('rooms_prices_eurobookings')->orderBy('s_no', 'desc')->first()) {
+                                    $j = $result1->s_no;
+                                } else {
+                                    $j = 0;
+                                }
                                 DB::table('rooms_prices_eurobookings')->insert([
                                     'uid' => uniqid(),
                                     's_no' => ++$j,
@@ -158,12 +159,12 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                         }
 
                     } catch (\Exception $e) {
-                        print_r($da);
                         print($e->getMessage());
                     }
                 });
 
             }
+            $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
         }
     }
 }

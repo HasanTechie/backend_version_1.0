@@ -1,6 +1,7 @@
 <?php
 
 use Goutte\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
@@ -25,7 +26,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
         $currency = 'EUR';
         $city = 'Berlin';
         $cityDist = '536';
-        $cityTotalResults = 717-15;
+        $cityTotalResults = 717 - 15;
 
 //        $date = '2019-02-20';
         $date = '2019-03-25';
@@ -40,6 +41,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 
             $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
+            $goutteClient = new Client();
+            $guzzleClient = new GuzzleClient(array(
+                'timeout' => 60,
+            ));
+            $goutteClient->setClient($guzzleClient);
             $client = new Client();
 
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
@@ -47,6 +53,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
 
                 echo "\n" . $url . "\n";
+
+                Storage::append($city . 'url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
 
                 $crawler = $client->request('GET', $url);
 
@@ -77,6 +85,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                         }
 
                     } catch (\Exception $e) {
+                        global $city;
+                        Storage::append($city . 'errorTripAdvisor.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                         print($e->getMessage());
                     }
 
@@ -85,29 +95,47 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 
                         try {
 
+                            echo $node->attr('href') . "\n";
+
                             $client = new Client();
                             $crawler = $client->request('GET', $node->attr('href'));
 
+                            Storage::put('hotel.html', $crawler->html());
+
                             $rooms = $crawler->filter('#idEbAvailabilityRoomsTable')->each(function ($node) {
 
+                                $_SESSION['node'] = $node;
                                 $da['rooms_prices'] = $node->filter('#idEbAvailabilityRoomsTable > tr')->each(function ($node1) {
 
 
+                                    if ($node1->filter('li.clsMoreRoomInfo')->count() > 0) {
+                                        $roomId = str_replace('idEbAvailability', '', $node1->filter('li.clsMoreRoomInfo')->attr('id'));
+                                        $da['room_facilities'] = $_SESSION['room_facilities'] = $_SESSION['node']->filter('#' . strtolower($roomId) . ' > .clsEbAvailabilityRoomsBlockTextInner > p')->each(function ($node) {
+                                            return trim($node->text());
+                                        });
+                                    }
+
                                     if ($node1->filter('.clsMoreRoomInfoTxt')->count() > 0) {
-                                        $da['name'] = $_SESSION['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
+                                        $da['room'] = $_SESSION['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
                                     } else {
-                                        $da['name'] = null;
+                                        $da['room'] = null;
                                     }
 
                                     $da['price'] = ($node1->filter('.clsSortByPrice')->count() > 0) ? $node1->filter('.clsSortByPrice')->text() : null;
                                     $da['details'] = ($node1->filter('.clsUspList')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node1->filter('.clsUspList')->text())) : null;
 
-                                    if ((!empty($da['details']) && !empty($da['price'])) || empty($da['name'])) {
-                                        $da['name'] = (isset($_SESSION['room']) ? $_SESSION['room'] : null);
+                                    if ((!empty($da['details']) && !empty($da['price'])) || empty($da['room'])) {
+                                        $da['room'] = (isset($_SESSION['room']) ? $_SESSION['room'] : null);
                                     }
 
                                     if (!empty($da['price']) && empty($da['details'])) {
                                         $da['details'] = 'Not Available';
+                                    }
+
+                                    if ($_SESSION['room'] == $da['room']) {
+                                        if (isset($_SESSION['room_facilities'])) {
+                                            $da['room_facilities'] = $_SESSION['room_facilities'];
+                                        }
                                     }
                                     return $da;
                                 });
@@ -125,7 +153,34 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                             $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
                                 return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
                             });
-                            $da['hotel_total_rooms'] = $hotelInfo[0];
+
+                            if (isset($hotelInfo[0])) {
+                                $da['hotel_total_rooms'] = $hotelInfo[0];
+                            } else {
+                                $da['hotel_total_rooms'] = null;
+                            }
+
+//                            dd($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->attr('href'));
+
+                            $link = $crawler->selectLink('▼ Read More')->link();
+//                            dd($link);
+                            $crawler = $client->click($link);
+
+                            dd($crawler->extract());
+
+                            Storage::put('hoteldetails.html',$crawler->html());
+                            dd($crawler);
+
+                            dd($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->click());
+                            $data = $client->click($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->link());
+
+//                            dd($data);
+                            Storage::put('hoteldetails.html',$data->html());
+//                            dd($client->click($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->link())); //wasted time
+
+                            dd('ra');
+
+
                             $da['hotel_name'] = trim($crawler->filter('.clsEbFloatLeft > h1')->text());
                             $da['hotel_short_details'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('#expandQuickDescrp > p')->text()));
                             $da['hotel_address'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatLeft > .clsClear')->text()));
@@ -153,6 +208,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                             $da['hotel_ranking_on_tripadvisor'] = $da2['hotel_ranking_on_tripadvisor'];
                             $da['hotel_badge_on_tripadvisor'] = $da2['hotel_badge_on_tripadvisor'];
 
+                            dd('reached');
                             foreach ($da['all_rooms'] as $room) {
 
                                 $rid = $rid = 'currentdate' . $requestDate . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $da['hotel_name'])) . 'room' . trim(str_replace(' ', '', $room['name'])) . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
@@ -161,6 +217,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 
                                     $da['rid'] = $rid;
 
+                                    /*
                                     DB::table('rooms_prices_eurobookings')->insert([
                                         'uid' => uniqid(),
                                         's_no' => 1,
@@ -168,6 +225,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                                         'price' => $room['price'],
                                         'currency' => $da['currency'],
                                         'room_short_description' => $room['details'],
+                                        'room_facilities' => $room['room_facilities'],
                                         'number_of_adults_in_room_request' => $da['number_of_adults_in_room_request'],
                                         'hotel_uid' => $da['hotel_uid'],
                                         'hotel_name' => $da['hotel_name'],
@@ -190,6 +248,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                                         'created_at' => DB::raw('now()'),
                                         'updated_at' => DB::raw('now()')
                                     ]);
+                                    */
                                     echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
                                 } else {
                                     echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $da['hotel_name'] . "\n";
@@ -197,6 +256,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                             }
 
                         } catch (\Exception $e) {
+                            global $city;
+                            Storage::append($city . 'errorMain.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                             print($e->getMessage());
                         }
                     });

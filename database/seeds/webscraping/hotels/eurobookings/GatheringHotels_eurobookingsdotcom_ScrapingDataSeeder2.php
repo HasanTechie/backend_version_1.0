@@ -2,6 +2,8 @@
 
 use Goutte\Client;
 
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Database\Seeder;
 
 class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
@@ -24,9 +26,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
         $currency = 'EUR';
         $city = 'Rome';
         $cityDist = '3023';
-        $cityTotalResults = 2000-15;
+        $cityTotalResults = 2000 - 15;
 //        $date = '2019-02-20';
-        $date = '2019-03-04';
+        $date = '2019-03-06';
 
         $end_date = '2020-02-20'; //last checkin date hogi last me
 
@@ -44,9 +46,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
 
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
 
-                echo "\n" . $url . "\n";
+                echo "\n" . $url . "\n\n";
 
-
+                Storage::append('url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
 
                 $crawler = $client->request('GET', $url);
 
@@ -77,11 +79,12 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                         }
 
                     } catch (\Exception $e) {
+                        Storage::append('errorTripAdvisor.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                         print($e->getMessage());
                     }
 
 
-                    $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
+                    $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 
                         try {
 
@@ -120,12 +123,20 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                                 return $da;
                             });
 
-                            $da['all_rooms'] = $rooms[0]['rooms_prices'];
+                            if (isset($rooms[0])) {
+                                $da['all_rooms'] = $rooms[0]['rooms_prices'];
+                            } else {
+                                $da['all_rooms'] = $rooms;
+                            }
 
                             $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
                                 return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
                             });
-                            $da['hotel_total_rooms'] = $hotelInfo[0];
+                            if (isset($hotelInfo[0])) {
+                                $da['hotel_total_rooms'] = $hotelInfo[0];
+                            } else {
+                                $da['hotel_total_rooms'] = null;
+                            }
                             $da['hotel_name'] = trim($crawler->filter('.clsEbFloatLeft > h1')->text());
                             $da['hotel_short_details'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('#expandQuickDescrp > p')->text()));
                             $da['hotel_address'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatLeft > .clsClear')->text()));
@@ -197,6 +208,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2 extends Seeder
                             }
 
                         } catch (\Exception $e) {
+                            Storage::append('errorMain.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                             print($e->getMessage());
                         }
                     });

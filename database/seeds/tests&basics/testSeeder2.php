@@ -15,11 +15,11 @@ class testSeeder2 extends Seeder
         $j = 0;
 
 
-        $results = DB::table('cities')->get();
+        $results = DB::table('rooms_prices_eurobookings')->get();
 
         foreach ($results as $instance) {
 
-            DB::table('cities')->where('uid', $instance->uid)->update([
+            DB::table('rooms_prices_eurobookings')->where('uid', $instance->uid)->update([
                 's_no' => ++$j,
             ]);
             echo 's_no. ' . $j . "\n";

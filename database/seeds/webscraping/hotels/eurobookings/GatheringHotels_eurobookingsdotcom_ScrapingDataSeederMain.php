@@ -1,8 +1,10 @@
 <?php
 
-use Goutte\Client;
-use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Support\Facades\Storage;
+//use GuzzleHttp\Client as GuzzleClient;
+//use Storage;
+//use Goutte\Client;
+use JonnyW\PhantomJs\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Database\Seeder;
 
@@ -16,7 +18,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
     public function run()
     {
         //
-
         session_start();
         $_SESSION['room'] = '';
 
@@ -41,37 +42,57 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
-            $goutteClient = new Client();
-            $guzzleClient = new GuzzleClient(array(
-                'timeout' => 60,
-            ));
-            $goutteClient->setClient($guzzleClient);
-            $client = new Client();
+
+            $client = null;
+            $client = Client::getInstance();
 
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
 
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
-
+                Storage::append($city . 'url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                 echo "\n" . $url . "\n";
 
-                Storage::append($city . 'url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+//                $client->isLazy(); // Tells the client to wait for all resources before rendering
+                $request = $client->getMessageFactory()->createRequest($url);
+//                $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
+                $response = $client->getMessageFactory()->createResponse();
+                // Send the request
+                $client->send($request, $response);
 
-                $crawler = $client->request('GET', $url);
+                $content = $response->getContent();
 
-                $crawler->filter('.clsHotelListAvailable > tr')->each(function ($node) {
+//                Storage::put('content.html',$content);
+
+                $crawler = new Crawler($content);
+
+//                Storage::put('crawler.html',$crawler->html());
+
+//                dd($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr > td')->text());
+                $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
 
                     global $da3, $da2;
                     $da3['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
                     $da3['hotel_eurobooking_img'] = ($node->filter('.clsHotelImageDiv > img')->count() > 0) ? $node->filter('.clsHotelImageDiv > img')->attr('src') : null;
                     $da3['hotel_stars_category'] = ($node->filter('.clsHotelInfoBlokBesideImage > span')->count() > 0) ? $node->filter('.clsHotelInfoBlokBesideImage > span')->attr('title') : null;
 
+//                    dd($da3);
 
                     try {
                         if (!empty($da3['hotel_eurobooking_id'])) {
 
                             $url2 = "https://www.tripadvisor.com/WidgetEmbed-cdspropertydetail?locationId=" . $da3['hotel_eurobooking_id'] . "&lang=en&partnerId=5644224BD98E429BA8E2FC432FEC674B&display=true";
-                            $client2 = new Client();
-                            $crawler2 = $client2->request('GET', $url2);
+
+                            $client2 = Client::getInstance();
+                            $client2->isLazy(); // Tells the client to wait for all resources before rendering
+                            $request2 = $client2->getMessageFactory()->createRequest($url2);
+                            $request2->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
+                            $response2 = $client2->getMessageFactory()->createResponse();
+                            // Send the request
+                            $client2->send($request2, $response2);
+                            $content2 = $response2->getContent();
+                            $crawler2 = new Crawler($content2);
+
+                            Storage::put('crawler2.html', $crawler2->html());
 
                             $da2['hotel_ratings_on_tripadvisor'] = ($crawler2->filter('.taRating > img')->count() > 0) ? $crawler2->filter('.taRating > img')->attr('alt') : null;
                             $da2['hotel_number_of_ratings_on_tripadvisor'] = ($crawler2->filter('.numReviews')->count() > 0) ? $crawler2->filter('.numReviews')->text() : null;
@@ -82,6 +103,24 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                     $da2[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $instance));
                                 }
                             }
+
+                            $da2['reviews'] = $crawler2->filter('dl[name="sortableReviewPair"]')->each(function ($node) {
+
+                                $da2['name'] = $node->filter('.username')->text();
+                                $da2['location'] = $node->filter('.location')->text();
+                                $da2['trip_type'] = $node->filter('.tripType')->text();
+                                $da2['review_title'] = $node->filter('.reviewTitle')->text();
+                                $da2['ratings'] = $node->filter('div.reviewInfo > .rating > span:nth-child(1)')->attr('alt');
+                                $da2['date'] = $node->filter('div.reviewInfo > span.date')->text();
+                                $da2['review'] = $node->filter('div.reviewBody > dl > dd:nth-child(2)')->text();
+
+                                foreach ($da2 as $key => $instance) {
+                                    if (!is_array($instance)) {
+                                        $da2[$key] = trim(str_replace(array("\r", "\n", "\t", "« less"), '', $instance));
+                                    }
+                                }
+                                return $da2;
+                            });
                         }
 
                     } catch (\Exception $e) {
@@ -96,17 +135,22 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                         try {
 
                             echo $node->attr('href') . "\n";
+                            $url2 = $node->attr('href');
+                            $client2 = Client::getInstance();
+                            $client2->isLazy(); // Tells the client to wait for all resources before rendering
+                            $request2 = $client2->getMessageFactory()->createRequest($url2);
+                            $request2->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
+                            $response2 = $client2->getMessageFactory()->createResponse();
+                            // Send the request
+                            $client2->send($request2, $response2);
+                            $content2 = $response2->getContent();
+                            $crawler = new Crawler($content2);
 
-                            $client = new Client();
-                            $crawler = $client->request('GET', $node->attr('href'));
 
-                            Storage::put('hotel.html', $crawler->html());
-
-                            $rooms = $crawler->filter('#idEbAvailabilityRoomsTable')->each(function ($node) {
+                            $rooms = $crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->each(function ($node) {
 
                                 $_SESSION['node'] = $node;
-                                $da['rooms_prices'] = $node->filter('#idEbAvailabilityRoomsTable > tr')->each(function ($node1) {
-
+                                $da['rooms_prices'] = $node->filter('tr')->each(function ($node1) {
 
                                     if ($node1->filter('li.clsMoreRoomInfo')->count() > 0) {
                                         $roomId = str_replace('idEbAvailability', '', $node1->filter('li.clsMoreRoomInfo')->attr('id'));
@@ -137,6 +181,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                             $da['room_facilities'] = $_SESSION['room_facilities'];
                                         }
                                     }
+
                                     return $da;
                                 });
 
@@ -150,6 +195,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                             $da['all_rooms'] = $rooms[0]['rooms_prices'];
 
+
                             $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
                                 return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
                             });
@@ -160,30 +206,52 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                 $da['hotel_total_rooms'] = null;
                             }
 
-//                            dd($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->attr('href'));
+                            Storage::put('hoteldetails.html', $crawler->filter('div#idHotelInfoLazy > table > tbody')->html());
 
-                            $link = $crawler->selectLink('▼ Read More')->link();
-//                            dd($link);
-                            $crawler = $client->click($link);
+                            $da['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
 
-                            dd($crawler->extract());
+                                $da['heading'] = $node->filter('p')->first()->text();
+                                if (trim($node->filter('p')->first()->text()) == 'Area information :') {
 
-                            Storage::put('hoteldetails.html',$crawler->html());
-                            dd($crawler);
+                                    $da['detailsMeta'] = $node->filter('p:nth-child(2)')->text();
+                                    $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
 
-                            dd($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->click());
-                            $data = $client->click($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->link());
+                                    foreach ($details as $key => $value) {
+                                        $da['all_details'][] = trim($value);
+                                    }
+                                    $da['nearest_airport'] = $node->filter('p:nth-child(4)')->text();
+                                    $da['preferred_airport'] = $node->filter('p:nth-child(5)')->text();
+                                } else {
+                                    $da['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
+                                        return $node->text();
+                                    });
+                                }
 
-//                            dd($data);
-                            Storage::put('hoteldetails.html',$data->html());
-//                            dd($client->click($crawler->filter('div.clsTabHotelDetail > div.clsTabContinued > div.clsTabInner > div > a')->link())); //wasted time
+                                if (isset($da['all_details'])) {
+                                    foreach ($da['all_details'] as $key => $value) {
+                                        if (empty($value)) {
+                                            unset($da['all_details'][$key]);
+                                        }
+                                    }
+                                }
 
-                            dd('ra');
+                                return $da;
+                            });
+
+                            $da['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
+
+                            $da['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
+                                return $node->text();
+                            });
+
 
 
                             $da['hotel_name'] = trim($crawler->filter('.clsEbFloatLeft > h1')->text());
-                            $da['hotel_short_details'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('#expandQuickDescrp > p')->text()));
-                            $da['hotel_address'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatLeft > .clsClear')->text()));
+
+                            $da['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node){
+                               return $node->text();
+                            });
+                            $da['hotel_address'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.header-subtext > div.clsClear')->text()));
                             $da['default_phone'] = ($crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->text())) : null;
 
                             $requestDate = date("Y-m-d");

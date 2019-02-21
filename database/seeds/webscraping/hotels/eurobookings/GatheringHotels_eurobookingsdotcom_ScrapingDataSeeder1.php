@@ -1,8 +1,10 @@
 <?php
 
 use Goutte\Client;
-use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Support\Facades\Storage;
+//use GuzzleHttp\Client as GuzzleClient;
+use JonnyW\PhantomJs\Client as PhantomClient;
+//use Storage;
+use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Database\Seeder;
 
@@ -30,7 +32,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 
 //        $date = '2019-02-20';
         $date = '2019-03-25';
-
         $end_date = '2020-02-20'; //last checkin date hogi last me
 
 
@@ -41,11 +42,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
 
             $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
-            $goutteClient = new Client();
-            $guzzleClient = new GuzzleClient(array(
-                'timeout' => 60,
-            ));
-            $goutteClient->setClient($guzzleClient);
             $client = new Client();
 
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
@@ -165,8 +161,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1 extends Seeder
                             $link = $crawler->selectLink('▼ Read More')->link();
 //                            dd($link);
                             $crawler = $client->click($link);
-
-                            dd($crawler->extract());
 
                             Storage::put('hoteldetails.html',$crawler->html());
                             dd($crawler);

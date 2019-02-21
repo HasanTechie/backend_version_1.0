@@ -1,8 +1,6 @@
 <?php
 
-//use GuzzleHttp\Client as GuzzleClient;
-//use Storage;
-//use Goutte\Client;
+use Goutte\Client as GoutteClient;
 use JonnyW\PhantomJs\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -42,8 +40,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $checkOutDate = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
-
-            $client = Client::getInstance();
+            $client = new GoutteClient();
 
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
 
@@ -51,18 +48,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                 Storage::append($city . 'url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                 echo "\n" . $url . "\n";
 
-//                $client->isLazy(); // Tells the client to wait for all resources before rendering
-                $request = $client->getMessageFactory()->createRequest($url);
-//                $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
-                $response = $client->getMessageFactory()->createResponse();
-                $client->send($request, $response);
-                $content = $response->getContent();
-                $crawler = new Crawler($content);
+                $crawler = $client->request('GET', $url);
 
-                if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->count() > 0) {
+                if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
 
-
-                    $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
+                    $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
 
                         global $dh1;
                         $dh1['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
@@ -93,18 +83,17 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                     }
                                 }
 
-
                                 if ($crawler2->filter('dl[name="sortableReviewPair"]')->count() > 0) {
 
                                     $dh1['hotel_reviews_on_tripadvisor'] = $crawler2->filter('dl[name="sortableReviewPair"]')->each(function ($node) {
 
-                                        $dh1['name'] = $node->filter('.username')->text();
-                                        $dh1['location'] = $node->filter('.location')->text();
-                                        $dh1['trip_type'] = $node->filter('.tripType')->text();
-                                        $dh1['review_title'] = $node->filter('.reviewTitle')->text();
-                                        $dh1['ratings'] = $node->filter('div.reviewInfo > .rating > span:nth-child(1)')->attr('alt');
-                                        $dh1['date'] = $node->filter('div.reviewInfo > span.date')->text();
-                                        $dh1['review'] = $node->filter('div.reviewBody > dl > dd:nth-child(2)')->text();
+                                        $dh1['name'] = ($node->filter('.username')->count() > 0) ? $node->filter('.username')->text() : null;
+                                        $dh1['location'] = ($node->filter('.location')->count() > 0) ? $node->filter('.location')->text() : null;
+                                        $dh1['trip_type'] = ($node->filter('.tripType')->count() > 0) ? $node->filter('.tripType')->text() : null;
+                                        $dh1['review_title'] = ($node->filter('.reviewTitle')->count() > 0) ? $node->filter('.reviewTitle')->text() : null;
+                                        $dh1['ratings'] = ($node->filter('div.reviewInfo > .rating > span:nth-child(1)')->count() > 0) ? $node->filter('div.reviewInfo > .rating > span:nth-child(1)')->attr('alt') : null;
+                                        $dh1['date'] = ($node->filter('div.reviewInfo > span.date')->count() > 0) ? $node->filter('div.reviewInfo > span.date')->text() : null;
+                                        $dh1['review'] = ($node->filter('div.reviewBody > dl > dd:nth-child(2)')->count() > 0) ? $node->filter('div.reviewBody > dl > dd:nth-child(2)')->text() : null;
 
                                         foreach ($dh1 as $key => $instance) {
                                             if (!is_array($instance)) {
@@ -118,7 +107,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                         } catch (\Exception $e) {
                             global $city;
-                            Storage::append($city . 'errorTripAdvisor.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                            Storage::append($city . 'errorTripAdvisor.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                             print($e->getMessage());
                         }
 
@@ -129,8 +118,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 
                                 try {
-
-                                    echo $node->attr('href') . "\n";
                                     $url2 = $node->attr('href');
                                     $client2 = Client::getInstance();
                                     $client2->isLazy(); // Tells the client to wait for all resources before rendering
@@ -143,63 +130,72 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                     $crawler = new Crawler($content2);
 
 
-                                    $rooms = $crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->each(function ($node) {
-                                        $_SESSION['room'] = '';
-                                        $_SESSION['node'] = $node;
-                                        $dr['rooms_prices'] = $node->filter('tr')->each(function ($node1) {
+                                    if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0) {
 
-                                            if ($node1->filter('.clsRoomPhotoWrap > img')->count() > 0) {
-                                                $dr['img'] = $_SESSION['img'] = str_replace('//', '', $node1->filter('.clsRoomPhotoWrap > img')->attr('src'));
-                                            }
 
-                                            if ($node1->filter('li.clsMoreRoomInfo')->count() > 0) {
-                                                $roomId = str_replace('idEbAvailability', '', $node1->filter('li.clsMoreRoomInfo')->attr('id'));
-                                                $dr['room_facilities'] = $_SESSION['room_facilities'] = $_SESSION['node']->filter('#' . strtolower($roomId) . ' > .clsEbAvailabilityRoomsBlockTextInner > p')->each(function ($node) {
-                                                    return trim($node->text());
+                                        $rooms = $crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->each(function ($node) {
+                                            $_SESSION['room'] = '';
+                                            $_SESSION['node'] = $node;
+
+                                            if ($node->filter('tr')->count() > 0) {
+                                                $dr['rooms_prices'] = $node->filter('tr')->each(function ($node1) {
+
+                                                    if ($node1->filter('.clsRoomPhotoWrap > img')->count() > 0) {
+                                                        $dr['img'] = $_SESSION['img'] = str_replace('//', '', $node1->filter('.clsRoomPhotoWrap > img')->attr('src'));
+                                                    }
+
+                                                    if ($node1->filter('li.clsMoreRoomInfo')->count() > 0) {
+                                                        $roomId = str_replace('idEbAvailability', '', $node1->filter('li.clsMoreRoomInfo')->attr('id'));
+                                                        $dr['room_facilities'] = $_SESSION['room_facilities'] = $_SESSION['node']->filter('#' . strtolower($roomId) . ' > .clsEbAvailabilityRoomsBlockTextInner > p')->each(function ($node) {
+                                                            return trim($node->text());
+                                                        });
+                                                    }
+
+                                                    if ($node1->filter('.clsMoreRoomInfoTxt')->count() > 0) {
+                                                        $dr['room'] = $_SESSION['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
+                                                    } else {
+                                                        $dr['room'] = null;
+                                                    }
+
+                                                    $dr['price'] = ($node1->filter('.clsSortByPrice')->count() > 0) ? $node1->filter('.clsSortByPrice')->text() : null;
+                                                    $dr['details'] = ($node1->filter('.clsUspList')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node1->filter('.clsUspList')->text())) : null;
+
+                                                    if ((!empty($dr['details']) && !empty($dr['price'])) || empty($dr['room'])) {
+                                                        $dr['room'] = (isset($_SESSION['room']) ? $_SESSION['room'] : null);
+                                                        $dr['img'] = (isset($_SESSION['img']) ? $_SESSION['img'] : null);
+                                                    }
+
+                                                    if (!empty($dr['price']) && empty($dr['details'])) {
+                                                        $dr['details'] = 'Not Available';
+                                                    }
+
+                                                    if ($_SESSION['room'] == $dr['room']) {
+                                                        if (isset($_SESSION['room_facilities'])) {
+                                                            $dr['room_facilities'] = $_SESSION['room_facilities'];
+                                                        }
+                                                    }
+
+                                                    return $dr;
                                                 });
                                             }
 
-                                            if ($node1->filter('.clsMoreRoomInfoTxt')->count() > 0) {
-                                                $dr['room'] = $_SESSION['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
-                                            } else {
-                                                $dr['room'] = null;
-                                            }
-
-                                            $dr['price'] = ($node1->filter('.clsSortByPrice')->count() > 0) ? $node1->filter('.clsSortByPrice')->text() : null;
-                                            $dr['details'] = ($node1->filter('.clsUspList')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node1->filter('.clsUspList')->text())) : null;
-
-                                            if ((!empty($dr['details']) && !empty($dr['price'])) || empty($dr['room'])) {
-                                                $dr['room'] = (isset($_SESSION['room']) ? $_SESSION['room'] : null);
-                                                $dr['img'] = (isset($_SESSION['img']) ? $_SESSION['img'] : null);
-                                            }
-
-                                            if (!empty($dr['price']) && empty($dr['details'])) {
-                                                $dr['details'] = 'Not Available';
-                                            }
-
-                                            if ($_SESSION['room'] == $dr['room']) {
-                                                if (isset($_SESSION['room_facilities'])) {
-                                                    $dr['room_facilities'] = $_SESSION['room_facilities'];
+                                            foreach ($dr['rooms_prices'] as $key => $value) {
+                                                if (empty($value['price'])) {
+                                                    unset($dr['rooms_prices'][$key]);
                                                 }
                                             }
-
                                             return $dr;
                                         });
-
-                                        foreach ($dr['rooms_prices'] as $key => $value) {
-                                            if (empty($value['price'])) {
-                                                unset($dr['rooms_prices'][$key]);
-                                            }
-                                        }
-                                        return $dr;
-                                    });
+                                    }
 
                                     $dr['all_rooms'] = $rooms[0]['rooms_prices'];
 
 
-                                    $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
-                                        return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
-                                    });
+                                    if ($crawler->filter('#idEbHotelDetailRooms> p')->count() > 0) {
+                                        $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
+                                            return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
+                                        });
+                                    }
 
                                     if (isset($hotelInfo[0])) {
                                         $dh['hotel_total_rooms'] = $hotelInfo[0];
@@ -207,51 +203,58 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                         $dh['hotel_total_rooms'] = null;
                                     }
 
-                                    Storage::put('hoteldetails.html', $crawler->filter('div#idHotelInfoLazy > table > tbody')->html());
+                                    if ($crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->count()) {
 
-                                    $dh['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
 
-                                        $dh['heading'] = $node->filter('p')->first()->text();
-                                        if (trim($node->filter('p')->first()->text()) == 'Area information :') {
+                                        $dh['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
 
-                                            $dh['detailsMeta'] = $node->filter('p:nth-child(2)')->text();
-                                            $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
+                                            $dh['heading'] = $node->filter('p')->first()->text();
+                                            if (trim($node->filter('p')->first()->text()) == 'Area information :') {
 
-                                            foreach ($details as $key => $value) {
-                                                $dh['all_details'][] = trim($value);
+                                                $dh['detailsMeta'] = $node->filter('p:nth-child(2)')->text();
+                                                $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
+
+                                                foreach ($details as $key => $value) {
+                                                    $dh['all_details'][] = trim($value);
+                                                }
+                                                $dh['nearest_airport'] = $node->filter('p:nth-child(4)')->text();
+                                                $dh['preferred_airport'] = $node->filter('p:nth-child(5)')->text();
+                                            } else {
+                                                $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
+                                                    return $node->text();
+                                                });
                                             }
-                                            $dh['nearest_airport'] = $node->filter('p:nth-child(4)')->text();
-                                            $dh['preferred_airport'] = $node->filter('p:nth-child(5)')->text();
-                                        } else {
-                                            $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
-                                                return $node->text();
-                                            });
-                                        }
 
-                                        if (isset($dh['all_details'])) {
-                                            foreach ($dh['all_details'] as $key => $value) {
-                                                if (empty($value)) {
-                                                    unset($dh['all_details'][$key]);
+                                            if (isset($dh['all_details'])) {
+                                                foreach ($dh['all_details'] as $key => $value) {
+                                                    if (empty($value)) {
+                                                        unset($dh['all_details'][$key]);
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        return $dh;
-                                    });
+                                            return $dh;
+                                        });
+                                    }
 
-                                    $dh['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
-
-                                    $dh['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
-                                        return $node->text();
-                                    });
+                                    if ($crawler->filter('div#idHotelPoliciesLazy > table > tbody')->count() > 0) {
+                                        $dh['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
+                                    }
+                                    if ($crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->count() > 0) {
+                                        $dh['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
+                                            return $node->text();
+                                        });
+                                    }
 
 
                                     $dh['hotel_name'] = ($crawler->filter('.clsEbFloatLeft > h1')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1')->text()) : null;
 
-                                    $dh['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node) {
-                                        return $node->text();
-                                    });
-                                    $dh['hotel_address'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.header-subtext > div.clsClear')->text()));
+                                    if ($crawler->filter('#idQuickDescriptionLazy > p')->count() > 0) {
+                                        $dh['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node) {
+                                            return $node->text();
+                                        });
+                                    }
+                                    $dh['hotel_address'] = ($crawler->filter('div.header-subtext > div.clsClear')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.header-subtext > div.clsClear')->text())) : null;
                                     $dh['default_phone'] = ($crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->text())) : null;
 
                                     $requestDate = date("Y-m-d");
@@ -350,7 +353,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                 } catch (\Exception $e) {
                                     global $city;
-                                    Storage::append($city . 'errorMain.log', $e->getMessage() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+
+                                    Storage::append($city . 'errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                     print($e->getMessage());
                                 }
                             });
@@ -363,6 +367,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         }
     }
 }
+
 /*
 //                dd($crawler->filter('div.clsPageNavigationPages > a')->link());
 //                $client->click($crawler->filter('div.clsPageNavigationPages > a')->link()); //wasted time

@@ -72,7 +72,10 @@ Route::get('/roomsprices/hotel3/', 'PriceController@hotel3Prices');
 Route::get('/roomsprices/hotel3/{id}', 'PriceController@hotel3Show');
 Route::get('/roomsprices/hotel4/', 'PriceController@hotel4Prices');
 Route::get('/roomsprices/hotel4/{id}', 'PriceController@hotel4Show');
-
+Route::get('/roomsprices/hotel5/', 'PriceController@hotel5Prices');
+Route::get('/roomsprices/hotel5/{id}', 'PriceController@hotel5Show');
+Route::get('/hotels5/{hotel}', 'HotelController@show');
+Route::get('/hotels5/{hotel}', 'HotelController@show');
 
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');

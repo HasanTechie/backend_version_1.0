@@ -1,6 +1,7 @@
 <?php
 
 use Goutte\Client;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,16 @@ class testWebScarpingSeeder extends Seeder
     public function run()
     {
         //
+        $client = new Client();
+        $crawler = $client->request('GET', 'https://global.momondo.com/hotel-search/Berlin,Germany-c9109/2019-02-23/2019-02-24/2adults?fs=price-options=onlinereq&sort=rank_a');
+//        $link = $crawler->selectLink('Hotel Policies')->link();
+//        $crawler = $client->click($link);
+
+        Storage::put('hotel_details.html', $crawler->html());
+
+//        $crawler->filter('h2 > a')->each(function ($node) {
+//            print $node->text()."\n";
+//        });
 
     }
 }

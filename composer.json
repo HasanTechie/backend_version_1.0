@@ -15,6 +15,7 @@
         "fideloper/proxy": "^4.0",
         "google/cloud-firestore": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "horror/php-phantomjs": "^4.6",
         "kreait/firebase-php": "^4.18",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",

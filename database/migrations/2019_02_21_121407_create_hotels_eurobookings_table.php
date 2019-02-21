@@ -40,7 +40,7 @@ class CreateHotelsEurobookingsTable extends Migration
             $table->text('website')->nullable();
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
-            $table->string('hid')->nullable();
+            $table->string('hid')->unique();
             $table->string('source')->nullable();
 
             $table->timestamps();

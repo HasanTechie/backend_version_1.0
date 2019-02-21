@@ -21,10 +21,11 @@ class CreateHotelsEurobookingsTable extends Migration
             $table->string('address')->nullable();
             $table->string('total_rooms')->nullable();
             $table->string('eurobooking_id')->nullable();
-            $table->text('eurobooking_img')->nullable();
+            $table->text('photo')->nullable();
             $table->string('stars_category')->nullable();
             $table->string('ratings_on_tripadvisor')->nullable();
-            $table->string('number_of_ratings_on_tripadvisor')->nullable();
+            $table->string('total_number_of_ratings_on_tripadvisor')->nullable();
+            $table->text('reviews_on_tripadvisor')->nullable();
             $table->string('ranking_on_tripadvisor')->nullable();
             $table->string('badge_on_tripadvisor')->nullable();
             $table->text('details')->nullable();
@@ -33,13 +34,13 @@ class CreateHotelsEurobookingsTable extends Migration
             $table->text('policies')->nullable();
 
             $table->string('city')->nullable();
+            $table->string('city_id_on_eurobookings')->nullable();
             $table->string('country')->nullable();
             $table->string('phone')->nullable();
             $table->text('website')->nullable();
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
-            $table->longText('all_data')->nullable();
-
+            $table->string('hid')->nullable();
             $table->string('source')->nullable();
 
             $table->timestamps();

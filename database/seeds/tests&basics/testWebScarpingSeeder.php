@@ -15,64 +15,7 @@ class testWebScarpingSeeder extends Seeder
      */
     public function run()
     {
-        $url = "https://www.hrs.com/en/hotel/berlin/d-55133/2#container=&locationId=55133&requestUrl=%2Fen%2Fhotel%2Fberlin%2Fd-55133&showAlternates=false&toggle=&arrival=2019-02-28&departure=2019-03-01&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1&_=1550832580038";
-
-        $client = new GoutteClient();
-        $crawler = $client->request('GET', $url);
-        echo $url;
-        $data = $crawler->filter('a.sw-hotel-list__link')->each(function ($node) {
-            $da['link'] = $node->attr('href');
-
-            $da['hotel_id'] = preg_replace('/[^0-9]/', '', $da['link']);
-
-            $adult=1;
-            $url1 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $da['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=22&startDateMonth=02&startDateYear=2019&endDateDay=23&endDateMonth=02&endDateYear=2019&adults=$adult&singleRooms=1&doubleRooms=0&children=0#priceAnchor";
-            $adults=2;
-            $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $da['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=22&startDateMonth=02&startDateYear=2019&endDateDay=23&endDateMonth=02&endDateYear=2019&adults=$adults&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
-
-            $client = new GoutteClient();
-            $crawler = $client->request('GET', $url1);
-            $crawler2 = $client->request('GET', $url2);
-
-            $da['all_double_rooms'] = $crawler2->filter('table#basket > tbody > tr ')->each(function ($node) {
-                $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
-                $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
-                $dr['details'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
-                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
-                $dr['included'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
-                foreach ($dr as $key => $value) {
-                    if (!is_array($value)) {
-                        $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
-                    }
-                    if (empty($value)) {
-                        unset($dr[$key]);
-                    }
-                }
-                return $dr;
-            });
-
-            $da['all_single_rooms'] = $crawler->filter('table#basket > tbody > tr ')->each(function ($node) {
-                $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
-                $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
-                $dr['details'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
-                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
-                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
-                foreach ($dr as $key => $value) {
-                    if (!is_array($value)) {
-                        $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
-                    }
-                    if (empty($value)) {
-                        unset($dr[$key]);
-                    }
-                }
-                return $dr;
-            });
-
-            $da['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
-            $da['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
-
-            return $da;
-        });
+        //
 
 
     }

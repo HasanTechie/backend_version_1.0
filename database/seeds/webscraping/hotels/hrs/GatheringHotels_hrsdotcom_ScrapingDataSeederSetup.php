@@ -14,6 +14,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
         $hrs = new GatheringHotels_hrsdotcom_ScrapingDataSeederMain();
 
         $dataArray = [
+            'currency' => 'EUR',
             'start_date' => '2019-02-26',
             'end_date' => '2020-02-26',
             'city' => 'Paris',

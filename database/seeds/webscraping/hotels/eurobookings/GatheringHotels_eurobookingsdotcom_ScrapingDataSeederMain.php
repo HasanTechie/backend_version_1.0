@@ -25,13 +25,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $city = $dataArray['city'];
         $country = $dataArray['country'];
         $cityId = $dataArray['city_id'];
-//        $cityTotalResults = $dataArray['total_results'] - 15;
-
-//        $date = '2019-02-20';
         $date = $dataArray['start_date'];
 
         $end_date = $dataArray['end_date']; //last checkin date hogi last me
-
 
         while (strtotime($date) <= strtotime($end_date)) {
 
@@ -350,8 +346,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                                 if (isset($room['room']) || isset($room['price'])) {
 
-                                                    $rid = 'currentdate' . $requestDate . 'checkin' . $checkInDate . 'checkout' . $checkOutDate . 'hotelname' . trim(str_replace(' ', '', $dh['hotel_name'])) . 'room' . trim(str_replace(' ', '', $room['room'])) . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
-
+                                                    $rid = $requestDate . $checkInDate . $checkOutDate . $dh['hotel_name'] . $room['room'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                                    $rid = str_replace(' ', '', $rid);
                                                     if (DB::table('rooms_prices_eurobookings')->where('rid', '=', $rid)->doesntExist()) {
 
                                                         DB::table('rooms_prices_eurobookings')->insert([
@@ -394,7 +390,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                         }
                     }
                     if ($response->getStatus() != 200) {
-                        break;
+                        break 2;
                     }
                 } catch (\Exception $e) {
                     global $city;

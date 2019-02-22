@@ -40,11 +40,12 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             for ($i = 1; $i <= 10000; $i += 15) {
 
-                $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityId;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
-                Storage::append('eurobookings/' . $city . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
-                echo "\n" . $url . "\n";
 
                 try {
+
+                    $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityId;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
+                    Storage::append('eurobookings/' . $city . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    echo "\n" . $url . "\n";
 
                     $crawler = $client->request('GET', $url);
 
@@ -390,7 +391,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                         }
                     }
                     if ($response->getStatus() != 200) {
-                        break 2;
+                        break;
                     }
                 } catch (\Exception $e) {
                     global $city;

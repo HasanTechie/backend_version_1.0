@@ -45,7 +45,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
 
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
-                Storage::append('eurobookings/'.$city . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                Storage::append('eurobookings/' . $city . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                 echo "\n" . $url . "\n";
 
                 try {
@@ -110,7 +110,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                             } catch (\Exception $e) {
                                 global $city;
-                                Storage::append('eurobookings/'.$city . '/errorTripAdvisor.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                Storage::append('eurobookings/' . $city . '/errorTripAdvisor.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                 print($e->getMessage());
                             }
 
@@ -247,15 +247,21 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                                 return $dh;
                                             });
+                                        } else {
+                                            $dh['hotel_info'] = null;
                                         }
 
                                         if ($crawler->filter('div#idHotelPoliciesLazy > table > tbody')->count() > 0) {
                                             $dh['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
+                                        } else {
+                                            $dh['hotel_policies'] = null;
                                         }
                                         if ($crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->count() > 0) {
                                             $dh['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
                                                 return $node->text();
                                             });
+                                        } else {
+                                            $dh['hotel_facilities'] = null;
                                         }
 
 
@@ -368,7 +374,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                     } catch (\Exception $e) {
                                         global $city;
 
-                                        Storage::append('eurobookings/'.$city . '/errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('eurobookings/' . $city . '/errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                         print($e->getMessage());
                                     }
                                 });
@@ -378,7 +384,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                     }
                 } catch (\Exception $e) {
                     global $city;
-                    Storage::append('eurobookings/'.$city . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('eurobookings/' . $city . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                     print($e->getMessage());
                 }
             }

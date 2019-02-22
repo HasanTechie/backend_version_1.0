@@ -41,16 +41,16 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
 //            'country' => 'Italy',
 //            'total_results' => 2000,
 //        ];
-        $dataArray = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-02-25',
-            'end_date' => '2020-02-25',
-            'city' => 'Berlin',
-            'city_dist' => 536,
-            'country' => 'Germany',
-            'total_results' => 717,
-        ];
+//        $dataArray = [
+//            'adults' => 2,
+//            'currency' => 'EUR',
+//            'start_date' => '2019-02-25',
+//            'end_date' => '2020-02-25',
+//            'city' => 'Berlin',
+//            'city_dist' => 536,
+//            'country' => 'Germany',
+//            'total_results' => 717,
+//        ];
 
         $euroBooking->mainRun($dataArray);
     }

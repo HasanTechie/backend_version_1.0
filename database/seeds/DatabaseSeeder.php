@@ -66,10 +66,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('Gathering_globaldotmomondodotcom_ScrapingDataSeeder');
 
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain');
-        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder1');
-//        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder2');
-//        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder3');
-//        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeeder4');
+        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
 
 //        $this->call('CorrectingRatingsDataOneurobookings');
 

@@ -13,24 +13,24 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function mainRun(array $dataArray)
     {
         //
         session_start();
 
         global $adults, $currency, $city, $country, $checkInDate, $checkOutDate, $cityDist;
 
-        $adults = 2;
-        $currency = 'EUR';
-        $city = 'Berlin';
-        $country = 'Germany';
-        $cityDist = '536';
-        $cityTotalResults = 717 - 15;
+        $adults = $dataArray['adults'];
+        $currency = $dataArray['currency'];
+        $city = $dataArray['city'];
+        $country = $dataArray['country'];
+        $cityDist = $dataArray['city_dist'];
+        $cityTotalResults = $dataArray['total_results'] - 15;
 
 //        $date = '2019-02-20';
-        $date = '2019-03-25';
+        $date = $dataArray['start_date'];
 
-        $end_date = '2020-02-20'; //last checkin date hogi last me
+        $end_date = $dataArray['end_date']; //last checkin date hogi last me
 
 
         while (strtotime($date) <= strtotime($end_date)) {
@@ -45,7 +45,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             for ($i = 1; $i <= $cityTotalResults; $i += 15) {
 
                 $url = "https://www.eurobookings.com/search.html?q=cur:$currency;frm:9;dsti:$cityDist;dstt:1;dsts:$city;start:$checkInDate;end:$checkOutDate;fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[$adults,0];sf:1;&offset=$i";
-                Storage::append($city . 'url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                Storage::append('eurobookings/'.$city . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                 echo "\n" . $url . "\n";
 
                 try {
@@ -110,7 +110,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                             } catch (\Exception $e) {
                                 global $city;
-                                Storage::append($city . 'errorTripAdvisor.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                Storage::append('eurobookings/'.$city . '/errorTripAdvisor.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                 print($e->getMessage());
                             }
 
@@ -218,21 +218,23 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                     $dh['heading'] = $node->filter('p')->first()->text();
                                                     if (trim($dh['heading']) == 'Area information :') {
 
-                                                        $dh['detailsMeta'] = $node->filter('p:nth-child(2)')->text();
-                                                        $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
-
-                                                        foreach ($details as $key => $value) {
-                                                            $dh['all_details'][] = trim($value);
+                                                        $dh['detailsMeta'] = ($node->filter('p:nth-child(2)')->count() > 0) ? $node->filter('p:nth-child(2)')->text() : null;
+                                                        if ($node->filter('p:nth-child(3)')->count() > 0) {
+                                                            $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
+                                                            foreach ($details as $key => $value) {
+                                                                $dh['all_details'][] = trim($value);
+                                                            }
                                                         }
-                                                        $dh['nearest_airport'] = $node->filter('p:nth-child(4)')->text();
-                                                        $dh['preferred_airport'] = $node->filter('p:nth-child(5)')->text();
+
+                                                        $dh['nearest_airport'] = ($node->filter('p:nth-child(4)')->count() > 0) ? $node->filter('p:nth-child(4)')->text() : null;
+                                                        $dh['preferred_airport'] = ($node->filter('p:nth-child(5)')->count() > 0) ? $node->filter('p:nth-child(5)')->text() : null;
                                                     } else {
                                                         $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
                                                             return $node->text();
                                                         });
                                                     }
-                                                }else{
-                                                    $dh=null;
+                                                } else {
+                                                    $dh = null;
                                                 }
 
                                                 if (isset($dh['all_details'])) {
@@ -366,7 +368,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                     } catch (\Exception $e) {
                                         global $city;
 
-                                        Storage::append($city . 'errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('eurobookings/'.$city . '/errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                         print($e->getMessage());
                                     }
                                 });
@@ -376,7 +378,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                     }
                 } catch (\Exception $e) {
                     global $city;
-                    Storage::append($city . 'errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('eurobookings/'.$city . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                     print($e->getMessage());
                 }
             }

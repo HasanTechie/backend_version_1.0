@@ -71,15 +71,15 @@ class PriceController extends Controller
         dd($prices[0]);
     }
 
-    public function hotel4Prices()
+    public function verticalbookingPrices()
     {
         $prices = DB::table('rooms_prices_vertical_booking')
             ->paginate(20);
 
-        return view('roomsprices.hotel4.index', compact('prices'));
+        return view('roomsprices.verticalbooking.index', compact('prices'));
     }
 
-    public function hotel4Show($id)
+    public function verticalbookingShow($id)
     {
 
         $prices = DB::table('rooms_prices_vertical_booking')->where('uid', '=', $id)->get();

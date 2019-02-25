@@ -19,7 +19,7 @@
             <th>Check Out Date</th>
             <th>Requested Date</th>
             <th>Short Description</th>
-            <th>All Details</th>
+            <th>Room All Details</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,8 @@
                 <td>{{$instance->check_out_date}}</td>
                 <td>{{$instance->request_date}}</td>
                 <td>{{$instance->short_description}}</td>
-                <td><a href="/roomsprices/eurobookings/{{$instance->hotel_uid}}/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/roomsprices/eurobookings/{{$instance->hotel_uid}}/{{$instance->uid}}"
+                       class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
 

@@ -88,8 +88,9 @@
             <a href="/hotels/eurobookings">Eurbookings Prices </a>
             <a href="/hotels/hrs">HRS Prices </a>
         </div>
+        <br/>
         <div class="links">
-            <a href="/roomsprices/hotel4">Hotel VerticalBooking Prices </a>
+            <a href="/roomsprices/verticalbooking">Hotel VerticalBooking Prices </a>
             <a href="/roomsprices/hotel1">Baglioni Hotels Prices </a>
             <a href="/roomsprices/hotel3">Novecento Hotel Prices </a>
 

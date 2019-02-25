@@ -44,7 +44,8 @@
                 <td>{{$instance->hotel_phone}}</td>
                 <td>{{$instance->hotel_email}}</td>
                 <td>{{$instance->hotel_website}}</td>
-                <td><a href="/roomsprices/hotel3/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/roomsprices/hotel3/{{$instance->uid}}" class="button is-primary is-outlined">Details</a>
+                </td>
             </tr>
         @endforeach
 

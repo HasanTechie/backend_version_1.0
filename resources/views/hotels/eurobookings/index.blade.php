@@ -26,16 +26,19 @@
         @foreach ($hotels as $hotel)
             <tr>
                 <td>{{$hotel->uid}}</td>
-                <td><a href="https://www.google.com/search?q={{$hotel->name}}, {{$hotel->city}}">{{$hotel->name}}</a></td>
+                <td><a href="https://www.google.com/search?q={{$hotel->name}}, {{$hotel->city}}">{{$hotel->name}}</a>
+                </td>
                 <td>{{$hotel->address}}</td>
                 <td>{{$hotel->city}}</td>
                 <td>{{$hotel->country}}</td>
                 <td><a href="eurobookings/hotelinfo/{{$hotel->uid}}" class="button is-info is-outlined">O</a></td>
-                <td><a href="eurobookings/reviewsontripadvisor/{{$hotel->uid}}" class="button is-info is-outlined">O</a></td>
+                <td><a href="eurobookings/reviewsontripadvisor/{{$hotel->uid}}" class="button is-info is-outlined">O</a>
+                </td>
                 <td><a href="eurobookings/details/{{$hotel->uid}}" class="button is-info is-outlined">O</a></td>
                 <td><a href="eurobookings/facilities/{{$hotel->uid}}" class="button is-info is-outlined">O</a></td>
                 <td><a href="eurobookings/{{$hotel->uid}}" class="button is-primary is-outlined">O</a></td>
-                <td><a href="eurobookings/roomsprices/{{$hotel->uid}}" class="button is-success is-outlined">Rooms Prices</a></td>
+                <td><a href="eurobookings/roomsprices/{{$hotel->uid}}" class="button is-success is-outlined">Rooms
+                        Prices</a></td>
             </tr>
         @endforeach
         </tbody>

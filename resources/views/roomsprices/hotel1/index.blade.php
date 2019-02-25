@@ -35,12 +35,13 @@
                 <td>{{$instance->check_in_date}}</td>
                 <td>{{$instance->check_out_date}}</td>
                 <td>{{$instance->requested_date}}</td>
-                <td>{{$instance->hotel_name}}</td>
+                <td><a href="https://www.google.com/search?q={{$instance->hotel_name}}, {{$instance->hotel_city}}">{{$instance->hotel_name}}</a></td>
                 <td>{{$instance->hotel_city}}</td>
                 <td>{{$instance->hotel_phone}}</td>
                 <td>{{$instance->hotel_email}}</td>
                 <td>{{$instance->hotel_website}}</td>
-                <td><a href="/roomsprices/hotel1/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/roomsprices/hotel1/{{$instance->uid}}" class="button is-primary is-outlined">Details</a>
+                </td>
             </tr>
         @endforeach
 

@@ -70,8 +70,8 @@ Route::get('/roomsprices/hotel2/', 'PriceController@hotel2Prices');
 Route::get('/roomsprices/hotel2/{id}', 'PriceController@hotel2Show');
 Route::get('/roomsprices/hotel3/', 'PriceController@hotel3Prices');
 Route::get('/roomsprices/hotel3/{id}', 'PriceController@hotel3Show');
-Route::get('/roomsprices/hotel4/', 'PriceController@hotel4Prices');
-Route::get('/roomsprices/hotel4/{id}', 'PriceController@hotel4Show');
+Route::get('/roomsprices/verticalbooking/', 'PriceController@verticalbookingPrices');
+Route::get('/roomsprices/verticalbooking/{id}', 'PriceController@verticalbookingShow');
 
 
 Route::get('/hotels/eurobookings/roomsprices/{id}', 'PriceController@EurobookingsRoomsPrices');

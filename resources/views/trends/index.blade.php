@@ -33,13 +33,14 @@
                 <td>@if($trend->time == 'today 5-y') {{'5 years data'}} @endif</td>
                 <td><a href="/trends/{{$trend->uid}}" class="button is-primary is-outlined">Details</a></td>
                 <td><a href="/trends/interestovertime/{{$trend->uid}}"
-                       class="button is-primary is-outlined">Details</a></td>
-                <td><a href="/trends/interestbysubregion/{{$trend->uid}}" class="button is-primary is-outlined">Details</a>
+                       class="button is-primary is-outlined">O</a></td>
+                <td><a href="/trends/interestbysubregion/{{$trend->uid}}"
+                       class="button is-primary is-outlined">O</a>
                 </td>
                 <td><a href="/trends/relatedtopics/{{$trend->uid}}"
-                       class="button is-primary is-outlined">Details</a></td>
+                       class="button is-primary is-outlined">O</a></td>
                 <td><a href="/trends/relatedqueries/{{$trend->uid}}"
-                       class="button is-primary is-outlined">Details</a></td>
+                       class="button is-primary is-outlined">O</a></td>
             </tr>
         @endforeach
         </tbody>

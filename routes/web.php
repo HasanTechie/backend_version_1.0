@@ -75,7 +75,7 @@ Route::get('/roomsprices/hotel4/{id}', 'PriceController@hotel4Show');
 
 
 Route::get('/hotels/eurobookings/roomsprices/{id}', 'PriceController@EurobookingsRoomsPrices');
-Route::get('/hotels/eurobookings/roomsprices/{id}/{id}', 'PriceController@EurobookingsRoomsPricesShow');
+Route::get('/roomsprices/eurobookings/{uid}/{id}', 'PriceController@EurobookingsRoomsPricesShow');
 
 Route::get('/hotels/eurobookings', 'HotelController@hotelEurobookingsShowAll');
 Route::get('/hotels/eurobookings/reviewsontripadvisor/{id}', 'HotelController@hotelEurobookingsReviewsOnTripadvisor');

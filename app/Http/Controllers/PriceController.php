@@ -100,6 +100,20 @@ class PriceController extends Controller
         dd($prices[0]);
     }
 
+
+    public function HRSRoomsPrices($id){
+
+        $prices = DB::table('rooms_prices_hrs')->where('hotel_uid', '=', $id)->paginate(20);
+
+        return view('roomsprices.hrs.index', compact('prices'));
+    }
+
+    public function HRSRoomsPricesShow($uid,$id){
+
+        $prices = DB::table('rooms_prices_hrs')->where('uid', '=', $id)->get();
+        dd($prices[0]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

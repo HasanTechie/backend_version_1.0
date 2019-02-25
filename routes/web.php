@@ -83,7 +83,15 @@ Route::get('/hotels/eurobookings/details/{id}', 'HotelController@hotelEurobookin
 Route::get('/hotels/eurobookings/facilities/{id}', 'HotelController@hotelEurobookingsFacilities');
 Route::get('/hotels/eurobookings/hotelinfo/{id}', 'HotelController@hotelEurobookingsHotelInfo');
 Route::get('/hotels/eurobookings/{id}', 'HotelController@hotelEurobookingsShowDetails');
-Route::get('/hotels/eurobookings/{id}', 'HotelController@hotelEurobookingsShowDetails');
+
+
+Route::get('/hotels/hrs', 'HotelController@hotelHRSShowAll');
+Route::get('/hotels/hrs/{id}', 'HotelController@hotelHRSShowDetails');
+
+Route::get('/hotels/hrs/roomsprices/{id}', 'PriceController@HRSRoomsPrices');
+Route::get('/roomsprices/hrs/{uid}/{id}', 'PriceController@HRSRoomsPricesShow');
+
+
 
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');

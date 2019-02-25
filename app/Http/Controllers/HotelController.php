@@ -140,6 +140,21 @@ class HotelController extends Controller
     }
 
 
+    public function hotelHRSShowAll(){
+        $hotels = DB::table('hotels_hrs')
+            ->paginate(20);
+
+        return view('hotels.hrs.index', compact('hotels'));
+    }
+
+    public function hotelHRSShowDetails($id)
+    {
+        $hotels = DB::table('hotels_hrs')->where('uid', '=', $id)->get();
+
+        dd($hotels[0]);
+    }
+
+
 
 
 

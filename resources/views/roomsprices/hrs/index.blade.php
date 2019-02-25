@@ -1,6 +1,6 @@
 @extends ('layouts/header')
 
-@section('title','Eurobookings Prices')
+@section('title','HRS Prices')
 @section('content')
 
 
@@ -14,11 +14,13 @@
             <th>Price</th>
             <th>Currency</th>
             <th>Room</th>
+            <th>Room Type</th>
+            <th>Room Criteria</th>
+            <th>Room Short Description</th>
             <th>Request for (n) persons</th>
             <th>Check In Date</th>
             <th>Check Out Date</th>
             <th>Requested Date</th>
-            <th>Short Description</th>
             <th>All Details</th>
         </tr>
         </thead>
@@ -31,12 +33,14 @@
                 <td>{{$instance->price}}</td>
                 <td>{{$instance->currency}}</td>
                 <td>{{$instance->room}}</td>
+                <td>{{$instance->room_type}}</td>
+                <td>{{$instance->criteria}}</td>
+                <td>{{$instance->short_description}}</td>
                 <td>room for {{$instance->number_of_adults_in_room_request}} person(s)</td>
                 <td>{{$instance->check_in_date}}</td>
                 <td>{{$instance->check_out_date}}</td>
                 <td>{{$instance->request_date}}</td>
-                <td>{{$instance->short_description}}</td>
-                <td><a href="/roomsprices/eurobookings/{{$instance->hotel_uid}}/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
+                <td><a href="/roomsprices/hrs/{{$instance->hotel_uid}}/{{$instance->uid}}" class="button is-primary is-outlined">Details</a></td>
             </tr>
         @endforeach
 

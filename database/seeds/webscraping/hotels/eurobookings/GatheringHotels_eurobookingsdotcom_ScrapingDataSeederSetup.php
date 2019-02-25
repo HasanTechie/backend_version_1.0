@@ -14,7 +14,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
         $dataArray = [
             'adults' => 2,
             'currency' => 'EUR',
-            'start_date' => '2019-02-26',
+//            'start_date' => '2019-02-26',
+            'start_date' => '2019-05-26',
             'end_date' => '2020-02-26',
             'city' => 'Frankfurt',
             'city_id' => 1246,

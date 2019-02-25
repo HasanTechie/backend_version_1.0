@@ -38,7 +38,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $client = new GoutteClient();
 
-            for ($i = 1; $i <= 7000; $i += 15) {
+            for ($i = 1; $i <= 2000; $i += 15) {
 
 
                 try {

@@ -14,6 +14,7 @@ class testSeeder1 extends Seeder
     public function run()
     {
         //
+//        print_r(php_ini_loaded_file());
 
     }
 }

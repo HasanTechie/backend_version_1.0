@@ -85,7 +85,7 @@
         </div>
 
         <div class="links">
-            <a href="/roomsprices/hotel5">Eurbookings Prices </a>
+            <a href="/hotels/eurobookings">Eurbookings Prices </a>
             <a href="/roomsprices/hotel4">Hotel VerticalBooking Prices </a>
             <a href="/roomsprices/hotel1">Baglioni Hotels Prices </a>
             <a href="/roomsprices/hotel3">Novecento Hotel Prices </a>

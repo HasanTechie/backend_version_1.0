@@ -93,6 +93,56 @@ class HotelController extends Controller
 
     }
 
+    public function hotelEurobookingsShowAll(){
+        $hotels = DB::table('hotels_eurobookings')
+            ->paginate(20);
+
+        return view('hotels.eurobookings.index', compact('hotels'));
+    }
+
+    public function hotelEurobookingsShowDetails($id)
+    {
+        $hotels = DB::table('hotels_eurobookings')->where('uid', '=', $id)->get();
+
+        dd($hotels[0]);
+    }
+
+
+    public function hotelEurobookingsReviewsOnTripadvisor($id)
+    {
+        $hotels = DB::table('hotels_eurobookings')->where('uid', '=', $id)->get();
+
+        dd(unserialize($hotels[0]->reviews_on_tripadvisor));
+    }
+
+
+    public function hotelEurobookingsDetails($id)
+    {
+        $hotels = DB::table('hotels_eurobookings')->where('uid', '=', $id)->get();
+
+        dd(unserialize($hotels[0]->details));
+    }
+
+
+    public function hotelEurobookingsFacilities($id)
+    {
+        $hotels = DB::table('hotels_eurobookings')->where('uid', '=', $id)->get();
+
+        dd(unserialize($hotels[0]->facilities));
+    }
+
+
+    public function hotelEurobookingsHotelInfo($id)
+    {
+        $hotels = DB::table('hotels_eurobookings')->where('uid', '=', $id)->get();
+
+        dd(unserialize($hotels[0]->hotel_info));
+    }
+
+
+
+
+
     public function getPlaces()
     {
         $client = new \GuzzleHttp\Client();

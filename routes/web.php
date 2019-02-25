@@ -18,10 +18,10 @@ Route::get('/', function () {
 Route::get('/places', 'PlaceController@index');
 Route::get('/places/{place}', 'PlaceController@show');
 
-
+//
 Route::get('/hotels/create', 'HotelController@create');
 Route::get('/hotels', 'HotelController@index');
-Route::get('/hotels/{hotel}', 'HotelController@show');
+Route::get('/hotels/hotels/{hotel}', 'HotelController@show');
 Route::get('/hotels/test1', 'HotelController@test1');
 Route::get('/hotels/test2', 'HotelController@test2');
 Route::get('/hotels/test3', 'HotelController@test3');
@@ -72,10 +72,18 @@ Route::get('/roomsprices/hotel3/', 'PriceController@hotel3Prices');
 Route::get('/roomsprices/hotel3/{id}', 'PriceController@hotel3Show');
 Route::get('/roomsprices/hotel4/', 'PriceController@hotel4Prices');
 Route::get('/roomsprices/hotel4/{id}', 'PriceController@hotel4Show');
-Route::get('/roomsprices/hotel5/', 'PriceController@hotel5Prices');
-Route::get('/roomsprices/hotel5/{id}', 'PriceController@hotel5Show');
-Route::get('/hotels5/{hotel}', 'HotelController@show');
-Route::get('/hotels5/{hotel}', 'HotelController@show');
+
+
+Route::get('/hotels/eurobookings/roomsprices/{id}', 'PriceController@EurobookingsRoomsPrices');
+Route::get('/hotels/eurobookings/roomsprices/{id}/{id}', 'PriceController@EurobookingsRoomsPricesShow');
+
+Route::get('/hotels/eurobookings', 'HotelController@hotelEurobookingsShowAll');
+Route::get('/hotels/eurobookings/reviewsontripadvisor/{id}', 'HotelController@hotelEurobookingsReviewsOnTripadvisor');
+Route::get('/hotels/eurobookings/details/{id}', 'HotelController@hotelEurobookingsDetails');
+Route::get('/hotels/eurobookings/facilities/{id}', 'HotelController@hotelEurobookingsFacilities');
+Route::get('/hotels/eurobookings/hotelinfo/{id}', 'HotelController@hotelEurobookingsHotelInfo');
+Route::get('/hotels/eurobookings/{id}', 'HotelController@hotelEurobookingsShowDetails');
+Route::get('/hotels/eurobookings/{id}', 'HotelController@hotelEurobookingsShowDetails');
 
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');

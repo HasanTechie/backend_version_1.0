@@ -147,15 +147,14 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                             global $checkOutDate, $checkInDate, $currency;
 
                                             $requestDate = date("Y-m-d");
-                                            if (isset($room['room_type'])) {
-                                                if ($room['room_type'] == 'singleroom') {
-                                                    $adults = 1;
-                                                }
-                                                if ($room['room_type'] == 'doubleroom') {
-                                                    $adults = 2;
-                                                }
+                                            $room['room_type'] = isset($room['room_type']) ? $room['room_type'] : null;
+                                            if ($room['room_type'] == 'singleroom') {
+                                                $adults = 1;
                                             }
-                                            $rid = $requestDate . $checkInDate . $checkOutDate . $dh['hotel_name'] . $room['room'] . (isset($room['room_type']) ? $room['room_type'] : null) . $room['room_short_description'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                            if ($room['room_type'] == 'doubleroom') {
+                                                $adults = 2;
+                                            }
+                                            $rid = $requestDate . $checkInDate . $checkOutDate . $dh['hotel_name'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                                             $rid = str_replace(' ', '', $rid);
                                             if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
 

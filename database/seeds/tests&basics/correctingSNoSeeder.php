@@ -13,6 +13,7 @@ class correctingSNoSeeder extends Seeder
     {
         //
 
+//        $tables = ['hotels_hrs'];
         $tables = ['hotels_eurobookings', 'hotels_hrs', 'rooms_prices_eurobookings', 'rooms_prices_hrs'];
 
         foreach ($tables as $table) {
@@ -25,7 +26,7 @@ class correctingSNoSeeder extends Seeder
                 DB::table($table)->where('uid', $instance->uid)->update([
                     's_no' => ++$j,
                 ]);
-                echo 's_no. ' . $j . ' ' . $table . "\n";
+//                echo 's_no. ' . $j . ' ' . $table . "\n";
             }
         }
     }

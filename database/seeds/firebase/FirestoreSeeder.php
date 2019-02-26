@@ -23,8 +23,8 @@ class FirestoreSeeder extends Seeder
         $k = 0;
 
         $db = new FirestoreClient([
-//            'keyFilePath' => __DIR__ . '/keys/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
-            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
+            'keyFilePath' => __DIR__ . '/keys/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
+//            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
 
         $hotels = DB::table('hotels')->where('website', '=', 'hotelportamaggiore.it')->orWhere('website', '=', 'novecentohotel.it')->get();
@@ -33,7 +33,7 @@ class FirestoreSeeder extends Seeder
         foreach ($hotels as $hotel) {
 
             $properties = $db
-                ->collection('properties')//hotles
+                ->collection('properties')//hotels
                 ->document($hotel->uid);
 
             //forbidden by max
@@ -54,7 +54,7 @@ class FirestoreSeeder extends Seeder
                     'country' => 'Germany',
                 ]);
 
-                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->limit(100)->orderBy('check_in_date')->get();
 
             }
 
@@ -64,13 +64,13 @@ class FirestoreSeeder extends Seeder
                     'city' => 'Rome',
                     'country' => 'Italy',
                 ]);
-                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->limit(100)->orderBy('check_in_date')->get();
             }
 
             foreach ($dates as $date) {
 
                 $calendar = $properties->collection('calendar')//dates
-                ->document(uniqid());
+                ->document($date->check_in_date);
 
 
                 if ($hotel->uid == '5c62bce9f062b') {

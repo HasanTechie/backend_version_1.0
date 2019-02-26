@@ -26,6 +26,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $country = $dataArray['country'];
         $cityId = $dataArray['city_id'];
         $date = $dataArray['start_date'];
+        $approxResults = $dataArray['total_results'];
 
         $end_date = $dataArray['end_date']; //last checkin date hogi last me
 
@@ -38,7 +39,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $client = new GoutteClient();
 
-            for ($i = 1; $i <= 2000; $i += 15) {
+            for ($i = 1; $i <= $approxResults; $i += 15) {
 
 
                 try {

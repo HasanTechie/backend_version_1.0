@@ -2,30 +2,26 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
+use correctingSNoSeeder;
 use Carbon\Carbon;
-
-use FirestoreSeeder;
-
 
 use Illuminate\Console\Command;
 
-
-class PushDataToFirestore extends Command
+class CorrectingSNo extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:pushdatatofirestore';
+    protected $signature = 'command:correctingsno';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Push Data To Firestore From MySQL';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -45,9 +41,9 @@ class PushDataToFirestore extends Command
     public function handle()
     {
         //
-        echo 'PushDataToFireBase started at : ' . Carbon::now()->toDateTimeString() . "\n";
-        $new = new FirestoreSeeder();
+        echo 'CorrectingSNo started at : ' . Carbon::now()->toDateTimeString() . "\n";
+        $new = new correctingSNoSeeder();
         $new->run();
-        echo 'PushDataToFireBase ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
+        echo 'CorrectingSNo ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }
 }

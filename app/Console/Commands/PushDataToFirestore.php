@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 use FirestoreSeeder;

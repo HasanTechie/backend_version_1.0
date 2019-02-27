@@ -30,26 +30,26 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->everyMinute()
-            ->appendOutputTo(storage_path('logs/PushDataToFirestore.log'));
+            ->daily()
+            ->appendOutputTo(storage_path('logs/kernel/PushDataToFirestore.log'));
 
 //        $schedule->command('command:gathereurobookingsberlindata')
 //            ->withoutOverlapping()
 //            ->runInBackground()
 //            ->daily()
-//            ->appendOutputTo(storage_path('logs/GatherEurobookingsBerlinData.log'));
+//            ->appendOutputTo(storage_path('logs/kernel/GatherEurobookingsBerlinData.log'));
 //
 //        $schedule->command('command:gathereurobookingsromedata')
 //            ->withoutOverlapping()
 //            ->runInBackground()
 //            ->daily()
-//            ->appendOutputTo(storage_path('logs/GatherEurobookingsRomeData.log'));
+//            ->appendOutputTo(storage_path('logs/kernel/GatherEurobookingsRomeData.log'));
 
         $schedule->command('command:correctingsno')
             ->withoutOverlapping()
             ->runInBackground()
             ->everyMinute()
-            ->appendOutputTo(storage_path('logs/CorrectingSNo.log'));
+            ->appendOutputTo(storage_path('logs/kernel/CorrectingSNo.log'));
     }
 
     /**

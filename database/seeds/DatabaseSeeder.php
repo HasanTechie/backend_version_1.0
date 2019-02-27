@@ -22,11 +22,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringTourPediaPlacesDetailsReviewsSeeder');
 
 //        $this->call('MergingHotelPlacesDataSeeder');
-//        $this->call('GatheringCountriesDataFromHotelBedsSeeder');
-//        $this->call('GatheringHotelDataFromHotelBedsAPISeeder');
 
 //        $this->call('MergingDataGoogleMapsAPISeeder');
-//        $this->call('MergingDataHotelBedsAPISeeder');
 //        $this->call('MergingDataTourPediaAPISeeder');
 //        $this->call('GatheringSingaporeHotelDataSeeder');
 //        $this->call('MergingDataTourPediaAPIplacesSeeder');
@@ -65,7 +62,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 //        $this->call('Gathering_globaldotmomondodotcom_ScrapingDataSeeder');
 
-//        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
+        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
 
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetup');
 
@@ -76,7 +73,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FixinguidOfVerticalBookings');
 
 //        $this->call('FirebaseSeeder');
-        $this->call('FirestoreSeeder');
+//        $this->call('FirestoreSeeder');
 
 //        $this->call('TrawexSeeder');
 

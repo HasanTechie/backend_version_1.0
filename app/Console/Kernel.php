@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -33,17 +33,17 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->appendOutputTo(storage_path('logs/PushDataToFirestore.log'));
 
-        $schedule->command('command:gathereurobookingsberlindata')
-            ->withoutOverlapping()
-            ->runInBackground()
-            ->daily()
-            ->appendOutputTo(storage_path('logs/GatherEurobookingsBerlinData.log'));
-
-        $schedule->command('command:gathereurobookingsromedata')
-            ->withoutOverlapping()
-            ->runInBackground()
-            ->daily()
-            ->appendOutputTo(storage_path('logs/GatherEurobookingsRomeData.log'));
+//        $schedule->command('command:gathereurobookingsberlindata')
+//            ->withoutOverlapping()
+//            ->runInBackground()
+//            ->daily()
+//            ->appendOutputTo(storage_path('logs/GatherEurobookingsBerlinData.log'));
+//
+//        $schedule->command('command:gathereurobookingsromedata')
+//            ->withoutOverlapping()
+//            ->runInBackground()
+//            ->daily()
+//            ->appendOutputTo(storage_path('logs/GatherEurobookingsRomeData.log'));
 
         $schedule->command('command:correctingsno')
             ->withoutOverlapping()
@@ -59,7 +59,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

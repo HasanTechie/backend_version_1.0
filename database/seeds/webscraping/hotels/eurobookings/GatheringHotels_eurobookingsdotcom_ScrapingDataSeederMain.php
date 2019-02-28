@@ -146,6 +146,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                             $dh1['hotel_latitude'] = (!empty($coordinatesArray[1]) ? $coordinatesArray[1] : null);
                                             $dh1['hotel_longitude'] = (!empty($coordinatesArray[0]) ? $coordinatesArray[0] : null);
                                         } else {
+                                            global $city;
                                             Storage::put('eurobookings/' . $city . '/ErrorMaps.html', $crawler->html());
                                         }
 

@@ -21,10 +21,13 @@ class CreateHotelsHrsTable extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('city_id_on_hrs')->nullable();
-            $table->string('country')->nullable();
+            $table->string('country_code')->nullable();
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
+            $table->string('ratings_on_google')->nullable();
+            $table->string('total_number_of_ratings_on_google')->nullable();
             $table->string('hid',254)->unique();
+            $table->longText('all_data_google')->nullable();
             $table->string('source')->nullable();
 
             $table->timestamps();

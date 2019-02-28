@@ -15,7 +15,9 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
      */
     public function mainRun($dataArray)
     {
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
 
         global $city, $country, $checkInDate, $checkOutDate, $cityId, $currency;
 

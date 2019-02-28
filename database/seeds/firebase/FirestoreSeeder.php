@@ -23,9 +23,10 @@ class FirestoreSeeder extends Seeder
         $k = 0;
 
         $db = new FirestoreClient([
-            'keyFilePath' => __DIR__ . '/keys/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
-//            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
+//            'keyFilePath' => __DIR__ . '/keys/solidps-backend-data-firebase-adminsdk-8d9sv-9bb2dbfcb0.json'
+            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
+
 
         $hotels = DB::table('hotels')->where('website', '=', 'hotelportamaggiore.it')->orWhere('website', '=', 'novecentohotel.it')->get();
 
@@ -67,6 +68,7 @@ class FirestoreSeeder extends Seeder
                 $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->limit(100)->orderBy('check_in_date')->get();
             }
 
+//
             foreach ($dates as $date) {
 
                 $calendar = $properties->collection('calendar')//dates
@@ -146,6 +148,7 @@ class FirestoreSeeder extends Seeder
 
                 echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
+                $i = 0;
                 foreach ($rooms as $room) {
 
                     if ($hotel->uid == '5c62bce9f062b') {
@@ -185,6 +188,22 @@ class FirestoreSeeder extends Seeder
                                     'hint' => $competitor->action,
                                     'name' => 'Normal'
                                 ]);
+
+
+                            $assets2 = $properties
+                                ->collection('assets')//rooms
+                                ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+
+                            $analytics2 = $assets2
+                                ->collection('analytics')//dates
+                                ->document($date->check_in_date);
+
+                            $analytics2->set([
+                                'real_price' => $realPrice,
+                                'competitor_price' => $competitorPrice,
+                                'suggested_price' => $suggestedPrice,
+                                'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                            ]);
                         }
                     }
 
@@ -207,6 +226,7 @@ class FirestoreSeeder extends Seeder
 
 
                             if (!empty($competitor)) {
+                                $i++;
                                 $assets = $calendar
                                     ->collection('assets')//rooms
                                     ->document($room->uid);
@@ -238,6 +258,28 @@ class FirestoreSeeder extends Seeder
                                         'hint' => $competitor->action,
                                         'name' => 'Normal'
                                     ]);
+
+
+                                $assets2 = $properties
+                                    ->collection('assets')//rooms
+                                    ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+
+                                $analytics2 = $assets2
+                                    ->collection('analytics')//dates
+                                    ->document($date->check_in_date);
+
+//                                if ($i == 2) {
+//                                    dd($room);
+//                                }
+                                $analytics2->set([
+                                    'real_price' => $realPrice,
+                                    'competitor_price' => $competitorPrice,
+                                    'suggested_price' => $suggestedPrice,
+                                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                                ]);
+
+
+                                //properties/{property_id}/assets/{asset_id}/analytics{date_id, for example 2015-02-20}
                             }
                         }
                     }
@@ -249,8 +291,8 @@ class FirestoreSeeder extends Seeder
                     'events' => (count($eventArray) > 0) ? $eventArray : null,
                     'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
                     'market_suggestions' => [
-                        'max_marketvalue_offset' => (count($marketValueOffsetArray)>0) ? round(max($marketValueOffsetArray), 2) : null,
-                        'min_marketvalue_offset' => (count($marketValueOffsetArray)>0) ? round(min($marketValueOffsetArray), 2) : null,
+                        'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
+                        'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
                     ]
                 ]);
                 $marketValueOffsetArray = [];

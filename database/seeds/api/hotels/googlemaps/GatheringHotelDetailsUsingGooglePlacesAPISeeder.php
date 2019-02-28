@@ -17,15 +17,37 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
         $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
         $client = new GuzzleClient();
         $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
-        $input = "Park Inn by Radisson Berlin Alexanderplatz Hotel";
-        $fields = "formatted_address,geometry,icon,id,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating,opening_hours";
 
-        $response = $client->request('GET',"$url?input=$input&inputtype=textquery&fields=$fields&key=$key");
+        $hotels = DB::table('hotels_eurobookings')->get();
 
-        $response = json_decode($response->getBody())->candidates[0];
+        foreach ($hotels as $hotel) {
 
+            $input = $hotel->name . ' ,' . $hotel->city;
 
-        /*
+            $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
+
+            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&key=$key");
+
+            $response = json_decode($response->getBody())->candidates[0];
+
+            DB::table('hotels_eurobookings')
+                ->where('name', $response->name)
+                ->orWhere('address', $response->formatted_address)
+                ->update([
+                    'latitude' => $response->geometry->location->lat,
+                    'longitude' => $response->geometry->location->lng,
+                    'ratings_on_google' => $response->rating,
+                    'total_number_of_ratings_on_google' => $response->user_ratings_total,
+                    'all_data_google' => serialize($response),
+                ]);
+
+            dd('check fist');
+        }
+    }
+
+}
+
+/*
         $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&fields=$fields&key=$key"); //free but only one result
         $response = $client->request('GET', "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJ42MzYk1QqEcRhlX0r_-WtI8&fields=name,rating,price_level,formatted_phone_number&key=$key");
         if (!empty($_SESSION['next_page_token'])) {
@@ -95,5 +117,3 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
                 ]);
         }
 */
-    }
-}

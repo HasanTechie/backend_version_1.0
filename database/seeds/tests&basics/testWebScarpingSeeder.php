@@ -17,6 +17,44 @@ class testWebScarpingSeeder extends Seeder
     public function run()
     {
         //
+        $url = "https://www.eurobookings.com/scripts/php/popupGMap.php?intHotelId=427789&lang=en";
+        $client2 = PhantomClient::getInstance();
+        $client2->isLazy(); // Tells the client to wait for all resources before rendering
+        $request2 = $client2->getMessageFactory()->createRequest($url);
+        $request2->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
+        $response2 = $client2->getMessageFactory()->createResponse();
+        // Send the request
+        $client2->send($request2, $response2);
+        $content2 = $response2->getContent();
+        $crawler = new Crawler($content2);
+
+        Storage::put('maps.html', $crawler->html());
+
+        $result = preg_split('/center:/',$crawler->html());
+        if(count($result)>1){
+            $result_split=explode(' ',$result[1]);
+
+            $coordinates = $result_split[1];
+        }
+
+        $coordinates = substr($coordinates, 0, -1);
+
+        $coordinates = str_replace(array("[", "]"), '',$coordinates);
+        $coordinatesArray = explode(',',$coordinates);
+
+        $longitude= $coordinatesArray[0];
+        $latitude = $coordinatesArray[1];
+
+
+        /*
+        if ($data = preg_match('/\bcenter\b/',$crawler->html())){
+            dd($data);
+        }
+        */
+
+    }
+}
+/*
         $url = "https://example.com/";
 
 //        $client = new GuzzleClient();
@@ -62,10 +100,7 @@ class testWebScarpingSeeder extends Seeder
         dd($response);
 
 //        dd($response);
-
-
-    }
-}
+*/
 /*        $client = new Client();
         $crawler = $client->request('GET', 'https://global.momondo.com/hotel-search/Berlin,Germany-c9109/2019-02-23/2019-02-24/2adults?fs=price-options=onlinereq&sort=rank_a');
 //        $link = $crawler->selectLink('Hotel Policies')->link();

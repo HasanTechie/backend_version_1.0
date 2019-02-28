@@ -19,19 +19,26 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('command:pushdatatofirestore')
+
+        $schedule->command('command:correctingsno')
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->daily()
-            ->appendOutputTo(storage_path('logs/kernel/PushDataToFirestore.log'));
+            ->everyMinute()
+            ->appendOutputTo(storage_path('logs/kernel/CorrectingSNo.log'));
+
+//        $schedule->command('command:pushdatatofirestore')
+//            ->withoutOverlapping()
+//            ->runInBackground()
+//            ->everyThirtyMinutes()
+//            ->appendOutputTo(storage_path('logs/kernel/PushDataToFirestore.log'));
 
 //        $schedule->command('command:gathereurobookingsberlindata')
 //            ->withoutOverlapping()
@@ -45,11 +52,7 @@ class Kernel extends ConsoleKernel
 //            ->daily()
 //            ->appendOutputTo(storage_path('logs/kernel/GatherEurobookingsRomeData.log'));
 
-        $schedule->command('command:correctingsno')
-            ->withoutOverlapping()
-            ->runInBackground()
-            ->everyMinute()
-            ->appendOutputTo(storage_path('logs/kernel/CorrectingSNo.log'));
+
     }
 
     /**
@@ -59,7 +62,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

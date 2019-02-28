@@ -18,7 +18,9 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
         $client = new GuzzleClient();
         $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
 
-        $hotels = DB::table('hotels_eurobookings')->get();
+        $hotels = DB::table('hotels_eurobookings')
+            ->whereNull('total_number_of_ratings_on_google')
+            ->get();
 
         foreach ($hotels as $hotel) {
 
@@ -26,22 +28,54 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
 
             $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
 
-            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&key=$key");
+            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:2000@" . $hotel->latitude . "," . $hotel->longitude . "&key=$key");
 
-            $response = json_decode($response->getBody())->candidates[0];
 
-            DB::table('hotels_eurobookings')
-                ->where('name', $response->name)
-                ->orWhere('address', $response->formatted_address)
-                ->update([
-                    'latitude' => $response->geometry->location->lat,
-                    'longitude' => $response->geometry->location->lng,
-                    'ratings_on_google' => $response->rating,
-                    'total_number_of_ratings_on_google' => $response->user_ratings_total,
-                    'all_data_google' => serialize($response),
-                ]);
+            if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
 
-            dd('check fist');
+                $response = json_decode($response->getBody())->candidates[0];
+
+
+//            $array['elat1'] = $hotel->latitude;
+//            $array['lat1'] = round($hotel->latitude, 3);
+//            $array['glat2'] = $response->geometry->location->lat;
+//            $array['lat2'] = round($response->geometry->location->lat, 3);
+//            $array['elng1'] = $hotel->longitude;
+//            $array['lng1'] = round($hotel->longitude, 3);
+//            $array['glng2'] = $response->geometry->location->lng;
+//            $array['lng2'] = round($response->geometry->location->lng, 3);
+
+
+//            if (($array['lat1'] == $array['lat2']) && ($array['lng1'] == $array['lng2'])) {
+
+                if (DB::table('temp_google_data')->where('place_id', '=', $response->place_id)->doesntExist()) {
+
+                    DB::table('temp_google_data')->insert([
+                        'place_id' => $response->place_id,
+                        'all_data_google' => serialize($response),
+                        'created_at' => DB::raw('now()'),
+                        'updated_at' => DB::raw('now()')
+                    ]);
+                    echo $hotel->name . "\n";
+                }
+            } else {
+                Storage::append('googleapi/tests/notfound.log', $input . ' lat:' . $hotel->latitude . ' lng:' . $hotel->longitude);
+            }
+//            }
+
+
+//            DB::table('hotels_eurobookings')
+//                ->where('name', $response->name)
+//                ->orWhere('address', $response->formatted_address)
+//                ->update([
+//                    'latitude' => $response->geometry->location->lat,
+//                    'longitude' => $response->geometry->location->lng,
+//                    'ratings_on_google' => $response->rating,
+//                    'total_number_of_ratings_on_google' => $response->user_ratings_total,
+//                    'all_data_google' => serialize($response),
+//                ]);
+
+//            dd('check fist');
         }
     }
 

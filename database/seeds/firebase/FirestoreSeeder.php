@@ -146,7 +146,7 @@ class FirestoreSeeder extends Seeder
                     $eventIndicator [] = $newWeather;
                 }
 
-                echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+//                echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
                 $i = 0;
                 foreach ($rooms as $room) {
@@ -161,7 +161,7 @@ class FirestoreSeeder extends Seeder
                         if (!empty($competitor)) {
                             $assets = $calendar
                                 ->collection('assets')//rooms
-                                ->document($room->uid);
+                                ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
 
                             $assets->set([
                                 'name' => $room->room,
@@ -229,7 +229,7 @@ class FirestoreSeeder extends Seeder
                                 $i++;
                                 $assets = $calendar
                                     ->collection('assets')//rooms
-                                    ->document($room->uid);
+                                    ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
 
                                 $assets->set([
                                     'name' => $room->room,

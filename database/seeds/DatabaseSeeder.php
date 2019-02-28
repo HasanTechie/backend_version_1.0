@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder
 //        $this->call('AirborneFlightsSeeder');
 //        $this->call('UpdateFlightsData');
 
-//        $this->call('GatheringGoogleMapsHotelDetailsSeeder');
+//        $this->call('GatheringHotelAllDetailsUsingGooglePlacesDetailsAPISeeder');
 //        $this->call('GatheringHotelDetailsUsingGooglePlacesAPISeeder');
+        $this->call('MigratingDataFromTempGoogleToEurobookingsTableSeeder');
+
 
 //        $this->call('GatheringTourPediaPlacesSeeder');
 //        $this->call('GatheringTourPediaPlacesDetailsReviewsSeeder');

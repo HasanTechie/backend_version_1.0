@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:pushdatatofirestore')
             ->withoutOverlapping()
             ->runInBackground()
-            ->everyThirtyMinutes()
+            ->daily()
             ->appendOutputTo(storage_path('logs/PushDataToFirestore.log'));
 
 //        $schedule->command('command:gathereurobookingsberlindata')

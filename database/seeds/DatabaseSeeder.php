@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('GatheringHotelAllDetailsUsingGooglePlacesDetailsAPISeeder');
 //        $this->call('GatheringHotelDetailsUsingGooglePlacesAPISeeder');
-        $this->call('MigratingDataFromTempGoogleToEurobookingsTableSeeder');
+//        $this->call('MigratingDataFromTempGoogleToEurobookingsTableSeeder');
 
 
 //        $this->call('GatheringTourPediaPlacesSeeder');
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FixinguidOfVerticalBookings');
 
 //        $this->call('FirebaseSeeder');
-//        $this->call('FirestoreSeeder');
+        $this->call('FirestoreSeeder');
 
 //        $this->call('TrawexSeeder');
 

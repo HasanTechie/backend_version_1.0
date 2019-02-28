@@ -55,7 +55,7 @@ class FirestoreSeeder extends Seeder
                     'country' => 'Germany',
                 ]);
 
-                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->limit(100)->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->limit(10)->orderBy('check_in_date')->get();
 
             }
 
@@ -65,7 +65,7 @@ class FirestoreSeeder extends Seeder
                     'city' => 'Rome',
                     'country' => 'Italy',
                 ]);
-                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->limit(100)->orderBy('check_in_date')->get();
+                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->limit(10)->orderBy('check_in_date')->get();
             }
 
 //
@@ -161,7 +161,7 @@ class FirestoreSeeder extends Seeder
                         if (!empty($competitor)) {
                             $assets = $calendar
                                 ->collection('assets')//rooms
-                                ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+                                ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
                             $assets->set([
                                 'name' => $room->room,
@@ -192,7 +192,7 @@ class FirestoreSeeder extends Seeder
 
                             $assets2 = $properties
                                 ->collection('assets')//rooms
-                                ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+                                ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
                             $analytics2 = $assets2
                                 ->collection('analytics')//dates
@@ -204,6 +204,10 @@ class FirestoreSeeder extends Seeder
                                 'suggested_price' => $suggestedPrice,
                                 'date' => Carbon\Carbon::createFromDate($y, $m, $d),
                             ]);
+
+                            $allRealPrice[] = $realPrice;
+                            $allCompetitorPrice[] = $competitorPrice;
+                            $allSuggestedPrice[] = $suggestedPrice;
                         }
                     }
 
@@ -229,7 +233,7 @@ class FirestoreSeeder extends Seeder
                                 $i++;
                                 $assets = $calendar
                                     ->collection('assets')//rooms
-                                    ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
                                 $assets->set([
                                     'name' => $room->room,
@@ -262,7 +266,11 @@ class FirestoreSeeder extends Seeder
 
                                 $assets2 = $properties
                                     ->collection('assets')//rooms
-                                    ->document(strtolower(str_replace(array(' ', ',','/'), '', $room->room)));
+                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
+
+                                $assets2->set([
+                                    'name' => $room->room
+                                ]);
 
                                 $analytics2 = $assets2
                                     ->collection('analytics')//dates
@@ -278,12 +286,32 @@ class FirestoreSeeder extends Seeder
                                     'date' => Carbon\Carbon::createFromDate($y, $m, $d),
                                 ]);
 
+                                $allRealPrice[] = $realPrice;
+                                $allCompetitorPrice[] = $competitorPrice;
+                                $allSuggestedPrice[] = $suggestedPrice;
+
 
                                 //properties/{property_id}/assets/{asset_id}/analytics{date_id, for example 2015-02-20}
                             }
                         }
                     }
                 }
+
+                $assets3 = $properties
+                    ->collection('assets')//rooms
+                    ->document('all');
+
+                $analytics3 = $assets3
+                    ->collection('analytics')//dates
+                    ->document($date->check_in_date);
+
+                $allRealPrice = array_filter($allRealPrice);
+                $averageAllRealPrice = array_sum($allRealPrice) / count($allRealPrice);
+
+                $analytics3->set([
+                    'avg_real_price' => $averageAllRealPrice,
+                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                ]);
 
                 $calendar->set([
                     'date' => Carbon\Carbon::createFromDate($y, $m, $d),

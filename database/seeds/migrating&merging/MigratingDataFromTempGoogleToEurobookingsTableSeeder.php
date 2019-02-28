@@ -19,9 +19,9 @@ class MigratingDataFromTempGoogleToEurobookingsTableSeeder extends Seeder
 
         foreach ($hotels as $hotel) {
 
-            $google = DB::table('temp_google_data')->get();
+            $googleAll = DB::table('temp_google_data')->get();
 
-            foreach ($google as $instance) {
+            foreach ($googleAll as $instance) {
 
                 $googleData = unserialize($instance->all_data_google);
 
@@ -37,10 +37,32 @@ class MigratingDataFromTempGoogleToEurobookingsTableSeeder extends Seeder
 
                 if (($array['lat1'] == $array['lat2']) && ($array['lng1'] == $array['lng2'])) {
 
-                    echo 'if';
-                } else {
-                    print_r($array);
-                    echo 'else';
+//                    $results2 = DB::table('hotels_eurobookings')->select(DB::raw('uid,name,address, ROUND(latitude,3) as lati ,latitude, ROUND(longitude,3) as longi,longitude'))->havingRaw(
+//                        'lati=' . round($hotel->latitude, 3) . ' AND longi=' . round($hotel->longitude, 3) . ' '
+//                    )->get();
+
+                    $result3 = DB::table('hotels_eurobookings')->where('name', $googleData->name)->get();
+
+                    if ($result3->count() > 1) {
+
+                        dd($result3);
+//                        echo $result3[0]->name . $googleData->name . "\n";
+                    }
+
+//                    if ($results2->count() == 1) {
+//
+////                        $data = DB::table('hotels_eurobookings')
+////                            ->whereRaw('name', [$googleData->name])
+////                            ->update([
+////                                'total_number_of_ratings_on_google' => $googleData->user_ratings_total,
+////                                'ratings_on_google' => $googleData->rating,
+////                                'all_data_google' => serialize($googleData),
+////                            ]);
+//
+//                        if ($data == 1) {
+//                            echo $hotel->uid . ' h:' . $hotel->name . ' g:' . $googleData->name . "\n";
+//                        }
+//                    }
                 }
             }
         }

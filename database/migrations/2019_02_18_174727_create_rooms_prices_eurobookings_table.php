@@ -22,6 +22,7 @@ class CreateRoomsPricesEurobookingsTable extends Migration
             $table->string('room')->nullable();
             $table->string('hotel_uid')->nullable();
             $table->string('hotel_name')->nullable();
+            $table->string('hotel_eurobooking_id')->nullable();
             $table->text('short_description')->nullable();
             $table->text('facilities')->nullable();
             $table->text('photo')->nullable();

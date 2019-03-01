@@ -12,6 +12,19 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
         $euroBooking = new GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain();
 
 
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-05',
+            'end_date' => '2019-03-05',
+            'city' => 'Hamburg',
+            'city_id' => 1427,
+            'country_code' => 'DE',
+            'total_results' => 341,
+        ];
+
+
         $dataArray[] = [
             'adults' => 2,
             'currency' => 'EUR',
@@ -46,16 +59,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
         ];
 
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-05',
-            'end_date' => '2019-03-05',
-            'city' => 'Hamburg',
-            'city_id' => 1427,
-            'country_code' => 'DE',
-            'total_results' => 341,
-        ];
 
         $dataArray[] = [
             'adults' => 2,

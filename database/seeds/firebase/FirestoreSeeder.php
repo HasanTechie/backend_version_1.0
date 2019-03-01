@@ -194,6 +194,11 @@ class FirestoreSeeder extends Seeder
                                 ->collection('assets')//rooms
                                 ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
+
+                            $assets2->set([
+                                'name' => $room->room
+                            ]);
+
                             $analytics2 = $assets2
                                 ->collection('analytics')//dates
                                 ->document($date->check_in_date);
@@ -299,7 +304,11 @@ class FirestoreSeeder extends Seeder
 
                 $assets3 = $properties
                     ->collection('assets')//rooms
-                    ->document('all');
+                    ->document('all_assets');
+
+                $assets3->set([
+                    'name' => 'all room types'
+                ]);
 
                 $analytics3 = $assets3
                     ->collection('analytics')//dates
@@ -308,8 +317,16 @@ class FirestoreSeeder extends Seeder
                 $allRealPrice = array_filter($allRealPrice);
                 $averageAllRealPrice = array_sum($allRealPrice) / count($allRealPrice);
 
+                $allCompetitorPrice = array_filter($allCompetitorPrice);
+                $averageAllCompetitorPrice = array_sum($allCompetitorPrice) / count($allCompetitorPrice);
+
+                $allSuggestedPrice = array_filter($allSuggestedPrice);
+                $averageAllSuggestedPrice = array_sum($allSuggestedPrice) / count($allSuggestedPrice);
+
                 $analytics3->set([
-                    'avg_real_price' => $averageAllRealPrice,
+                    'real_price' => round($averageAllRealPrice, 2),
+                    'competitor_price' => round($averageAllCompetitorPrice, 2),
+                    'suggested_price' => round($averageAllSuggestedPrice, 2),
                     'date' => Carbon\Carbon::createFromDate($y, $m, $d),
                 ]);
 

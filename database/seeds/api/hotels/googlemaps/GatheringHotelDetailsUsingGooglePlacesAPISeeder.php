@@ -13,6 +13,7 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
      */
     public function run()
     {
+        /*
         //
         $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
         $client = new GuzzleClient();
@@ -77,6 +78,7 @@ class GatheringHotelDetailsUsingGooglePlacesAPISeeder extends Seeder
 
 //            dd('check fist');
         }
+        */
     }
 
 }

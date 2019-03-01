@@ -20,13 +20,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
     public function mainRun(array $data)
     {
         //
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $this->dataArray['source'] = 'eurobookings.com';
         $this->dataArray = $data;
-
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
             $this->dataArray['request_date'] = date("Y-m-d");
@@ -237,7 +231,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                                         'price' => $room['price'],
                                                                         'currency' => $this->dataArray['currency'],
                                                                         'room' => $room['room'],
-                                                                        'short_description' => $room['details'],
+                                                                        'short_description' => (!empty($room['details']) ? serialize($room['details']) : null),
                                                                         'facilities' => serialize($room['room_facilities']),
                                                                         'photo' => $room['img'],
                                                                         'hotel_uid' => $this->dataArray['hotel_uid'],
@@ -374,47 +368,50 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
     {
 
         $crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->each(function ($node) {
-            $_SESSION['room'] = '';
-            $_SESSION['node'] = $node;
+            $this->dataArray['temp']['room'] = '';
+            $this->dataArray['temp']['node'] = $node;
 
             if ($node->filter('tr')->count() > 0) {
                 $this->dataArray['all_rooms'] = $node->filter('tr')->each(function ($node1) {
 
                     if ($node1->filter('.clsRoomPhotoWrap > img')->count() > 0) {
-                        $dr['img'] = $_SESSION['img'] = str_replace('//', '', $node1->filter('.clsRoomPhotoWrap > img')->attr('src'));
+                        $dr['img'] = $this->dataArray['temp']['img'] = str_replace('//', '', $node1->filter('.clsRoomPhotoWrap > img')->attr('src'));
                     }
 
                     if ($node1->filter('li.clsMoreRoomInfo')->count() > 0) {
                         $roomId = str_replace('idEbAvailability', '', $node1->filter('li.clsMoreRoomInfo')->attr('id'));
-                        $dr['room_facilities'] = $_SESSION['room_facilities'] = $_SESSION['node']->filter('#' . strtolower($roomId) . ' > .clsEbAvailabilityRoomsBlockTextInner > p')->each(function ($node) {
+                        $dr['room_facilities'] = $this->dataArray['temp']['room_facilities'] = $this->dataArray['temp']['node']->filter('#' . strtolower($roomId) . ' > .clsEbAvailabilityRoomsBlockTextInner > p')->each(function ($node) {
                             return trim($node->text());
                         });
                     }
 
                     if ($node1->filter('.clsMoreRoomInfoTxt')->count() > 0) {
-                        $dr['room'] = $_SESSION['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
+                        $dr['room'] = $this->dataArray['temp']['room'] = $node1->filter('.clsMoreRoomInfoTxt')->text();
                     } else {
                         $dr['room'] = null;
                     }
 
                     $dr['price'] = ($node1->filter('.clsSortByPrice')->count() > 0) ? $node1->filter('.clsSortByPrice')->text() : null;
-                    $dr['details'] = ($node1->filter('.clsUspList')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $node1->filter('.clsUspList')->text())) : null;
+                    if ($node1->filter('ul.clsUspList  > li')->count() > 0) {
+                        $dr['details'] = $node1->filter('ul.clsUspList > li')->each(function ($node1) {
+                            return $node1->text();
+                        });
+                    } else {
+                        $dr['details'] = null;
+                    }
 
                     if ((!empty($dr['details']) && !empty($dr['price'])) || empty($dr['room'])) {
-                        $dr['room'] = (isset($_SESSION['room']) ? $_SESSION['room'] : null);
+                        $dr['room'] = (isset($this->dataArray['temp']['room']) ? $this->dataArray['temp']['room'] : null);
 
                     }
                     if (empty($dr['img'])) {
-                        $dr['img'] = (isset($_SESSION['img']) ? $_SESSION['img'] : null);
+                        $dr['img'] = (isset($this->dataArray['temp']['img']) ? $this->dataArray['temp']['img'] : null);
                     }
 
-                    if (!empty($dr['price']) && empty($dr['details'])) {
-                        $dr['details'] = 'Not Available';
-                    }
 
-                    if ($_SESSION['room'] == $dr['room']) {
-                        if (isset($_SESSION['room_facilities'])) {
-                            $dr['room_facilities'] = $_SESSION['room_facilities'];
+                    if ($this->dataArray['temp']['room'] == $dr['room']) {
+                        if (isset($this->dataArray['temp']['room_facilities'])) {
+                            $dr['room_facilities'] = $this->dataArray['temp']['room_facilities'];
                         }
                     }
 

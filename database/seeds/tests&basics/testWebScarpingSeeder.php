@@ -30,19 +30,19 @@ class testWebScarpingSeeder extends Seeder
 
         Storage::put('maps.html', $crawler->html());
 
-        $result = preg_split('/center:/',$crawler->html());
-        if(count($result)>1){
-            $result_split=explode(' ',$result[1]);
+        $result = preg_split('/center:/', $crawler->html());
+        if (count($result) > 1) {
+            $result_split = explode(' ', $result[1]);
 
             $coordinates = $result_split[1];
         }
 
         $coordinates = substr($coordinates, 0, -1);
 
-        $coordinates = str_replace(array("[", "]"), '',$coordinates);
-        $coordinatesArray = explode(',',$coordinates);
+        $coordinates = str_replace(array("[", "]"), '', $coordinates);
+        $coordinatesArray = explode(',', $coordinates);
 
-        $longitude= $coordinatesArray[0];
+        $longitude = $coordinatesArray[0];
         $latitude = $coordinatesArray[1];
 
 

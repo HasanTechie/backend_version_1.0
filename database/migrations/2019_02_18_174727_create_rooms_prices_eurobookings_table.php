@@ -23,8 +23,8 @@ class CreateRoomsPricesEurobookingsTable extends Migration
             $table->string('hotel_uid')->nullable();
             $table->string('hotel_name')->nullable();
             $table->string('hotel_eurobooking_id')->nullable();
-            $table->text('short_description')->nullable();
-            $table->text('facilities')->nullable();
+            $table->longText('short_description')->nullable();
+            $table->longText('facilities')->nullable();
             $table->text('photo')->nullable();
             $table->string('number_of_adults_in_room_request')->nullable();
             $table->string('check_in_date')->nullable();

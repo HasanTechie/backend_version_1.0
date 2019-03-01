@@ -14,8 +14,10 @@
             <th>Hotel Address</th>
             <th>City</th>
             <th>Country</th>
-            <th>Ratings</th>
-            <th>Total Ratings</th>
+            <th>TripAdvisor Ratings</th>
+            <th>TripAdvisor Total Ratings</th>
+            <th>Google Ratings</th>
+            <th>Google Total Ratings</th>
             <th>Hotel Info</th>
             <th>Reviews on TripAdvisor</th>
             <th>Hotel Detail</th>
@@ -32,9 +34,11 @@
                 </td>
                 <td>{{$hotel->address}}</td>
                 <td>{{$hotel->city}}</td>
-                <td>{{$hotel->country}}</td>
+                <td>{{$hotel->country_code}}</td>
                 <td>{{$hotel->ratings_on_tripadvisor}}</td>
                 <td>{{$hotel->total_number_of_ratings_on_tripadvisor}}</td>
+                <td>{{$hotel->ratings_on_google}}</td>
+                <td>{{$hotel->total_number_of_ratings_on_google}}</td>
                 <td><a href="eurobookings/hotelinfo/{{$hotel->uid}}" class="button is-info is-outlined">O</a></td>
                 <td><a href="eurobookings/reviewsontripadvisor/{{$hotel->uid}}" class="button is-info is-outlined">O</a>
                 </td>

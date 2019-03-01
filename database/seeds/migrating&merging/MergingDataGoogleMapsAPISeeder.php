@@ -12,6 +12,7 @@ class MergingDataGoogleMapsAPISeeder extends Seeder
     public function run()
     {
         //
+        /*
         $j = 0;
         for ($i = 1; $i <= 1000; $i++) {
             if (DB::table('hotels_1')->where('id', $i)->exists()) {
@@ -40,5 +41,6 @@ class MergingDataGoogleMapsAPISeeder extends Seeder
                 }
             }
         }
+        */
     }
 }

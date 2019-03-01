@@ -89,45 +89,41 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                     $this->dataArray['hotel_total_rooms'] = null;
                                                 }
 
+
                                                 if ($crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->count()) {
-
-
-                                                    $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
-
+                                                    $this->dataArray['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
                                                         if ($node->filter('p')->count() > 0) {
-                                                            $this->dataArray['hotel_info']['heading'] = $node->filter('p')->first()->text();
-                                                            if (trim($this->dataArray['hotel_info']['heading']) == 'Area information :') {
-
-                                                                $this->dataArray['hotel_info']['detailsMeta'] = ($node->filter('p:nth-child(2)')->count() > 0) ? $node->filter('p:nth-child(2)')->text() : null;
+                                                            $dh['heading'] = $node->filter('p')->first()->text();
+                                                            if (trim($dh['heading']) == 'Area information :') {
+                                                                $dh['detailsMeta'] = ($node->filter('p:nth-child(2)')->count() > 0) ? $node->filter('p:nth-child(2)')->text() : null;
                                                                 if ($node->filter('p:nth-child(3)')->count() > 0) {
                                                                     $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
                                                                     foreach ($details as $key => $value) {
-                                                                        $this->dataArray['hotel_info']['all_details'][] = trim($value);
+                                                                        $dh['all_details'][] = trim($value);
                                                                     }
                                                                 }
-
-                                                                $this->dataArray['hotel_info']['nearest_airport'] = ($node->filter('p:nth-child(4)')->count() > 0) ? $node->filter('p:nth-child(4)')->text() : null;
-                                                                $this->dataArray['hotel_info']['preferred_airport'] = ($node->filter('p:nth-child(5)')->count() > 0) ? $node->filter('p:nth-child(5)')->text() : null;
+                                                                $dh['nearest_airport'] = ($node->filter('p:nth-child(4)')->count() > 0) ? $node->filter('p:nth-child(4)')->text() : null;
+                                                                $dh['preferred_airport'] = ($node->filter('p:nth-child(5)')->count() > 0) ? $node->filter('p:nth-child(5)')->text() : null;
                                                             } else {
-                                                                $this->dataArray['hotel_info']['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
+                                                                $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
                                                                     return $node->text();
                                                                 });
                                                             }
+                                                        } else {
+                                                            $dh = null;
                                                         }
-
-                                                        if (isset($this->dataArray['hotel_info']['all_details'])) {
-                                                            foreach ($this->dataArray['hotel_info']['all_details'] as $key => $value) {
+                                                        if (isset($dh['all_details'])) {
+                                                            foreach ($dh['all_details'] as $key => $value) {
                                                                 if (empty($value)) {
-                                                                    unset($this->dataArray['hotel_info']['all_details'][$key]);
+                                                                    unset($dh['all_details'][$key]);
                                                                 }
                                                             }
                                                         }
-
+                                                        return $dh;
                                                     });
                                                 } else {
                                                     $this->dataArray['hotel_info'] = null;
                                                 }
-
                                                 if ($crawler->filter('div#idHotelPoliciesLazy > table > tbody')->count() > 0) {
                                                     $this->dataArray['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
                                                 } else {
@@ -304,17 +300,22 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                 if ($crawler->filter('dl[name="sortableReviewPair"]')->count() > 0) {
 
-                    $crawler->filter('dl[name="sortableReviewPair"]')->each(function ($node) {
+                    $this->dataArray['hotel_reviews_on_tripadvisor'] = $crawler->filter('dl[name="sortableReviewPair"]')->each(function ($node) {
 
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['name'] = ($node->filter('.username')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('.username')->text())) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['location'] = ($node->filter('.location')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('.location')->text())) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['trip_type'] = ($node->filter('.tripType')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('.tripType')->text())) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['review_title'] = ($node->filter('.reviewTitle')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('.reviewTitle')->text())) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['ratings'] = ($node->filter('div.reviewInfo > .rating > span:nth-child(1)')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('div.reviewInfo > .rating > span:nth-child(1)')->attr('alt'))) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['date'] = ($node->filter('div.reviewInfo > span.date')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('div.reviewInfo > span.date')->text())) : null;
-                        $this->dataArray['hotel_reviews_on_tripadvisor']['review'] = ($node->filter('div.reviewBody > dl > dd:nth-child(2)')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t", "« less"), '', $node->filter('div.reviewBody > dl > dd:nth-child(2)')->text())) : null;
+                        $dh1['name'] = ($node->filter('.username')->count() > 0) ? $node->filter('.username')->text() : null;
+                        $dh1['location'] = ($node->filter('.location')->count() > 0) ? $node->filter('.location')->text() : null;
+                        $dh1['trip_type'] = ($node->filter('.tripType')->count() > 0) ? $node->filter('.tripType')->text() : null;
+                        $dh1['review_title'] = ($node->filter('.reviewTitle')->count() > 0) ? $node->filter('.reviewTitle')->text() : null;
+                        $dh1['ratings'] = ($node->filter('div.reviewInfo > .rating > span:nth-child(1)')->count() > 0) ? $node->filter('div.reviewInfo > .rating > span:nth-child(1)')->attr('alt') : null;
+                        $dh1['date'] = ($node->filter('div.reviewInfo > span.date')->count() > 0) ? $node->filter('div.reviewInfo > span.date')->text() : null;
+                        $dh1['review'] = ($node->filter('div.reviewBody > dl > dd:nth-child(2)')->count() > 0) ? $node->filter('div.reviewBody > dl > dd:nth-child(2)')->text() : null;
+                        foreach ($dh1 as $key => $instance) {
+                            if (!is_array($instance)) {
+                                $dh1[$key] = trim(str_replace(array("\r", "\n", "\t", "« less"), '', $instance));
+                            }
+                        }
+                        return $dh1;
                     });
-
                 }
             }
 

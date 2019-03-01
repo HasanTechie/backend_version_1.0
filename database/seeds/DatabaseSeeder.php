@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('GatheringHotelAllDetailsUsingGooglePlacesDetailsAPISeeder');
 //        $this->call('GatheringHotelDetailsUsingGooglePlacesAPISeeder');
-//        $this->call('MigratingDataFromTempGoogleToEurobookingsTableSeeder');
+//        $this->call('MigratingDataFromTempGoogleTableToEurobookingsTableSeeder');
 
 
 //        $this->call('GatheringTourPediaPlacesSeeder');

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MigratingDataFromTempGoogleToEurobookingsTableSeeder extends Seeder
+class MigratingDataFromTempGoogleTableToEurobookingsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,7 @@ class MigratingDataFromTempGoogleToEurobookingsTableSeeder extends Seeder
      */
     public function run()
     {
+        /*
         //
         $hotels = DB::table('hotels_eurobookings')
             ->whereNull('total_number_of_ratings_on_google')
@@ -79,5 +80,6 @@ class MigratingDataFromTempGoogleToEurobookingsTableSeeder extends Seeder
                 }
             }
         }
+        */
     }
 }

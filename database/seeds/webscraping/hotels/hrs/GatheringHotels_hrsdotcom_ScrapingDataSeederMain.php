@@ -155,7 +155,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                     }
                                 });
 
-                                dd($crawler->filter('dl#hotelinformation')->each(function ($node) {
+                                $crawler->filter('dl#hotelinformation')->each(function ($node) {
 //                                    $this->dataArray['node_hotel_information'] = $node;
 //                                    $node->filter('dt > h5')->each(function ($node) {
 //
@@ -176,30 +176,36 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 //                                    }
 
 
-                                    if (trim($node->filter('dt > h5')->text()) == 'Style of hotel and ambience') {
-                                        $this->dataArray['hotel_style_and_ambience'] = $node->filter('dd')->text();
-                                    }
-                                    if (trim($node->filter('dt > h5')->text()) == 'Hotel data') {
-                                        $this->dataArray['hotel_data'] = $node->filter('dd')->text();
-                                    }
-                                    if (trim($node->filter('dt > h5')->text()) == 'Accepted payment methods') {
-                                        $this->dataArray['hotel_payment_methods'] = $node->filter('li')->each(function ($node) {
-                                            return trim($node->text());
-                                        });
-                                    }
-                                    $this->dataArray['iteration_i'] = 0;
-                                    $this->dataArray['iteration_j'] = 0;
+//                                    if (trim($node->filter('dt > h5')->text()) == 'Style of hotel and ambience') {
+//                                        $this->dataArray['hotel_style_and_ambience'] = $node->filter('dd')->text();
+//                                    }
+//                                    if (trim($node->filter('dt > h5')->text()) == 'Hotel data') {
+//                                        $this->dataArray['hotel_data'] = $node->filter('dd')->text();
+//                                    }
+//                                    if (trim($node->filter('dt > h5')->text()) == 'Accepted payment methods') {
+//                                        $this->dataArray['hotel_payment_methods'] = $node->filter('li')->each(function ($node) {
+//                                            return trim($node->text());
+//                                        });
+//                                    }
+//                                    $this->dataArray['iteration_i'] = 0;
+//                                    $this->dataArray['iteration_j'] = 0;
 
-                                    $d1['first'] = $node->filter('dt > h5')->each(function ($node){
-                                        $this->dataArray[$node->text()];
+                                    $d1['heading'] = $node->filter('dt > h5')->each(function ($node) {
+                                        return trim($node->text());
                                     });
-                                    $d1['body'] = $node->filter('dd')->each(function ($node){
-                                        
-                                        return $node->text();
+                                    $d1['body'] = $node->filter('dd')->each(function ($node) {
+                                        if ($node->filter('li')->count() > 0) {
+                                            return $node->filter('li')->each(function ($node) {
+                                                return trim($node->text());
+                                            });
+                                        } else {
+                                            return trim($node->text());
+                                        }
                                     });
-//                                    $d1['last'] = $node->filter('dt > h5')->last()->text();
-                                    return $d1;
-                                }));
+                                    for ($k = 0; $k < count($d1['heading']); $k++) {
+                                        $this->dataArray[$d1['heading'][$k]] = $d1['body'][$k];
+                                    }
+                                });
 
 //                                $this->dataArray['node_hotel_information'] = null;
 

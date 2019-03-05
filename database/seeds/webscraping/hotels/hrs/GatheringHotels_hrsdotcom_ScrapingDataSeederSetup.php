@@ -13,23 +13,42 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
     {
         $hrs = new GatheringHotels_hrsdotcom_ScrapingDataSeederMain();
 
-//        $dataArray = [
-//            'currency' => 'EUR',
-//            'start_date' => '2019-02-26',
-//            'end_date' => '2020-02-26',
-//            'city' => 'Paris',
-//            'city_id' => 49551,
-//            'country' => 'France',
-//        ];
-        $dataArray = [
+        $dataArray [] = [
             'currency' => 'EUR',
             'start_date' => '2019-02-26',
             'end_date' => '2020-02-26',
-            'city' => 'frankfurt-am-main',
+            'city' => 'Paris',
+            'city_id' => 49551,
+            'country' => 'France',
+        ];
+        $dataArray [] = [
+            'currency' => 'EUR',
+            'start_date' => '2019-03-10',
+            'end_date' => '2020-03-10',
+            'city' => 'Frankfurt-am-main',
             'city_id' => 91191,
             'country' => 'Germany',
         ];
+        $dataArray [] = [
+            'currency' => 'EUR',
+            'start_date' => '2019-03-10',
+            'end_date' => '2020-03-10',
+            'city' => 'Berlin',
+            'city_id' => 55133,
+            'country' => 'Germany',
+        ];
+        $dataArray [] = [
+            'currency' => 'EUR',
+            'start_date' => '2019-03-10',
+            'end_date' => '2020-03-10',
+            'city' => 'Rome',
+            'city_id' => 54084,
+            'country' => 'Italy',
+        ];
 
-        $hrs->mainRun($dataArray);
+        foreach ($dataArray as $instance) {
+
+            $hrs->mainRun($instance);
+        }
     }
 }

@@ -67,24 +67,26 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                             $adult = 1;
                             global $currency;
-                            $url1 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dataArray['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dataArray['currency'] . "&startDateDay=22&startDateMonth=02&startDateYear=2019&endDateDay=23&endDateMonth=02&endDateYear=2019&adults=$adult&singleRooms=1&doubleRooms=0&children=0#priceAnchor";
+                            $url1 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dataArray['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dataArray['currency'] . "&startDateDay=" . date("d", strtotime($this->dataArray['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dataArray['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dataArray['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dataArray['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dataArray['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dataArray['check_out_date'])) . "&adults=$adult&singleRooms=1&doubleRooms=0&children=0#priceAnchor";
                             $adults = 2;
-                            $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dataArray['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dataArray['currency'] . "&startDateDay=22&startDateMonth=02&startDateYear=2019&endDateDay=23&endDateMonth=02&endDateYear=2019&adults=$adults&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
+                            $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dataArray['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dataArray['currency'] . "&startDateDay=" . date("d", strtotime($this->dataArray['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dataArray['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dataArray['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dataArray['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dataArray['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dataArray['check_out_date'])) . "&adults=$adults&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
 
                             try {
 
 
+                                echo "\n" . $url2;
                                 $client2 = new GoutteClient();
                                 $client = PhantomClient::getInstance();
                                 $client->isLazy(); // Tells the client to wait for all resources before rendering
-                                $request = $client->getMessageFactory()->createRequest($url1);
+                                $request = $client->getMessageFactory()->createRequest($url2);
                                 $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
                                 $response = $client->getMessageFactory()->createResponse();
                                 // Send the request
                                 $client->send($request, $response);
                                 $crawler = new Crawler($response->getContent());
+                                Storage::put('hrs/hotelData.html', $crawler->html());
 //                                $crawler = $client->request('GET', $url1);
-                                $crawler2 = $client2->request('GET', $url2);
+                                $crawler2 = $client2->request('GET', $url1);
 
                                 $dr['all_rooms'][] = $crawler2->filter('table#basket > tbody > tr ')->each(function ($node) {
                                     $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
@@ -123,7 +125,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                 $dh['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
                                 $dh['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
 
-                                Storage::put('hrs/hotelData.html', $crawler->html());
+//                                Storage::put('hrs/hotelData.html', $crawler->html());
 
                                 $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
                                 if (count($result) > 1) {
@@ -156,40 +158,6 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                 });
 
                                 $crawler->filter('dl#hotelinformation')->each(function ($node) {
-//                                    $this->dataArray['node_hotel_information'] = $node;
-//                                    $node->filter('dt > h5')->each(function ($node) {
-//
-//                                        if ($this->dataArray['node_hotel_information']->filter('dt > h5')->text() == 'Style of hotel and ambience') {
-//                                            $this->dataArray['hotel_style_and_ambience'] = $this->dataArray['node_hotel_information']->filter('dd')->text();
-//                                        }
-//                                        if (trim($this->dataArray['node_hotel_information']->filter('dt > h5')->text()) == 'Hotel data') {
-//                                            $this->dataArray['hotel_data'] = $this->dataArray['node_hotel_information']->filter('dd')->text();
-//                                        }
-//                                        if (trim($this->dataArray['node_hotel_information']->filter('dt > h5')->text()) == 'Accepted payment methods') {
-//                                            $this->dataArray['hotel_payment_methods'] = $this->dataArray['node_hotel_information']->filter('li')->each(function ($node) {
-//                                                return trim($node->text());
-//                                            });
-//                                        }
-//                                    });
-//                                    if (trim($node->filter('dt > h5')->text()) == 'Style of hotel and ambience') {
-//                                        $this->dataArray['hotel_style_and_ambience'] = $node->filter('dd')->text();
-//                                    }
-
-
-//                                    if (trim($node->filter('dt > h5')->text()) == 'Style of hotel and ambience') {
-//                                        $this->dataArray['hotel_style_and_ambience'] = $node->filter('dd')->text();
-//                                    }
-//                                    if (trim($node->filter('dt > h5')->text()) == 'Hotel data') {
-//                                        $this->dataArray['hotel_data'] = $node->filter('dd')->text();
-//                                    }
-//                                    if (trim($node->filter('dt > h5')->text()) == 'Accepted payment methods') {
-//                                        $this->dataArray['hotel_payment_methods'] = $node->filter('li')->each(function ($node) {
-//                                            return trim($node->text());
-//                                        });
-//                                    }
-//                                    $this->dataArray['iteration_i'] = 0;
-//                                    $this->dataArray['iteration_j'] = 0;
-
                                     $d1['heading'] = $node->filter('dt > h5')->each(function ($node) {
                                         return trim($node->text());
                                     });
@@ -207,11 +175,28 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                     }
                                 });
 
-//                                $this->dataArray['node_hotel_information'] = null;
+                                $crawler->filter('dl#hdInformationMarginal')->each(function ($node) {
+                                    $dl['body'] = $node->filter('dd > p')->each(function ($node) {
+                                        return $node->text();
+                                    });
+                                    $this->dataArray['hotel_service_times'] = $dl['body'];
+                                });
+
+                                $crawler->filter('div.distances')->each(function ($node) {
+                                    $this->dataArray['hotel_location_details'] = $node->filter('p#locationEnviromentFull')->text();
+
+                                    $this->dataArray['hotel_location_details'] = $node->filter('li.airport')->each(function ($node){
+
+                                        $da['distance'] = $node->filter('span.distanceNumber')->text();
+                                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                                        $da['airport'] = trim(str_replace(array($da['distance'],$da['distance_dimension']),'',$node->text()));
+                                        $da['airport_whole_text'] = $node->text();
+                                    });
+
+                                });
 
                                 dd($this->dataArray);
 
-                                dd($this->dataArray['in_house_services']);
                                 dd('reached');
 
                                 $da['source'] = 'hrs.com';

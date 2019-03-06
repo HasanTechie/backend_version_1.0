@@ -48,9 +48,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
-                                $this->dataArray['hotel_eurobooking_img'] = ($node->filter('.clsHotelImageDiv > img')->count() > 0) ? $node->filter('.clsHotelImageDiv > img')->attr('src') : null;
-                                $this->dataArray['hotel_stars_category'] = ($node->filter('.clsHotelInfoBlokBesideImage > span')->count() > 0) ? $node->filter('.clsHotelInfoBlokBesideImage > span')->attr('title') : null;
-
 
                                 if (DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist()) {
                                     $this->tripAdvisor();
@@ -59,6 +56,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                 } else {
                                     $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = false;
                                 }
+
                                 if ($node->filter('.clsHotelNameSearchResults')->count() > 0) {
 
 
@@ -77,6 +75,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                             $crawler = new Crawler($content2);
 
                                             if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
+
+
+
                                                 if ($crawler->filter('#idEbHotelDetailRooms> p')->count() > 0) {
                                                     $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
                                                         return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
@@ -139,6 +140,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
 
                                                 $this->dataArray['hotel_name'] = ($crawler->filter('.clsEbFloatLeft > h1')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1')->text()) : null;
+                                                $this->dataArray['hotel_stars_category'] = ($crawler->filter('.clsEbFloatLeft > h1 > span')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1 > span')->attr('title')) : null;
+
+                                                $this->dataArray['hotel_eurobooking_img'] = ($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->count() > 0) ? trim($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->attr('src')) : null;
 
                                                 if ($crawler->filter('#idQuickDescriptionLazy > p')->count() > 0) {
                                                     $this->dataArray['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node) {

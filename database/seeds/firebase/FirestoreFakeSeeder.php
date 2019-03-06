@@ -5,7 +5,7 @@ use Google\Cloud\Firestore\FirestoreClient;
 
 use Illuminate\Database\Seeder;
 
-class FirestoreSeeder extends Seeder
+class FirestoreFakeSeeder extends Seeder
 {
     /**
      * Run the database seeds.

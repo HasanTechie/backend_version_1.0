@@ -27,8 +27,16 @@ class FirestoreSeeder extends Seeder
 //            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
 
+        $mainHotel = 'Hotel Emona Aquaeductus';
+        $mainHotelUid = '5c80a2d79d162';
 
-        $hotels = DB::table('hotels')->where('website', '=', 'hotelportamaggiore.it')->orWhere('website', '=', 'novecentohotel.it')->get();
+        $CompetitorHotels = DB::table('hotels_competitors')->where([
+            ['hotel_uid', '=', '5c80a2d79d162'],
+            ['hotel_name', '=', 'Hotel Emona Aquaeductus'],
+        ])->get();
+
+        dd($CompetitorHotels);
+
 
 
         foreach ($hotels as $hotel) {
@@ -37,37 +45,17 @@ class FirestoreSeeder extends Seeder
                 ->collection('properties')//hotels
                 ->document($hotel->uid);
 
-            //forbidden by max
-//            $properties->set([
-//                'name' => $hotel->name,
-//                'address' => $hotel->address,
-//                'city' => $hotel->city,
-//                'country' => $hotel->country,
-//                'phone' => $hotel->phone,
-//                'website' => $hotel->website,
-//            ]);
+            $properties->set([
+                'name' => $hotel->name,
+                'address' => $hotel->address,
+                'city' => $hotel->city,
+                'country' => $hotel->country,
+                'phone' => $hotel->phone,
+                'website' => $hotel->website,
+            ]);
 
-
-            if ($hotel->uid == '5c62bce9f062b') {
-                $properties->set([
-                    'name' => '4-star Hotel Berlin',
-                    'city' => 'Berlin',
-                    'country' => 'Germany',
-                ]);
-
-                $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
-
-            }
-
-            if ($hotel->uid == '5c67dc940dec1') {
-                $properties->set([
-                    'name' => '3-star Hotel Rome',
-                    'city' => 'Rome',
-                    'country' => 'Italy',
-                ]);
-                $dates = DB::table('rooms_prices_vertical_booking')->select('check_in_date')->distinct('check_in_date')->where('hotel_website', '=', 'hotelportamaggiore.it')->orderBy('check_in_date')->get();
-            }
-
+//            $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
+            $dates = [];
 //
             foreach ($dates as $date) {
 

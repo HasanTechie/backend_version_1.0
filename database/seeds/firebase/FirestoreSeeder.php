@@ -27,203 +27,126 @@ class FirestoreSeeder extends Seeder
 //            'keyFilePath' => __DIR__ . '/keys/solidps-frontend-firebase-adminsdk-6o2qh-81d5c5fe40.json'
         ]);
 
-        $mainHotel = 'Hotel Emona Aquaeductus';
-        $mainHotelUid = '5c80a2d79d162';
+        $mainHotels[] = [
+            'hotel_uid' => '5c80a2d79d162',
+            'hotel_name' => 'Hotel Emona Aquaeductus',
+            'city' => 'Rome'
+        ];
 
-        $CompetitorHotels = DB::table('hotels_competitors')->where([
-            ['hotel_uid', '=', '5c80a2d79d162'],
-            ['hotel_name', '=', 'Hotel Emona Aquaeductus'],
-        ])->get();
+        foreach ($mainHotels as $mainHotel) {
 
-        dd($CompetitorHotels);
+            $CompetitorHotels = DB::table('hotels_competitors')->where([
+                ['hotel_uid', '=', $mainHotel['hotel_uid']],
+                ['hotel_name', '=', $mainHotel['hotel_name']],
+            ])->get();
 
 
+            foreach ($CompetitorHotels as $competitorHotel) {
 
-        foreach ($hotels as $hotel) {
+                $properties = $db
+                    ->collection('properties')//hotels
+                    ->document($mainHotel['hotel_uid']);
 
-            $properties = $db
-                ->collection('properties')//hotels
-                ->document($hotel->uid);
+//                $mainHotelData = DB::table('hotels_eurobookings')->where([
+//                    ['uid', '=', $mainHotel['hotel_uid']]
+//                ])->get();
 
-            $properties->set([
-                'name' => $hotel->name,
-                'address' => $hotel->address,
-                'city' => $hotel->city,
-                'country' => $hotel->country,
-                'phone' => $hotel->phone,
-                'website' => $hotel->website,
-            ]);
 
-//            $dates = DB::table('rooms_prices_hotel_novecento')->select('check_in_date')->distinct('check_in_date')->orderBy('check_in_date')->get();
-            $dates = [];
+                $properties->set([
+                    'name' => $mainHotel['hotel_name'],
+//                    'address' => $hotel->address,
+//                    'city' => $hotel->city,
+//                    'country' => $hotel->country,
+//                    'phone' => $hotel->phone,
+//                    'website' => $hotel->website,
+                ]);
+
+                $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->orderBy('check_in_date')->get();
+
 //
-            foreach ($dates as $date) {
+                foreach ($dates as $date) {
 
-                $calendar = $properties->collection('calendar')//dates
-                ->document($date->check_in_date);
+                    $calendar = $properties->collection('calendar')//dates
+                    ->document($date->check_in_date);
 
 
-                if ($hotel->uid == '5c62bce9f062b') {
                     $events = DB::table('events')->where([
                         ['event_date', '=', $date->check_in_date],
-                        ['city', '=', 'Berlin']
+                        ['city', '=', $mainHotel['city']]
                     ])->get();
-                    $url = "https://api.openweathermap.org/data/2.5/forecast?id=2950159&appid=" . $apiArray[$k][0]; //Berlin
-                    $rooms = DB::table('rooms_prices_hotel_novecento')->where('check_in_date', '=', $date->check_in_date)->get();
-                }
 
-                if ($hotel->uid == '5c67dc940dec1') {
-                    $events = DB::table('events')->where([
-                        ['event_date', '=', $date->check_in_date],
-                        ['city', '=', 'Rome']
-                    ])->get();
-                    $url = "https://api.openweathermap.org/data/2.5/forecast?id=6691831&appid=" . $apiArray[$k][0]; //Rome
-                    $rooms = DB::table('rooms_prices_vertical_booking')->where([
+
+                    $rooms = DB::table('rooms_prices_eurbookings')->where([
                         ['check_in_date', '=', $date->check_in_date],
-                        ['hotel_website', '=', 'hotelportamaggiore.it']
+                        ['hotel_uid', '=', $mainHotel['hotel_uid']],
                     ])->get();
-                }
 
-                $eventArray = [];
-                $i = 0;
-                foreach ($events as $event) {
-                    $eventArray[$i++] = array(
-                        'event_price_min' => $event->standard_price_min,
-                        'event_price_max' => $event->standard_price_max,
-                        'event_name' => $event->name,
-                        'event_venue_name' => $event->venue_name,
-                        'event_date' => $event->event_date,
-                        'event_city' => $event->city,
-                        'event_url' => $event->url,
-                    );
-                }
+                    $eventArray = [];
+                    $i = 0;
 
-                $client = new Client();
-
-                $res = $client->request('GET', $url);
-                $response = json_decode($res->getBody());
-                $weather = [];
-                foreach ($response->list as $instance) {
-
-                    $dateTime = $instance->dt_txt;
-                    $dateArray = explode(" ", $dateTime);
-                    $weatherTime = $dateArray[1];
-                    $weatherDate = $dateArray[0];
-
-                    if ($weatherTime == '12:00:00' && $weatherDate == $date->check_in_date) {
-                        $weather['avg_temp_in_celsius'] = round(($instance->main->temp - 273.15));
-                        $weather['condition'] = $instance->weather[0]->description;
+                    foreach ($events as $event) {
+                        $eventArray[$i++] = array(
+                            'event_price_min' => $event->standard_price_min,
+                            'event_price_max' => $event->standard_price_max,
+                            'event_name' => $event->name,
+                            'event_venue_name' => $event->venue_name,
+                            'event_date' => $event->event_date,
+                            'event_city' => $event->city,
+                            'event_url' => $event->url,
+                        );
                     }
-                }
 
-                $d = date("d", strtotime($date->check_in_date));
-                $m = date("m", strtotime($date->check_in_date));
-                $y = date("Y", strtotime($date->check_in_date));
-                $newWeather = '';
-                if (!empty($weather['condition'])) {
+                    $client = new Client();
+                    $url = "https://api.openweathermap.org/data/2.5/forecast?id=6691831&appid=" . $apiArray[$k][0]; //Rome
+                    $res = $client->request('GET', $url);
+                    $response = json_decode($res->getBody());
+                    $weather = [];
 
-                    $newWeather = str_replace(' ', '-', $weather['condition']);
-                    $newWeather = 'weather-' . $newWeather;
-                }
+                    foreach ($response->list as $instance) {
 
-                $eventIndicator = [];
-                if (count($eventArray) > 0) {
-                    $eventIndicator [] = 'very-busy';
-                }
-                if (!empty($newWeather)) {
-                    $eventIndicator [] = $newWeather;
-                }
+                        $dateTime = $instance->dt_txt;
+                        $dateArray = explode(" ", $dateTime);
+                        $weatherTime = $dateArray[1];
+                        $weatherDate = $dateArray[0];
 
-                echo $hotel->uid . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-
-                $i = 0;
-                foreach ($rooms as $room) {
-
-                    if ($hotel->uid == '5c62bce9f062b') {
-                        $competitor = DB::table('rooms_prices_4_star_fake')->where([
-                            ['date', '=', $d . '.' . $m . '.' . $y],
-                            ['type', '=', $room->room],
-                            ['sales_type', '=', 'Economy'],
-                        ])->first();
-
-                        if (!empty($competitor)) {
-                            $assets = $calendar
-                                ->collection('assets')//rooms
-                                ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                            $assets->set([
-                                'name' => $room->room,
-                                'room_description' => $room->room_description,
-                            ]);
-
-
-                            $options = $assets
-                                ->collection('options')//options
-                                ->document($room->uid);
-
-                            $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
-                            $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
-                            $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
-
-                            $marketValueOffset = ((($suggestedPrice - $realPrice) / $realPrice) * 100);
-                            $marketValueOffsetArray [] = $marketValueOffset;
-                            $options =
-                                $options->set([
-                                    'real_price' => $realPrice,
-                                    'competitor_price' => $competitorPrice,
-                                    'suggested_price' => $suggestedPrice,
-                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
-                                    'hint' => $competitor->action,
-                                    'name' => 'Normal'
-                                ]);
-
-
-                            $assets2 = $properties
-                                ->collection('assets')//rooms
-                                ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-
-                            $assets2->set([
-                                'name' => $room->room
-                            ]);
-
-                            $analytics2 = $assets2
-                                ->collection('analytics')//dates
-                                ->document($date->check_in_date);
-
-                            $analytics2->set([
-                                'real_price' => $realPrice,
-                                'competitor_price' => $competitorPrice,
-                                'suggested_price' => $suggestedPrice,
-                                'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                            ]);
-
-                            $allRealPrice[] = $realPrice;
-                            $allCompetitorPrice[] = $competitorPrice;
-                            $allSuggestedPrice[] = $suggestedPrice;
+                        if ($weatherTime == '12:00:00' && $weatherDate == $date->check_in_date) {
+                            $weather['avg_temp_in_celsius'] = round(($instance->main->temp - 273.15));
+                            $weather['condition'] = $instance->weather[0]->description;
                         }
                     }
 
-                    if ($hotel->uid == '5c67dc940dec1') {
+                    $d = date("d", strtotime($date->check_in_date));
+                    $m = date("m", strtotime($date->check_in_date));
+                    $y = date("Y", strtotime($date->check_in_date));
+                    $newWeather = '';
+                    if (!empty($weather['condition'])) {
 
-                        if (
-                            (($room->room == 'STANDARD QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
-                            || (($room->room == 'DELUXE QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
-                            || (($room->room == 'STANDARD TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
-                            || (($room->room == 'DELUXE TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
-                            || (($room->room == 'STANDARD DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
-                            || (($room->room == 'DELUXE DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
-                            || (($room->room == 'STANDARD SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
-                            || (($room->room == 'DELUXE SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
-                        ) {
-                            $competitor = DB::table('rooms_prices_3_star_fake')->where([
+                        $newWeather = str_replace(' ', '-', $weather['condition']);
+                        $newWeather = 'weather-' . $newWeather;
+                    }
+
+                    $eventIndicator = [];
+                    if (count($eventArray) > 0) {
+                        $eventIndicator [] = 'very-busy';
+                    }
+                    if (!empty($newWeather)) {
+                        $eventIndicator [] = $newWeather;
+                    }
+
+                    echo $mainHotel['hotel_name'] . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+
+                    $i = 0;
+
+                    foreach ($rooms as $room) {
+
+                        if ($hotel->uid == '5c62bce9f062b') {
+                            $competitor = DB::table('rooms_prices_4_star_fake')->where([
                                 ['date', '=', $d . '.' . $m . '.' . $y],
                                 ['type', '=', $room->room],
+                                ['sales_type', '=', 'Economy'],
                             ])->first();
 
-
                             if (!empty($competitor)) {
-                                $i++;
                                 $assets = $calendar
                                     ->collection('assets')//rooms
                                     ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
@@ -231,7 +154,6 @@ class FirestoreSeeder extends Seeder
                                 $assets->set([
                                     'name' => $room->room,
                                     'room_description' => $room->room_description,
-                                    'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
                                 ]);
 
 
@@ -239,12 +161,11 @@ class FirestoreSeeder extends Seeder
                                     ->collection('options')//options
                                     ->document($room->uid);
 
-
                                 $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
                                 $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
                                 $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
 
-                                $marketValueOffset = (($suggestedPrice - $realPrice) / $realPrice) * 100;
+                                $marketValueOffset = ((($suggestedPrice - $realPrice) / $realPrice) * 100);
                                 $marketValueOffsetArray [] = $marketValueOffset;
                                 $options =
                                     $options->set([
@@ -261,6 +182,7 @@ class FirestoreSeeder extends Seeder
                                     ->collection('assets')//rooms
                                     ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
+
                                 $assets2->set([
                                     'name' => $room->room
                                 ]);
@@ -269,9 +191,6 @@ class FirestoreSeeder extends Seeder
                                     ->collection('analytics')//dates
                                     ->document($date->check_in_date);
 
-//                                if ($i == 2) {
-//                                    dd($room);
-//                                }
                                 $analytics2->set([
                                     'real_price' => $realPrice,
                                     'competitor_price' => $competitorPrice,
@@ -282,57 +201,138 @@ class FirestoreSeeder extends Seeder
                                 $allRealPrice[] = $realPrice;
                                 $allCompetitorPrice[] = $competitorPrice;
                                 $allSuggestedPrice[] = $suggestedPrice;
+                            }
+                        }
+
+                        if ($hotel->uid == '5c67dc940dec1') {
+
+                            if (
+                                (($room->room == 'STANDARD QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
+                                || (($room->room == 'DELUXE QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
+                                || (($room->room == 'STANDARD TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
+                                || (($room->room == 'DELUXE TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
+                                || (($room->room == 'STANDARD DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
+                                || (($room->room == 'DELUXE DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
+                                || (($room->room == 'STANDARD SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
+                                || (($room->room == 'DELUXE SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
+                            ) {
+                                $competitor = DB::table('rooms_prices_3_star_fake')->where([
+                                    ['date', '=', $d . '.' . $m . '.' . $y],
+                                    ['type', '=', $room->room],
+                                ])->first();
 
 
-                                //properties/{property_id}/assets/{asset_id}/analytics{date_id, for example 2015-02-20}
+                                if (!empty($competitor)) {
+                                    $i++;
+                                    $assets = $calendar
+                                        ->collection('assets')//rooms
+                                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
+
+                                    $assets->set([
+                                        'name' => $room->room,
+                                        'room_description' => $room->room_description,
+                                        'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
+                                    ]);
+
+
+                                    $options = $assets
+                                        ->collection('options')//options
+                                        ->document($room->uid);
+
+
+                                    $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
+                                    $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
+                                    $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
+
+                                    $marketValueOffset = (($suggestedPrice - $realPrice) / $realPrice) * 100;
+                                    $marketValueOffsetArray [] = $marketValueOffset;
+                                    $options =
+                                        $options->set([
+                                            'real_price' => $realPrice,
+                                            'competitor_price' => $competitorPrice,
+                                            'suggested_price' => $suggestedPrice,
+                                            'market_value_offset_for_room' => round($marketValueOffset, 2),
+                                            'hint' => $competitor->action,
+                                            'name' => 'Normal'
+                                        ]);
+
+
+                                    $assets2 = $properties
+                                        ->collection('assets')//rooms
+                                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
+
+                                    $assets2->set([
+                                        'name' => $room->room
+                                    ]);
+
+                                    $analytics2 = $assets2
+                                        ->collection('analytics')//dates
+                                        ->document($date->check_in_date);
+
+//                                if ($i == 2) {
+//                                    dd($room);
+//                                }
+                                    $analytics2->set([
+                                        'real_price' => $realPrice,
+                                        'competitor_price' => $competitorPrice,
+                                        'suggested_price' => $suggestedPrice,
+                                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                                    ]);
+
+                                    $allRealPrice[] = $realPrice;
+                                    $allCompetitorPrice[] = $competitorPrice;
+                                    $allSuggestedPrice[] = $suggestedPrice;
+
+
+                                    //properties/{property_id}/assets/{asset_id}/analytics{date_id, for example 2015-02-20}
+                                }
                             }
                         }
                     }
+
+                    $assets3 = $properties
+                        ->collection('assets')//rooms
+                        ->document('all_assets');
+
+                    $assets3->set([
+                        'name' => 'all room types'
+                    ]);
+
+                    $analytics3 = $assets3
+                        ->collection('analytics')//dates
+                        ->document($date->check_in_date);
+
+                    $allRealPrice = array_filter($allRealPrice);
+                    $averageAllRealPrice = array_sum($allRealPrice) / count($allRealPrice);
+
+                    $allCompetitorPrice = array_filter($allCompetitorPrice);
+                    $averageAllCompetitorPrice = array_sum($allCompetitorPrice) / count($allCompetitorPrice);
+
+                    $allSuggestedPrice = array_filter($allSuggestedPrice);
+                    $averageAllSuggestedPrice = array_sum($allSuggestedPrice) / count($allSuggestedPrice);
+
+                    $analytics3->set([
+                        'real_price' => round($averageAllRealPrice, 2),
+                        'competitor_price' => round($averageAllCompetitorPrice, 2),
+                        'suggested_price' => round($averageAllSuggestedPrice, 2),
+                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                    ]);
+
+                    $calendar->set([
+                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                        'weather' => ((count($weather) > 0) ? $weather : null),
+                        'events' => (count($eventArray) > 0) ? $eventArray : null,
+                        'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
+                        'market_suggestions' => [
+                            'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
+                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
+                        ]
+                    ]);
+                    $marketValueOffsetArray = [];
                 }
 
-                $assets3 = $properties
-                    ->collection('assets')//rooms
-                    ->document('all_assets');
-
-                $assets3->set([
-                    'name' => 'all room types'
-                ]);
-
-                $analytics3 = $assets3
-                    ->collection('analytics')//dates
-                    ->document($date->check_in_date);
-
-                $allRealPrice = array_filter($allRealPrice);
-                $averageAllRealPrice = array_sum($allRealPrice) / count($allRealPrice);
-
-                $allCompetitorPrice = array_filter($allCompetitorPrice);
-                $averageAllCompetitorPrice = array_sum($allCompetitorPrice) / count($allCompetitorPrice);
-
-                $allSuggestedPrice = array_filter($allSuggestedPrice);
-                $averageAllSuggestedPrice = array_sum($allSuggestedPrice) / count($allSuggestedPrice);
-
-                $analytics3->set([
-                    'real_price' => round($averageAllRealPrice, 2),
-                    'competitor_price' => round($averageAllCompetitorPrice, 2),
-                    'suggested_price' => round($averageAllSuggestedPrice, 2),
-                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                ]);
-
-                $calendar->set([
-                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                    'weather' => ((count($weather) > 0) ? $weather : null),
-                    'events' => (count($eventArray) > 0) ? $eventArray : null,
-                    'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
-                    'market_suggestions' => [
-                        'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
-                        'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
-                    ]
-                ]);
-                $marketValueOffsetArray = [];
             }
-
         }
-
     }
 
     /*

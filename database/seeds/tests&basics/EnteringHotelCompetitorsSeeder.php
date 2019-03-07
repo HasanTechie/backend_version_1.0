@@ -53,8 +53,8 @@ class EnteringHotelCompetitorsSeeder extends Seeder
                 's_no' => $j++,
                 'hotel_uid' => $hotelUid,
                 'hotel_name' => $hotelName,
-                'hotel_competitor_uid' => $competitorHotel['name'],
-                'hotel_competitor_name' => $competitorHotel['uid'],
+                'hotel_competitor_uid' => $competitorHotel['uid'],
+                'hotel_competitor_name' => $competitorHotel['name'],
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);

@@ -134,233 +134,99 @@ class FirestoreSeeder extends Seeder
                     ['hotel_name', '=', $mainHotel['hotel_name']],
                 ])->get();
 
-                foreach ($rooms as $room) {
+                $competitorRoomArray = [];
+                foreach ($CompetitorHotels as $competitorHotel) {
 
-                    $competitorRoomArray = [];
-                    foreach ($CompetitorHotels as $competitorHotel) {
+                    $competitorRooms = DB::table('rooms_prices_eurobookings')->where([
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+                    ])->get();
 
-                        $competitorRoom = DB::table('rooms_prices_eurobookings')->where([
-                            ['check_in_date', '=', $date->check_in_date],
-                            ['room', '=', $room->room],
-                            ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                        ])->first();
 
-                        if (!empty($competitorRoom)) {
+                    if (!empty($competitorRooms)) {
+                        foreach ($competitorRooms as $competitorRoom) {
+
                             $competitorRoomArray[] = [
                                 'competitor_price' => $competitorRoom->price,
+                                'competitor_room' => $competitorRoom->room,
                                 'competitor_name' => $competitorRoom->hotel_name,
                             ];
                             $allCompetitorPrice[] = $competitorRoom->price;
                         }
                     }
+                }
+
+                $roomArray = [];
+
+                foreach ($rooms as $room) {
+                    $roomArray[] = $room->room;
+                }
+
+                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
+
+                    foreach ($competitorRoomArray as $key => $competitorRoomArrayInstance) {
+                        if ($room->room == $competitorRoomArrayInstance['competitor_room']) {
+                        } else {
+                            unset($competitorRoomArray[$key]);
+                            print $key . "\n";
+                        }
+                        dd($room->room);
+                    }
+
+                    dd($competitorRoomArray);
 
 
-                    if (count($competitorRoomArray) > 0) {
+                    $assets = $calendar
+                        ->collection('assets')//rooms
+                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
-                        $assets = $calendar
-                            ->collection('assets')//rooms
-                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                        $assets->set([
-                            'name' => $room->room,
+                    $assets->set([
+                        'name' => $room->room,
 //                                'room_description' => $room->room_description,
-                        ]);
+                    ]);
 
-                        $options = $assets
-                            ->collection('options')//options
-                            ->document($room->uid);
+                    $options = $assets
+                        ->collection('options')//options
+                        ->document($room->uid);
 
 
-                        $options =
-                            $options->set([
-                                'real_price' => $room->price,
-                                'competitor' =>
-                                    $competitorRoomArray
-                                ,
+                    $options =
+                        $options->set([
+                            'real_price' => $room->price,
+                            'competitor' => $competitorRoomArray,
 //                                    'suggested_price' => $suggestedPrice,
 //                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
 //                                    'hint' => $competitor->action,
 //                                    'name' => 'Normal'
-                            ]);
-
-                        $assets2 = $properties
-                            ->collection('assets')//rooms
-                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-
-                        $assets2->set([
-                            'name' => $room->room
                         ]);
 
-                        $analytics2 = $assets2
-                            ->collection('analytics')//dates
-                            ->document($date->check_in_date);
+                    $assets2 = $properties
+                        ->collection('assets')//rooms
+                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
-                        $analytics2->set([
-                            'real_price' => $room->price,
-                            'competitor' => $competitorRoomArray,
+
+                    $assets2->set([
+                        'name' => $room->room
+                    ]);
+
+                    $analytics2 = $assets2
+                        ->collection('analytics')//dates
+                        ->document($date->check_in_date);
+
+                    $analytics2->set([
+                        'real_price' => $room->price,
+                        'competitor' => $competitorRoomArray,
 //                                'suggested_price' => $suggestedPrice,
-                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                        ]);
+                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                    ]);
 
 
-                        $allRealPrice[] = $room->price;
+                    $allRealPrice[] = $room->price;
 //                        $allCompetitorPrice[] = $competitorRoom->price;
 //                            $allSuggestedPrice[] = $suggestedPrice;
-                        echo 'Foundedd' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                    } else {
-                        echo 'NotFound' . $competitorHotel->hotel_competitor_name . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                    }
-
-                    /*        if ($hotel->uid == '5c62bce9f062b') {
-                                $competitor = DB::table('rooms_prices_4_star_fake')->where([
-                                    ['date', '=', $d . '.' . $m . '.' . $y],
-                                    ['type', '=', $room->room],
-                                    ['sales_type', '=', 'Economy'],
-                                ])->first();
-
-                                if (!empty($competitor)) {
-                                    $assets = $calendar
-                                        ->collection('assets')//rooms
-                                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                                    $assets->set([
-                                        'name' => $room->room,
-                                        'room_description' => $room->room_description,
-                                    ]);
-
-
-                                    $options = $assets
-                                        ->collection('options')//options
-                                        ->document($room->uid);
-
-                                    $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
-                                    $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
-                                    $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
-
-                                    $marketValueOffset = ((($suggestedPrice - $realPrice) / $realPrice) * 100);
-                                    $marketValueOffsetArray [] = $marketValueOffset;
-                                    $options =
-                                        $options->set([
-                                            'real_price' => $realPrice,
-                                            'competitor_price' => $competitorPrice,
-                                            'suggested_price' => $suggestedPrice,
-                                            'market_value_offset_for_room' => round($marketValueOffset, 2),
-                                            'hint' => $competitor->action,
-                                            'name' => 'Normal'
-                                        ]);
-
-
-                                    $assets2 = $properties
-                                        ->collection('assets')//rooms
-                                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-
-                                    $assets2->set([
-                                        'name' => $room->room
-                                    ]);
-
-                                    $analytics2 = $assets2
-                                        ->collection('analytics')//dates
-                                        ->document($date->check_in_date);
-
-                                    $analytics2->set([
-                                        'real_price' => $realPrice,
-                                        'competitor_price' => $competitorPrice,
-                                        'suggested_price' => $suggestedPrice,
-                                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                                    ]);
-
-                                    $allRealPrice[] = $realPrice;
-                                    $allCompetitorPrice[] = $competitorPrice;
-                                    $allSuggestedPrice[] = $suggestedPrice;
-                                }
-                            }
-
-                            if ($hotel->uid == '5c67dc940dec1') {
-
-                                if (
-                                    (($room->room == 'STANDARD QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
-                                    || (($room->room == 'DELUXE QUADRUPLE ROOM') && ($room->number_of_adults_in_room_request == 4))
-                                    || (($room->room == 'STANDARD TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
-                                    || (($room->room == 'DELUXE TRIPLE ROOM') && ($room->number_of_adults_in_room_request == 3))
-                                    || (($room->room == 'STANDARD DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
-                                    || (($room->room == 'DELUXE DOUBLE/TWIN ROOM') && ($room->number_of_adults_in_room_request == 2))
-                                    || (($room->room == 'STANDARD SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
-                                    || (($room->room == 'DELUXE SINGLE ROOM') && ($room->number_of_adults_in_room_request == 1))
-                                ) {
-                                    $competitor = DB::table('rooms_prices_3_star_fake')->where([
-                                        ['date', '=', $d . '.' . $m . '.' . $y],
-                                        ['type', '=', $room->room],
-                                    ])->first();
-
-
-                                    if (!empty($competitor)) {
-                                        $i++;
-                                        $assets = $calendar
-                                            ->collection('assets')//rooms
-                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                                        $assets->set([
-                                            'name' => $room->room,
-                                            'room_description' => $room->room_description,
-                                            'room_capacity' => $room->number_of_adults_in_room_request . ' number of adults'
-                                        ]);
-
-
-                                        $options = $assets
-                                            ->collection('options')//options
-                                            ->document($room->uid);
-
-
-                                        $realPrice = (double)trim(str_replace(',', '.', str_replace('EUR', '', $room->display_price)));
-                                        $competitorPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_now)));
-                                        $suggestedPrice = (double)trim(str_replace(',', '.', str_replace('€', '', $competitor->prices_should)));
-
-                                        $marketValueOffset = (($suggestedPrice - $realPrice) / $realPrice) * 100;
-                                        $marketValueOffsetArray [] = $marketValueOffset;
-                                        $options =
-                                            $options->set([
-                                                'real_price' => $realPrice,
-                                                'competitor_price' => $competitorPrice,
-                                                'suggested_price' => $suggestedPrice,
-                                                'market_value_offset_for_room' => round($marketValueOffset, 2),
-                                                'hint' => $competitor->action,
-                                                'name' => 'Normal'
-                                            ]);
-
-
-                                        $assets2 = $properties
-                                            ->collection('assets')//rooms
-                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                                        $assets2->set([
-                                            'name' => $room->room
-                                        ]);
-
-                                        $analytics2 = $assets2
-                                            ->collection('analytics')//dates
-                                            ->document($date->check_in_date);
-
-    //                                if ($i == 2) {
-    //                                    dd($room);
-    //                                }
-                                        $analytics2->set([
-                                            'real_price' => $realPrice,
-                                            'competitor_price' => $competitorPrice,
-                                            'suggested_price' => $suggestedPrice,
-                                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                                        ]);
-
-                                        $allRealPrice[] = $realPrice;
-                                        $allCompetitorPrice[] = $competitorPrice;
-                                        $allSuggestedPrice[] = $suggestedPrice;
-
-
-                                        //properties/{property_id}/assets/{asset_id}/analytics{date_id, for example 2015-02-20}
-                                    }
-                                }
-                            }*/
+                    echo 'Foundedd' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                } else {
+                    echo 'NotFound' . $competitorHotel->hotel_competitor_name . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                 }
 
                 $assets3 = $properties

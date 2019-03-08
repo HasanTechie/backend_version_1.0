@@ -37,26 +37,26 @@ class FirestoreSeeder extends Seeder
 
             $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->limit(7)->orderBy('check_in_date')->get();
 
-            foreach ($dates as $date) {
-
-
-                $properties = $db
-                    ->collection('properties')//hotels
-                    ->document($mainHotel['hotel_uid']);
+            $properties = $db
+                ->collection('properties')//hotels
+                ->document($mainHotel['hotel_uid']);
 
 //                $mainHotelData = DB::table('hotels_eurobookings')->where([
 //                    ['uid', '=', $mainHotel['hotel_uid']]
 //                ])->get();
 
 
-                $properties->set([
-                    'name' => $mainHotel['hotel_name'],
+            $properties->set([
+                'name' => $mainHotel['hotel_name'],
 //                    'address' => $hotel->address,
 //                    'city' => $hotel->city,
 //                    'country' => $hotel->country,
 //                    'phone' => $hotel->phone,
 //                    'website' => $hotel->website,
-                ]);
+            ]);
+
+            foreach ($dates as $date) {
+
 
                 $calendar = $properties->collection('calendar')//dates
                 ->document($date->check_in_date);
@@ -67,11 +67,6 @@ class FirestoreSeeder extends Seeder
                     ['city', '=', $mainHotel['city']]
                 ])->get();
 
-
-                $rooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
-                    ['check_in_date', '=', $date->check_in_date],
-                    ['hotel_uid', '=', $mainHotel['hotel_uid']],
-                ])->groupBy('room')->get();
 
                 $eventArray = [];
                 $i = 0;
@@ -134,12 +129,13 @@ class FirestoreSeeder extends Seeder
                     ['hotel_name', '=', $mainHotel['hotel_name']],
                 ])->get();
 
+
                 $competitorRoomArray = [];
                 foreach ($CompetitorHotels as $competitorHotel) {
                     $competitorRooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
                         ['check_in_date', '=', $date->check_in_date],
                         ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                    ])->groupBy('room')->get();
+                    ])->groupBy('room', 'short_description','uid')->get();
 
 
                     if (!empty($competitorRooms)) {
@@ -149,11 +145,18 @@ class FirestoreSeeder extends Seeder
                                 'competitor_price' => $competitorRoom->price,
                                 'competitor_room' => $competitorRoom->room,
                                 'competitor_hotel' => $competitorRoom->hotel_name,
+                                'competitor_short_description' => $competitorRoom->short_description,
                             ];
                             $allCompetitorPrice[] = $competitorRoom->price;
                         }
                     }
                 }
+
+
+                $rooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
+                    ['check_in_date', '=', $date->check_in_date],
+                    ['hotel_uid', '=', $mainHotel['hotel_uid']],
+                ])->whereNotNull('short_description')->groupBy('room','short_description')->get();
 
                 $roomArray = [];
 
@@ -161,16 +164,24 @@ class FirestoreSeeder extends Seeder
                     $roomArray[] = $room->room;
                 }
 
-                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
+                dd($roomArray);
+                $roomArray = array_unique($roomArray);
+
+
+                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms) / 2) {
 
                     foreach ($roomArray as $key => $roomArrayInstance) {
-
                         foreach ($competitorRoomArray as $competitorRoomArrayInstance) {
+
 
                             if ($roomArrayInstance == 'Standard Double Room') {
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room', 'Economy Room'))) {
                                     if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort', '(Extra Bed)')))) {
-                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
+                                            if (strpos('test' . $instance, 'Breakfast')) {
+                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -178,14 +189,22 @@ class FirestoreSeeder extends Seeder
                             if ($roomArrayInstance == 'Superior Double Room') {
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room'))) {
                                     if (($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
+                                            if (strpos('test' . $instance, 'Breakfast')) {
+                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                            }
+                                        }
                                     }
                                 }
                             }
                             if ($roomArrayInstance == 'Triple Room') {
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Triple Room'))) {
                                     if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
+                                            if (strpos('test' . $instance, 'Breakfast')) {
+                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -193,71 +212,85 @@ class FirestoreSeeder extends Seeder
                             if ($roomArrayInstance == 'Family Room') {
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Family Room', 'Quadruple Room'))) {
                                     if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+
+                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
+                                            if (strpos($instance, 'Breakfast')) {
+                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach ($rooms as $room) {
+
+                    if (is_array(unserialize($room->short_description))) {
+                        foreach (unserialize($room->short_description) as $instance) {
+                            if (strpos('test' . $instance, 'Breakfast')) {
+                                foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
+
+                                    if ($room->room == $key) {
+
+                                        $assets = $calendar
+                                            ->collection('assets')//rooms
+                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+
+                                        $assets->set([
+                                            'name' => $key,
+                                            'short_description' => $room->short_description,
+                                        ]);
+
+                                        $options = $assets
+                                            ->collection('options')//options
+                                            ->document('Breakfast');
+
+                                        $options =
+                                            $options->set([
+                                                'real_price' => $room->price,
+                                                'competitor' => $roomArrayWithCompetitorsInstance,
+//                                    'suggested_price' => $suggestedPrice,
+//                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
+//                                    'hint' => $competitor->action,
+//                                    'name' => 'Normal'
+                                            ]);
+
+                                        $assets2 = $properties
+                                            ->collection('assets')//rooms
+                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+
+
+                                        $assets2->set([
+                                            'name' => $key
+                                        ]);
+
+                                        $analytics2 = $assets2
+                                            ->collection('analytics')//dates
+                                            ->document($date->check_in_date);
+
+                                        $analytics2->set([
+                                            'real_price' => $room->price,
+                                            'competitor' => $roomArrayWithCompetitorsInstance,
+//                                'suggested_price' => $suggestedPrice,
+                                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                                        ]);
+
+
+                                        $allRealPrice[] = $room->price;
+                                        foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
+                                            $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
+                                        }
+//                            $allSuggestedPrice[] = $suggestedPrice;
+                                        echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
                                     }
                                 }
                             }
                         }
                     }
 
-                    foreach ($rooms as $room) {
 
-                        foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
-
-                            if ($room->room == $key) {
-                                $assets = $calendar
-                                    ->collection('assets')//rooms
-                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
-
-                                $assets->set([
-                                    'name' => $key,
-//                                'room_description' => $room->room_description,
-                                ]);
-
-                                $options = $assets
-                                    ->collection('options')//options
-                                    ->document($room->uid);
-                                
-                                $options =
-                                    $options->set([
-                                        'real_price' => $room->price,
-                                        'competitor' => $roomArrayWithCompetitorsInstance,
-//                                    'suggested_price' => $suggestedPrice,
-//                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
-//                                    'hint' => $competitor->action,
-//                                    'name' => 'Normal'
-                                    ]);
-
-                                $assets2 = $properties
-                                    ->collection('assets')//rooms
-                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
-
-
-                                $assets2->set([
-                                    'name' => $key
-                                ]);
-
-                                $analytics2 = $assets2
-                                    ->collection('analytics')//dates
-                                    ->document($date->check_in_date);
-
-                                $analytics2->set([
-                                    'real_price' => $room->price,
-                                    'competitor' => $roomArrayWithCompetitorsInstance,
-//                                'suggested_price' => $suggestedPrice,
-                                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                                ]);
-
-
-                                $allRealPrice[] = $room->price;
-                                foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
-                                    $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
-                                }
-//                            $allSuggestedPrice[] = $suggestedPrice;
-                                echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                            }
-                        }
-                    }
                 }
 
                 $assets3 = $properties
@@ -302,6 +335,9 @@ class FirestoreSeeder extends Seeder
 //                        ]
                 ]);
 //                $marketValueOffsetArray = [];
+                $rooms = [];
+                $competitorRooms = [];
+
             }
 
         }

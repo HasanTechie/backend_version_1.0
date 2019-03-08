@@ -152,29 +152,36 @@ class FirestoreSeeder extends Seeder
                     }
                 }
 
-
                 $rooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
                     ['check_in_date', '=', $date->check_in_date],
                     ['hotel_uid', '=', $mainHotel['hotel_uid']],
-                ])->whereNotNull('short_description')->groupBy('room','short_description')->get();
+                ])->whereNotNull('short_description')->groupBy('room', 'short_description','uid')->get();
 
-                $roomArray = [];
 
-                foreach ($rooms as $room) {
+//                dd($rooms);
+                foreach ($rooms as $key => $room) {
+                    foreach (unserialize($room->short_description) as $instance) {
+                        if (!(strpos('test' . $instance, 'Breakfast'))) {
+                            $unset = true;
+                        } else {
+                            $unset = false;
+                        }
+                    }
+                    if ($unset) {
+                        unset($rooms[$key]);
+                    }
+                }
+                foreach ($rooms as $key => $room) {
                     $roomArray[] = $room->room;
                 }
 
-                dd($roomArray);
-                $roomArray = array_unique($roomArray);
-
-
-                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms) / 2) {
+                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
 
                     foreach ($roomArray as $key => $roomArrayInstance) {
                         foreach ($competitorRoomArray as $competitorRoomArrayInstance) {
 
-
                             if ($roomArrayInstance == 'Standard Double Room') {
+
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room', 'Economy Room'))) {
                                     if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort', '(Extra Bed)')))) {
                                         foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {

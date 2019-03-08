@@ -35,7 +35,7 @@ class FirestoreSeeder extends Seeder
 
         foreach ($mainHotels as $mainHotel) {
 
-            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->limit(70)->orderBy('check_in_date')->get();
+            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->limit(7)->orderBy('check_in_date')->get();
 
             foreach ($dates as $date) {
 
@@ -136,11 +136,10 @@ class FirestoreSeeder extends Seeder
 
                 $competitorRoomArray = [];
                 foreach ($CompetitorHotels as $competitorHotel) {
-
-                    $competitorRooms = DB::table('rooms_prices_eurobookings')->where([
+                    $competitorRooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
                         ['check_in_date', '=', $date->check_in_date],
                         ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                    ])->get();
+                    ])->groupBy('room')->get();
 
 
                     if (!empty($competitorRooms)) {
@@ -149,7 +148,7 @@ class FirestoreSeeder extends Seeder
                             $competitorRoomArray[] = [
                                 'competitor_price' => $competitorRoom->price,
                                 'competitor_room' => $competitorRoom->room,
-                                'competitor_name' => $competitorRoom->hotel_name,
+                                'competitor_hotel' => $competitorRoom->hotel_name,
                             ];
                             $allCompetitorPrice[] = $competitorRoom->price;
                         }
@@ -159,74 +158,104 @@ class FirestoreSeeder extends Seeder
                 $roomArray = [];
 
                 foreach ($rooms as $room) {
-                    $roomArray[] = $room->room;
+                    $roomArray[] = $room;
                 }
 
                 if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
 
-                    foreach ($competitorRoomArray as $key => $competitorRoomArrayInstance) {
-                        if ($room->room == $competitorRoomArrayInstance['competitor_room']) {
-                        } else {
-                            unset($competitorRoomArray[$key]);
-                            print $key . "\n";
+                    foreach ($roomArray as $key2 => $roomArrayInstance) {
+                        dd($roomArrayInstance);
+                        foreach ($competitorRoomArray as $key => $competitorRoomArrayInstance) {
+
+                            if ($roomArrayInstance == 'Standard Double Room') {
+                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room', 'Economy Room'))) {
+                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort', '(Extra Bed)')))) {
+                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                    }
+                                }
+                            }
+
+                            if ($roomArrayInstance == 'Superior Double Room') {
+                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room'))) {
+                                    if (($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
+                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                    }
+                                }
+                            }
+                            if ($roomArrayInstance == 'Triple Room') {
+                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Triple Room'))) {
+                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
+                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                    }
+                                }
+                            }
+
+                            if ($roomArrayInstance == 'Family Room') {
+                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Family Room', 'Quadruple Room'))) {
+                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
+                                        $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
+                                    }
+                                }
+                            }
                         }
-                        dd($room->room);
                     }
 
-                    dd($competitorRoomArray);
+                    foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
+                        dd($roomArrayWithCompetitors);
+                        $assets = $calendar
+                            ->collection('assets')//rooms
+                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
 
-
-                    $assets = $calendar
-                        ->collection('assets')//rooms
-                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
-
-                    $assets->set([
-                        'name' => $room->room,
+                        $assets->set([
+                            'name' => $key,
 //                                'room_description' => $room->room_description,
-                    ]);
+                        ]);
 
-                    $options = $assets
-                        ->collection('options')//options
-                        ->document($room->uid);
+                        $options = $assets
+                            ->collection('options')//options
+                            ->document($room->uid);
 
 
-                    $options =
-                        $options->set([
-                            'real_price' => $room->price,
-                            'competitor' => $competitorRoomArray,
+                        $options =
+                            $options->set([
+                                'real_price' => $room->price,
+                                'competitor' => $roomArrayWithCompetitorsInstance,
 //                                    'suggested_price' => $suggestedPrice,
 //                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
 //                                    'hint' => $competitor->action,
 //                                    'name' => 'Normal'
+                            ]);
+
+                        $assets2 = $properties
+                            ->collection('assets')//rooms
+                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+
+
+                        $assets2->set([
+                            'name' => $key
                         ]);
 
-                    $assets2 = $properties
-                        ->collection('assets')//rooms
-                        ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
+                        $analytics2 = $assets2
+                            ->collection('analytics')//dates
+                            ->document($date->check_in_date);
 
-
-                    $assets2->set([
-                        'name' => $room->room
-                    ]);
-
-                    $analytics2 = $assets2
-                        ->collection('analytics')//dates
-                        ->document($date->check_in_date);
-
-                    $analytics2->set([
-                        'real_price' => $room->price,
-                        'competitor' => $competitorRoomArray,
+                        $analytics2->set([
+                            'real_price' => $room->price,
+                            'competitor' => $roomArrayWithCompetitorsInstance,
 //                                'suggested_price' => $suggestedPrice,
-                        'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                    ]);
+                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                        ]);
 
 
-                    $allRealPrice[] = $room->price;
-//                        $allCompetitorPrice[] = $competitorRoom->price;
+                        $allRealPrice[] = $room->price;
+                        foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
+                            $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
+                        }
 //                            $allSuggestedPrice[] = $suggestedPrice;
-                    echo 'Foundedd' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                } else {
-                    echo 'NotFound' . $competitorHotel->hotel_competitor_name . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                        echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+
+                    }
+
                 }
 
                 $assets3 = $properties
@@ -270,11 +299,19 @@ class FirestoreSeeder extends Seeder
 //                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
 //                        ]
                 ]);
-                $marketValueOffsetArray = [];
+//                $marketValueOffsetArray = [];
             }
 
         }
 
+    }
+
+    function contains($str, array $array)
+    {
+        foreach ($array as $instance) {
+            if (stripos($str, $instance) !== false) return true;
+        }
+        return false;
     }
 
     /*

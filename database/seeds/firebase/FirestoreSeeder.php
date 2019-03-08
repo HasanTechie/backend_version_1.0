@@ -158,14 +158,14 @@ class FirestoreSeeder extends Seeder
                 $roomArray = [];
 
                 foreach ($rooms as $room) {
-                    $roomArray[] = $room;
+                    $roomArray[] = $room->room;
                 }
 
                 if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
 
-                    foreach ($roomArray as $key2 => $roomArrayInstance) {
-                        dd($roomArrayInstance);
-                        foreach ($competitorRoomArray as $key => $competitorRoomArrayInstance) {
+                    foreach ($roomArray as $key => $roomArrayInstance) {
+
+                        foreach ($competitorRoomArray as $competitorRoomArrayInstance) {
 
                             if ($roomArrayInstance == 'Standard Double Room') {
                                 if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room', 'Economy Room'))) {
@@ -200,62 +200,64 @@ class FirestoreSeeder extends Seeder
                         }
                     }
 
-                    foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
-                        dd($roomArrayWithCompetitors);
-                        $assets = $calendar
-                            ->collection('assets')//rooms
-                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+                    foreach ($rooms as $room) {
 
-                        $assets->set([
-                            'name' => $key,
+                        foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
+
+                            if ($room->room == $key) {
+                                $assets = $calendar
+                                    ->collection('assets')//rooms
+                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+
+                                $assets->set([
+                                    'name' => $key,
 //                                'room_description' => $room->room_description,
-                        ]);
+                                ]);
 
-                        $options = $assets
-                            ->collection('options')//options
-                            ->document($room->uid);
-
-
-                        $options =
-                            $options->set([
-                                'real_price' => $room->price,
-                                'competitor' => $roomArrayWithCompetitorsInstance,
+                                $options = $assets
+                                    ->collection('options')//options
+                                    ->document($room->uid);
+                                
+                                $options =
+                                    $options->set([
+                                        'real_price' => $room->price,
+                                        'competitor' => $roomArrayWithCompetitorsInstance,
 //                                    'suggested_price' => $suggestedPrice,
 //                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
 //                                    'hint' => $competitor->action,
 //                                    'name' => 'Normal'
-                            ]);
+                                    ]);
 
-                        $assets2 = $properties
-                            ->collection('assets')//rooms
-                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+                                $assets2 = $properties
+                                    ->collection('assets')//rooms
+                                    ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
 
 
-                        $assets2->set([
-                            'name' => $key
-                        ]);
+                                $assets2->set([
+                                    'name' => $key
+                                ]);
 
-                        $analytics2 = $assets2
-                            ->collection('analytics')//dates
-                            ->document($date->check_in_date);
+                                $analytics2 = $assets2
+                                    ->collection('analytics')//dates
+                                    ->document($date->check_in_date);
 
-                        $analytics2->set([
-                            'real_price' => $room->price,
-                            'competitor' => $roomArrayWithCompetitorsInstance,
+                                $analytics2->set([
+                                    'real_price' => $room->price,
+                                    'competitor' => $roomArrayWithCompetitorsInstance,
 //                                'suggested_price' => $suggestedPrice,
-                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                        ]);
+                                    'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                                ]);
 
 
-                        $allRealPrice[] = $room->price;
-                        foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
-                            $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
-                        }
+                                $allRealPrice[] = $room->price;
+                                foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
+                                    $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
+                                }
 //                            $allSuggestedPrice[] = $suggestedPrice;
-                        echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-
+                                echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
+                            }
+                        }
                     }
-
                 }
 
                 $assets3 = $properties

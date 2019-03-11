@@ -71,7 +71,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         // Send the request
                                         $client->send($request, $response);
                                         $crawler = new Crawler($response->getContent());
-                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
+//                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
                                         $crawler2 = $client2->request('GET', $url1);
 //                                        Storage::put('hrs/hotelDataSingle.html', $crawler2->html()); //to be deleted
 
@@ -146,7 +146,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         foreach ($this->dataArray['all_rooms'] as $rooms) {
                                             foreach ($rooms as $room) {
 
-                                                if (isset($room['room']) || isset($room['price'])) {
+                                                if (!empty($room['room']) || !empty($room['price'])) {
 
                                                     $room['room_type'] = isset($room['room_type']) ? $room['room_type'] : null;
                                                     if ($room['room_type'] == 'singleroom') {

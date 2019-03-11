@@ -41,7 +41,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                     if ($response->getStatus() == 200) {
 
-                        Storage::put('hrs/hotels.html', $crawler->html());
+//                        Storage::put('hrs/hotels.html', $crawler->html());
 
                         if ($crawler->filter('a.sw-hotel-list__link')->count() > 0) {
 
@@ -71,9 +71,9 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         // Send the request
                                         $client->send($request, $response);
                                         $crawler = new Crawler($response->getContent());
-                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
+//                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
                                         $crawler2 = $client2->request('GET', $url1);
-                                        Storage::put('hrs/hotelDataSingle.html', $crawler2->html()); //to be deleted
+//                                        Storage::put('hrs/hotelDataSingle.html', $crawler2->html()); //to be deleted
 
                                         $this->roomData($crawler, $crawler2);
                                         $this->hotelData($crawler);
@@ -87,7 +87,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         dd($this->dataArray);
 
                                         if (DB::table('hotels_hrs')->where('hid', '=', $dh['hid'])->doesntExist()) {
-                                            $dh['hotel_uid'] = uniqid();
+                                            $hotelUid = uniqid();
 //                                    DB::table('hotels_hrs')->insert([
 //                                        'uid' => $dh['hotel_uid'],
 //                                        's_no' => 1,
@@ -109,15 +109,10 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         }
 
                                         foreach ($dr['all_rooms'] as $rooms) {
-
                                             foreach ($rooms as $room) {
-
 
                                                 if (isset($room['room']) || isset($room['price'])) {
 
-                                                    global $checkOutDate, $checkInDate, $currency;
-
-                                                    $requestDate = date("Y-m-d");
                                                     $room['room_type'] = isset($room['room_type']) ? $room['room_type'] : null;
                                                     if ($room['room_type'] == 'singleroom') {
                                                         $adults = 1;
@@ -125,7 +120,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                                     if ($room['room_type'] == 'doubleroom') {
                                                         $adults = 2;
                                                     }
-                                                    $rid = $requestDate . $checkInDate . $checkOutDate . $dh['hotel_name'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                                    $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                                                     $rid = str_replace(' ', '', $rid);
                                                     if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
 
@@ -139,7 +134,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 //                                                    'room_type' => $room['room_type'],
 //                                                    'criteria' => $room['criteria'],
 //                                                    'short_description' => $room['room_short_description'],
-//                                                    'hotel_uid' => $dh['hotel_uid'],
+//                                                    'hotel_uid' => $hotelUid,
 //                                                    'hotel_name' => $dh['hotel_name'],
 //                                                    'number_of_adults_in_room_request' => $adults,
 //                                                    'check_in_date' => $checkInDate,
@@ -150,21 +145,19 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 //                                                    'created_at' => DB::raw('now()'),
 //                                                    'updated_at' => DB::raw('now()')
 //                                                ]);
-                                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $dh['hotel_name'] . "\n";
+                                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                                     } else {
-                                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $checkInDate . ' out-> ' . $checkOutDate . ' hotel-> ' . $dh['hotel_name'] . "\n";
+                                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                                     }
                                                 }
                                             }
                                         }
 
                                     } catch (\Exception $e) {
-                                        global $city;
-                                        Storage::append('hrs/' . $city . '/errorSingleHotelAndDb.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorSingleHotelAndDb.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                         print($e->getMessage());
                                     }
                                 }
-
                             });
                         }
                     }
@@ -172,14 +165,12 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                         break;
                     }
                 } catch (\Exception $e) {
-                    global $city;
-                    Storage::append('hrs/' . $city . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                     print($e->getMessage());
                 }
             }
 
-
-            $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+            $this->dataArray['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
         }
     }
 
@@ -460,7 +451,5 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
         }
     }
 }
-
-
 
 //                        $da['hotel_id'] = preg_replace('/[^0-9]/', '', $da['link']);

@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FixinguidOfVerticalBookings');
 
 //        $this->call('FirebaseSeeder');
-        $this->call('FirestoreSeeder');
+//        $this->call('FirestoreSeeder');
 
 //        $this->call('EnteringHotelCompetitorsSeeder');
 

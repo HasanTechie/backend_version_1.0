@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client as GuzzleClient;
 use Goutte\Client as GoutteClient;
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
@@ -405,6 +406,34 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
 
             $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+        }
+    }
+
+    protected function googleData()
+    {
+
+        $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
+        $client = new GuzzleClient();
+        $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
+
+        $input = $this->dataArray['hotel_name'] . ' ,' . $this->dataArray['city'];
+
+        $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
+
+        $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:2000@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
+
+        if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
+
+            $response = json_decode($response->getBody())->candidates[0];
+
+            $this->dataArray['ratings_on_google'] = $response->rating;
+            $this->dataArray['total_number_of_ratings_on_google'] = $response->user_ratings_total;
+            $this->dataArray['google_latitude'] = $response->geometry->location->lat;
+            $this->dataArray['google_longitude'] = $response->geometry->location->lng;
+            $this->dataArray['all_data_google'] = serialize($response);
+
+        } else {
+            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
         }
     }
 }

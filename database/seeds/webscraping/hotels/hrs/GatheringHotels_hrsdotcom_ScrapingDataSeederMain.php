@@ -19,23 +19,6 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
     public function mainRun($data)
     {
         $this->dataArray = $data;
-//        if (session_status() == PHP_SESSION_NONE) {
-//            session_start();
-//        }
-
-//        global $city, $country, $checkInDate, $checkOutDate, $cityId, $currency;
-//
-//        $city = $dataArray['city'];
-//        $currency = $dataArray['currency'];
-//        $country = $dataArray['country'];
-//        $cityId = $dataArray['city_id'];
-//
-////        $date = '2019-02-20';
-//        $date = $dataArray['start_date'];
-//        $end_date = $dataArray['end_date']; //last checkin date hogi last me
-        //
-
-
         $client = new GoutteClient();
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
@@ -58,19 +41,15 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                     if ($response->getStatus() == 200) {
 
-
                         Storage::put('hrs/hotels.html', $crawler->html());
 
                         if ($crawler->filter('a.sw-hotel-list__link')->count() > 0) {
-
 
                             $crawler->filter('a.sw-hotel-list__link')->each(function ($node) {
 
                                 $this->dataArray['hotel_image'] = ($node->filter('div.sw-hotel-list__element__image > noscript > img')->count() > 0) ? $node->filter('div.sw-hotel-list__element__image > noscript > img')->attr('src') : null;
 
                                 $tempData = $node->attr('data-gtm-click');
-
-//                        $da['hotel_id'] = preg_replace('/[^0-9]/', '', $da['link']);
 
                                 $this->dataArray['hotel_id'] = json_decode($tempData)->ecommerce->click->products[0]->id;
 
@@ -82,10 +61,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                     try {
 
-
                                         $this->dataArray['hotel_url_on_hrs'] = $url2;
-//                                $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=14413&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=21&startDateMonth=03&startDateYear=2019&endDateDay=22&endDateMonth=03&endDateYear=2019&adults=2&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
-                                        echo "\n" . $url2;
                                         $client2 = new GoutteClient();
                                         $client = PhantomClient::getInstance();
                                         $client->isLazy(); // Tells the client to wait for all resources before rendering
@@ -101,19 +77,15 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                         $this->roomData($crawler, $crawler2);
                                         $this->hotelData($crawler);
+                                        $this->googleData();
 
-                                        dd($this->dataArray);
-                                        dd('reached');
 
-                                        $da['source'] = 'hrs.com';
-
-                                        global $city, $cityId, $country;
-
-                                        $hid = 'hotel' . $dh['hotel_name'] . 'address' . $dh['hotel_address'];
+                                        $this->dataArray['source'] = 'hrs.com';
+                                        $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
                                         $dh['hid'] = str_replace(' ', '', $hid);
 
-
                                         dd($this->dataArray);
+
                                         if (DB::table('hotels_hrs')->where('hid', '=', $dh['hid'])->doesntExist()) {
                                             $dh['hotel_uid'] = uniqid();
 //                                    DB::table('hotels_hrs')->insert([
@@ -272,8 +244,8 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
     protected function hotelData($crawler)
     {
-        $dh['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
-        $dh['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
+        $this->dataArray['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
+        $this->dataArray['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
 
         $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
         if (count($result) > 1) {
@@ -488,3 +460,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
         }
     }
 }
+
+
+
+//                        $da['hotel_id'] = preg_replace('/[^0-9]/', '', $da['link']);

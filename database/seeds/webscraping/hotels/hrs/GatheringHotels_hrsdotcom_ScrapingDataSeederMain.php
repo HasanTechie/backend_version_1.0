@@ -83,6 +83,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                     try {
 
 
+                                        $this->dataArray['hotel_url_on_hrs'] = $url2;
 //                                $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=14413&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=21&startDateMonth=03&startDateYear=2019&endDateDay=22&endDateMonth=03&endDateYear=2019&adults=2&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
                                         echo "\n" . $url2;
                                         $client2 = new GoutteClient();
@@ -210,7 +211,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                             });
                                         }
 
-                                        if($crawler->filter('div.distances')->count()>0) {
+                                        if ($crawler->filter('div.distances')->count() > 0) {
 
 
                                             $crawler->filter('div.distances')->each(function ($node) {
@@ -285,23 +286,44 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                                     return $da;
                                                 });
-
-                                                $this->dataArray['stadium'] = $node->filter('li.stadion')->each(function ($node) {
+                                                $this->dataArray['hotel_parking_details'] = $node->filter('li.parking')->each(function ($node) {
 
                                                     $da['distance_number'] = $node->filter('span.distanceNumber')->text();
                                                     $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                                                    $da['stadium'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                                                    $da['parking'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
                                                     $da['wholetext'] = $node->text();
 
                                                     return $da;
                                                 });
 
+                                                $this->dataArray['Sports/leisure facilities'] = $node->filter('div.col33.lastCol33 > ul > li')->each(function ($node) {
+                                                    return $node->text();
+                                                });
+
+                                                $node->filter('div.col33')->each(function ($node) {
+                                                    if ($node->filter('h5')->text() == 'Surroundings of the hotel') {
+                                                        $this->dataArray['Surroundings of the hotel']= $node->filter('ul > li')->each(function ($node) {
+                                                            return $node->text();
+                                                        });
+                                                    }
+                                                });
+
+//                                                $this->dataArray['stadium'] = $node->filter('li.stadion')->each(function ($node) {
+//
+//                                                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+//                                                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+//                                                    $da['stadium'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+//                                                    $da['wholetext'] = $node->text();
+//
+//                                                    return $da;
+//                                                });
+
                                             });
                                         }
 
-                                        $this->dataArray['ratings_on_hrs'] = ($crawler->filter('div.ratingCircle')->count()>0) ? $crawler->filter('div.ratingCircle')->text() : null;
+                                        $this->dataArray['ratings_on_hrs'] = ($crawler->filter('div.ratingCircle')->count() > 0) ? $crawler->filter('div.ratingCircle')->text() : null;
 
-                                        $this->dataArray['total_ratings_on_hrs'] = ($crawler->filter('div.ratingDescription')->count()>0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription')->text())) : null;
+                                        $this->dataArray['total_ratings_on_hrs'] = ($crawler->filter('div.ratingDescription')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription')->text())) : null;
 
                                         dd($this->dataArray);
                                         dd('reached');
@@ -312,6 +334,9 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                         $hid = 'hotel' . $dh['hotel_name'] . 'address' . $dh['hotel_address'];
                                         $dh['hid'] = str_replace(' ', '', $hid);
+
+
+                                        dd($this->dataArray);
                                         if (DB::table('hotels_hrs')->where('hid', '=', $dh['hid'])->doesntExist()) {
                                             $dh['hotel_uid'] = uniqid();
 //                                    DB::table('hotels_hrs')->insert([

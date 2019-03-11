@@ -15,32 +15,32 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
 
         $dataArray [] = [
             'currency' => 'EUR',
-            'start_date' => '2019-03-10',
-            'end_date' => '2020-03-10',
+            'start_date' => '2019-03-14',
+            'end_date' => '2020-03-14',
             'city' => 'Paris',
             'city_id' => 49551,
             'country' => 'France',
         ];
         $dataArray [] = [
             'currency' => 'EUR',
-            'start_date' => '2019-03-10',
-            'end_date' => '2020-03-10',
+            'start_date' => '2019-03-14',
+            'end_date' => '2020-03-14',
             'city' => 'Frankfurt-am-main',
             'city_id' => 91191,
             'country' => 'Germany',
         ];
         $dataArray [] = [
             'currency' => 'EUR',
-            'start_date' => '2019-03-10',
-            'end_date' => '2020-03-10',
+            'start_date' => '2019-03-14',
+            'end_date' => '2020-03-14',
             'city' => 'Berlin',
             'city_id' => 55133,
             'country' => 'Germany',
         ];
         $dataArray [] = [
             'currency' => 'EUR',
-            'start_date' => '2019-03-10',
-            'end_date' => '2020-03-10',
+            'start_date' => '2019-03-14',
+            'end_date' => '2020-03-14',
             'city' => 'Rome',
             'city_id' => 54084,
             'country' => 'Italy',

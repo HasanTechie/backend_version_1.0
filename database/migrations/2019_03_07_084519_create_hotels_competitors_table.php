@@ -21,6 +21,7 @@ class CreateHotelsCompetitorsTable extends Migration
             $table->string('hotel_name');
             $table->string('hotel_competitor_uid');
             $table->string('hotel_competitor_name');
+            $table->string('hotel_provider');
 
             $table->timestamps();
         });

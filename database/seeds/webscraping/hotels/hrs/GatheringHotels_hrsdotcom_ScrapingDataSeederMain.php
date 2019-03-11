@@ -71,7 +71,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                         // Send the request
                                         $client->send($request, $response);
                                         $crawler = new Crawler($response->getContent());
-//                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
+                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
                                         $crawler2 = $client2->request('GET', $url1);
 //                                        Storage::put('hrs/hotelDataSingle.html', $crawler2->html()); //to be deleted
 
@@ -237,6 +237,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
     {
         $this->dataArray['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
         $this->dataArray['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
+        $this->dataArray['hotel_id_on_hrs'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
         $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
         if (count($result) > 1) {

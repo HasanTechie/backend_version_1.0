@@ -55,6 +55,7 @@ class EnteringHotelCompetitorsSeeder extends Seeder
                 'hotel_name' => $hotelName,
                 'hotel_competitor_uid' => $competitorHotel['uid'],
                 'hotel_competitor_name' => $competitorHotel['name'],
+                'hotel_provider' => 'eurobookings.com',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);

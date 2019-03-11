@@ -20,11 +20,15 @@ class CreateRoomsPricesHrsTable extends Migration
             $table->string('price')->nullable();
             $table->string('currency')->nullable();
             $table->string('room')->nullable();
-            $table->string('room_type')->nullable();
-            $table->string('criteria')->nullable();
             $table->string('hotel_uid')->nullable();
             $table->string('hotel_name')->nullable();
+            $table->string('hotel_hrs_id')->nullable();
+            $table->string('room_type')->nullable();
+            $table->string('criteria')->nullable();
+            $table->longText('basic_conditions')->nullable();
+            $table->text('photo')->nullable();
             $table->text('short_description')->nullable();
+            $table->longText('facilities')->nullable();
             $table->string('number_of_adults_in_room_request')->nullable();
             $table->string('check_in_date')->nullable();
             $table->string('check_out_date')->nullable();

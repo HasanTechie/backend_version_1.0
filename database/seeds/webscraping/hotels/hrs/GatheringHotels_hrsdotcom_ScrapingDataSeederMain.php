@@ -497,7 +497,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
             $this->dataArray['all_data_google'] = serialize($response);
 
         } else {
-            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
+            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
         }
     }
 }

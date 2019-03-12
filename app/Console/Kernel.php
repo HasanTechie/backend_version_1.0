@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->hourly()
+            ->everyTenMinutes()
             ->appendOutputTo(storage_path('logs/CorrectingSNo.log'));
 
 //        $schedule->command('command:pushdatatofirestore')

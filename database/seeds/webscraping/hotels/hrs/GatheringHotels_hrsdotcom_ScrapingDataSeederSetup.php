@@ -15,36 +15,36 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
 
         $dataArray [] = [
             'currency' => 'EUR',
-            'start_date' => '2019-03-14',
-            'end_date' => '2020-03-14',
+            'start_date' => '2019-03-19',
+            'end_date' => '2020-03-19',
             'city' => 'Rome',
             'city_id' => 54084,
             'country_code' => 'IT',
         ];
-        $dataArray [] = [
-            'currency' => 'EUR',
-            'start_date' => '2019-03-14',
-            'end_date' => '2020-03-14',
-            'city' => 'Paris',
-            'city_id' => 49551,
-            'country_code' => 'FR',
-        ];
-        $dataArray [] = [
-            'currency' => 'EUR',
-            'start_date' => '2019-03-14',
-            'end_date' => '2020-03-14',
-            'city' => 'Frankfurt-am-main',
-            'city_id' => 91191,
-            'country_code' => 'DE',
-        ];
-        $dataArray [] = [
-            'currency' => 'EUR',
-            'start_date' => '2019-03-14',
-            'end_date' => '2020-03-14',
-            'city' => 'Berlin',
-            'city_id' => 55133,
-            'country_code' => 'DE',
-        ];
+//        $dataArray [] = [
+//            'currency' => 'EUR',
+//            'start_date' => '2019-03-14',
+//            'end_date' => '2020-03-14',
+//            'city' => 'Paris',
+//            'city_id' => 49551,
+//            'country_code' => 'FR',
+//        ];
+//        $dataArray [] = [
+//            'currency' => 'EUR',
+//            'start_date' => '2019-03-14',
+//            'end_date' => '2020-03-14',
+//            'city' => 'Frankfurt-am-main',
+//            'city_id' => 91191,
+//            'country_code' => 'DE',
+//        ];
+//        $dataArray [] = [
+//            'currency' => 'EUR',
+//            'start_date' => '2019-03-14',
+//            'end_date' => '2020-03-14',
+//            'city' => 'Berlin',
+//            'city_id' => 55133,
+//            'country_code' => 'DE',
+//        ];
 
         foreach ($dataArray as $instance) {
 

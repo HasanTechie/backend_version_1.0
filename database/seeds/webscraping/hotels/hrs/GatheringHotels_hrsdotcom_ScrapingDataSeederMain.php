@@ -107,7 +107,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                                     'name' => $this->dataArray['hotel_name'],
                                                     'address' => $this->dataArray['hotel_address'],
                                                     'hrs_id' => $this->dataArray['hotel_hrs_id'],
-                                                    'photo' => $this->dataArray['hotel_hrs_image'],
+                                                    'photo' => (!empty($this->dataArray['hotel_hrs_image']) ? $this->dataArray['hotel_hrs_image'] : null),
                                                     'ratings_on_hrs' => (isset($this->dataArray['ratings_on_hrs']) ? $this->dataArray['ratings_on_hrs'] : null),
                                                     'total_number_of_ratings_on_hrs' => (isset($this->dataArray['total_number_of_ratings_on_hrs']) ? $this->dataArray['total_number_of_ratings_on_hrs'] : null),
                                                     'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
@@ -148,14 +148,8 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                                 if (!empty($room['room']) && !empty($room['price'])) {
 
-                                                    $room['room_type'] = isset($room['room_type']) ? $room['room_type'] : null;
-                                                    if ($room['room_type'] == 'singleroom') {
-                                                        $adults = 1;
-                                                    }
-                                                    if ($room['room_type'] == 'doubleroom') {
-                                                        $adults = 2;
-                                                    }
-                                                    $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                                    $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+
                                                     $rid = str_replace(' ', '', $rid);
                                                     if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
                                                         DB::table('rooms_prices_hrs')->insert([
@@ -173,7 +167,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                                             'hotel_uid' => $hotelUid,
                                                             'hotel_name' => $this->dataArray['hotel_name'],
                                                             'hotel_hrs_id' => $this->dataArray['hotel_hrs_id'],
-                                                            'number_of_adults_in_room_request' => $adults,
+                                                            'number_of_adults_in_room_request' => $room['room_adults'],
                                                             'check_in_date' => $this->dataArray['check_in_date'],
                                                             'check_out_date' => $this->dataArray['check_out_date'],
                                                             'rid' => $rid,
@@ -189,6 +183,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                                 }
                                             }
                                         }
+                                        $this->dataArray['all_rooms'] = null;
 
                                     } catch (\Exception $e) {
                                         Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
@@ -225,7 +220,10 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                     $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
                         return $node->text();
                     }) : null;
-                    $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
+
+                    $dr['room_type'] = 'singleroom';
+                    $dr['room_adults'] = 1;
+//                    $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
                     $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
 //                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
                     $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
@@ -263,7 +261,8 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                     $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
                         return $node->text();
                     }) : null;
-                    $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
+                    $dr['room_type'] = 'doubleroom';
+                    $dr['room_adults'] = 2;
                     $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
 //                                                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
 //                                                $dr['price'] = ($node->filter('td.roomPrice > div > h4')->count() > 0) ? $node->filter('td.roomPrice > div > h4')->text() : null;

@@ -130,42 +130,44 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
                     }
                     $this->roomData($crawler, $crawler2);
 
-                    foreach ($this->dataArray['all_rooms'] as $rooms) {
-                        foreach ($rooms as $room) {
+                    if (is_array($this->dataArray['all_rooms'])) {
+                        foreach ($this->dataArray['all_rooms'] as $rooms) {
+                            foreach ($rooms as $room) {
 
-                            if (!empty($room['room']) && !empty($room['price'])) {
+                                if (!empty($room['room']) && !empty($room['price']) && !empty($hotelUid)) {
 
-                                $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                    $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
 
-                                $rid = str_replace(' ', '', $rid);
-                                if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
-                                    DB::table('rooms_prices_hrs')->insert([
-                                        'uid' => uniqid(),
-                                        's_no' => 1,
-                                        'price' => $room['price'],
-                                        'currency' => $this->dataArray['currency'],
-                                        'room' => $room['room'],
-                                        'room_type' => $room['room_type'],
-                                        'criteria' => $room['criteria'],
-                                        'basic_conditions' => serialize($room['room_basic_conditions']),
-                                        'photo' => $room['room_image'],
-                                        'short_description' => $room['room_short_description'],
-                                        'facilities' => serialize($this->dataArray['room_facilities']),
-                                        'hotel_uid' => $hotelUid,
-                                        'hotel_name' => $this->dataArray['hotel_name'],
-                                        'hotel_hrs_id' => $this->dataArray['hotel_hrs_id'],
-                                        'number_of_adults_in_room_request' => $room['room_adults'],
-                                        'check_in_date' => $this->dataArray['check_in_date'],
-                                        'check_out_date' => $this->dataArray['check_out_date'],
-                                        'rid' => $rid,
-                                        'request_date' => $this->dataArray['request_date'],
-                                        'source' => $this->dataArray['source'],
-                                        'created_at' => DB::raw('now()'),
-                                        'updated_at' => DB::raw('now()')
-                                    ]);
-                                    echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                } else {
-                                    echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                    $rid = str_replace(' ', '', $rid);
+                                    if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
+                                        DB::table('rooms_prices_hrs')->insert([
+                                            'uid' => uniqid(),
+                                            's_no' => 1,
+                                            'price' => $room['price'],
+                                            'currency' => $this->dataArray['currency'],
+                                            'room' => $room['room'],
+                                            'room_type' => $room['room_type'],
+                                            'criteria' => $room['criteria'],
+                                            'basic_conditions' => serialize($room['room_basic_conditions']),
+                                            'photo' => $room['room_image'],
+                                            'short_description' => $room['room_short_description'],
+                                            'facilities' => serialize($this->dataArray['room_facilities']),
+                                            'hotel_uid' => $hotelUid,
+                                            'hotel_name' => $this->dataArray['hotel_name'],
+                                            'hotel_hrs_id' => $this->dataArray['hotel_hrs_id'],
+                                            'number_of_adults_in_room_request' => $room['room_adults'],
+                                            'check_in_date' => $this->dataArray['check_in_date'],
+                                            'check_out_date' => $this->dataArray['check_out_date'],
+                                            'rid' => $rid,
+                                            'request_date' => $this->dataArray['request_date'],
+                                            'source' => $this->dataArray['source'],
+                                            'created_at' => DB::raw('now()'),
+                                            'updated_at' => DB::raw('now()')
+                                        ]);
+                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                    } else {
+                                        echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                    }
                                 }
                             }
                         }

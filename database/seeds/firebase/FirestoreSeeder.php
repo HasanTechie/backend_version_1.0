@@ -35,7 +35,7 @@ class FirestoreSeeder extends Seeder
 
         foreach ($mainHotels as $mainHotel) {
 
-            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->limit(7)->orderBy('check_in_date')->get();
+            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->orderBy('check_in_date')->get();
 
             $properties = $db
                 ->collection('properties')//hotels

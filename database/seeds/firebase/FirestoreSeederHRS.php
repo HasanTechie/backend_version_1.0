@@ -28,20 +28,20 @@ class FirestoreSeederHRS extends Seeder
         ]);
 
         $mainHotels[] = [
-            'hotel_uid' => '5c80a2d79d162',
-            'hotel_name' => 'Hotel Emona Aquaeductus',
+            'hotel_uid' => '5c878f0d161a5',
+            'hotel_name' => 'Emona Aquaeductus',
             'city' => 'Rome'
         ];
 
         foreach ($mainHotels as $mainHotel) {
 
-            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->limit(7)->orderBy('check_in_date')->get();
+            $dates = DB::table('rooms_prices_hrs')->select('check_in_date')->distinct('check_in_date')->where('hotel_uid', '=', $mainHotel['hotel_uid'])->orderBy('check_in_date')->get();
 
             $properties = $db
                 ->collection('properties')//hotels
                 ->document($mainHotel['hotel_uid']);
 
-//                $mainHotelData = DB::table('hotels_eurobookings')->where([
+//                $mainHotelData = DB::table('hotels_hrs')->where([
 //                    ['uid', '=', $mainHotel['hotel_uid']]
 //                ])->get();
 
@@ -122,181 +122,123 @@ class FirestoreSeederHRS extends Seeder
 
 //                    echo $mainHotel['hotel_name'] . ' ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
-                $i = 0;
-
                 $CompetitorHotels = DB::table('hotels_competitors')->where([
                     ['hotel_uid', '=', $mainHotel['hotel_uid']],
                     ['hotel_name', '=', $mainHotel['hotel_name']],
                 ])->get();
 
+//
+//                $competitorRoomArray = [];
+//                foreach ($CompetitorHotels as $competitorHotel) {
+//                    $competitorRooms = DB::table('rooms_prices_hrs')->select('*')->where([
+//                        ['check_in_date', '=', $date->check_in_date],
+//                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+//                    ])->groupBy('room', 'short_description','uid')->get();
+//
+//
+//                    if (!empty($competitorRooms)) {
+//                        foreach ($competitorRooms as $competitorRoom) {
+//
+//                            $competitorRoomArray[] = [
+//                                'competitor_price' => $competitorRoom->price,
+//                                'competitor_room' => $competitorRoom->room,
+//                                'competitor_hotel' => $competitorRoom->hotel_name,
+//                                'competitor_short_description' => $competitorRoom->short_description,
+//                            ];
+//                            $allCompetitorPrice[] = $competitorRoom->price;
+//                        }
+//                    }
+//                }
 
-                $competitorRoomArray = [];
-                foreach ($CompetitorHotels as $competitorHotel) {
-                    $competitorRooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
-                        ['check_in_date', '=', $date->check_in_date],
-                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                    ])->groupBy('room', 'short_description','uid')->get();
 
-
-                    if (!empty($competitorRooms)) {
-                        foreach ($competitorRooms as $competitorRoom) {
-
-                            $competitorRoomArray[] = [
-                                'competitor_price' => $competitorRoom->price,
-                                'competitor_room' => $competitorRoom->room,
-                                'competitor_hotel' => $competitorRoom->hotel_name,
-                                'competitor_short_description' => $competitorRoom->short_description,
-                            ];
-                            $allCompetitorPrice[] = $competitorRoom->price;
-                        }
-                    }
-                }
-
-                $rooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
+                $rooms = DB::table('rooms_prices_hrs')->select('*')->where([
                     ['check_in_date', '=', $date->check_in_date],
                     ['hotel_uid', '=', $mainHotel['hotel_uid']],
-                ])->whereNotNull('short_description')->groupBy('room', 'short_description','uid')->get();
-
-
-//                dd($rooms);
-                foreach ($rooms as $key => $room) {
-                    foreach (unserialize($room->short_description) as $instance) {
-                        if (!(strpos('test' . $instance, 'Breakfast'))) {
-                            $unset = true;
-                        } else {
-                            $unset = false;
-                        }
-                    }
-                    if ($unset) {
-                        unset($rooms[$key]);
-                    }
-                }
-                foreach ($rooms as $key => $room) {
-                    $roomArray[] = $room->room;
-                }
-
-                if (count($competitorRoomArray) > 0 && count($roomArray) == count($rooms)) {
-
-                    foreach ($roomArray as $key => $roomArrayInstance) {
-                        foreach ($competitorRoomArray as $competitorRoomArrayInstance) {
-
-                            if ($roomArrayInstance == 'Standard Double Room') {
-
-                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room', 'Economy Room'))) {
-                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort', '(Extra Bed)')))) {
-                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
-                                            if (strpos('test' . $instance, 'Breakfast')) {
-                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if ($roomArrayInstance == 'Superior Double Room') {
-                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Double Room', 'Twin Room'))) {
-                                    if (($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
-                                            if (strpos('test' . $instance, 'Breakfast')) {
-                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if ($roomArrayInstance == 'Triple Room') {
-                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Triple Room'))) {
-                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
-                                            if (strpos('test' . $instance, 'Breakfast')) {
-                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if ($roomArrayInstance == 'Family Room') {
-                                if ($this->contains($competitorRoomArrayInstance['competitor_room'], array('Family Room', 'Quadruple Room'))) {
-                                    if (!($this->contains($competitorRoomArrayInstance['competitor_room'], array('Superior', 'Comfort')))) {
-
-                                        foreach (unserialize($competitorRoomArrayInstance['competitor_short_description']) as $instance) {
-                                            if (strpos($instance, 'Breakfast')) {
-                                                $roomArrayWithCompetitors[$roomArrayInstance][] = $competitorRoomArrayInstance;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                ])->groupBy('room', 'room_type')->get();
 
                 foreach ($rooms as $room) {
 
-                    if (is_array(unserialize($room->short_description))) {
-                        foreach (unserialize($room->short_description) as $instance) {
-                            if (strpos('test' . $instance, 'Breakfast')) {
-                                foreach ($roomArrayWithCompetitors as $key => $roomArrayWithCompetitorsInstance) {
+                    foreach ($CompetitorHotels as $hotel) {
+                        $competitorRooms = DB::table('rooms_prices_hrs')->select('*')->where([
+                            ['check_in_date', '=', $date->check_in_date],
+                            ['hotel_uid', '=', $hotel->hotel_competitor_uid],
+                            ['room', '=', $room->room],
+                            ['room_type', '=', $room->room_type],
+                        ])->groupBy('room')->get();
 
-                                    if ($room->room == $key) {
 
-                                        $assets = $calendar
-                                            ->collection('assets')//rooms
-                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+                        foreach ($competitorRooms as $competitorRoom) {
+                            $competitorRoomArray[] = [
+                                'competitor_hotel' => $competitorRoom->hotel_name,
+                                'competitor_price' => $competitorRoom->price,
+                                'competitor_room' => $competitorRoom->room,
+                                'competitor_room_type' => $competitorRoom->room_type,
+                                'competitor_criteria' => $competitorRoom->criteria,
+                                'competitor_short_description' => $competitorRoom->short_description,
+                            ];
+                            $allCompetitorPrice[] = $competitorRoom->price;
 
-                                        $assets->set([
-                                            'name' => $key,
-                                            'short_description' => $room->short_description,
-                                        ]);
+                        }
+                    }
 
-                                        $options = $assets
-                                            ->collection('options')//options
-                                            ->document('Breakfast');
+                    if (is_array($competitorRoomArray)) {
 
-                                        $options =
-                                            $options->set([
-                                                'real_price' => $room->price,
-                                                'competitor' => $roomArrayWithCompetitorsInstance,
+                        $assets = $calendar
+                            ->collection('assets')//rooms
+                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
+
+                        $assets->set([
+                            'name' => $room->room,
+                            'short_description' => $room->short_description,
+                        ]);
+
+                        $options = $assets
+                            ->collection('options')//options
+                            ->document($room->room_type);
+
+                        $options =
+                            $options->set([
+                                'real_price' => $room->price,
+                                'competitor' => $competitorRoomArray,
 //                                    'suggested_price' => $suggestedPrice,
 //                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
 //                                    'hint' => $competitor->action,
 //                                    'name' => 'Normal'
-                                            ]);
-
-                                        $assets2 = $properties
-                                            ->collection('assets')//rooms
-                                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $key)));
+                            ]);
 
 
-                                        $assets2->set([
-                                            'name' => $key
-                                        ]);
+                        $assets2 = $properties
+                            ->collection('assets')//rooms
+                            ->document(strtolower(str_replace(array(' ', ',', '/'), '', $room->room)));
 
-                                        $analytics2 = $assets2
-                                            ->collection('analytics')//dates
-                                            ->document($date->check_in_date);
 
-                                        $analytics2->set([
-                                            'real_price' => $room->price,
-                                            'competitor' => $roomArrayWithCompetitorsInstance,
+                        $assets2->set([
+                            'name' => $room->room
+                        ]);
+
+                        $options = $assets2
+                            ->collection('options')//options
+                            ->document($room->room_type);
+
+                        $analytics2 = $options
+                            ->collection('analytics')//dates
+                            ->document($date->check_in_date);
+
+                        $analytics2->set([
+                            'real_price' => $room->price,
+                            'competitor' => $competitorRoomArray,
 //                                'suggested_price' => $suggestedPrice,
-                                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
-                                        ]);
+                            'date' => Carbon\Carbon::createFromDate($y, $m, $d),
+                        ]);
 
 
-                                        $allRealPrice[] = $room->price;
-                                        foreach ($roomArrayWithCompetitorsInstance as $roomArrayWithCompetitorsInstance2) {
-                                            $allCompetitorPrice[] = $roomArrayWithCompetitorsInstance2['competitor_price'];
-                                        }
+                        $allRealPrice[] = $room->price;
 //                            $allSuggestedPrice[] = $suggestedPrice;
-                                        echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                                    }
-                                }
-                            }
-                        }
-                    }
+                        echo 'Foundedd ' . $date->check_in_date . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
 
+//                        $competitorRoomArray = null;
+                    }
+                    $competitorRoomArray = null;
 
                 }
 
@@ -317,9 +259,10 @@ class FirestoreSeederHRS extends Seeder
                     $allRealPrice = array_filter($allRealPrice);
                     $averageAllRealPrice = array_sum($allRealPrice) / count($allRealPrice);
 
+                    $allRealPrice = null;
                     $allCompetitorPrice = array_filter($allCompetitorPrice);
                     $averageAllCompetitorPrice = array_sum($allCompetitorPrice) / count($allCompetitorPrice);
-
+                    $allCompetitorPrice = null;
 //                    $allSuggestedPrice = array_filter($allSuggestedPrice);
 //                    $averageAllSuggestedPrice = array_sum($allSuggestedPrice) / count($allSuggestedPrice);
 

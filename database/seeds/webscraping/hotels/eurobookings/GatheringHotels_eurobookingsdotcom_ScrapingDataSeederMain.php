@@ -208,8 +208,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                 }
                                             } else {
                                                 $resultHid = DB::table('hotels_eurobookings')->select('uid', 'name')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->get();
-                                                $hotelUid = $resultHid[0]->uid;
-                                                $this->dataArray['hotel_name'] = $resultHid[0]->name;
+                                                $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
+                                                $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
                                                 echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                             }
 

@@ -30,7 +30,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
-            for ($i = 1; $i < 10000; $i++) {
+            for ($i = 1; $i < 1000; $i++) {
 
                 try {
 
@@ -51,9 +51,11 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                                 $this->dataArray['hotel_hrs_image'] = ($node->filter('div.sw-hotel-list__element__image > noscript > img')->count() > 0) ? $node->filter('div.sw-hotel-list__element__image > noscript > img')->attr('src') : null;
 
-                                $tempData = $node->attr('data-gtm-click');
+                                $tempData = ($node->count()>0) ? $node->attr('data-gtm-click') : null;
 
-                                $this->dataArray['hotel_id'] = json_decode($tempData)->ecommerce->click->products[0]->id;
+                                if (isset(json_decode($tempData)->ecommerce->click->products[0]->id)) {
+                                    $this->dataArray['hotel_id'] = json_decode($tempData)->ecommerce->click->products[0]->id;
+                                }
 
                                 if (!empty($this->dataArray['hotel_id'])) {
                                     $adult = 1;
@@ -137,8 +139,8 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                             }
                                         } else {
                                             $resultHid = DB::table('hotels_hrs')->select('uid', 'name')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->get();
-                                            $hotelUid = $resultHid[0]->uid;
-                                            $this->dataArray['hotel_name'] = $resultHid[0]->name;
+                                            $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
+                                            $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
                                             echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                         }
                                         $this->roomData($crawler, $crawler2);

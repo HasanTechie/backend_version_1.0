@@ -17,7 +17,8 @@ class CreateRoomsPricesEurobookingsTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('price')->nullable();
+            $table->double('price')->nullable();
+            $table->double('price_should')->nullable();
             $table->string('currency')->nullable();
             $table->string('room')->nullable();
             $table->string('hotel_uid')->nullable();

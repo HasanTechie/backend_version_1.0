@@ -187,83 +187,6 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
         }
     }
 
-    protected function roomData($crawler, $crawler2)
-    {
-
-        if (!empty($crawler2)) {
-            if ($crawler2->filter('table#basket > tbody > tr')->count() > 0) {
-
-                $this->dataArray['all_rooms'][] = $crawler2->filter('table#basket > tbody > tr')->each(function ($node) {
-                    $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
-                    $dr['room_image'] = ($node->filter('td.roomOffer > div.imageWrap > img')->count() > 0) ? $node->filter('td.roomOffer > div.imageWrap > img')->attr('src') : null;
-                    $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
-                        return $node->text();
-                    }) : null;
-
-                    $dr['room_type'] = 'singleroom';
-                    $dr['room_adults'] = 1;
-//                    $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
-                    $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
-//                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
-                    $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
-                    $dr['price_cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
-                    $dr['price'] = str_replace(array($dr['price_cents'], '€'), '', $dr['full_text_price']) . '.' . $dr['price_cents'];
-                    $dr['criteria'] = ($node->filter('td.roomPrice > div > div.supplements')->count() > 0) ? $node->filter('td.roomPrice > div > div.supplements')->text() : null;
-//                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
-                    foreach ($dr as $key => $value) {
-                        if (!is_array($value)) {
-                            $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
-                        }
-                        if (empty($value)) {
-                            unset($dr[$key]);
-                        }
-                    }
-                    return $dr;
-                });
-            }
-        }
-        if (!empty($crawler)) {
-            if ($crawler->filter('div.jsAmenities.equipement.col33')->count() > 0) {
-
-                $crawler->filter('div.jsAmenities.equipement.col33')->each(function ($node) {
-                    if ($node->filter('h5')->text() == 'Room facilities') {
-                        $this->dataArray['room_facilities'] = $node->filter('li')->each(function ($node) {
-                            return trim($node->text());
-                        });
-                    }
-                });
-            }
-            if ($crawler->filter('table#basket > tbody > tr')->count() > 0) {
-                $this->dataArray['all_rooms'][] = $crawler->filter('table#basket > tbody > tr')->each(function ($node) {
-                    $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
-                    $dr['room_image'] = ($node->filter('td.roomOffer > div.imageWrap > img')->count() > 0) ? $node->filter('td.roomOffer > div.imageWrap > img')->attr('src') : null;
-                    $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
-                        return $node->text();
-                    }) : null;
-                    $dr['room_type'] = 'doubleroom';
-                    $dr['room_adults'] = 2;
-                    $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
-//                                                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
-//                                                $dr['price'] = ($node->filter('td.roomPrice > div > h4')->count() > 0) ? $node->filter('td.roomPrice > div > h4')->text() : null;
-                    $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
-                    $dr['price_cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
-                    $dr['price'] = str_replace(array($dr['price_cents'], '€'), '', $dr['full_text_price']) . '.' . $dr['price_cents'];
-//                                                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
-                    $dr['criteria'] = ($node->filter('td.roomPrice > div > div.supplements')->count() > 0) ? $node->filter('td.roomPrice > div > div.supplements')->text() : null;
-                    foreach ($dr as $key => $value) {
-                        if (!is_array($value)) {
-                            $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
-                        }
-                        if (empty($value)) {
-                            unset($dr[$key]);
-                        }
-                    }
-                    return $dr;
-                });
-            }
-        }
-    }
-
     protected function hotelData($crawler)
     {
         $this->dataArray['hotel_name'] = ($crawler->filter('div#detailsHead > h2 > span.title')->count() > 0) ? $crawler->filter('div#detailsHead > h2 > span.title')->text() : null;
@@ -282,21 +205,24 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
         if ($crawler->filter('div.jsAmenities.equipement.col33')->count() > 0) {
 
             $crawler->filter('div.jsAmenities.equipement.col33')->each(function ($node) {
-                if ($node->filter('h5')->text() == 'Hotel facilities') {
-
-                    $this->dataArray['hotel_facilities'] = $node->filter('li')->each(function ($node) {
-                        return trim($node->text());
-                    });
+                if ($node->filter('h5')->count() > 0) {
+                    if ($node->filter('h5')->text() == 'Hotel facilities') {
+                        $this->dataArray['hotel_facilities'] = ($node->filter('li')->count() > 0) ? $node->filter('li')->each(function ($node) {
+                            return trim($node->text());
+                        }) : null;
+                    }
                 }
             });
         }
 
         if ($crawler->filter('div.jsServices.equipement.col33')->count() > 0) {
             $crawler->filter('div.jsServices.equipement.col33')->each(function ($node) {
-                if ($node->filter('h5')->text() == 'In-house services') {
-                    $this->dataArray['in_house_services'] = $node->filter('li')->each(function ($node) {
-                        return trim($node->text());
-                    });
+                if ($node->filter('h5')->count() > 0) {
+                    if ($node->filter('h5')->text() == 'In-house services') {
+                        $this->dataArray['in_house_services'] = ($node->filter('li')->count() > 0) ? $node->filter('li')->each(function ($node) {
+                            return trim($node->text());
+                        }) : null;
+                    }
                 }
             });
         }
@@ -304,10 +230,11 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
         if ($crawler->filter('dl#hotelinformation')->count() > 0) {
 
             $this->dataArray['hotel_details']['hotel_information'] = $crawler->filter('dl#hotelinformation')->each(function ($node) {
-                $d1['heading'] = $node->filter('dt > h5')->each(function ($node) {
+                $d1['heading'] = ($node->filter('dt > h5')->count() > 0) ? $node->filter('dt > h5')->each(function ($node) {
                     return trim($node->text());
-                });
-                $d1['body'] = $node->filter('dd')->each(function ($node) {
+                }) : null;
+
+                $d1['body'] = ($node->filter('dd')->count() > 0) ? $node->filter('dd')->each(function ($node) {
                     if ($node->filter('li')->count() > 0) {
                         return $node->filter('li')->each(function ($node) {
                             return trim($node->text());
@@ -315,7 +242,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
                     } else {
                         return trim($node->text());
                     }
-                });
+                }) : null;
                 for ($k = 0; $k < count($d1['heading']); $k++) {
                     $dh[$d1['heading'][$k]] = $d1['body'][$k];
                 }
@@ -325,12 +252,12 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
         if ($crawler->filter('dl#hdInformationMarginal')->count() > 0) {
             $crawler->filter('dl#hdInformationMarginal')->each(function ($node) {
-                $dl['body'] = $node->filter('dd > p')->each(function ($node) {
-                    $dl['heading'] = $node->filter('strong')->text();
-                    $dl['wholetext'] = $node->text();
+                $dl['body'] = ($node->filter('dd > p')->count() > 0) ? $node->filter('dd > p')->each(function ($node) {
+                    $dl['heading'] = ($node->filter('strong')->count() > 0) ? $node->filter('strong')->text() : null;
+                    $dl['wholetext'] = ($node->count() > 0) ? $node->text() : null;
                     $dl['body'] = trim(str_replace($dl['heading'], '', $dl['wholetext']));
                     return $dl;
-                });
+                }) : null;
                 $this->dataArray['hotel_details']['hotel_service_times'] = $dl['body'];
             });
         }
@@ -342,133 +269,100 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
                 $this->dataArray['hotel_location_details']['location_of_hotel'] = ($node->filter('p#locationEnviromentFull')->count() > 0) ? $node->filter('p#locationEnviromentFull')->text() : null;
 
 
-                if ($node->filter('li.centralTrainAStation')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['centralTrainAStation'] = $node->filter('li.centralTrainAStation')->each(function ($node) {
+                $this->dataArray['hotel_location_details']['centralTrainAStation'] = ($node->filter('li.centralTrainAStation')->count() > 0) ? $node->filter('li.centralTrainAStation')->each(function ($node) {
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['central_train_station'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['central_train_station'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['centralTrainAStation'] = null;
-                }
+                    return $da;
+                }) : null;
 
-                if ($node->filter('li.train')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['train'] = $node->filter('li.train')->each(function ($node) {
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['train'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                $this->dataArray['hotel_location_details']['train'] = ($node->filter('li.train')->count() > 0) ? $node->filter('li.train')->each(function ($node) {
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['train'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['train'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('li.bus')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['bus'] = $node->filter('li.bus')->each(function ($node) {
+                    return $da;
+                }) : null;
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['bus'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['bus'] = null;
-                }
+                $this->dataArray['hotel_location_details']['bus'] = ($node->filter('li.bus')->count() > 0) ? $node->filter('li.bus')->each(function ($node) {
 
-                if ($node->filter('li.highway')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['highway'] = $node->filter('li.highway')->each(function ($node) {
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['bus'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['highway'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                    return $da;
+                }) : null;
 
-                        return $da;
-                    });
+                $this->dataArray['hotel_location_details']['highway'] = ($node->filter('li.highway')->count() > 0) ? $node->filter('li.highway')->each(function ($node) {
 
-                } else {
-                    $this->dataArray['hotel_location_details']['highway'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['highway'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('li.congresscenter')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['congresscenter'] = $node->filter('li.congresscenter')->each(function ($node) {
+                    return $da;
+                }) : null;
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['congresscenter'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                $this->dataArray['hotel_location_details']['congresscenter'] = ($node->filter('li.congresscenter')->count() > 0) ? $node->filter('li.congresscenter')->each(function ($node) {
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['congresscenter'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['congresscenter'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('li.citycenter')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['hotel_city_center_details'] = $node->filter('li.citycenter')->each(function ($node) {
+                    return $da;
+                }) : null;
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['city_center'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                $this->dataArray['hotel_location_details']['hotel_city_center_details'] = ($node->filter('li.citycenter')->count() > 0) ? $node->filter('li.citycenter')->each(function ($node) {
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['citycenter'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['city_center'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('li.airport')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['nearby_airports'] = $node->filter('li.airport')->each(function ($node) {
+                    return $da;
+                }) : null;
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['airport'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                $this->dataArray['hotel_location_details']['nearby_airports'] = ($node->filter('li.airport')->count() > 0) ? $node->filter('li.airport')->each(function ($node) {
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['airport'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['airport'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('li.parking')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['hotel_parking_details'] = $node->filter('li.parking')->each(function ($node) {
+                    return $da;
+                }) : null;
 
-                        $da['distance_number'] = $node->filter('span.distanceNumber')->text();
-                        $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
-                        $da['parking'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
-                        $da['wholetext'] = $node->text();
+                $this->dataArray['hotel_location_details']['hotel_parking_details'] = ($node->filter('li.parking')->count() > 0) ? $node->filter('li.parking')->each(function ($node) {
 
-                        return $da;
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['parking'] = null;
-                }
+                    $da['distance_number'] = $node->filter('span.distanceNumber')->text();
+                    $da['distance_dimension'] = $node->filter('span.distanceDimension')->text();
+                    $da['parking'] = trim(str_replace(array($da['distance_number'], $da['distance_dimension']), '', $node->text()));
+                    $da['wholetext'] = $node->text();
 
-                if ($node->filter('div.col33.lastCol33 > ul > li')->count() > 0) {
-                    $this->dataArray['hotel_location_details']['sports_leisure_facilities'] = $node->filter('div.col33.lastCol33 > ul > li')->each(function ($node) {
-                        return $node->text();
-                    });
-                } else {
-                    $this->dataArray['hotel_location_details']['sports_leisure_facilities'] = null;
-                }
+                    return $da;
+                }) : null;
+
+                $this->dataArray['hotel_location_details']['sports_leisure_facilities'] = ($node->filter('div.col33.lastCol33 > ul > li')->count() > 0) ? $node->filter('div.col33.lastCol33 > ul > li')->each(function ($node) {
+                    return $node->text();
+                }) : null;
 
                 if ($node->filter('div.col33')->count() > 0) {
                     $node->filter('div.col33')->each(function ($node) {
-                        if ($node->filter('h5')->text() == 'Surroundings of the hotel') {
-                            $this->dataArray['hotel_location_details']['surroundings_of_the_hotel'] = $node->filter('ul > li')->each(function ($node) {
-                                return $node->text();
-                            });
+                        if ($node->filter('h5')->count() > 0) {
+                            if ($node->filter('h5')->text() == 'Surroundings of the hotel') {
+                                $this->dataArray['hotel_location_details']['surroundings_of_the_hotel'] = $node->filter('ul > li')->each(function ($node) {
+                                    return $node->text();
+                                });
+                            }
                         }
                     });
                 } else {
@@ -510,6 +404,85 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
             } else {
                 Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
+            }
+        }
+    }
+
+    protected function roomData($crawler, $crawler2)
+    {
+
+        if (!empty($crawler2)) {
+            if ($crawler2->filter('table#basket > tbody > tr')->count() > 0) {
+
+                $this->dataArray['all_rooms'][] = $crawler2->filter('table#basket > tbody > tr')->each(function ($node) {
+                    $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
+                    $dr['room_image'] = ($node->filter('td.roomOffer > div.imageWrap > img')->count() > 0) ? $node->filter('td.roomOffer > div.imageWrap > img')->attr('src') : null;
+                    $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
+                        return ($node->count() > 0) ? $node->text() : null;
+                    }) : null;
+
+                    $dr['room_type'] = 'singleroom';
+                    $dr['room_adults'] = 1;
+//                    $dr['room_type'] = ($node->count() > 0) ? $node->attr('data-roomtype') : null;
+                    $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
+//                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
+                    $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
+                    $dr['price_cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
+                    $dr['price'] = str_replace(array($dr['price_cents'], '€'), '', $dr['full_text_price']) . '.' . $dr['price_cents'];
+                    $dr['criteria'] = ($node->filter('td.roomPrice > div > div.supplements')->count() > 0) ? $node->filter('td.roomPrice > div > div.supplements')->text() : null;
+//                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
+                    foreach ($dr as $key => $value) {
+                        if (!is_array($value)) {
+                            $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
+                        }
+                        if (empty($value)) {
+                            unset($dr[$key]);
+                        }
+                    }
+                    return $dr;
+                });
+            }
+        }
+        if (!empty($crawler)) {
+            if ($crawler->filter('div.jsAmenities.equipement.col33')->count() > 0) {
+
+                $crawler->filter('div.jsAmenities.equipement.col33')->each(function ($node) {
+                    if ($node->filter('h5')->count() > 0) {
+                        if ($node->filter('h5')->text() == 'Room facilities') {
+                            $this->dataArray['room_facilities'] = ($node->filter('li')->count() > 0) ? $node->filter('li')->each(function ($node) {
+                                return trim($node->text());
+                            }) : null;
+                        }
+                    }
+                });
+            }
+            if ($crawler->filter('table#basket > tbody > tr')->count() > 0) {
+                $this->dataArray['all_rooms'][] = $crawler->filter('table#basket > tbody > tr')->each(function ($node) {
+                    $dr['room'] = ($node->filter('td.roomOffer > div > h4')->count() > 0) ? $node->filter('td.roomOffer > div > h4')->text() : null;
+                    $dr['room_image'] = ($node->filter('td.roomOffer > div.imageWrap > img')->count() > 0) ? $node->filter('td.roomOffer > div.imageWrap > img')->attr('src') : null;
+                    $dr['room_basic_conditions'] = ($node->filter('td.roomOffer > div > ul.checkListSmall > li')->count() > 0) ? $node->filter('td.roomOffer > div > ul.checkListSmall > li')->each(function ($node) {
+                        return ($node->count() > 0) ? $node->text() : null;
+                    }) : null;
+                    $dr['room_type'] = 'doubleroom';
+                    $dr['room_adults'] = 2;
+                    $dr['room_short_description'] = ($node->filter('td.roomOffer > div > p')->count() > 0) ? $node->filter('td.roomOffer > div > p')->text() : null;
+//                                                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
+//                                                $dr['price'] = ($node->filter('td.roomPrice > div > h4')->count() > 0) ? $node->filter('td.roomPrice > div > h4')->text() : null;
+                    $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
+                    $dr['price_cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
+                    $dr['price'] = str_replace(array($dr['price_cents'], '€'), '', $dr['full_text_price']) . '.' . $dr['price_cents'];
+//                                                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
+                    $dr['criteria'] = ($node->filter('td.roomPrice > div > div.supplements')->count() > 0) ? $node->filter('td.roomPrice > div > div.supplements')->text() : null;
+                    foreach ($dr as $key => $value) {
+                        if (!is_array($value)) {
+                            $dr[$key] = trim(str_replace(array("\r", "\n", "\t"), '', $value));
+                        }
+                        if (empty($value)) {
+                            unset($dr[$key]);
+                        }
+                    }
+                    return $dr;
+                });
             }
         }
     }

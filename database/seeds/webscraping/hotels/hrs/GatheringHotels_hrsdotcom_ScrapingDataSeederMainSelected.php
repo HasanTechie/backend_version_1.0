@@ -66,12 +66,10 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
                     $this->dataArray['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
-                    if (DB::table('hotels_hrs')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->doesntExist()) {
+                    $hotelHRSidDoesntExist = DB::table('hotels_hrs')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->doesntExist();
+                    if ($hotelHRSidDoesntExist) {
                         $this->hotelData($crawler);
                         $this->googleData();
-                        $this->dataArray['hotel_hrs_id_doesnt_exists'] = true;
-                    } else {
-                        $this->dataArray['hotel_hrs_id_doesnt_exists'] = false;
                     }
 
 
@@ -82,7 +80,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
                 try {
 
-                    if ($this->dataArray['hotel_hrs_id_doesnt_exists']) {
+                    if ($hotelHRSidDoesntExist) {
                         $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
                         $this->dataArray['hid'] = str_replace(' ', '', $hid);
 
@@ -172,6 +170,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
                             }
                         }
                     }
+
                     $this->dataArray['all_rooms'] = null;
 
                 } catch (\Exception $e) {
@@ -180,11 +179,9 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
                 }
             }
 
-
 //                    if ($response->getStatus() != 200) {
 //                        break;
 //                    }
-
 
             $this->dataArray['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
         }
@@ -489,28 +486,31 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
     protected function googleData()
     {
 
-        $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
-        $client = new GuzzleClient();
-        $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
+        if (isset($this->dataArray['hotel_latitude']) && isset($this->dataArray['hotel_longitude'])) {
 
-        $input = $this->dataArray['hotel_name'] . ' ,' . $this->dataArray['city'];
+            $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
+            $client = new GuzzleClient();
+            $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
 
-        $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
+            $input = $this->dataArray['hotel_name'] . ' ,' . $this->dataArray['city'];
 
-        $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:2000@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
+            $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
 
-        if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
+            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:2000@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
 
-            $response = json_decode($response->getBody())->candidates[0];
+            if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
 
-            $this->dataArray['ratings_on_google'] = $response->rating;
-            $this->dataArray['total_number_of_ratings_on_google'] = $response->user_ratings_total;
-            $this->dataArray['google_latitude'] = $response->geometry->location->lat;
-            $this->dataArray['google_longitude'] = $response->geometry->location->lng;
-            $this->dataArray['all_data_google'] = serialize($response);
+                $response = json_decode($response->getBody())->candidates[0];
 
-        } else {
-            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
+                $this->dataArray['ratings_on_google'] = $response->rating;
+                $this->dataArray['total_number_of_ratings_on_google'] = $response->user_ratings_total;
+                $this->dataArray['google_latitude'] = $response->geometry->location->lat;
+                $this->dataArray['google_longitude'] = $response->geometry->location->lng;
+                $this->dataArray['all_data_google'] = serialize($response);
+
+            } else {
+                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
+            }
         }
     }
 }

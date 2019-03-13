@@ -17,7 +17,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected extends Seeder
         $dataArray [] = [
             'currency' => 'EUR',
             'start_date' => '2019-03-14',
-            'end_date' => '2020-03-14',
+            'end_date' => '2020-04-14',
             'city' => 'Rome',
             'city_id' => 54084,
             'country_code' => 'IT',

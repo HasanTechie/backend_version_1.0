@@ -78,12 +78,12 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FixinguidOfVerticalBookings');
 
 //        $this->call('FirebaseSeeder');
-//        $this->call('FirestoreSeeder');
-//        $this->call('FirestoreSeederHRS');
+        $this->call('FirestoreSeeder');
+        $this->call('FirestoreSeederHRS');
 
 //        $this->call('EnteringHotelCompetitorsSeeder');
 //        $this->call('MergingEurobookingsHRSSeeder');
-        $this->call('TestingGooglePlacesSeeder');
+//        $this->call('TestingGooglePlacesSeeder');
 
 
 

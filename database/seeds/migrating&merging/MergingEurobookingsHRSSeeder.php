@@ -31,7 +31,7 @@ class MergingEurobookingsHRSSeeder extends Seeder
 
                 if (($lat1 == $lat2) && ($lng1 == $lng2)) {
                     echo $eurobookingsHotelsInstance->name . ' == ' . $HRSHotelsInstance->name . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
-                    sleep(2);
+                    sleep(1);
                 }
             }
         }

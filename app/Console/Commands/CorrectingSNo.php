@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use correctingSNoSeeder;
+use CorrectingSNoSeeder;
 use Carbon\Carbon;
 
 use Illuminate\Console\Command;
@@ -42,7 +42,7 @@ class CorrectingSNo extends Command
     {
         //
         echo 'CorrectingSNo started at : ' . Carbon::now()->toDateTimeString() . "\n";
-        $new = new correctingSNoSeeder();
+        $new = new CorrectingSNoSeeder();
         $new->run();
         echo 'CorrectingSNo ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }

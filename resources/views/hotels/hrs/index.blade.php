@@ -26,7 +26,7 @@
                 </td>
                 <td>{{$hotel->address}}</td>
                 <td>{{$hotel->city}}</td>
-                <td>{{$hotel->country}}</td>
+                <td>{{$hotel->country_code}}</td>
                 <td><a href="hrs/{{$hotel->uid}}" class="button is-primary is-outlined">O</a></td>
                 <td><a href="hrs/roomsprices/{{$hotel->uid}}" class="button is-success is-outlined">Rooms Prices</a>
                 </td>

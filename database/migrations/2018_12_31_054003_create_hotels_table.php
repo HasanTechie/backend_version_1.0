@@ -17,17 +17,10 @@ class CreateHotelsTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('name')->nullable();
-            $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('country')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('website')->nullable();
-            $table->double('latitude')->nullable();
-            $table->double('longitude')->nullable();
-            $table->longText('all_data')->nullable();
-
-            $table->string('source')->nullable();
+            $table->string('name_on_eurobookings')->nullable();
+            $table->string('name_on_hrs')->nullable();
+            $table->string('uid_on_eurobookings')->nullable();
+            $table->string('uid_on_hrs')->nullable();
 
             $table->timestamps();
         });

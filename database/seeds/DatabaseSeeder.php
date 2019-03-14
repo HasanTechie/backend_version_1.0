@@ -82,7 +82,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FirestoreSeederHRS');
 
 //        $this->call('EnteringHotelCompetitorsSeeder');
-        $this->call('MergingEurobookingsHRSSeeder');
+//        $this->call('MergingEurobookingsHRSSeeder');
+        $this->call('TestingGooglePlacesSeeder');
 
 
 

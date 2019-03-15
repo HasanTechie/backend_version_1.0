@@ -25,7 +25,7 @@ class LandRouteController extends Controller
         //
         // Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
         // soliDPS => AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg
-        $key = 'AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg';
+        $key = 'AIzaSyDQb12hXetLTc0FEuLPKrs9W1-9MXDaPUU';
 
 //
 //        $client = new \GuzzleHttp\Client();
@@ -36,7 +36,7 @@ class LandRouteController extends Controller
 //        dd($data);
 
 
-        $hotels = DB::table('hotels')->where('city', '=', 'berlin')->get();
+        $hotels = DB::table('hotels_basic_data')->where('city', '=', 'berlin')->get();
 
         $attractions = DB::table('places')->where([
             ['category', '=', 'attraction'],

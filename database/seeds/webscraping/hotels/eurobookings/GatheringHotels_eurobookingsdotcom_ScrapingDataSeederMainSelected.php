@@ -61,12 +61,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMainSelected extends 
                         $this->dataArray['hotel_eurobooking_id'] = $result_split[0];
                     }
 
-                    if (DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist()) {
+                    $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
+
+                    if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
                         $this->tripAdvisor();
                         $this->mapsCoordinates();
-                        $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = true;
-                    } else {
-                        $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = false;
                     }
 
                     if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {

@@ -21,14 +21,15 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
     {
         //
         $this->dataArray = $data;
+
+        $client = new GoutteClient();
+
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
             $this->dataArray['request_date'] = date("Y-m-d");
 
             $this->dataArray['check_in_date'] = $this->dataArray['start_date'];
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
-
-            $client = new GoutteClient();
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
 
@@ -38,7 +39,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                     echo "\n" . $url . "\n";
 
                     $crawler = $client->request('GET', $url);
-
                     $response = $client->getResponse();
 
                     if ($response->getStatus() == 200) {
@@ -49,16 +49,14 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 
-                                if (DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist()) {
+                                $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
+
+                                if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
                                     $this->tripAdvisor();
                                     $this->mapsCoordinates();
-                                    $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = true;
-                                } else {
-                                    $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = false;
                                 }
 
                                 if ($node->filter('.clsHotelNameSearchResults')->count() > 0) {
-
 
                                     $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 

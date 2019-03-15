@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_reservationsdotverticalbookingdotcom_ScrapingDataSeeder');
 //        $this->call('Gathering_globaldotmomondodotcom_ScrapingDataSeeder');
 
-//        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
+        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected');
 
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetup');
@@ -78,8 +78,8 @@ class DatabaseSeeder extends Seeder
 //        $this->call('FixinguidOfVerticalBookings');
 
 //        $this->call('FirebaseSeeder');
-        $this->call('FirestoreSeeder');
-        $this->call('FirestoreSeederHRS');
+//        $this->call('FirestoreSeeder');
+//        $this->call('FirestoreSeederHRS');
 
 //        $this->call('EnteringHotelCompetitorsSeeder');
 //        $this->call('MergingEurobookingsHRSSeeder');

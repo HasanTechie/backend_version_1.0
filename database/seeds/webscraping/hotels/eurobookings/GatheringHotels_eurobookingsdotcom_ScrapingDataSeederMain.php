@@ -441,7 +441,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $client = new GuzzleClient();
         $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
 
-        $input = $this->dataArray['hotel_name'] . ' ,' . $this->dataArray['city'];
+        $input = $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'];
+
+        $input = str_replace('-', ' ', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $input))); // Replaces all special characters.
 
         $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
 

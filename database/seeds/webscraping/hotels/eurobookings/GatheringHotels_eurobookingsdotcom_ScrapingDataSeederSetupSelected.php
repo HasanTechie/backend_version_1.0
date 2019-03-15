@@ -17,8 +17,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected extends
         $dataArray[] = [
             'adults' => 2,
             'currency' => 'EUR',
-            'start_date' => '2019-03-12',
-            'end_date' => '2020-03-12',
+            'start_date' => '2019-03-20',
+            'end_date' => '2020-03-20',
             'city' => 'Rome',
             'city_id' => 3023,
             'country_code' => 'IT',

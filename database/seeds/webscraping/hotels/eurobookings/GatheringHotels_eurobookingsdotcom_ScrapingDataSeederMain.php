@@ -51,6 +51,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                 $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
 
+                                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/eurobookingID.log', $this->dataArray['hotel_eurobooking_id'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+
                                 if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
                                     $this->tripAdvisor();
                                     $this->mapsCoordinates();

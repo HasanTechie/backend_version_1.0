@@ -11,7 +11,101 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
     {
         $euroBooking = new GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain();
 
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Rome',
+            'city_id' => 3023,
+            'country_code' => 'IT',
+            'total_results' => 5135,
+            'source' => 'eurobookings.com'
+        ];
 
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'London',
+            'city_id' => 2114,
+            'country_code' => 'UK',
+            'total_results' => 5628,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Brussels',
+            'city_id' => 690,
+            'country_code' => 'BE',
+            'total_results' => 357,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Amsterdam',
+            'city_id' => 378,
+            'country_code' => 'NL',
+            'total_results' => 606,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Prague',
+            'city_id' => 2872,
+            'country_code' => 'CZ',
+            'total_results' => 953,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Barcelona',
+            'city_id' => 513,
+            'country_code' => 'ES',
+            'total_results' => 1411,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Munich',
+            'city_id' => 2452,
+            'country_code' => 'DE',
+            'total_results' => 364,
+            'source' => 'eurobookings.com'
+        ];
+
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-03-27',
+            'end_date' => '2019-03-27',
+            'city' => 'Paris',
+            'city_id' => 2734,
+            'country_code' => 'FR',
+            'total_results' => 2389,
+            'source' => 'eurobookings.com'
+        ];
 
         $dataArray[] = [
             'adults' => 2,
@@ -37,17 +131,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'source' => 'eurobookings.com'
         ];
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Rome',
-            'city_id' => 3023,
-            'country_code' => 'IT',
-            'total_results' => 5135,
-            'source' => 'eurobookings.com'
-        ];
 
         $dataArray[] = [
             'adults' => 2,
@@ -61,17 +144,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'source' => 'eurobookings.com'
         ];
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Munich',
-            'city_id' => 2452,
-            'country_code' => 'DE',
-            'total_results' => 364,
-            'source' => 'eurobookings.com'
-        ];
 
 
         $dataArray[] = [
@@ -86,77 +158,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'source' => 'eurobookings.com'
         ];
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Paris',
-            'city_id' => 2734,
-            'country_code' => 'FR',
-            'total_results' => 2389,
-            'source' => 'eurobookings.com'
-        ];
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'London',
-            'city_id' => 2114,
-            'country_code' => 'UK',
-            'total_results' => 5628,
-            'source' => 'eurobookings.com'
-        ];
 
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Barcelona',
-            'city_id' => 513,
-            'country_code' => 'ES',
-            'total_results' => 1411,
-            'source' => 'eurobookings.com'
-        ];
-
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Prague',
-            'city_id' => 2872,
-            'country_code' => 'CZ',
-            'total_results' => 953,
-            'source' => 'eurobookings.com'
-        ];
-
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Amsterdam',
-            'city_id' => 378,
-            'country_code' => 'NL',
-            'total_results' => 606,
-            'source' => 'eurobookings.com'
-        ];
-
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-03-27',
-            'end_date' => '2019-03-27',
-            'city' => 'Brussels',
-            'city_id' => 690,
-            'country_code' => 'BE',
-            'total_results' => 357,
-            'source' => 'eurobookings.com'
-        ];
 
         foreach ($dataArray as $instance) {
             $euroBooking->mainRun($instance);

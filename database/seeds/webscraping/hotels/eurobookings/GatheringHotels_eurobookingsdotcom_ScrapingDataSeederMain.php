@@ -23,10 +23,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $this->dataArray = $data;
 
         $goutteClient = new GoutteClient();
-        $guzzleClient = new GuzzleClient(array(
-            'timeout' => 180,
-        ));
-        $goutteClient->setClient($guzzleClient);
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
@@ -35,21 +31,27 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             $this->dataArray['check_in_date'] = $this->dataArray['start_date'];
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
-            for ($i = 1; $i <= $this->dataArray['total_results']; $i += 14) {
+            $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
+
+            for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
 
                 try {
-
-                    $url = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";&offset=$i";
-
+//                    $url = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";&offset=$i";
 //                    $url = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";&offset=$i";
 //                    $url = "https://www.eurobookings.com/search.html?q=cur:" . $this->dataArray['currency'] . ";frm:9;dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[" . $this->dataArray['adults'] . ",0];sf:1;&offset=$i";
-                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
-                    echo "\n" . $url . "\n";
+                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    echo "\n" . $this->dataArray['url'] . "\n";
 
-                    $crawler = $goutteClient->request('GET', $url);
+                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
                     $response = $goutteClient->getResponse();
 
                     if ($response->getStatus() == 200) {
+
+                        if($crawler->filter('div.clsPageNavigationNext')->count()>0){
+                            $crawler->filter('div.clsPageNavigationNext')->each(function ($node){
+                                $this->dataArray['url'] = $node->filter('a')->attr('href');
+                            });
+                        }
 
                         if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
 

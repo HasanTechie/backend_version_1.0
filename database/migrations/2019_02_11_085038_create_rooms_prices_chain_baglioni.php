@@ -13,7 +13,7 @@ class CreateRoomsPricesChainBaglioni extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_chain_baglioni', function (Blueprint $table) {
+        Schema::create('z_ignore_rooms_prices_chain_baglioni', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
@@ -44,6 +44,6 @@ class CreateRoomsPricesChainBaglioni extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_chain_baglioni');
+        Schema::dropIfExists('z_ignore_rooms_prices_chain_baglioni');
     }
 }

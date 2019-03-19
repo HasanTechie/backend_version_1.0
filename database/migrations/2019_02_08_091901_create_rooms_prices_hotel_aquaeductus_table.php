@@ -13,7 +13,7 @@ class CreateRoomsPricesHotelAquaeductusTable extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_hotel_aquaeductus', function (Blueprint $table) {
+        Schema::create('z_ignore_rooms_prices_hotel_aquaeductus', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
@@ -44,6 +44,6 @@ class CreateRoomsPricesHotelAquaeductusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_hotel_aquaeductus');
+        Schema::dropIfExists('z_ignore_rooms_prices_hotel_aquaeductus');
     }
 }

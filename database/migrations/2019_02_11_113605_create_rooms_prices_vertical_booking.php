@@ -13,7 +13,7 @@ class CreateRoomsPricesVerticalBooking extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_vertical_booking', function (Blueprint $table) {
+        Schema::create('z_ignore_rooms_prices_vertical_booking', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
             $table->string('display_price')->nullable();
@@ -47,6 +47,6 @@ class CreateRoomsPricesVerticalBooking extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_vertical_booking');
+        Schema::dropIfExists('z_ignore_rooms_prices_vertical_booking');
     }
 }

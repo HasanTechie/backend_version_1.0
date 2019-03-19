@@ -13,7 +13,7 @@ class CreateRoomsPricesHotelNovecentoTable extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_hotel_novecento', function (Blueprint $table) {
+        Schema::create('z_ignore_rooms_prices_hotel_novecento', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
@@ -46,6 +46,6 @@ class CreateRoomsPricesHotelNovecentoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_hotel_novecento');
+        Schema::dropIfExists('z_ignore_rooms_prices_hotel_novecento');
     }
 }

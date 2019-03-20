@@ -45,9 +45,13 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 //                    $url = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";&offset=$i";
 //                    $url = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";&offset=$i";
 //                    $url = "https://www.eurobookings.com/search.html?q=cur:" . $this->dataArray['currency'] . ";frm:9;dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";fac:0;stars:;rad:0;wa:0;offset:1;rmcnf:1[" . $this->dataArray['adults'] . ",0];sf:1;&offset=$i";
-                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                     echo "\n" . $this->dataArray['url'] . "\n";
 
+                    if ($this->dataArray['url'] == false) {
+                        break;
+                    }
+
+                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                     $crawler = $goutteClient->request('GET', $this->dataArray['url']);
                     $response = $goutteClient->getResponse();
 
@@ -55,6 +59,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                         if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
                             $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
+                                if ($this->dataArray['url'] == $node->filter('a')->attr('href')) {
+                                    $this->dataArray['url'] = false;
+                                }
                                 $this->dataArray['url'] = $node->filter('a')->attr('href');
                             });
                         }
@@ -66,8 +73,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 
                                 $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
-
-                                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/eurobookingID.log', $this->dataArray['hotel_eurobooking_id'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
 
                                 if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
                                     $this->tripAdvisor();
@@ -471,8 +476,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
             $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
-            $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null ;
-            $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ?  $response->geometry->location->lng : null;
+            $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null;
+            $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ? $response->geometry->location->lng : null;
             $this->dataArray['all_data_google'] = serialize($response);
 
         } else {

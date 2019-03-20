@@ -18,7 +18,7 @@ class luminatiSeeder extends Seeder
 //        echo 'To enable your free eval account and get CUSTOMER, YOURZONE and '
 //            .'YOURPASS, please contact sales@luminati.io';
 
-        $url='http://example.com';
+        $url = 'https://api.myip.com/';
         $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
         $password = 'azuuy61773vi';
         $port = 22225;
@@ -36,17 +36,21 @@ class luminatiSeeder extends Seeder
             echo $result;
         }
 
-
         $goutteClient = new GoutteClient();
         $guzzleClient = new GuzzleClient(array(
-            'timeout' => 60,
-            'cookies' => true
+            'curl' => [
+                CURLOPT_USERAGENT => $user_agent,
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_PROXY => "http://$super_proxy:$port",
+                CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+
+            ]
 
         ));
         $goutteClient->setClient($guzzleClient);
         $crawler = $goutteClient->request('GET', $url);
         $response = $goutteClient->getResponse();
 
-        dd($crawler->filter('div')->text());
+        dd($crawler->html());
     }
 }

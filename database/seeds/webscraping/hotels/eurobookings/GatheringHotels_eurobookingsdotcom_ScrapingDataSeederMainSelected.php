@@ -212,7 +212,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMainSelected extends 
 
                             foreach ($this->dataArray['all_rooms'] as $room) {
 
-                                if (isset($room['room']) || isset($room['price'])) {
+                                if (!empty($room['room']) || !empty($room['price'])) {
 
                                     try {
                                         $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults

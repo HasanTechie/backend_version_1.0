@@ -62,14 +62,15 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
                                 if ($this->dataArray['url'] == $node->filter('a')->attr('href')) {
                                     $this->dataArray['url'] = false;
+                                } else {
+                                    $this->dataArray['url'] = $node->filter('a')->attr('href');
                                 }
-                                $this->dataArray['url'] = $node->filter('a')->attr('href');
                             });
                         }
 
-                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->count() > 0) {
+                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
 
-                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
+                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 
@@ -243,7 +244,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                                     foreach ($this->dataArray['all_rooms'] as $room) {
 
-                                                        if (isset($room['room']) || isset($room['price'])) {
+                                                        if (!empty($room['room']) || !empty($room['price'])) {
 
                                                             try {
                                                                 $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults

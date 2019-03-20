@@ -11,6 +11,17 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
     {
         $euroBooking = new GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain();
 
+        $dataArray[] = [
+            'adults' => 2,
+            'currency' => 'EUR',
+            'start_date' => '2019-04-02',
+            'end_date' => '2019-04-02',
+            'city' => 'Rome',
+            'city_id' => 3023,
+            'country_code' => 'IT',
+            'total_results' => 5135,
+            'source' => 'eurobookings.com'
+        ];
 
         $dataArray[] = [
             'adults' => 2,
@@ -21,18 +32,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'city_id' => 536,
             'country_code' => 'DE',
             'total_results' => 723,
-            'source' => 'eurobookings.com'
-        ];
-
-        $dataArray[] = [
-            'adults' => 2,
-            'currency' => 'EUR',
-            'start_date' => '2019-04-02',
-            'end_date' => '2019-04-02',
-            'city' => 'Rome',
-            'city_id' => 3023,
-            'country_code' => 'IT',
-            'total_results' => 5135,
             'source' => 'eurobookings.com'
         ];
 

@@ -25,10 +25,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $goutteClient = new GoutteClient();
         $guzzleClient = new GuzzleClient(array(
             'timeout' => 60,
-            'cookies' => true
-
+            'cookies' => true,
+            'allow_redirects' => true
         ));
         $goutteClient->setClient($guzzleClient);
+
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
@@ -66,9 +67,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             });
                         }
 
-                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
+                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->count() > 0) {
 
-                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
+                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 

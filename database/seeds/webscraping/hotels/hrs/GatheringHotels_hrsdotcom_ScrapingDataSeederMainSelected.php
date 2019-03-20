@@ -392,16 +392,16 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
             $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
 
-            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:2000@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
+            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:200@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
 
             if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
 
                 $response = json_decode($response->getBody())->candidates[0];
 
-                $this->dataArray['ratings_on_google'] = $response->rating;
-                $this->dataArray['total_number_of_ratings_on_google'] = $response->user_ratings_total;
-                $this->dataArray['google_latitude'] = $response->geometry->location->lat;
-                $this->dataArray['google_longitude'] = $response->geometry->location->lng;
+                $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
+                $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
+                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null ;
+                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ?  $response->geometry->location->lng : null;
                 $this->dataArray['all_data_google'] = serialize($response);
 
             } else {

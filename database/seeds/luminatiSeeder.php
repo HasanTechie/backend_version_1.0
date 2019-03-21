@@ -14,19 +14,21 @@ class luminatiSeeder extends Seeder
      *
      * @return void
      */
+    protected $dataArray;
     public function run()
     {
         //
 //        echo 'To enable your free eval account and get CUSTOMER, YOURZONE and '
 //            .'YOURPASS, please contact sales@luminati.io';
 
-        $url = 'https://api.myip.com/';
-        $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
-        $password = 'azuuy61773vi';
-        $port = 22225;
-        $user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-        $session = mt_rand();
-        $super_proxy = 'zproxy.lum-superproxy.io';
+//        $url = 'https://api.myip.com/';
+        $url = 'https://www.eurobookings.com/rome-hotels-it/best-western-hotel-i-triangoli.html?q=start:2019-04-02;end:2019-04-03;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:1;sort:0_desc;cur:EUR;';
+//        $url='https://www.eurobookings.com/prague-hotels-cz/u-zlate-podkovy-at-the-golden-horseshoe.html?q=start:2019-04-02;end:2019-04-03;rmcnf:1[2,0];offset:91;dsti:2872;dstt:1;dsts:Prague;frm:1;sort:0_desc;cur:EUR;';
+        $this->dataArray['username'] = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+        $this->dataArray['password'] = 'azuuy61773vi';
+        $this->dataArray['port'] = 22225;
+        $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+        $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
 //        $curl = curl_init($url);
 //        curl_setopt($curl, CURLOPT_USERAGENT, $user_agent);
 //        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -41,10 +43,10 @@ class luminatiSeeder extends Seeder
 //        $goutteClient = new GoutteClient();
 //        $guzzleClient = new GuzzleClient(array(
 //            'curl' => [
-//                CURLOPT_USERAGENT => $user_agent,
+//                CURLOPT_USERAGENT => $this->dataArray['user_agent'],
 //                CURLOPT_RETURNTRANSFER => 1,
-//                CURLOPT_PROXY => "http://$super_proxy:$port",
-//                CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+//                CURLOPT_PROXY => "http://".$this->dataArray['super_proxy'].":".$this->dataArray['port'],
+//                CURLOPT_PROXYUSERPWD => $this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password'],
 //
 //            ]
 //
@@ -58,8 +60,8 @@ class luminatiSeeder extends Seeder
         $client = PhantomClient::getInstance();
         $client->getEngine()->addOption('--load-images=false');
         $client->getEngine()->addOption('--ignore-ssl-errors=true');
-        $client->getEngine()->addOption("--proxy=http://$super_proxy:$port");
-        $client->getEngine()->addOption("--proxy-auth=$username-session-$session:$password");
+        $client->getEngine()->addOption("--proxy=http://".$this->dataArray['super_proxy'].":".$this->dataArray['port']);
+        $client->getEngine()->addOption("--proxy-auth=".$this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password']);
 
         $client->isLazy();
         $request = $client->getMessageFactory()->createRequest($url);
@@ -67,7 +69,7 @@ class luminatiSeeder extends Seeder
         $response = $client->getMessageFactory()->createResponse();
         $client->send($request, $response);
         $crawler = new Crawler($response->getContent());
-
+        dd($response->getStatus());
         dd($crawler->html());
     }
 }

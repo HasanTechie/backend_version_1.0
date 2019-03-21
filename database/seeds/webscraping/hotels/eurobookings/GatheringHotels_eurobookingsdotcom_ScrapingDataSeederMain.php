@@ -23,15 +23,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $this->dataArray = $data;
 
         //            $url = 'https://api.myip.com/';
-        $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
-        $password = 'azuuy61773vi';
-        $port = 22225;
-        $user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-        $session = mt_rand();
-        $super_proxy = 'zproxy.lum-superproxy.io';
-
-
-
+        $this->dataArray['username'] = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+        $this->dataArray['password'] = 'azuuy61773vi';
+        $this->dataArray['port'] = 22225;
+        $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+        $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
 
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
@@ -43,24 +39,22 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
 
-            $client = PhantomClient::getInstance();
-//            $client->getEngine()->addOption('--load-images=true');
+//            $client = PhantomClient::getInstance();
+//            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://$super_proxy:$port");
-            $client->getEngine()->addOption("--proxy-auth=$username-session-$session:$password");
+//            $client->getEngine()->addOption("--proxy=http://".$this->dataArray['super_proxy'].":".$this->dataArray['port']);
+//            $client->getEngine()->addOption("--proxy-auth=".$this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password']);
 
-//            $goutteClient = new GoutteClient();
-//            $guzzleClient = new GuzzleClient(array(
-//                'curl' => [
-//                    CURLOPT_USERAGENT => $user_agent,
-//                    CURLOPT_RETURNTRANSFER => 1,
-//                    CURLOPT_PROXY => "http://$super_proxy:$port",
-//                    CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
-//
-//                ]
-//
-//            ));
-//            $goutteClient->setClient($guzzleClient);
+            $goutteClient = new GoutteClient();
+            $guzzleClient = new GuzzleClient(array(
+                'curl' => [
+                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://".$this->dataArray['super_proxy'].":".$this->dataArray['port'],
+                    CURLOPT_PROXYUSERPWD => $this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password'],
+                ]
+            ));
+            $goutteClient->setClient($guzzleClient);
 
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
@@ -76,20 +70,17 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                     }
 
                     Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
-//                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
-//                    $response = $goutteClient->getResponse();
 
-//                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
-//                    $response = $goutteClient->getResponse();
+                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
+                    $response = $goutteClient->getResponse();
 
-                    $client->isLazy();
-                    $request = $client->getMessageFactory()->createRequest($this->dataArray['url']);
-                    $request->setTimeout(5000);
-                    $response = $client->getMessageFactory()->createResponse();
-                    $client->send($request, $response);
-                    $crawler = new Crawler($response->getContent());
+//                    $client->isLazy();
+//                    $request = $client->getMessageFactory()->createRequest($this->dataArray['url']);
+//                    $request->setTimeout(5000);
+//                    $response = $client->getMessageFactory()->createResponse();
+//                    $client->send($request, $response);
+//                    $crawler = new Crawler($response->getContent());
 
-                        dd($response->getStatus());
                     if ($response->getStatus() == 200) {
 
                         if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
@@ -102,9 +93,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             });
                         }
 
-                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->count() > 0) {
+                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
 
-                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
+                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 
@@ -122,6 +113,10 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                         try {
                                             $this->dataArray['hotel_url'] = $node->attr('href');
                                             $client2 = PhantomClient::getInstance();
+                                            $client2->getEngine()->addOption('--load-images=false');
+                                            $client2->getEngine()->addOption('--ignore-ssl-errors=true');
+                                            $client2->getEngine()->addOption("--proxy=http://".$this->dataArray['super_proxy'].":".$this->dataArray['port']);
+                                            $client2->getEngine()->addOption("--proxy-auth=".$this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password']);
                                             $client2->isLazy(); // Tells the client to wait for all resources before rendering
                                             $request = $client2->getMessageFactory()->createRequest($this->dataArray['hotel_url']);
                                             $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
@@ -351,6 +346,10 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                 $url = "https://www.tripadvisor.com/WidgetEmbed-cdspropertydetail?locationId=" . $this->dataArray['hotel_eurobooking_id'] . "&lang=en&partnerId=5644224BD98E429BA8E2FC432FEC674B&display=true";
 
                 $client = PhantomClient::getInstance();
+                $client->getEngine()->addOption('--load-images=false');
+                $client->getEngine()->addOption('--ignore-ssl-errors=true');
+                $client->getEngine()->addOption("--proxy=http://".$this->dataArray['super_proxy'].":".$this->dataArray['port']);
+                $client->getEngine()->addOption("--proxy-auth=".$this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password']);
                 $client->isLazy();
                 $request = $client->getMessageFactory()->createRequest($url);
                 $request->setTimeout(5000);
@@ -397,6 +396,10 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                 $urlMap = "https://www.eurobookings.com/scripts/php/popupGMap.php?intHotelId=" . $this->dataArray['hotel_eurobooking_id'] . "&lang=en";
                 $client = PhantomClient::getInstance();
+                $client->getEngine()->addOption('--load-images=false');
+                $client->getEngine()->addOption('--ignore-ssl-errors=true');
+                $client->getEngine()->addOption("--proxy=http://".$this->dataArray['super_proxy'].":".$this->dataArray['port']);
+                $client->getEngine()->addOption("--proxy-auth=".$this->dataArray['username']."-session-".mt_rand().":".$this->dataArray['password']);
                 $client->isLazy(); // Tells the client to wait for all resources before rendering
                 $request = $client->getMessageFactory()->createRequest($urlMap);
                 $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
@@ -493,7 +496,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
     protected function googleData()
     {
-
         $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
         $client = new GuzzleClient();
         $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
@@ -520,7 +522,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
         }
     }
-
 }
 
 /*        $goutteClient = new GoutteClient();

@@ -29,6 +29,16 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
         $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
 
+        $goutteClient = new GoutteClient();
+        $guzzleClient = new GuzzleClient(array(
+            'curl' => [
+                CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'],
+                CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'],
+            ]
+        ));
+        $goutteClient->setClient($guzzleClient);
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
@@ -38,21 +48,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
 
-            $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:$k;";
-
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'],
-                    CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'],
-                ]
-            ));
-            $goutteClient->setClient($guzzleClient);
-
-            for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
-                for ($k = 0; $k <= 5; $k++) {
+            for ($k = 0; $k <= 5; $k++) {
+                for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
+                    $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:$k;";
                     try {
                         echo "\n" . $this->dataArray['url'] . "\n";
 

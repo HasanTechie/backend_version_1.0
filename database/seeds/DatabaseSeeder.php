@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('MergingEurobookingsHRSSeeder');
 //        $this->call('TestingGooglePlacesSeeder');
 
-        $this->call('luminatiSeeder');
+//        $this->call('luminatiSeeder');
 
 //        $this->call('TrawexSeeder');
 

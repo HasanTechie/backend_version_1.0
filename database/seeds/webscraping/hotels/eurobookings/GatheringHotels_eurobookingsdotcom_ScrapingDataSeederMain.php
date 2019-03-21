@@ -22,30 +22,16 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         //
         $this->dataArray = $data;
 
-        //
-//        echo 'To enable your free eval account and get CUSTOMER, YOURZONE and '
-//            .'YOURPASS, please contact sales@luminati.io';
-
-//        $curl = curl_init($url);
-//        curl_setopt($curl, CURLOPT_USERAGENT, $user_agent);
-//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curl, CURLOPT_PROXY, "http://$super_proxy:$port");
-//        curl_setopt($curl, CURLOPT_PROXYUSERPWD, "$username-session-$session:$password");
-//        $result = curl_exec($curl);
-//        curl_close($curl);
-//        if ($result) {
-//            echo $result;
-//        }
+        //            $url = 'https://api.myip.com/';
+        $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+        $password = 'azuuy61773vi';
+        $port = 22225;
+        $user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+        $session = mt_rand();
+        $super_proxy = 'zproxy.lum-superproxy.io';
 
 
 
-//        $goutteClient = new GoutteClient();
-//        $guzzleClient = new GuzzleClient(array(
-//            'timeout' => 60,
-//            'cookies' => true,
-//            'allow_redirects' => true
-//        ));
-//        $goutteClient->setClient($guzzleClient);
 
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
@@ -57,26 +43,24 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
             $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
 
-//            $url = 'https://api.myip.com/';
-            $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
-            $password = 'azuuy61773vi';
-            $port = 22225;
-            $user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $session = mt_rand();
-            $super_proxy = 'zproxy.lum-superproxy.io';
+            $client = PhantomClient::getInstance();
+//            $client->getEngine()->addOption('--load-images=true');
+//            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+            $client->getEngine()->addOption("--proxy=http://$super_proxy:$port");
+            $client->getEngine()->addOption("--proxy-auth=$username-session-$session:$password");
 
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-                    CURLOPT_USERAGENT => $user_agent,
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://$super_proxy:$port",
-                    CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
-
-                ]
-
-            ));
-            $goutteClient->setClient($guzzleClient);
+//            $goutteClient = new GoutteClient();
+//            $guzzleClient = new GuzzleClient(array(
+//                'curl' => [
+//                    CURLOPT_USERAGENT => $user_agent,
+//                    CURLOPT_RETURNTRANSFER => 1,
+//                    CURLOPT_PROXY => "http://$super_proxy:$port",
+//                    CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+//
+//                ]
+//
+//            ));
+//            $goutteClient->setClient($guzzleClient);
 
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
@@ -95,9 +79,17 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 //                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
 //                    $response = $goutteClient->getResponse();
 
-                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
-                    $response = $goutteClient->getResponse();
+//                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
+//                    $response = $goutteClient->getResponse();
 
+                    $client->isLazy();
+                    $request = $client->getMessageFactory()->createRequest($this->dataArray['url']);
+                    $request->setTimeout(5000);
+                    $response = $client->getMessageFactory()->createResponse();
+                    $client->send($request, $response);
+                    $crawler = new Crawler($response->getContent());
+
+                        dd($response->getStatus());
                     if ($response->getStatus() == 200) {
 
                         if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
@@ -110,9 +102,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                             });
                         }
 
-                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
+                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->count() > 0) {
 
-                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
+                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tbody > tr')->each(function ($node) {
 
                                 $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
 
@@ -530,6 +522,14 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
     }
 
 }
+
+/*        $goutteClient = new GoutteClient();
+        $guzzleClient = new GuzzleClient(array(
+            'timeout' => 60,
+            'cookies' => true,
+            'allow_redirects' => true
+        ));
+        $goutteClient->setClient($guzzleClient);*/
 
 /*
 //                dd($crawler->filter('div.clsPageNavigationPages > a')->link());

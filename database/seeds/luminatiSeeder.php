@@ -2,6 +2,8 @@
 
 use Goutte\Client as GoutteClient;
 use GuzzleHttp\Client as GuzzleClient;
+use JonnyW\PhantomJs\Client as PhantomClient;
+use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Database\Seeder;
 
@@ -36,20 +38,35 @@ class luminatiSeeder extends Seeder
 //            echo $result;
 //        }
 
-        $goutteClient = new GoutteClient();
-        $guzzleClient = new GuzzleClient(array(
-            'curl' => [
-                CURLOPT_USERAGENT => $user_agent,
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_PROXY => "http://$super_proxy:$port",
-                CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+//        $goutteClient = new GoutteClient();
+//        $guzzleClient = new GuzzleClient(array(
+//            'curl' => [
+//                CURLOPT_USERAGENT => $user_agent,
+//                CURLOPT_RETURNTRANSFER => 1,
+//                CURLOPT_PROXY => "http://$super_proxy:$port",
+//                CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+//
+//            ]
+//
+//        ));
+//
+//        $goutteClient->setClient($guzzleClient);
+//        $crawler = $goutteClient->request('GET', $url);
+//        $response = $goutteClient->getResponse();
 
-            ]
 
-        ));
-        $goutteClient->setClient($guzzleClient);
-        $crawler = $goutteClient->request('GET', $url);
-        $response = $goutteClient->getResponse();
+        $client = PhantomClient::getInstance();
+        $client->getEngine()->addOption('--load-images=false');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
+        $client->getEngine()->addOption("--proxy=http://$super_proxy:$port");
+        $client->getEngine()->addOption("--proxy-auth=$username-session-$session:$password");
+
+        $client->isLazy();
+        $request = $client->getMessageFactory()->createRequest($url);
+        $request->setTimeout(5000);
+        $response = $client->getMessageFactory()->createResponse();
+        $client->send($request, $response);
+        $crawler = new Crawler($response->getContent());
 
         dd($crawler->html());
     }

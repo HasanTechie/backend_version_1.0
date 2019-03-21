@@ -22,13 +22,30 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         //
         $this->dataArray = $data;
 
-        $goutteClient = new GoutteClient();
-        $guzzleClient = new GuzzleClient(array(
-            'timeout' => 60,
-            'cookies' => true,
-            'allow_redirects' => true
-        ));
-        $goutteClient->setClient($guzzleClient);
+        //
+//        echo 'To enable your free eval account and get CUSTOMER, YOURZONE and '
+//            .'YOURPASS, please contact sales@luminati.io';
+
+//        $curl = curl_init($url);
+//        curl_setopt($curl, CURLOPT_USERAGENT, $user_agent);
+//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($curl, CURLOPT_PROXY, "http://$super_proxy:$port");
+//        curl_setopt($curl, CURLOPT_PROXYUSERPWD, "$username-session-$session:$password");
+//        $result = curl_exec($curl);
+//        curl_close($curl);
+//        if ($result) {
+//            echo $result;
+//        }
+
+
+
+//        $goutteClient = new GoutteClient();
+//        $guzzleClient = new GuzzleClient(array(
+//            'timeout' => 60,
+//            'cookies' => true,
+//            'allow_redirects' => true
+//        ));
+//        $goutteClient->setClient($guzzleClient);
 
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
@@ -39,6 +56,28 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
             $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
+
+//            $url = 'https://api.myip.com/';
+            $username = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+            $password = 'azuuy61773vi';
+            $port = 22225;
+            $user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+            $session = mt_rand();
+            $super_proxy = 'zproxy.lum-superproxy.io';
+
+            $goutteClient = new GoutteClient();
+            $guzzleClient = new GuzzleClient(array(
+                'curl' => [
+                    CURLOPT_USERAGENT => $user_agent,
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://$super_proxy:$port",
+                    CURLOPT_PROXYUSERPWD => "$username-session-$session:$password",
+
+                ]
+
+            ));
+            $goutteClient->setClient($guzzleClient);
+
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
 
@@ -53,6 +92,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                     }
 
                     Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+//                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
+//                    $response = $goutteClient->getResponse();
+
                     $crawler = $goutteClient->request('GET', $this->dataArray['url']);
                     $response = $goutteClient->getResponse();
 

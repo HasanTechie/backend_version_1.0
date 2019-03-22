@@ -361,23 +361,24 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                 $urlMap = "https://www.eurobookings.com/scripts/php/popupGMap.php?intHotelId=" . $this->dataArray['hotel_eurobooking_id'] . "&lang=en";
                 $crawler = $this->phantomRequest($urlMap);
 
-                $result = preg_split('/center:/', $crawler->html());
-                if (count($result) > 1) {
-                    $result_split = explode(' ', $result[1]);
+                if ($crawler->count() > 0) {
+                    $result = preg_split('/center:/', $crawler->html());
+                    if (count($result) > 1) {
+                        $result_split = explode(' ', $result[1]);
 
-                    $coordinates = $result_split[1];
+                        $coordinates = $result_split[1];
 
-                    $coordinates = substr($coordinates, 0, -1);
+                        $coordinates = substr($coordinates, 0, -1);
 
-                    $coordinates = str_replace(array("[", "]"), '', $coordinates);
-                    $coordinatesArray = explode(',', $coordinates);
+                        $coordinates = str_replace(array("[", "]"), '', $coordinates);
+                        $coordinatesArray = explode(',', $coordinates);
 
-                    $this->dataArray['hotel_latitude'] = (!empty($coordinatesArray[1]) ? $coordinatesArray[1] : null);
-                    $this->dataArray['hotel_longitude'] = (!empty($coordinatesArray[0]) ? $coordinatesArray[0] : null);
-                } else {
-                    Storage::put('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorMaps.html', $crawler->html());
+                        $this->dataArray['hotel_latitude'] = (!empty($coordinatesArray[1]) ? $coordinatesArray[1] : null);
+                        $this->dataArray['hotel_longitude'] = (!empty($coordinatesArray[0]) ? $coordinatesArray[0] : null);
+                    } else {
+                        Storage::put('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorMaps.html', $crawler->html());
+                    }
                 }
-
             }
         } catch (\Exception $e) {
             Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMap.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");

@@ -1,6 +1,6 @@
 <?php
 
-class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain
+class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder
 {
     /**
      * Run the database seeds.
@@ -155,9 +155,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'source' => 'eurobookings.com'
         ];
 
-        foreach ($dataArray as $instance) {
-            $euroBooking->mainRun($instance);
-
+        for ($k = -1; $k <= 5; $k++) {
+            foreach ($dataArray as $instance) {
+                $instance['k'] = $k;
+                $euroBooking->mainRun($instance);
+            }
         }
     }
 }

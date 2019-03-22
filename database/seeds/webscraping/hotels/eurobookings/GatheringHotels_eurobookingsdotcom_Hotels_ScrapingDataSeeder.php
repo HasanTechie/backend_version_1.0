@@ -7,7 +7,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
+class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -95,22 +95,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                                             try {
                                                 $this->dataArray['hotel_url'] = $node->attr('href');
-                                                $client2 = PhantomClient::getInstance();
-                                                $client2->getEngine()->addOption('--load-images=false');
-                                                $client2->getEngine()->addOption('--ignore-ssl-errors=true');
-                                                $client2->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port']);
-                                                $client2->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password']);
-                                                $client2->isLazy(); // Tells the client to wait for all resources before rendering
-                                                $request = $client2->getMessageFactory()->createRequest($this->dataArray['hotel_url']);
-                                                $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
-                                                $response = $client2->getMessageFactory()->createResponse();
-                                                // Send the request
-                                                $client2->send($request, $response);
-                                                $content2 = $response->getContent();
-                                                $crawler = new Crawler($content2);
+                                                $crawler = $this->phantomRequest($this->dataArray['hotel_url']);
 
                                                 if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
-
 
                                                     if ($crawler->filter('#idEbHotelDetailRooms> p')->count() > 0) {
                                                         $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
@@ -241,14 +228,16 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                         Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorHotelDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
                                                         print($e->getMessage());
                                                     }
-                                                } else {
+                                                }
+                                                /*else {
                                                     $resultHid = DB::table('hotels_eurobookings')->select('uid', 'name')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->get();
                                                     $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
                                                     $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
                                                     echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                                }
+                                                }*/
 
-                                                if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0 && !empty($hotelUid)) {
+
+                                                /*if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0 && !empty($hotelUid)) {
                                                     $this->roomsData($crawler);
                                                     $this->dataArray['all_rooms'] = array_filter($this->dataArray['all_rooms']);
 
@@ -295,8 +284,9 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                                 }
                                                             }
                                                         }
+                                                        $this->dataArray['all_rooms'] = null;
                                                     }
-                                                }
+                                                }*/
 
                                             } catch (\Exception $e) {
 
@@ -329,17 +319,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
                 $url = "https://www.tripadvisor.com/WidgetEmbed-cdspropertydetail?locationId=" . $this->dataArray['hotel_eurobooking_id'] . "&lang=en&partnerId=5644224BD98E429BA8E2FC432FEC674B&display=true";
 
-                $client = PhantomClient::getInstance();
-                $client->getEngine()->addOption('--load-images=false');
-                $client->getEngine()->addOption('--ignore-ssl-errors=true');
-                $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port']);
-                $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password']);
-                $client->isLazy();
-                $request = $client->getMessageFactory()->createRequest($url);
-                $request->setTimeout(5000);
-                $response = $client->getMessageFactory()->createResponse();
-                $client->send($request, $response);
-                $crawler = new Crawler($response->getContent());
+                $crawler = $this->phantomRequest($url);
 
                 $this->dataArray['hotel_ratings_on_tripadvisor'] = ($crawler->filter('.taRating > img')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.taRating > img')->attr('alt'))) : null;
                 $this->dataArray['hotel_total_number_of_ratings_on_tripadvisor'] = ($crawler->filter('.numReviews')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.numReviews')->text())) : null;
@@ -379,19 +359,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
             if (!empty($this->dataArray['hotel_eurobooking_id'])) {
 
                 $urlMap = "https://www.eurobookings.com/scripts/php/popupGMap.php?intHotelId=" . $this->dataArray['hotel_eurobooking_id'] . "&lang=en";
-                $client = PhantomClient::getInstance();
-                $client->getEngine()->addOption('--load-images=false');
-                $client->getEngine()->addOption('--ignore-ssl-errors=true');
-                $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port']);
-                $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password']);
-                $client->isLazy(); // Tells the client to wait for all resources before rendering
-                $request = $client->getMessageFactory()->createRequest($urlMap);
-                $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
-                $response = $client->getMessageFactory()->createResponse();
-                // Send the request
-                $client->send($request, $response);
-                $crawler = new Crawler($response->getContent());
-
+                $crawler = $this->phantomRequest($urlMap);
 
                 $result = preg_split('/center:/', $crawler->html());
                 if (count($result) > 1) {
@@ -417,7 +385,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         }
     }
 
-    protected function roomsData($crawler)
+    /*protected function roomsData($crawler)
     {
 
         $crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->each(function ($node) {
@@ -476,36 +444,53 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                 });
             }
         });
-    }
-
-/*    protected function googleData()
-    {
-        $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
-        $client = new GuzzleClient();
-        $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
-
-        $input = $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'];
-
-        $input = str_replace('-', ' ', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $input))); // Replaces all special characters.
-
-        $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
-
-        $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:200@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
-
-        if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
-
-            $response = json_decode($response->getBody())->candidates[0];
-
-            $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
-            $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
-            $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null;
-            $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ? $response->geometry->location->lng : null;
-            $this->dataArray['all_data_google'] = serialize($response);
-
-        } else {
-            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
-        }
     }*/
+
+    protected function phantomRequest($url)
+    {
+        $client = PhantomClient::getInstance();
+        $client->getEngine()->addOption('--load-images=false');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
+        $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port']);
+        $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password']);
+        $client->isLazy(); // Tells the client to wait for all resources before rendering
+        $request = $client->getMessageFactory()->createRequest($url);
+        $response = $client->getMessageFactory()->createResponse();
+        // Send the request
+        $client->send($request, $response);
+        $crawler = new Crawler($response->getContent());
+
+        return $crawler;
+
+    }
+    /*    protected function googleData()
+        {
+            $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
+            $client = new GuzzleClient();
+            $url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
+
+            $input = $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'];
+
+            $input = str_replace('-', ' ', preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $input))); // Replaces all special characters.
+
+            $fields = "formatted_address,geometry,name,permanently_closed,photos,place_id,plus_code,types,user_ratings_total,price_level,rating";
+
+            $response = $client->request('GET', "$url?input=$input&inputtype=textquery&fields=$fields&locationbias=circle:200@" . $this->dataArray['hotel_latitude'] . "," . $this->dataArray['hotel_longitude'] . "&key=$key");
+
+            if (json_decode($response->getBody())->status != 'ZERO_RESULTS') {
+
+                $response = json_decode($response->getBody())->candidates[0];
+
+                $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
+                $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
+                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null;
+                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ? $response->geometry->location->lng : null;
+                $this->dataArray['all_data_google'] = serialize($response);
+
+            } else {
+                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
+            }
+        }*/
 }
 
 /*        $goutteClient = new GoutteClient();

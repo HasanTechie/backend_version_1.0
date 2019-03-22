@@ -9,7 +9,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
      */
     public function run()
     {
-        $euroBooking = new GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain();
+        $euroBooking = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
 
         $dataArray[] = [
             'adults' => 2,

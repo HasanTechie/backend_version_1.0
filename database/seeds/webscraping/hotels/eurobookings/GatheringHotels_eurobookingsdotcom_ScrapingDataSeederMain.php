@@ -23,7 +23,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         $this->dataArray = $data;
 
         //            $url = 'https://api.myip.com/';
-        $this->dataArray['username'] = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+//        $this->dataArray['username'] = 'lum-customer-hl_4d865891-zone-static-route_err-pass_dyn';
+        $this->dataArray['username'] = 'lum-customer-solidps-zone-static';
         $this->dataArray['password'] = 'azuuy61773vi';
         $this->dataArray['port'] = 22225;
         $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
@@ -49,8 +50,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
 
 
             for ($k = 0; $k <= 5; $k++) {
+                $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:$k;";
                 for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
-                    $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:$k;";
                     try {
                         echo "\n" . $this->dataArray['url'] . "\n";
 
@@ -190,7 +191,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                     $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
                                                     $this->dataArray['hid'] = preg_replace('/\s+/u', '', $hid);
 
-                                                    $this->googleData();
+//                                                    $this->googleData();
 
                                                     try {
 
@@ -211,8 +212,8 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                                     'reviews_on_tripadvisor' => (isset($this->dataArray['hotel_reviews_on_tripadvisor']) ? serialize($this->dataArray['hotel_reviews_on_tripadvisor']) : null),
                                                                     'ranking_on_tripadvisor' => (isset($this->dataArray['hotel_ranking_on_tripadvisor']) ? $this->dataArray['hotel_ranking_on_tripadvisor'] : null),
                                                                     'badge_on_tripadvisor' => (isset($this->dataArray['hotel_badge_on_tripadvisor']) ? $this->dataArray['hotel_badge_on_tripadvisor'] : null),
-                                                                    'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
-                                                                    'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
+//                                                                    'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
+//                                                                    'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
                                                                     'details' => serialize($this->dataArray['hotel_details']),
                                                                     'facilities' => serialize($this->dataArray['hotel_facilities']),
                                                                     'hotel_info' => serialize($this->dataArray['hotel_info']),
@@ -221,12 +222,12 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
                                                                     'city_id_on_eurobookings' => $this->dataArray['city_id'],
                                                                     'country_code' => $this->dataArray['country_code'],
                                                                     'latitude_eurobookings' => (isset($this->dataArray['hotel_latitude']) ? $this->dataArray['hotel_latitude'] : null),
-                                                                    'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
+//                                                                    'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
                                                                     'longitude_eurobookings' => (isset($this->dataArray['hotel_longitude']) ? $this->dataArray['hotel_longitude'] : null),
-                                                                    'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
+//                                                                    'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
                                                                     'hid' => $this->dataArray['hid'],
                                                                     'hotel_url_on_eurobookings' => (isset($this->dataArray['hotel_url']) ? $this->dataArray['hotel_url'] : null),
-                                                                    'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
+//                                                                    'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
                                                                     'source' => $this->dataArray['source'],
                                                                     'created_at' => DB::raw('now()'),
                                                                     'updated_at' => DB::raw('now()')
@@ -477,7 +478,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         });
     }
 
-    protected function googleData()
+/*    protected function googleData()
     {
         $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';
         $client = new GuzzleClient();
@@ -504,7 +505,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain extends Seeder
         } else {
             Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
         }
-    }
+    }*/
 }
 
 /*        $goutteClient = new GoutteClient();

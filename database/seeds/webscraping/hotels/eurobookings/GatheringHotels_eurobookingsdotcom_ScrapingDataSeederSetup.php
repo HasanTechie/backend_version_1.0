@@ -155,9 +155,6 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
             'source' => 'eurobookings.com'
         ];
 
-
-
-
         foreach ($dataArray as $instance) {
             $euroBooking->mainRun($instance);
 

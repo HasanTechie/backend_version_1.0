@@ -466,6 +466,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
             print($e->getMessage());
         }
     }
+
     /*    protected function googleData()
         {
             $key = 'AIzaSyCnBc_5D1PX2OV6M4kJ0v8KJS8_aW6Z6L4';

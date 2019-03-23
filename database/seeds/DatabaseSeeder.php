@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup');
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected');
 //        $this->call('addDataToEurobookingsTables');
-        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
+//        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
 
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetup');
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected');
@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
 
 //        $this->call('testSeeder1');
 //        $this->call('testSeeder2');
-//        $this->call('testSeeder3');
+        $this->call('testSeeder3');
 //        $this->call('correctingSNoSeeder');
 
 

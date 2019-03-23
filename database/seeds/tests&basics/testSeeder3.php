@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Seeder;
 
+use App\Jobs\GatherHotelsDataEurobookingsJob;
+use App\Jobs\PushDataToFirestoreJob;
+
 class testSeeder3 extends Seeder
 {
     /**
@@ -12,8 +15,8 @@ class testSeeder3 extends Seeder
      */
     public function run()
     {
-        //
-        Storage::append('url.log', 'blah' . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
-
+        GatherHotelsDataEurobookingsJob::dispatch()->delay(now()->addSecond(1));
+        PushDataToFirestoreJob::dispatch()->delay(now()->addSecond(1));
+        echo "reached";
     }
 }

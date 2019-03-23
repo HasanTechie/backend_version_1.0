@@ -17,10 +17,11 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
     protected $dataArray = [];
 
-    public function mainRun(array $data)
+    public function mainRun(array $data, $k)
     {
         //
         $this->dataArray = $data;
+        $this->dataArray['k'] = $k;
 
         $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
         $this->dataArray['password'] = 'azuuy61773vi';

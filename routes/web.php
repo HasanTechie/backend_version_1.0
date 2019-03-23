@@ -92,7 +92,6 @@ Route::get('/hotels/hrs/roomsprices/{id}', 'PriceController@HRSRoomsPrices');
 Route::get('/roomsprices/hrs/{uid}/{id}', 'PriceController@HRSRoomsPricesShow');
 
 
-
 Route::get('/airports', 'AirportController@index');
 Route::get('/airlines', 'AirlineController@index');
 Route::get('/routes', 'RouteController@index');
@@ -102,3 +101,4 @@ Route::get('/planes', 'PlaneController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+

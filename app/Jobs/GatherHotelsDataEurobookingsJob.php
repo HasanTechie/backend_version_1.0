@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use Carbon\Carbon;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,7 +32,9 @@ class GatherHotelsDataEurobookingsJob implements ShouldQueue
     public function handle()
     {
         //
-        for ($i = 0; $i < 1000000000; $i++) {
+        for ($i = 0; $i < 10; $i++) {
+            Storage::append('log/testingMyCode.log', Carbon::now()->toDateTimeString() . "\n");
+            sleep(1);
         }
     }
 }

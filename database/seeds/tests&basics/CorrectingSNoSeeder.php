@@ -14,7 +14,7 @@ class CorrectingSNoSeeder extends Seeder
         //
 
 //        $tables = ['hotels_hrs'];
-        $tables = ['hotels_eurobookings', 'hotels_hrs', 'rooms_prices_eurobookings', 'rooms_prices_hrs'];
+        $tables = ['hotels_eurobookings', 'hotels_hrs', 'rooms_prices_eurobookings', 'rooms_prices_hrs', 'hotels_basic_data_for_gathering'];
 
         foreach ($tables as $table) {
 

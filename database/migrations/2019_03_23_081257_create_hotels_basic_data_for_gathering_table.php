@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBasicDataForHotelsGatheringTable extends Migration
+class CreateHotelsBasicDataForGatheringTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBasicDataForHotelsGatheringTable extends Migration
      */
     public function up()
     {
-        Schema::create('basic_data_for_hotels_gathering', function (Blueprint $table) {
+        Schema::create('hotels_basic_data_for_gathering', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
@@ -23,8 +23,8 @@ class CreateBasicDataForHotelsGatheringTable extends Migration
             $table->string('city_id');
             $table->string('country_code');
             $table->integer('total_results');
-            $table->string('provider');
-            
+            $table->string('source');
+
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ class CreateBasicDataForHotelsGatheringTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('basic_data_for_hotels_gathering');
+        Schema::dropIfExists('hotels_basic_data_for_gathering');
     }
 }

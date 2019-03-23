@@ -156,6 +156,20 @@ class EnteringEurobookingsAndHrsBasicDataSeeder extends Seeder
             'source' => 'eurobookings.com'
         ];
 
-
+        foreach ($dataArray as $instance) {
+            DB::table('hotels_basic_data_for_gathering')->insert([
+                'uid' => uniqid(),
+                's_no' => 1,
+                'adults' => $instance['adults'],
+                'currency' => $instance['currency'],
+                'city' => $instance['city'],
+                'city_id' => $instance['city_id'],
+                'country_code' => $instance['country_code'],
+                'total_results' => $instance['total_results'],
+                'source' => $instance['source'],
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
+            ]);
+        }
     }
 }

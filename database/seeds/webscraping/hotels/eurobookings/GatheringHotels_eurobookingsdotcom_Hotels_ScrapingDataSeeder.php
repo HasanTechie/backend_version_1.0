@@ -33,8 +33,8 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
             'curl' => [
                 CURLOPT_USERAGENT => $this->dataArray['user_agent'],
                 CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'],
-                CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'],
+                CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
+                CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
             ]
         ));
         $goutteClient->setClient($guzzleClient);
@@ -375,8 +375,6 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
                         $this->dataArray['hotel_latitude'] = (!empty($coordinatesArray[1]) ? $coordinatesArray[1] : null);
                         $this->dataArray['hotel_longitude'] = (!empty($coordinatesArray[0]) ? $coordinatesArray[0] : null);
-                    } else {
-                        Storage::put('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorMaps.html', $crawler->html());
                     }
                 }
             }
@@ -449,20 +447,24 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
     protected function phantomRequest($url)
     {
-        $client = PhantomClient::getInstance();
-        $client->getEngine()->addOption('--load-images=false');
-        $client->getEngine()->addOption('--ignore-ssl-errors=true');
-        $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port']);
-        $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password']);
-        $client->isLazy(); // Tells the client to wait for all resources before rendering
-        $request = $client->getMessageFactory()->createRequest($url);
-        $response = $client->getMessageFactory()->createResponse();
-        // Send the request
-        $client->send($request, $response);
-        $crawler = new Crawler($response->getContent());
+        try {
+            $client = PhantomClient::getInstance();
+            $client->getEngine()->addOption('--load-images=false');
+            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+            $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "");
+            $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "");
+            $client->isLazy(); // Tells the client to wait for all resources before rendering
+            $request = $client->getMessageFactory()->createRequest($url);
+            $response = $client->getMessageFactory()->createResponse();
+            // Send the request
+            $client->send($request, $response);
+            $crawler = new Crawler($response->getContent());
+            return $crawler;
 
-        return $crawler;
-
+        } catch (\Exception $e) {
+            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError .log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
+        }
     }
     /*    protected function googleData()
         {

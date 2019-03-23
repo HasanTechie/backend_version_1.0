@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use Carbon\Carbon;
+use GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -14,14 +14,17 @@ class GatherHotelsDataEurobookingsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $eurobookingBasicData;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($eurobookingBasicData)
     {
         //
+        $this->eurobookingBasicData = $eurobookingBasicData;
     }
 
     /**
@@ -32,6 +35,7 @@ class GatherHotelsDataEurobookingsJob implements ShouldQueue
     public function handle()
     {
         //
-        sleep(10);
+        $myClass = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
+        $myClass->mainRun($this->eurobookingBasicData);
     }
 }

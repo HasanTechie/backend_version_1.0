@@ -18,11 +18,12 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
     protected $dataArray = [];
 
-    public function mainRun(array $data, $k)
+    public function mainRun(array $data)
     {
         //
         $this->dataArray = $data;
-        $this->dataArray['k'] = $k;
+
+        $this->dataArray['k'] = -1;
 
         $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
         $this->dataArray['password'] = 'azuuy61773vi';
@@ -451,6 +452,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
     {
         try {
             $client = PhantomClient::getInstance();
+            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
             $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "");
@@ -464,7 +466,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
             return $crawler;
 
         } catch (\Exception $e) {
-            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError .log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
             print($e->getMessage());
         }
     }

@@ -16,7 +16,7 @@ class testSeeder3 extends Seeder
     public function run()
     {
 
-        GatherHotelsDataEurobookingsJob::dispatch()->delay(now()->addSecond(1));
+        PushDataToFirestoreJob::dispatch()->delay(now()->addSecond(1));
         echo "reached" . "\n";
     }
 }

@@ -1,12 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Seeder;
 
-use App\Jobs\GatherHotelsDataEurobookingsJob;
-use App\Jobs\PushDataToFirestoreJob;
-
-class testSeeder3 extends Seeder
+class GatheringEurobookingsDataUsingQueuesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +11,7 @@ class testSeeder3 extends Seeder
      */
     public function run()
     {
-
+        //
         GatherHotelsDataEurobookingsJob::dispatch()->delay(now()->addSecond(1));
         echo "reached" . "\n";
     }

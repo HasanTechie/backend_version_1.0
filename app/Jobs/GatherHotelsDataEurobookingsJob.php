@@ -32,9 +32,6 @@ class GatherHotelsDataEurobookingsJob implements ShouldQueue
     public function handle()
     {
         //
-        for ($i = 0; $i < 10; $i++) {
-            Storage::append('log/testingMyCode.log', Carbon::now()->toDateTimeString() . "\n");
-            sleep(1);
-        }
+        sleep(10);
     }
 }

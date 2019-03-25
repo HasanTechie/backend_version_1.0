@@ -64,8 +64,6 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
                 try {
-                    echo "\n" . $this->dataArray['url'] . "\n";
-
                     if ($this->dataArray['url'] == false) {
                         break;
                     }

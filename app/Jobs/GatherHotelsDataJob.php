@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder;
+use GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -42,10 +43,10 @@ class GatherHotelsDataJob implements ShouldQueue
                 $myClass->mainRun($this->hotelsBasicData);
             }
         }
-//        if ($this->hotelsBasicData['source'] == 'hrs.com') {
-//            $myClass = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
-//            $myClass->mainRun($this->hotelsBasicData);
-//        }
+        if ($this->hotelsBasicData['source'] == 'hrs.com') {
+            $myClass = new GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder();
+            $myClass->mainRun($this->hotelsBasicData);
+        }
 
     }
 }

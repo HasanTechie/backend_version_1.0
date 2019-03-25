@@ -7,7 +7,7 @@ use Symfony\Component\DomCrawler\Crawler;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
+class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,9 +19,29 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
     public function mainRun($data)
     {
         $this->dataArray = $data;
-        $this->dataArray['source'] = 'hrs.com';
 
-        $client = new GoutteClient();
+        $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
+        $this->dataArray['password'] = 'azuuy61773vi';
+        $this->dataArray['port'] = 22225;
+        $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+        $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
+
+        try {
+            $goutteClient = new GoutteClient();
+            $guzzleClient = new GuzzleClient(array(
+                'curl' => [
+                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
+                    CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
+                ]
+            ));
+            $goutteClient->setClient($guzzleClient);
+        } catch (\Exception $e) {
+
+            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
+        }
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
@@ -35,11 +55,10 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                 try {
 
                     $url = "https://www.hrs.com/en/hotel/" . $this->dataArray['city'] . "/d-" . $this->dataArray['city_id'] . "/$i#container=&locationId=" . $this->dataArray['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dataArray['city'] . "%2Fd-" . $this->dataArray['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dataArray['check_in_date'] . "&departure=" . $this->dataArray['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1&_=1550832580038";
-                    $crawler = $client->request('GET', $url);
-                    echo $url . "\n";
-
                     Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
-                    $response = $client->getResponse();
+
+                    $crawler = $goutteClient->request('GET', $url);
+                    $response = $goutteClient->getResponse();
 
                     if ($response->getStatus() == 200) {
 
@@ -66,25 +85,15 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                     try {
 
                                         $this->dataArray['hotel_url'] = $url2;
-                                        $client2 = new GoutteClient();
-                                        $client = PhantomClient::getInstance();
-                                        $client->isLazy(); // Tells the client to wait for all resources before rendering
-                                        $request = $client->getMessageFactory()->createRequest($url2);
-                                        $request->setTimeout(5000); // Will render page if this timeout is reached and resources haven't finished loading
-                                        $response = $client->getMessageFactory()->createResponse();
-                                        // Send the request
-                                        $client->send($request, $response);
-                                        $crawler = new Crawler($response->getContent());
-//                                        Storage::put('hrs/hotelDataDouble.html', $crawler->html()); //to be deleted
-                                        $crawler2 = $client2->request('GET', $url1);
-//                                        Storage::put('hrs/hotelDataSingle.html', $crawler2->html()); //to be deleted
+//                                        $crawler2 = $this->goutteRequest($url1);
+                                        $crawler = $this->phantomRequest($this->dataArray['hotel_url']);
 
                                         $this->dataArray['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
                                         $hotelHRSidDoesntExist = DB::table('hotels_hrs')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->doesntExist();
                                         if ($hotelHRSidDoesntExist) {
                                             $this->hotelData($crawler);
-                                            $this->googleData();
+//                                            $this->googleData();
                                         }
 
                                     } catch (\Exception $e) {
@@ -135,58 +144,60 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                                                 ]);
                                                 echo Carbon\Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                             }
-                                        } else {
+                                        }
+                                        /*else {
                                             $resultHid = DB::table('hotels_hrs')->select('uid', 'name')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->get();
                                             $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
                                             $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
                                             echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                        }
-                                        $this->roomData($crawler, $crawler2);
+                                        }*/
 
-                                        if (is_array($this->dataArray['all_rooms'])) {
+//                                        $this->roomData($crawler, $crawler2);
 
-                                            foreach ($this->dataArray['all_rooms'] as $rooms) {
-                                                foreach ($rooms as $room) {
-
-                                                    if (!empty($room['room']) && !empty($room['price']) && !empty($hotelUid)) {
-
-                                                        $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
-
-                                                        $rid = str_replace(' ', '', $rid);
-                                                        if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
-                                                            DB::table('rooms_prices_hrs')->insert([
-                                                                'uid' => uniqid(),
-                                                                's_no' => 1,
-                                                                'price' => $room['price'],
-                                                                'currency' => $this->dataArray['currency'],
-                                                                'room' => $room['room'],
-                                                                'room_type' => $room['room_type'],
-                                                                'criteria' => $room['criteria'],
-                                                                'basic_conditions' => serialize($room['room_basic_conditions']),
-                                                                'photo' => $room['room_image'],
-                                                                'short_description' => $room['room_short_description'],
-                                                                'facilities' => serialize($this->dataArray['room_facilities']),
-                                                                'hotel_uid' => $hotelUid,
-                                                                'hotel_name' => $this->dataArray['hotel_name'],
-                                                                'hotel_hrs_id' => $this->dataArray['hotel_hrs_id'],
-                                                                'number_of_adults_in_room_request' => $room['room_adults'],
-                                                                'check_in_date' => $this->dataArray['check_in_date'],
-                                                                'check_out_date' => $this->dataArray['check_out_date'],
-                                                                'rid' => $rid,
-                                                                'request_date' => $this->dataArray['request_date'],
-                                                                'source' => $this->dataArray['source'],
-                                                                'created_at' => DB::raw('now()'),
-                                                                'updated_at' => DB::raw('now()')
-                                                            ]);
-                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                                        } else {
-                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        $this->dataArray['all_rooms'] = null;
+//                                        if (is_array($this->dataArray['all_rooms'])) {
+//
+//                                            foreach ($this->dataArray['all_rooms'] as $rooms) {
+//                                                foreach ($rooms as $room) {
+//
+//                                                    if (!empty($room['room']) && !empty($room['price']) && !empty($hotelUid)) {
+//
+//                                                        $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+//
+//                                                        $rid = str_replace(' ', '', $rid);
+//                                                        if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
+//                                                            DB::table('rooms_prices_hrs')->insert([
+//                                                                'uid' => uniqid(),
+//                                                                's_no' => 1,
+//                                                                'price' => $room['price'],
+//                                                                'currency' => $this->dataArray['currency'],
+//                                                                'room' => $room['room'],
+//                                                                'room_type' => $room['room_type'],
+//                                                                'criteria' => $room['criteria'],
+//                                                                'basic_conditions' => serialize($room['room_basic_conditions']),
+//                                                                'photo' => $room['room_image'],
+//                                                                'short_description' => $room['room_short_description'],
+//                                                                'facilities' => serialize($this->dataArray['room_facilities']),
+//                                                                'hotel_uid' => $hotelUid,
+//                                                                'hotel_name' => $this->dataArray['hotel_name'],
+//                                                                'hotel_hrs_id' => $this->dataArray['hotel_hrs_id'],
+//                                                                'number_of_adults_in_room_request' => $room['room_adults'],
+//                                                                'check_in_date' => $this->dataArray['check_in_date'],
+//                                                                'check_out_date' => $this->dataArray['check_out_date'],
+//                                                                'rid' => $rid,
+//                                                                'request_date' => $this->dataArray['request_date'],
+//                                                                'source' => $this->dataArray['source'],
+//                                                                'created_at' => DB::raw('now()'),
+//                                                                'updated_at' => DB::raw('now()')
+//                                                            ]);
+//                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+//                                                        } else {
+//                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+//                                                        }
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                        $this->dataArray['all_rooms'] = null;
 
                                     } catch (\Exception $e) {
                                         Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
@@ -401,7 +412,52 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
     }
 
-    protected function googleData()
+    protected function goutteRequest($url)
+    {
+        try {
+            $goutteClient = new GoutteClient();
+            $guzzleClient = new GuzzleClient(array(
+                'curl' => [
+                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
+                    CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
+                ]
+            ));
+            $goutteClient->setClient($guzzleClient);
+            $crawler = $goutteClient->request('GET', $url);
+            return $crawler;
+
+        } catch (\Exception $e) {
+            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
+        }
+    }
+
+    protected function phantomRequest($url)
+    {
+        try {
+            $client = PhantomClient::getInstance();
+            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+            $client->getEngine()->addOption('--load-images=false');
+            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+            $client->getEngine()->addOption("--proxy=http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "");
+            $client->getEngine()->addOption("--proxy-auth=" . $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "");
+            $client->isLazy(); // Tells the client to wait for all resources before rendering
+            $request = $client->getMessageFactory()->createRequest($url);
+            $response = $client->getMessageFactory()->createResponse();
+            // Send the request
+            $client->send($request, $response);
+            $crawler = new Crawler($response->getContent());
+            return $crawler;
+
+        } catch (\Exception $e) {
+            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
+        }
+    }
+
+    /*protected function googleData()
     {
 
         if (isset($this->dataArray['hotel_latitude']) && isset($this->dataArray['hotel_longitude'])) {
@@ -424,17 +480,17 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
 
                 $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
                 $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
-                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null ;
-                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ?  $response->geometry->location->lng : null;
+                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null;
+                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ? $response->geometry->location->lng : null;
                 $this->dataArray['all_data_google'] = serialize($response);
 
             } else {
                 Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/GoogleDataNotFound.log', $input . ' lat:' . $this->dataArray['hotel_latitude'] . ' lng:' . $this->dataArray['hotel_longitude']);
             }
         }
-    }
+    }*/
 
-    protected function roomData($crawler, $crawler2)
+    /*protected function roomData($crawler, $crawler2)
     {
 
         if (!empty($crawler2)) {
@@ -511,7 +567,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMain extends Seeder
                 });
             }
         }
-    }
+    }*/
 }
 
 //                        $da['hotel_id'] = preg_replace('/[^0-9]/', '', $da['link']);

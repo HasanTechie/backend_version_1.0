@@ -21,9 +21,7 @@ class GatheringDataUsingQueuesSeeder extends Seeder
             $instance['start_date'] = '2019-04-10';
             $instance['end_date'] = '2019-04-10';
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(1));
-            break;
         }
-
         echo "started Queue" . "\n";
     }
 }

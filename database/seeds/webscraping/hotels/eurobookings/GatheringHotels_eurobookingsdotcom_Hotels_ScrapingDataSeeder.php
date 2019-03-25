@@ -23,7 +23,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
         //
         $this->dataArray = $data;
 
-        $this->dataArray['k'] = -1;
+        $this->dataArray['adults'] = 2;
 
         $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
         $this->dataArray['password'] = 'azuuy61773vi';
@@ -44,16 +44,23 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                 $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:" . $this->dataArray['k'] . ";";
             }
 
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
-                    CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
-                ]
-            ));
-            $goutteClient->setClient($guzzleClient);
+            try {
+                $goutteClient = new GoutteClient();
+                $guzzleClient = new GuzzleClient(array(
+                    'curl' => [
+                        CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
+                        CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
+                    ]
+                ));
+                $goutteClient->setClient($guzzleClient);
+            } catch (\Exception $e) {
+
+                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                print($e->getMessage());
+            }
+
 
             for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
                 try {

@@ -20,8 +20,8 @@ class GatheringEurobookingsDataUsingQueuesSeeder extends Seeder
             foreach ($eurobookingsBasicData as $instance) {
                 $instance = (array)$instance;
                 $instance['k'] = $k;
-                $instance['start_date'] = '2019-04-04';
-                $instance['end_date'] = '2019-04-04';
+                $instance['start_date'] = '2019-04-10';
+                $instance['end_date'] = '2019-04-10';
                 GatherHotelsDataEurobookingsJob::dispatch($instance)->delay(now()->addSecond(1));
             }
         }

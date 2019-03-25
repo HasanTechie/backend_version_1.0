@@ -14,7 +14,7 @@ class GatheringDataUsingQueuesSeeder extends Seeder
     public function run()
     {
         //
-        $hotelsBasicData = DB::table('hotels_basic_data_for_gathering')->get();
+        $hotelsBasicData = DB::table('hotels_basic_data_for_gathering')->inRandomOrder()->get();
 
         foreach ($hotelsBasicData as $instance) {
             $instance = (array)$instance;

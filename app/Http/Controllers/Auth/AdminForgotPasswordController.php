@@ -34,7 +34,7 @@ class AdminForgotPasswordController extends Controller
 
     protected function broker()
     {
-        return Password::broker('fieldstaffs');
+        return Password::broker('admins');
     }
 
     protected function showLinkRequestForm()

@@ -237,7 +237,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                                                                 'created_at' => DB::raw('now()'),
                                                                 'updated_at' => DB::raw('now()')
                                                             ]);
-                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
+                                                            echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
                                                         }
                                                     }
 

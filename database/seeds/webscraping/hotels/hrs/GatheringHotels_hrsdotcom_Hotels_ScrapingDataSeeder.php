@@ -4,6 +4,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Goutte\Client as GoutteClient;
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
+use Carbon\Carbon;
 
 use Illuminate\Database\Seeder;
 
@@ -64,7 +65,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                 try {
 
                     $url = "https://www.hrs.com/en/hotel/" . $this->dataArray['city'] . "/d-" . $this->dataArray['city_id'] . "/$i#container=&locationId=" . $this->dataArray['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dataArray['city'] . "%2Fd-" . $this->dataArray['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dataArray['check_in_date'] . "&departure=" . $this->dataArray['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1&_=1550832580038";
-                    Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
 
                     $crawler = $goutteClient->request('GET', $url);
                     $response = $goutteClient->getResponse();
@@ -106,7 +107,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                         }
 
                                     } catch (\Exception $e) {
-                                        Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorHotelData.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorHotelData.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                                         print($e->getMessage());
                                     }
 
@@ -151,14 +152,14 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                                     'created_at' => DB::raw('now()'),
                                                     'updated_at' => DB::raw('now()')
                                                 ]);
-                                                echo Carbon\Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
+                                                echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
                                             }
                                         }
                                         /*else {
                                             $resultHid = DB::table('hotels_hrs')->select('uid', 'name')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->get();
                                             $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
                                             $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
-                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                            echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
                                         }*/
 
 //                                        $this->roomData($crawler, $crawler2);
@@ -198,9 +199,9 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 //                                                                'created_at' => DB::raw('now()'),
 //                                                                'updated_at' => DB::raw('now()')
 //                                                            ]);
-//                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+//                                                            echo Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
 //                                                        } else {
-//                                                            echo Carbon\Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+//                                                            echo Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
 //                                                        }
 //                                                    }
 //                                                }
@@ -209,7 +210,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 //                                        $this->dataArray['all_rooms'] = null;
 
                                     } catch (\Exception $e) {
-                                        Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/ErrorDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                                         print($e->getMessage());
                                     }
 
@@ -222,7 +223,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                         break;
                     }
                 } catch (\Exception $e) {
-                    Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     print($e->getMessage());
                 }
             }
@@ -438,7 +439,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
             return $crawler;
 
         } catch (\Exception $e) {
-            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
             print($e->getMessage());
         }
     }

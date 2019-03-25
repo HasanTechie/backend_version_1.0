@@ -18,8 +18,8 @@ class GatheringDataUsingQueuesSeeder extends Seeder
 
         foreach ($hotelsBasicData as $instance) {
             $instance = (array)$instance;
-            $instance['start_date'] = '2019-04-10';
-            $instance['end_date'] = '2019-04-10';
+            $instance['start_date'] = '2019-04-9';
+            $instance['end_date'] = '2019-04-9';
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(1));
         }
         echo "started Queue" . "\n";

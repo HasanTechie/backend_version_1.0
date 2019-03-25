@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Admin extends Authenticatable
 {
     //
+    protected $guard = 'admin';
+
     use Notifiable;
 
     protected $primaryKey = 'uid'; // or null
@@ -40,4 +42,5 @@ class Admin extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
 }

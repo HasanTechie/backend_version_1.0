@@ -14,7 +14,11 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
         $euroBooking = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
         for ($k = -1; $k <= 5; $k++) {
             foreach ($cities as $instance) {
-                $euroBooking->mainRun((array)$instance, $k);
+                $instance = (array)$instance;
+                $instance['start_date'] = '2019-04-10';
+                $instance['end_date'] = '2019-04-10';
+                $instance['k'] = $k;
+                $euroBooking->mainRun($instance);
             }
         }
     }

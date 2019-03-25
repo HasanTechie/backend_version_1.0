@@ -37,7 +37,7 @@ class GatherHotelsDataJob implements ShouldQueue
         //
         if ($this->hotelsBasicData['source'] == 'eurobookings.com') {
             for ($k = -1; $k <= 5; $k++) {
-                $instance['k'] = $k;
+                $this->hotelsBasicData['k'] = $k;
                 $myClass = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
                 $myClass->mainRun($this->hotelsBasicData);
             }

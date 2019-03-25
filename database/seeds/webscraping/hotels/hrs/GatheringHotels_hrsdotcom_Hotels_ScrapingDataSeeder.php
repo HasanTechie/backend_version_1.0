@@ -20,19 +20,19 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
     {
         $this->dataArray = $data;
 
-        if(rand(0,1)) {
+        if (rand(0, 1)) {
             $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
             $this->dataArray['password'] = 'azuuy61773vi';
             $this->dataArray['port'] = 22225;
             $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
             $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
-        }else{
+        } else {
 
             $this->dataArray['username'] = 'lum-customer-solidps-zone-allcountriesdatacenterips-route_err-pass_dyn';
-            $this->dataArray['password']  = 'axqcz3carpam';
+            $this->dataArray['password'] = 'axqcz3carpam';
             $this->dataArray['port'] = 22225;
             $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $this->dataArray['super_proxy']  = 'zproxy.lum-superproxy.io';
+            $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
         }
 
         try {
@@ -151,7 +151,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                                     'created_at' => DB::raw('now()'),
                                                     'updated_at' => DB::raw('now()')
                                                 ]);
-                                                echo Carbon\Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                                echo Carbon\Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
                                             }
                                         }
                                         /*else {

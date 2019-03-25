@@ -400,8 +400,8 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
 
                 $this->dataArray['ratings_on_google'] = isset($response->rating) ? $response->rating : null;
                 $this->dataArray['total_number_of_ratings_on_google'] = isset($response->user_ratings_total) ? $response->user_ratings_total : null;
-                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null ;
-                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ?  $response->geometry->location->lng : null;
+                $this->dataArray['google_latitude'] = isset($response->geometry->location->lat) ? $response->geometry->location->lat : null;
+                $this->dataArray['google_longitude'] = isset($response->geometry->location->lng) ? $response->geometry->location->lng : null;
                 $this->dataArray['all_data_google'] = serialize($response);
 
             } else {

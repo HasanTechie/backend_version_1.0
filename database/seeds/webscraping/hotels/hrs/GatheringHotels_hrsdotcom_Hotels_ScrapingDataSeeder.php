@@ -21,20 +21,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
     {
         $this->dataArray = $data;
 
-        if (rand(0, 1)) {
-            $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
-            $this->dataArray['password'] = 'azuuy61773vi';
-            $this->dataArray['port'] = 22225;
-            $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
-        } else {
-
-            $this->dataArray['username'] = 'lum-customer-solidps-zone-allcountriesdatacenterips-route_err-pass_dyn';
-            $this->dataArray['password'] = 'axqcz3carpam';
-            $this->dataArray['port'] = 22225;
-            $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
-        }
+        $this->setCredentials();
 
         try {
             $goutteClient = new GoutteClient();
@@ -48,7 +35,6 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
             ));
             $goutteClient->setClient($guzzleClient);
         } catch (\Exception $e) {
-
             Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
             print($e->getMessage());
         }
@@ -238,13 +224,15 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
         $this->dataArray['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
         $this->dataArray['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
-        $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
-        if (count($result) > 1) {
-            $result_split = explode(',', $result[1]);
+        if ($crawler->count() > 0) {
+            $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
+            if (count($result) > 1) {
+                $result_split = explode(',', $result[1]);
 
-            $this->dataArray['hotel_latitude'] = str_replace(array('"', ':'), '', $result_split[0]);
-            $this->dataArray['hotel_longitude'] = str_replace(array('"', ':', 'hotelLocationLongitude'), '', $result_split[1]);
+                $this->dataArray['hotel_latitude'] = str_replace(array('"', ':'), '', $result_split[0]);
+                $this->dataArray['hotel_longitude'] = str_replace(array('"', ':', 'hotelLocationLongitude'), '', $result_split[1]);
 
+            }
         }
 
         if ($crawler->filter('div.jsAmenities.equipement.col33')->count() > 0) {
@@ -420,6 +408,23 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
         $this->dataArray['total_number_of_ratings_on_hrs'] = ($crawler->filter('div.ratingDescription')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription')->text())) : null;
 
+    }
+
+    protected function setCredentials()
+    {
+        if (rand(0, 1)) {
+            $this->dataArray['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
+            $this->dataArray['password'] = 'azuuy61773vi';
+            $this->dataArray['port'] = 22225;
+            $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+            $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
+        } else {
+            $this->dataArray['username'] = 'lum-customer-solidps-zone-allcountriesdatacenterips-route_err-pass_dyn';
+            $this->dataArray['password'] = 'axqcz3carpam';
+            $this->dataArray['port'] = 22225;
+            $this->dataArray['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+            $this->dataArray['super_proxy'] = 'zproxy.lum-superproxy.io';
+        }
     }
 
     protected function goutteRequest($url)

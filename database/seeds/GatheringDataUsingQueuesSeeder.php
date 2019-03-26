@@ -14,26 +14,31 @@ class GatheringDataUsingQueuesSeeder extends Seeder
     public function run()
     {
         //
-        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->inRandomOrder()->get();
+        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
+        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->get();
+
+        $instanceArray = [];
+        foreach ($hrsHotelsBasicData as $instance) {
+            $instance = (array)$instance;
+            $instance['start_date'] = '2019-04-9';
+            $instance['end_date'] = '2019-04-9';
+
+            $instanceArray [] = $instance;
+        }
         for ($k = -1; $k <= 5; $k++) {
             foreach ($eurobookingsHotelsBasicData as $instance) {
                 $instance = (array)$instance;
                 $instance['start_date'] = '2019-04-9';
                 $instance['end_date'] = '2019-04-9';
                 $instance['k'] = $k;
-                GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(1));
+                $instanceArray [] = $instance;
             }
         }
-        echo "started Queue of Eurobookings" . "\n";
+        shuffle($instanceArray);
 
-
-        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->inRandomOrder()->get();
-        foreach ($hrsHotelsBasicData as $instance) {
-            $instance = (array)$instance;
-            $instance['start_date'] = '2019-04-9';
-            $instance['end_date'] = '2019-04-9';
-            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(1));
+        foreach ($instanceArray as $instance) {
+            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(2));
         }
-        echo "started Queue of HRS" . "\n";
+        echo "started Queue" . "\n";
     }
 }

@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
 
 
 //        $this->call('addDataToHotelsDataTables');
-        $this->call('GatheringDataUsingQueuesSeeder');
+//        $this->call('GatheringDataUsingQueuesSeeder');
 
 //        $this->call('CorrectingRatingsDataOneurobookings');
 

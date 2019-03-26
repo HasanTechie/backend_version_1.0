@@ -23,6 +23,10 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
         $this->setCredentials();
 
+        $this->dataArray['request_date'] = date("Y-m-d");
+
+        Storage::makeDirectory('hrs/' . $this->dataArray['request_date']);
+
         try {
             $goutteClient = new GoutteClient();
             $guzzleClient = new GuzzleClient(array(
@@ -41,7 +45,6 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
         while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
-            $this->dataArray['request_date'] = date("Y-m-d");
             $this->dataArray['check_in_date'] = $this->dataArray['start_date'];
 
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));

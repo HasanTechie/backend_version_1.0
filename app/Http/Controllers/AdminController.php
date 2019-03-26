@@ -12,6 +12,7 @@ class AdminController extends Controller
     {
         $this->middleware('auth:admin');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,8 +21,8 @@ class AdminController extends Controller
     public function index()
     {
         //
-        $user_type='admin';
-        return view('dashboard',compact('user_type'));
+        $user_type = 'admin';
+        return view('dashboard', compact('user_type'));
     }
 
     /**
@@ -37,7 +38,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +49,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function show(Admin $admin)
@@ -59,7 +60,7 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function edit(Admin $admin)
@@ -70,8 +71,8 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Admin $admin)
@@ -82,7 +83,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Admin  $admin
+     * @param  \App\Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy(Admin $admin)

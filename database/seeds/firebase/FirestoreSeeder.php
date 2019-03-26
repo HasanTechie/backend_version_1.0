@@ -135,7 +135,7 @@ class FirestoreSeeder extends Seeder
                     $competitorRooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
                         ['check_in_date', '=', $date->check_in_date],
                         ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                    ])->groupBy('room', 'short_description','uid')->get();
+                    ])->groupBy('room', 'short_description', 'uid')->get();
 
 
                     if (!empty($competitorRooms)) {
@@ -155,7 +155,7 @@ class FirestoreSeeder extends Seeder
                 $rooms = DB::table('rooms_prices_eurobookings')->select('*')->where([
                     ['check_in_date', '=', $date->check_in_date],
                     ['hotel_uid', '=', $mainHotel['hotel_uid']],
-                ])->whereNotNull('short_description')->groupBy('room', 'short_description','uid')->get();
+                ])->whereNotNull('short_description')->groupBy('room', 'short_description', 'uid')->get();
 
 
 //                dd($rooms);

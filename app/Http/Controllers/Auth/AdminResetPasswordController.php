@@ -41,7 +41,8 @@ class AdminResetPasswordController extends Controller
         $this->middleware('guest:admin');
     }
 
-    protected function guard(){
+    protected function guard()
+    {
         return Auth::guard('admin');
     }
 

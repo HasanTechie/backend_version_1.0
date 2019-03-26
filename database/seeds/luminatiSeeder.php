@@ -15,6 +15,7 @@ class luminatiSeeder extends Seeder
      * @return void
      */
     protected $dataArray;
+
     public function run()
     {
         //
@@ -40,7 +41,6 @@ class luminatiSeeder extends Seeder
 //        if ($result) {
 //            echo $result;
 //        }
-
 
 
 //        $goutteClient = new GoutteClient();

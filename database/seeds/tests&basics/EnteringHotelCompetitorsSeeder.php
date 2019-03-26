@@ -98,7 +98,6 @@ class EnteringHotelCompetitorsSeeder extends Seeder
 //        ];
 
 
-
         $j = 0;
         foreach ($hotelCompetitorArray as $competitorHotel) {
 

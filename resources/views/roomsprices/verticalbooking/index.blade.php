@@ -39,7 +39,9 @@
                 <td>{{$instance->check_in_date}}</td>
                 <td>{{$instance->check_out_date}}</td>
                 <td>{{$instance->request_date}}</td>
-                <td><a href="https://www.google.com/search?q={{$instance->hotel_name}}, {{$instance->hotel_city}}">{{$instance->hotel_name}}</a></td>
+                <td>
+                    <a href="https://www.google.com/search?q={{$instance->hotel_name}}, {{$instance->hotel_city}}">{{$instance->hotel_name}}</a>
+                </td>
                 <td>{{$instance->hotel_address}}</td>
                 <td>{{$instance->hotel_city}}</td>
                 <td>{{$instance->hotel_phone}}</td>

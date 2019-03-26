@@ -93,7 +93,8 @@ class HotelController extends Controller
 
     }
 
-    public function hotelEurobookingsShowAll(){
+    public function hotelEurobookingsShowAll()
+    {
         $hotels = DB::table('hotels_eurobookings')
             ->paginate(20);
 
@@ -140,7 +141,8 @@ class HotelController extends Controller
     }
 
 
-    public function hotelHRSShowAll(){
+    public function hotelHRSShowAll()
+    {
         $hotels = DB::table('hotels_hrs')
             ->paginate(20);
 
@@ -153,9 +155,6 @@ class HotelController extends Controller
 
         dd($hotels[0]);
     }
-
-
-
 
 
     public function getPlaces()

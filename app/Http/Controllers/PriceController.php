@@ -87,28 +87,32 @@ class PriceController extends Controller
         dd($prices[0]);
     }
 
-    public function EurobookingsRoomsPrices($id){
+    public function EurobookingsRoomsPrices($id)
+    {
 
         $prices = DB::table('rooms_prices_eurobookings')->where('hotel_uid', '=', $id)->paginate(20);
 
         return view('roomsprices.eurobookings.index', compact('prices'));
     }
 
-    public function EurobookingsRoomsPricesShow($uid,$id){
+    public function EurobookingsRoomsPricesShow($uid, $id)
+    {
 
         $prices = DB::table('rooms_prices_eurobookings')->where('uid', '=', $id)->get();
         dd($prices[0]);
     }
 
 
-    public function HRSRoomsPrices($id){
+    public function HRSRoomsPrices($id)
+    {
 
         $prices = DB::table('rooms_prices_hrs')->where('hotel_uid', '=', $id)->paginate(20);
 
         return view('roomsprices.hrs.index', compact('prices'));
     }
 
-    public function HRSRoomsPricesShow($uid,$id){
+    public function HRSRoomsPricesShow($uid, $id)
+    {
 
         $prices = DB::table('rooms_prices_hrs')->where('uid', '=', $id)->get();
         dd($prices[0]);

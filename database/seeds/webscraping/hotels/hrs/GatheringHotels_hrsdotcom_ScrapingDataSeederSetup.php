@@ -11,13 +11,17 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
      */
     public function run()
     {
-        $cities = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->inRandomOrder()->get();
+        $hrsBasicData = DB::table('hotels_basic_data_for_gathering')->where([
+            ['source', '=', 'hrs.com'],
+            ['city', '=', 'Istanbul'],
+
+        ])->get();
 
         $hrs = new GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder();
-        foreach ($cities as $instance) {
+        foreach ($hrsBasicData as $instance) {
             $instance = (array)$instance;
-            $instance['start_date'] = '2019-04-10';
-            $instance['end_date'] = '2019-04-10';
+            $instance['start_date'] = '2019-04-09';
+            $instance['end_date'] = '2019-04-09';
             $hrs->mainRun($instance);
         }
     }

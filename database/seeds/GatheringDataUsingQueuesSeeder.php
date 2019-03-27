@@ -20,16 +20,16 @@ class GatheringDataUsingQueuesSeeder extends Seeder
         $instanceArray = [];
         foreach ($hrsHotelsBasicData as $instance) {
             $instance = (array)$instance;
-            $instance['start_date'] = '2019-04-9';
-            $instance['end_date'] = '2019-04-9';
+            $instance['start_date'] = '2019-04-09';
+            $instance['end_date'] = '2019-04-09';
 
             $instanceArray [] = $instance;
         }
         for ($k = -1; $k <= 5; $k++) {
             foreach ($eurobookingsHotelsBasicData as $instance) {
                 $instance = (array)$instance;
-                $instance['start_date'] = '2019-04-9';
-                $instance['end_date'] = '2019-04-9';
+                $instance['start_date'] = '2019-04-09';
+                $instance['end_date'] = '2019-04-09';
                 $instance['k'] = $k;
                 $instanceArray [] = $instance;
             }

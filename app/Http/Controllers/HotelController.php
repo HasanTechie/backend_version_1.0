@@ -8,6 +8,9 @@ use phpDocumentor\Reflection\Types\Array_;
 use SKAgarwal\GoogleApi\PlacesApi;
 
 use App\Hotel;
+use App\Http\Resources\Hotel as HotelResource;
+
+
 use Illuminate\Http\Request;
 
 class HotelController extends Controller
@@ -15,7 +18,7 @@ class HotelController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:admin');
+//        $this->middleware('auth:admin');
     }
 
     /**
@@ -26,8 +29,8 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = Hotel::paginate(25);
-        return view('hotels.index', compact('hotels'));
+        $hotels = DB::table('hotels_eurobookings')->get();
+        return HotelResource::collection($hotels);
     }
 
     public function search()
@@ -45,7 +48,7 @@ class HotelController extends Controller
      */
     public function create()
     {
-        //
+        /*//
 //        $client = new Client();
 //
         $url = "https://www.gruppoloan.it/hdc/en/";
@@ -73,7 +76,7 @@ class HotelController extends Controller
         $form['NUMPERSONE'] = 1;
         $crawler = $client->submit($form);
 
-        dd($crawler);
+        dd($crawler);*/
     }
 
 

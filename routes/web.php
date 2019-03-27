@@ -19,17 +19,17 @@ Route::get('/places', 'PlaceController@index');
 Route::get('/places/{place}', 'PlaceController@show');
 
 //
-Route::get('/hotels/create', 'HotelController@create');
-Route::get('/hotels', 'HotelController@index');
-Route::get('/hotels/hotels/{hotel}', 'HotelController@show');
-Route::get('/hotels/test1', 'HotelController@test1');
-Route::get('/hotels/test2', 'HotelController@test2');
-Route::get('/hotels/test3', 'HotelController@test3');
-Route::get('/hotels/getPlaces', 'HotelController@getPlaces');
-Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
-Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
-Route::get('/hotels/search', 'HotelController@search');
-Route::post('/hotels/search', 'HotelController@search');
+//Route::get('/hotels/create', 'HotelController@create');
+//Route::get('/hotels', 'HotelController@index');
+//Route::get('/hotels/hotels/{hotel}', 'HotelController@show');
+//Route::get('/hotels/test1', 'HotelController@test1');
+//Route::get('/hotels/test2', 'HotelController@test2');
+//Route::get('/hotels/test3', 'HotelController@test3');
+//Route::get('/hotels/getPlaces', 'HotelController@getPlaces');
+//Route::get('/hotels/getPlaceDetails', 'HotelController@getPlaceDetails');
+//Route::get('/hotels/getReviewDetails', 'HotelController@getReviewDetails');
+//Route::get('/hotels/search', 'HotelController@search');
+//Route::post('/hotels/search', 'HotelController@search');
 
 Route::get('/events', 'EventController@index');
 Route::get('/events/{event}', 'EventController@show');

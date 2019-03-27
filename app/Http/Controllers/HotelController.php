@@ -9,6 +9,7 @@ use SKAgarwal\GoogleApi\PlacesApi;
 
 use App\Hotel;
 use App\Http\Resources\Hotel as HotelResource;
+use App\Http\Resources\RoomPrice as RoomPriceResource;
 
 
 use Illuminate\Http\Request;
@@ -200,10 +201,14 @@ class HotelController extends Controller
      * @param  \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show($hotel,$date)
     {
         //
-        return view('hotels.show', compact('hotel'));
+        $hotels = DB::table('rooms_prices_eurobookings_data')->where([
+            ['hotel_uid','=',$hotel],
+            ['check_in_date','=',$date],
+        ])->get();
+        return RoomPriceResource::collection($hotels);
     }
 
     /**

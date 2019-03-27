@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('hotels', 'HotelController@index');
+
+Route::get('rooms/hoteluid={hotel_uid}&date={date}', 'HotelController@show');

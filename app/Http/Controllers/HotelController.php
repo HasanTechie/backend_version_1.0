@@ -10,6 +10,7 @@ use SKAgarwal\GoogleApi\PlacesApi;
 use App\Hotel;
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;
+use App\Http\Resources\CompetitorPrice as CompetitorPriceResource;
 
 
 use Illuminate\Http\Request;
@@ -30,7 +31,8 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = DB::table('hotels_eurobookings')->get();
+//        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
+        $hotels = DB::table('hotels_eurobookings_data')->limit(50)->get();
         return HotelResource::collection($hotels);
     }
 
@@ -201,14 +203,41 @@ class HotelController extends Controller
      * @param  \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show($hotel,$date)
+    public function show($hotel, $dateFrom, $dateTo)
     {
         //
         $hotels = DB::table('rooms_prices_eurobookings_data')->where([
-            ['hotel_uid','=',$hotel],
-            ['check_in_date','=',$date],
+            ['hotel_uid', '=', $hotel],
+            ['check_in_date', '>=', $dateFrom],
+            ['check_in_date', '<=', $dateTo],
         ])->get();
+
         return RoomPriceResource::collection($hotels);
+    }
+
+    public function showCompetitor($hotel, $dateFrom, $dateTo)
+    {
+        //
+
+        $dates = DB::table('rooms_prices_eurobookings_data')->select('check_in_date')->distinct('check_in_date')->where([
+            ['hotel_uid', '=', $hotel],
+            ['check_in_date', '>=', $dateFrom],
+            ['check_in_date', '<=', $dateTo],
+        ])->orderBy('check_in_date')->get();
+        $competitorRooms = [];
+        foreach ($dates as $date) {
+
+            $CompetitorHotels = DB::table('hotels_competitors')->where('hotel_uid', '=', $hotel)->get();
+
+            foreach ($CompetitorHotels as $competitorHotel) {
+                $competitorRooms = DB::table('rooms_prices_eurobookings_data')->where([
+                    ['check_in_date', '=', $date->check_in_date],
+                    ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+                ])->get();
+                break;
+            }
+        }
+        return CompetitorPriceResource::collection($competitorRooms);
     }
 
     /**

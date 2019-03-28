@@ -53,7 +53,6 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
                 $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
-
                 while (0 == 0) {
                     try {
                         $url = "https://www.hrs.com/en/hotel/" . $this->dataArray['city'] . "/d-" . $this->dataArray['city_id'] . "/" . $this->dataArray['count_i']++ . "#container=&locationId=" . $this->dataArray['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dataArray['city'] . "%2Fd-" . $this->dataArray['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dataArray['check_in_date'] . "&departure=" . $this->dataArray['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
@@ -71,9 +70,11 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                         }
 
                         if ($response->getStatus() == 403) {
+                            $this->dataArray['count_i']--;
                             if ($this->dataArray['count_access_denied'] == 50) {
                                 Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:' . $crawler->filter('title')->text() . ';' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                                 $this->dataArray['count_access_denied'] = 0;
+
                                 break 3;
                             }
                             $this->dataArray['count_access_denied']++;

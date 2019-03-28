@@ -16,9 +16,7 @@ class CompetitorPrice extends JsonResource
     {
 //        return parent::toArray($request);
         return [
-            $this->uid,
-            $this->price,
-            $this->room,
+            'data' => $this->data
         ];
     }
 }

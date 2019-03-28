@@ -52,9 +52,9 @@ class addDataToHotelsDataTables extends Seeder
                     'created_at' => $instance1->created_at,
                     'updated_at' => $instance1->updated_at,
                 ]);
-                echo Carbon\Carbon::now()->toDateTimeString() . 'Eurobookings Completed hotel-> ' . $instance1->name . "\n";
+                echo Carbon\Carbon::now()->toDateTimeString() . ' Eurobookings Completed hotel-> ' . $instance1->name . "\n";
             } else {
-                echo Carbon\Carbon::now()->toDateTimeString() . 'Eurobookings Existeddd hotel-> ' . $instance1->name . "\n";
+                echo Carbon\Carbon::now()->toDateTimeString() . ' Eurobookings Existeddd hotel-> ' . $instance1->name . "\n";
             }
         }
 
@@ -96,9 +96,9 @@ class addDataToHotelsDataTables extends Seeder
                     'created_at' => $instance2->created_at,
                     'updated_at' => $instance2->updated_at,
                 ]);
-                echo Carbon\Carbon::now()->toDateTimeString() . 'HRS Completed hotel-> ' . $instance2->name . "\n";
+                echo Carbon\Carbon::now()->toDateTimeString() . ' HRS Completed hotel-> ' . $instance2->name . "\n";
             } else {
-                echo Carbon\Carbon::now()->toDateTimeString() . 'HRS Existeddd hotel-> ' . $instance2->name . "\n";
+                echo Carbon\Carbon::now()->toDateTimeString() . ' HRS Existeddd hotel-> ' . $instance2->name . "\n";
             }
         }
     }

@@ -24,6 +24,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
         $this->setCredentials();
 
         $this->dataArray['request_date'] = date("Y-m-d");
+        $this->dataArray['count_access_denied'] = 0;
 
         Storage::makeDirectory('hrs/' . $this->dataArray['request_date']);
 
@@ -35,7 +36,9 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                     CURLOPT_RETURNTRANSFER => 1,
                     CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
                     CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
-                ]
+                ],
+//                'timeout' => 40, // Response timeout
+//                'connect_timeout' => 40, // Connection timeout
             ));
             $goutteClient->setClient($guzzleClient);
         } catch (\Exception $e) {
@@ -49,15 +52,30 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
             $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
-            for ($i = 1; $i < 240; $i++) {
-
+            $i = 1;
+            while (0 < 1) {
                 try {
+                    $url = "https://www.hrs.com/en/hotel/" . $this->dataArray['city'] . "/d-" . $this->dataArray['city_id'] . "/" . $i++ . "#container=&locationId=" . $this->dataArray['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dataArray['city'] . "%2Fd-" . $this->dataArray['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dataArray['check_in_date'] . "&departure=" . $this->dataArray['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1&_=1550832580038";
 
-                    $url = "https://www.hrs.com/en/hotel/" . $this->dataArray['city'] . "/d-" . $this->dataArray['city_id'] . "/$i#container=&locationId=" . $this->dataArray['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dataArray['city'] . "%2Fd-" . $this->dataArray['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dataArray['check_in_date'] . "&departure=" . $this->dataArray['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1&_=1550832580038";
                     Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
 
                     $crawler = $goutteClient->request('GET', $url);
                     $response = $goutteClient->getResponse();
+
+                    if ($crawler->filter('title')->count() > 0) {
+                        if ($crawler->filter('title')->text() == 'The requested page could not be found') {
+                            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:' . $crawler->filter('title')->text() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                            break 2;
+                        }
+                        if ($crawler->filter('title')->text() == 'Access Denied') {
+                            if ($this->dataArray['count_access_denied'] == 10) {
+                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:' . $crawler->filter('title')->text() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                break 2;
+                            }
+                            $i--;
+                            $this->dataArray['count_access_denied']++;
+                        }
+                    }
 
                     if ($response->getStatus() == 200) {
 
@@ -207,9 +225,6 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                 }
                             });
                         }
-                    }
-                    if ($response->getStatus() != 200) {
-                        break;
                     }
                 } catch (\Exception $e) {
                     Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");

@@ -234,7 +234,6 @@ class HotelController extends Controller
                     ['check_in_date', '=', $date->check_in_date],
                     ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
                 ])->get();
-                break;
             }
         }
         return CompetitorPriceResource::collection($competitorRooms);

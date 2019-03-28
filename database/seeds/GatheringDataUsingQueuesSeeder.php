@@ -14,7 +14,7 @@ class GatheringDataUsingQueuesSeeder extends Seeder
     public function run()
     {
         //
-        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
+//        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
         $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->get();
 
         $instanceArray = [];
@@ -25,15 +25,15 @@ class GatheringDataUsingQueuesSeeder extends Seeder
 
             $instanceArray [] = $instance;
         }
-        for ($k = -1; $k <= 5; $k++) {
-            foreach ($eurobookingsHotelsBasicData as $instance) {
-                $instance = (array)$instance;
-                $instance['start_date'] = '2019-04-09';
-                $instance['end_date'] = '2019-04-09';
-                $instance['k'] = $k;
-                $instanceArray [] = $instance;
-            }
-        }
+//        for ($k = -1; $k <= 5; $k++) {
+//            foreach ($eurobookingsHotelsBasicData as $instance) {
+//                $instance = (array)$instance;
+//                $instance['start_date'] = '2019-04-09';
+//                $instance['end_date'] = '2019-04-09';
+//                $instance['k'] = $k;
+//                $instanceArray [] = $instance;
+//            }
+//        }
         shuffle($instanceArray);
 
         foreach ($instanceArray as $instance) {

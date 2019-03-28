@@ -29,14 +29,12 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
         $this->dA['url_array'] = [];
         $this->dA['count_access_denied'] = 0;
-        $this->dA['count_same_i'] = 0;
+        $this->dA['count_same_url'] = 0;
         $this->dA['request_date'] = date("Y-m-d");
 
         Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
 
         while (0 == 0) {
-
-
             try {
                 $goutteClient = new GoutteClient();
                 $guzzleClient = new GuzzleClient(array(
@@ -74,7 +72,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                             $crawler = $goutteClient->request('GET', $this->dA['url']);
                             $response = $goutteClient->getResponse();
                         } catch (\Exception $e) {
-                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/goutteRequestError2.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/goutteRequestError2.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                             print($e->getMessage());
                         }
 
@@ -93,8 +91,8 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                             }
 
                             if (in_array($this->dA['url'], $this->dA['url_array'])) {
-                                $this->dA['count_same_i']++;
-                                if ($this->dA['count_same_i'] == 2) {
+                                $this->dA['count_same_url']++;
+                                if ($this->dA['count_same_url'] == 2) {
 
                                     Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'urlArray:' . serialize($this->dA['url_array']) . 'url:' . $this->dA['url'] . ';' . 'break-reason:sameURL;count_access_denied:' . $this->dA['count_access_denied'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                                     break 3;

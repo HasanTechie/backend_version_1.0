@@ -59,8 +59,13 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
                         Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
 
-                        $crawler = $goutteClient->request('GET', $url);
-                        $response = $goutteClient->getResponse();
+                        try {
+                            $crawler = $goutteClient->request('GET', $url);
+                            $response = $goutteClient->getResponse();
+                        } catch (\Exception $e) {
+                            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError2.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                            print($e->getMessage());
+                        }
 
                         if ($crawler->filter('title')->count() > 0) {
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
@@ -77,6 +82,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                 break 3;
                             }
                             $this->dataArray['count_access_denied']++;
+                            Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/minorBreakReason.log', 'url:' . $url . ';minor-break-reason:' . $crawler->filter('title')->text() . ';count_access_denied:' . $this->dataArray['count_access_denied'] . ';count_i:' . $this->dataArray['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                             break 2;
                         }
 
@@ -103,7 +109,6 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                         $url2 = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dataArray['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dataArray['currency'] . "&startDateDay=" . date("d", strtotime($this->dataArray['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dataArray['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dataArray['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dataArray['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dataArray['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dataArray['check_out_date'])) . "&adults=$adults&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
 
                                         try {
-
                                             $this->dataArray['hotel_url'] = $url2;
 //                                        $crawler2 = $this->goutteRequest($url1);
                                             $crawler = $this->phantomRequest($this->dataArray['hotel_url']);
@@ -124,46 +129,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                                         try {
 
                                             if ($hotelHRSidDoesntExist) {
-
-                                                $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
-                                                $this->dataArray['hid'] = str_replace(' ', '', $hid);
-
-                                                if (!empty($this->dataArray['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dataArray['hid'])->doesntExist()) {
-                                                    $hotelUid = uniqid();
-                                                    DB::table('hotels_hrs')->insert([
-                                                        'uid' => $hotelUid,
-                                                        's_no' => 1,
-                                                        'name' => $this->dataArray['hotel_name'],
-                                                        'address' => $this->dataArray['hotel_address'],
-                                                        'hrs_id' => $this->dataArray['hotel_hrs_id'],
-                                                        'photo' => (!empty($this->dataArray['hotel_hrs_image']) ? $this->dataArray['hotel_hrs_image'] : null),
-                                                        'ratings_on_hrs' => (isset($this->dataArray['ratings_on_hrs']) ? $this->dataArray['ratings_on_hrs'] : null),
-                                                        'total_number_of_ratings_on_hrs' => (isset($this->dataArray['total_number_of_ratings_on_hrs']) ? $this->dataArray['total_number_of_ratings_on_hrs'] : null),
-                                                        'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
-                                                        'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
-                                                        'details' => serialize($this->dataArray['hotel_details']),
-                                                        'location_details' => serialize($this->dataArray['hotel_location_details']),
-                                                        'surroundings_of_the_hotel' => serialize($this->dataArray['hotel_location_details']['surroundings_of_the_hotel']),
-                                                        'sports_leisure_facilities' => serialize($this->dataArray['hotel_location_details']['sports_leisure_facilities']),
-                                                        'nearby_airports' => serialize($this->dataArray['hotel_location_details']['nearby_airports']),
-                                                        'facilities' => serialize($this->dataArray['hotel_facilities']),
-                                                        'in_house_services' => serialize($this->dataArray['in_house_services']),
-                                                        'city' => $this->dataArray['city'],
-                                                        'city_id_on_hrs' => $this->dataArray['city_id'],
-                                                        'country_code' => $this->dataArray['country_code'],
-                                                        'latitude_hrs' => (isset($this->dataArray['hotel_latitude']) ? $this->dataArray['hotel_latitude'] : null),
-                                                        'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
-                                                        'longitude_hrs' => (isset($this->dataArray['hotel_longitude']) ? $this->dataArray['hotel_longitude'] : null),
-                                                        'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
-                                                        'hid' => $this->dataArray['hid'],
-                                                        'hotel_url_on_hrs' => (isset($this->dataArray['hotel_url']) ? $this->dataArray['hotel_url'] : null),
-                                                        'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
-                                                        'source' => $this->dataArray['source'],
-                                                        'created_at' => DB::raw('now()'),
-                                                        'updated_at' => DB::raw('now()')
-                                                    ]);
-                                                    echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
-                                                }
+                                                $this->insertHotelsDataIntoDB();
                                             }
                                             /*else {
                                                 $resultHid = DB::table('hotels_hrs')->select('uid', 'name')->where('hrs_id', '=', $this->dataArray['hotel_hrs_id'])->get();
@@ -426,9 +392,54 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
             });
         }
-        $this->dataArray['ratings_on_hrs'] = ($crawler->filter('div.ratingCircle')->count() > 0) ? $crawler->filter('div.ratingCircle')->text() : null;
 
-        $this->dataArray['total_number_of_ratings_on_hrs'] = ($crawler->filter('div.ratingDescription')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription')->text())) : null;
+        $this->dataArray['ratings_on_hrs'] = ($crawler->filter('div.ratingCircle')->count() > 0) ? $crawler->filter('div.ratingCircle')->text() : null;
+        $this->dataArray['ratings_text_on_hrs'] = ($crawler->filter('div.ratingDescription > strong')->count() > 0 ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription > strong')->text())) : null);
+        $this->dataArray['total_number_of_ratings_on_hrs'] = str_replace($this->dataArray['ratings_text_on_hrs'], '', (($crawler->filter('div.ratingDescription')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.ratingDescription')->text())) : null));
+    }
+
+    protected function insertHotelsDataIntoDB()
+    {
+
+        $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
+        $this->dataArray['hid'] = str_replace(' ', '', $hid);
+
+        if (!empty($this->dataArray['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dataArray['hid'])->doesntExist()) {
+            DB::table('hotels_hrs')->insert([
+                'uid' => uniqid(),
+                's_no' => 1,
+                'name' => $this->dataArray['hotel_name'],
+                'address' => $this->dataArray['hotel_address'],
+                'hrs_id' => $this->dataArray['hotel_hrs_id'],
+                'photo' => (!empty($this->dataArray['hotel_hrs_image']) ? $this->dataArray['hotel_hrs_image'] : null),
+                'ratings_on_hrs' => (isset($this->dataArray['ratings_on_hrs']) ? $this->dataArray['ratings_on_hrs'] : null),
+                'ratings_text_on_hrs' => (isset($this->dataArray['ratings_text_on_hrs']) ? $this->dataArray['ratings_text_on_hrs'] : null),
+                'total_number_of_ratings_on_hrs' => (isset($this->dataArray['total_number_of_ratings_on_hrs']) ? $this->dataArray['total_number_of_ratings_on_hrs'] : null),
+                'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
+                'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
+                'details' => serialize($this->dataArray['hotel_details']),
+                'location_details' => serialize($this->dataArray['hotel_location_details']),
+                'surroundings_of_the_hotel' => serialize($this->dataArray['hotel_location_details']['surroundings_of_the_hotel']),
+                'sports_leisure_facilities' => serialize($this->dataArray['hotel_location_details']['sports_leisure_facilities']),
+                'nearby_airports' => serialize($this->dataArray['hotel_location_details']['nearby_airports']),
+                'facilities' => serialize($this->dataArray['hotel_facilities']),
+                'in_house_services' => serialize($this->dataArray['in_house_services']),
+                'city' => $this->dataArray['city'],
+                'city_id_on_hrs' => $this->dataArray['city_id'],
+                'country_code' => $this->dataArray['country_code'],
+                'latitude_hrs' => (isset($this->dataArray['hotel_latitude']) ? $this->dataArray['hotel_latitude'] : null),
+                'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
+                'longitude_hrs' => (isset($this->dataArray['hotel_longitude']) ? $this->dataArray['hotel_longitude'] : null),
+                'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
+                'hid' => $this->dataArray['hid'],
+                'hotel_url_on_hrs' => (isset($this->dataArray['hotel_url']) ? $this->dataArray['hotel_url'] : null),
+                'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
+                'source' => $this->dataArray['source'],
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
+            ]);
+            echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
+        }
 
     }
 

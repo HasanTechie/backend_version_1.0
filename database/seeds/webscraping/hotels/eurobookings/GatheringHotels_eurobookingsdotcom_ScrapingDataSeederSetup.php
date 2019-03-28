@@ -9,7 +9,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetup extends Gatheri
      */
     public function run()
     {
-        $cities = DB::table('hotels_basic_data_for_gathering')->inRandomOrder()->get();
+        $cities = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->inRandomOrder()->get();
 
         $euroBooking = new GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder();
         for ($k = -1; $k <= 5; $k++) {

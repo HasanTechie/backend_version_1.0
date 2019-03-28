@@ -31,289 +31,314 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
         Storage::makeDirectory('eurobookings/' . $this->dataArray['request_date']);
 
-        try {
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-                    CURLOPT_USERAGENT => $this->dataArray['user_agent'],
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
-                    CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
-                ]
-            ));
-            $goutteClient->setClient($guzzleClient);
-        } catch (\Exception $e) {
+        while (0 == 0) {
 
-            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
 
-        while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
+            try {
+                $goutteClient = new GoutteClient();
+                $guzzleClient = new GuzzleClient(array(
+                    'curl' => [
+                        CURLOPT_USERAGENT => $this->dataArray['user_agent'],
+                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_PROXY => "http://" . $this->dataArray['super_proxy'] . ":" . $this->dataArray['port'] . "",
+                        CURLOPT_PROXYUSERPWD => $this->dataArray['username'] . "-session-" . mt_rand() . ":" . $this->dataArray['password'] . "",
+                    ]
+                ));
+                $goutteClient->setClient($guzzleClient);
+            } catch (\Exception $e) {
 
-            $this->dataArray['check_in_date'] = $this->dataArray['start_date'];
-            $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
-
-            if ($this->dataArray['k'] == -1) {
-                $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
-            } else {
-                $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:" . $this->dataArray['k'] . ";";
+                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                print($e->getMessage());
             }
 
-            for ($i = 1; $i <= $this->dataArray['total_results']; $i += 15) {
-                try {
-                    if ($this->dataArray['url'] == false) {
-                        break;
-                    }
+            while (strtotime($this->dataArray['start_date']) <= strtotime($this->dataArray['end_date'])) {
 
-                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                $this->dataArray['check_in_date'] = $this->dataArray['start_date'];
+                $this->dataArray['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
 
-                    $crawler = $goutteClient->request('GET', $this->dataArray['url']);
-                    $response = $goutteClient->getResponse();
+                if ($this->dataArray['k'] == -1) {
+                    $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";";
+                } else {
+                    $this->dataArray['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dataArray['check_in_date'] . ";end:" . $this->dataArray['check_out_date'] . ";rmcnf:1[" . $this->dataArray['adults'] . ",0];dsti:" . $this->dataArray['city_id'] . ";dstt:1;dsts:" . $this->dataArray['city'] . ";frm:9;sort:0_desc;cur:" . $this->dataArray['currency'] . ";stars:" . $this->dataArray['k'] . ";";
+                }
 
-                    if ($response->getStatus() == 200) {
-
-                        if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
-                            $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
-                                if ($this->dataArray['url'] == $node->filter('a')->attr('href')) {
-                                    $this->dataArray['url'] = false;
-                                } else {
-                                    $this->dataArray['url'] = $node->filter('a')->attr('href');
-                                }
-                            });
+                while (0 == 0) {
+                    try {
+                        if ($this->dataArray['url'] == false) {
+                            break 3;
                         }
 
-                        if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
+                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/url.log', $this->dataArray['url'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
 
-                            $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
+                        $crawler = $goutteClient->request('GET', $this->dataArray['url']);
+                        $response = $goutteClient->getResponse();
 
-                                $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
+                        if ($response->getStatus() == 403) {
+                            $this->dataArray['count_i']--;
+                            if ($this->dataArray['count_access_denied'] == 50) {
+                                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                $this->dataArray['count_access_denied'] = 0;
+                                break 3;
+                            }
+                            $this->dataArray['count_access_denied']++;
+                            break 2;
+                        }
 
-                                $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
+                        if ($response->getStatus() == 200) {
 
-                                if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
-                                    $this->tripAdvisor();
-                                    $this->mapsCoordinates();
-                                }
-
-                                if ($node->filter('.clsHotelNameSearchResults')->count() > 0) {
-
-                                    $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
-
-                                        try {
-                                            $this->dataArray['hotel_url'] = $node->attr('href');
-                                            $crawler = $this->phantomRequest($this->dataArray['hotel_url']);
-
-                                            if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
-
-                                                if ($crawler->filter('#idEbHotelDetailRooms> p')->count() > 0) {
-                                                    $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
-                                                        return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
-                                                    });
-                                                }
-
-                                                if (isset($hotelInfo[0])) {
-                                                    $this->dataArray['hotel_total_rooms'] = $hotelInfo[0];
-                                                } else {
-                                                    $this->dataArray['hotel_total_rooms'] = null;
-                                                }
-
-
-                                                if ($crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->count()) {
-                                                    $this->dataArray['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
-                                                        if ($node->filter('p')->count() > 0) {
-                                                            $dh['heading'] = $node->filter('p')->first()->text();
-                                                            if (trim($dh['heading']) == 'Area information :') {
-                                                                $dh['detailsMeta'] = ($node->filter('p:nth-child(2)')->count() > 0) ? $node->filter('p:nth-child(2)')->text() : null;
-                                                                if ($node->filter('p:nth-child(3)')->count() > 0) {
-                                                                    $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
-                                                                    foreach ($details as $key => $value) {
-                                                                        $dh['all_details'][] = trim($value);
-                                                                    }
-                                                                }
-                                                                $dh['nearest_airport'] = ($node->filter('p:nth-child(4)')->count() > 0) ? $node->filter('p:nth-child(4)')->text() : null;
-                                                                $dh['preferred_airport'] = ($node->filter('p:nth-child(5)')->count() > 0) ? $node->filter('p:nth-child(5)')->text() : null;
-                                                            } else {
-                                                                $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
-                                                                    return $node->text();
-                                                                });
-                                                            }
-                                                        } else {
-                                                            $dh = null;
-                                                        }
-                                                        if (isset($dh['all_details'])) {
-                                                            foreach ($dh['all_details'] as $key => $value) {
-                                                                if (empty($value)) {
-                                                                    unset($dh['all_details'][$key]);
-                                                                }
-                                                            }
-                                                        }
-                                                        return $dh;
-                                                    });
-                                                } else {
-                                                    $this->dataArray['hotel_info'] = null;
-                                                }
-                                                if ($crawler->filter('div#idHotelPoliciesLazy > table > tbody')->count() > 0) {
-                                                    $this->dataArray['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
-                                                } else {
-                                                    $this->dataArray['hotel_policies'] = null;
-                                                }
-                                                if ($crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->count() > 0) {
-                                                    $this->dataArray['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
-                                                        return $node->text();
-                                                    });
-                                                } else {
-                                                    $this->dataArray['hotel_facilities'] = null;
-                                                }
-
-
-                                                $this->dataArray['hotel_name'] = ($crawler->filter('.clsEbFloatLeft > h1')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1')->text()) : null;
-                                                $this->dataArray['hotel_stars_category'] = ($crawler->filter('.clsEbFloatLeft > h1 > span')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1 > span')->attr('title')) : null;
-
-                                                $this->dataArray['hotel_eurobooking_img'] = ($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->count() > 0) ? trim($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->attr('src')) : null;
-
-                                                if ($crawler->filter('#idQuickDescriptionLazy > p')->count() > 0) {
-                                                    $this->dataArray['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node) {
-                                                        return $node->text();
-                                                    });
-                                                } else {
-                                                    $this->dataArray['hotel_details'] = null;
-                                                }
-                                                $this->dataArray['hotel_address'] = ($crawler->filter('div.header-subtext > div.clsClear')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.header-subtext > div.clsClear')->text())) : null;
-                                                $this->dataArray['default_phone'] = ($crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->text())) : null;
-
-                                                $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
-                                                $this->dataArray['hid'] = preg_replace('/\s+/u', '', $hid);
-
-//                                                    $this->googleData();
-
-                                                try {
-
-                                                    if (!empty($this->dataArray['hid']) && (!empty($this->dataArray['hotel_eurobooking_img']) || !empty($this->dataArray['hotel_info']))) {
-                                                        if (DB::table('hotels_eurobookings')->where('hid', '=', $this->dataArray['hid'])->doesntExist()) {
-                                                            $hotelUid = uniqid();
-                                                            DB::table('hotels_eurobookings')->insert([
-                                                                'uid' => $hotelUid,
-                                                                's_no' => 1,
-                                                                'name' => $this->dataArray['hotel_name'],
-                                                                'address' => $this->dataArray['hotel_address'],
-                                                                'total_rooms' => $this->dataArray['hotel_total_rooms'],
-                                                                'eurobooking_id' => $this->dataArray['hotel_eurobooking_id'],
-                                                                'photo' => $this->dataArray['hotel_eurobooking_img'],
-                                                                'stars_category' => $this->dataArray['hotel_stars_category'],
-                                                                'ratings_on_tripadvisor' => (isset($this->dataArray['hotel_ratings_on_tripadvisor']) ? $this->dataArray['hotel_ratings_on_tripadvisor'] : null),
-                                                                'total_number_of_ratings_on_tripadvisor' => (isset($this->dataArray['hotel_total_number_of_ratings_on_tripadvisor']) ? $this->dataArray['hotel_total_number_of_ratings_on_tripadvisor'] : null),
-                                                                'reviews_on_tripadvisor' => (isset($this->dataArray['hotel_reviews_on_tripadvisor']) ? serialize($this->dataArray['hotel_reviews_on_tripadvisor']) : null),
-                                                                'ranking_on_tripadvisor' => (isset($this->dataArray['hotel_ranking_on_tripadvisor']) ? $this->dataArray['hotel_ranking_on_tripadvisor'] : null),
-                                                                'badge_on_tripadvisor' => (isset($this->dataArray['hotel_badge_on_tripadvisor']) ? $this->dataArray['hotel_badge_on_tripadvisor'] : null),
-//                                                                    'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
-//                                                                    'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
-                                                                'details' => serialize($this->dataArray['hotel_details']),
-                                                                'facilities' => serialize($this->dataArray['hotel_facilities']),
-                                                                'hotel_info' => serialize($this->dataArray['hotel_info']),
-                                                                'policies' => $this->dataArray['hotel_policies'],
-                                                                'city' => $this->dataArray['city'],
-                                                                'city_id_on_eurobookings' => $this->dataArray['city_id'],
-                                                                'country_code' => $this->dataArray['country_code'],
-                                                                'latitude_eurobookings' => (isset($this->dataArray['hotel_latitude']) ? $this->dataArray['hotel_latitude'] : null),
-//                                                                    'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
-                                                                'longitude_eurobookings' => (isset($this->dataArray['hotel_longitude']) ? $this->dataArray['hotel_longitude'] : null),
-//                                                                    'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
-                                                                'hid' => $this->dataArray['hid'],
-                                                                'hotel_url_on_eurobookings' => (isset($this->dataArray['hotel_url']) ? $this->dataArray['hotel_url'] : null),
-//                                                                    'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
-                                                                'source' => $this->dataArray['source'],
-                                                                'created_at' => DB::raw('now()'),
-                                                                'updated_at' => DB::raw('now()')
-                                                            ]);
-                                                            echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
-                                                        }
-                                                    }
-
-                                                } catch (\Exception $e) {
-
-                                                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorHotelDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                                                    print($e->getMessage());
-                                                }
-                                            }
-                                            /*else {
-                                                $resultHid = DB::table('hotels_eurobookings')->select('uid', 'name')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->get();
-                                                $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
-                                                $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
-                                                echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                            }*/
-
-
-                                            /*if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0 && !empty($hotelUid)) {
-                                                $this->roomsData($crawler);
-                                                $this->dataArray['all_rooms'] = array_filter($this->dataArray['all_rooms']);
-
-                                                if (is_array($this->dataArray['all_rooms'])) {
-
-                                                    foreach ($this->dataArray['all_rooms'] as $room) {
-
-                                                        if (!empty($room['room']) || !empty($room['price'])) {
-
-                                                            try {
-                                                                $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
-                                                                $rid = str_replace(' ', '', $rid);
-                                                                $rid = preg_replace('/\s+/u', '', $rid);
-                                                                if (DB::table('rooms_prices_eurobookings')->where('rid', '=', $rid)->doesntExist()) {
-
-                                                                    DB::table('rooms_prices_eurobookings')->insert([
-                                                                        'uid' => uniqid(),
-                                                                        's_no' => 1,
-                                                                        'price' => $room['price'],
-                                                                        'currency' => $this->dataArray['currency'],
-                                                                        'room' => $room['room'],
-                                                                        'short_description' => (!empty($room['details']) ? serialize($room['details']) : null),
-                                                                        'facilities' => serialize($room['room_facilities']),
-                                                                        'photo' => $room['img'],
-                                                                        'hotel_uid' => $hotelUid,
-                                                                        'hotel_eurobooking_id' => $this->dataArray['hotel_eurobooking_id'],
-                                                                        'hotel_name' => $this->dataArray['hotel_name'],
-                                                                        'number_of_adults_in_room_request' => $this->dataArray['adults'],
-                                                                        'check_in_date' => $this->dataArray['check_in_date'],
-                                                                        'check_out_date' => $this->dataArray['check_out_date'],
-                                                                        'rid' => $rid,
-                                                                        'request_date' => $this->dataArray['request_date'],
-                                                                        'source' => $this->dataArray['source'],
-                                                                        'created_at' => DB::raw('now()'),
-                                                                        'updated_at' => DB::raw('now()')
-                                                                    ]);
-                                                                    echo Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                                                } else {
-                                                                    echo Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
-                                                                }
-                                                            } catch (\Exception $e) {
-                                                                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorRoomsDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                                                                print($e->getMessage());
-                                                            }
-                                                        }
-                                                    }
-                                                    $this->dataArray['all_rooms'] = null;
-                                                }
-                                            }*/
-
-                                        } catch (\Exception $e) {
-
-                                            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                                            print($e->getMessage());
+                            if ($crawler->filter('div.clsPageNavigation')->count() > 0) {
+                                if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
+                                    $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
+                                        if ($this->dataArray['url'] == $node->filter('a')->attr('href')) {
+                                            $this->dataArray['url'] = false;
+                                            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:falseReached;' . Carbon::now()->toDateTimeString() . "\n");
+                                        } else {
+                                            $this->dataArray['url'] = $node->filter('a')->attr('href');
                                         }
                                     });
                                 }
 
-                            });
+                                if ($crawler->filter('div.clsPageNavigationNextDisabled')->count() > 0) {
+                                    if ($crawler->filter('div.clsPageNavigationNextDisabled')->text() == 'Next Page') {
+                                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:Next Page;' . Carbon::now()->toDateTimeString() . "\n");
+                                        break 2;
+                                    }
+                                }
+                            }
+
+                            if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
+
+                                $crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->each(function ($node) {
+
+                                    $this->dataArray['hotel_eurobooking_id'] = ($node->filter('.clsHotelImageDiv > a:nth-child(3)')->count() > 0) ? $node->filter('.clsHotelImageDiv > a:nth-child(3)')->attr('name') : null;
+
+                                    $this->dataArray['hotel_eurobooking_id_doesnt_exists'] = DB::table('hotels_eurobookings')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->doesntExist();
+
+                                    if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
+                                        $this->tripAdvisor();
+                                        $this->mapsCoordinates();
+                                    }
+
+                                    if ($node->filter('.clsHotelNameSearchResults')->count() > 0) {
+
+                                        $da['all_data'] = $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
+
+                                            try {
+                                                $this->dataArray['hotel_url'] = $node->attr('href');
+                                                $crawler = $this->phantomRequest($this->dataArray['hotel_url']);
+
+                                                if ($this->dataArray['hotel_eurobooking_id_doesnt_exists']) {
+
+                                                    if ($crawler->filter('#idEbHotelDetailRooms> p')->count() > 0) {
+                                                        $hotelInfo = $crawler->filter('#idEbHotelDetailRooms> p')->each(function ($node) {
+                                                            return preg_replace('/\s+/', ' ', trim(str_replace(array("\r", "\n", "\t"), '', $node->text())));
+                                                        });
+                                                    }
+
+                                                    if (isset($hotelInfo[0])) {
+                                                        $this->dataArray['hotel_total_rooms'] = $hotelInfo[0];
+                                                    } else {
+                                                        $this->dataArray['hotel_total_rooms'] = null;
+                                                    }
+
+
+                                                    if ($crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->count()) {
+                                                        $this->dataArray['hotel_info'] = $crawler->filter('div#idHotelInfoLazy > table > tbody > tr > td')->each(function ($node) {
+                                                            if ($node->filter('p')->count() > 0) {
+                                                                $dh['heading'] = $node->filter('p')->first()->text();
+                                                                if (trim($dh['heading']) == 'Area information :') {
+                                                                    $dh['detailsMeta'] = ($node->filter('p:nth-child(2)')->count() > 0) ? $node->filter('p:nth-child(2)')->text() : null;
+                                                                    if ($node->filter('p:nth-child(3)')->count() > 0) {
+                                                                        $details = explode("<br>", $node->filter('p:nth-child(3)')->html());
+                                                                        foreach ($details as $key => $value) {
+                                                                            $dh['all_details'][] = trim($value);
+                                                                        }
+                                                                    }
+                                                                    $dh['nearest_airport'] = ($node->filter('p:nth-child(4)')->count() > 0) ? $node->filter('p:nth-child(4)')->text() : null;
+                                                                    $dh['preferred_airport'] = ($node->filter('p:nth-child(5)')->count() > 0) ? $node->filter('p:nth-child(5)')->text() : null;
+                                                                } else {
+                                                                    $dh['all_details'] = $node->filter('p')->nextAll()->each(function ($node) {
+                                                                        return $node->text();
+                                                                    });
+                                                                }
+                                                            } else {
+                                                                $dh = null;
+                                                            }
+                                                            if (isset($dh['all_details'])) {
+                                                                foreach ($dh['all_details'] as $key => $value) {
+                                                                    if (empty($value)) {
+                                                                        unset($dh['all_details'][$key]);
+                                                                    }
+                                                                }
+                                                            }
+                                                            return $dh;
+                                                        });
+                                                    } else {
+                                                        $this->dataArray['hotel_info'] = null;
+                                                    }
+                                                    if ($crawler->filter('div#idHotelPoliciesLazy > table > tbody')->count() > 0) {
+                                                        $this->dataArray['hotel_policies'] = trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div#idHotelPoliciesLazy > table > tbody')->text()));
+                                                    } else {
+                                                        $this->dataArray['hotel_policies'] = null;
+                                                    }
+                                                    if ($crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->count() > 0) {
+                                                        $this->dataArray['hotel_facilities'] = $crawler->filter('div#idHotelFacilitiesLazy > div > ul > li')->each(function ($node) {
+                                                            return $node->text();
+                                                        });
+                                                    } else {
+                                                        $this->dataArray['hotel_facilities'] = null;
+                                                    }
+
+
+                                                    $this->dataArray['hotel_name'] = ($crawler->filter('.clsEbFloatLeft > h1')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1')->text()) : null;
+                                                    $this->dataArray['hotel_stars_category'] = ($crawler->filter('.clsEbFloatLeft > h1 > span')->count() > 0) ? trim($crawler->filter('.clsEbFloatLeft > h1 > span')->attr('title')) : null;
+
+                                                    $this->dataArray['hotel_eurobooking_img'] = ($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->count() > 0) ? trim($crawler->filter('div.clsEbSmallShadowPhotos > ul > li > a > img')->attr('src')) : null;
+
+                                                    if ($crawler->filter('#idQuickDescriptionLazy > p')->count() > 0) {
+                                                        $this->dataArray['hotel_details'] = $crawler->filter('#idQuickDescriptionLazy > p')->each(function ($node) {
+                                                            return $node->text();
+                                                        });
+                                                    } else {
+                                                        $this->dataArray['hotel_details'] = null;
+                                                    }
+                                                    $this->dataArray['hotel_address'] = ($crawler->filter('div.header-subtext > div.clsClear')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('div.header-subtext > div.clsClear')->text())) : null;
+                                                    $this->dataArray['default_phone'] = ($crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->count() > 0) ? trim(str_replace(array("\r", "\n", "\t"), '', $crawler->filter('.clsEbFloatRight.clsBgBarTop > span')->text())) : null;
+
+                                                    $hid = $this->dataArray['hotel_name'] . $this->dataArray['hotel_address'];
+                                                    $this->dataArray['hid'] = preg_replace('/\s+/u', '', $hid);
+
+//                                                    $this->googleData();
+
+                                                    try {
+
+                                                        if (!empty($this->dataArray['hid']) && (!empty($this->dataArray['hotel_eurobooking_img']) || !empty($this->dataArray['hotel_info']))) {
+                                                            if (DB::table('hotels_eurobookings')->where('hid', '=', $this->dataArray['hid'])->doesntExist()) {
+                                                                $hotelUid = uniqid();
+                                                                DB::table('hotels_eurobookings')->insert([
+                                                                    'uid' => $hotelUid,
+                                                                    's_no' => 1,
+                                                                    'name' => $this->dataArray['hotel_name'],
+                                                                    'address' => $this->dataArray['hotel_address'],
+                                                                    'total_rooms' => $this->dataArray['hotel_total_rooms'],
+                                                                    'eurobooking_id' => $this->dataArray['hotel_eurobooking_id'],
+                                                                    'photo' => $this->dataArray['hotel_eurobooking_img'],
+                                                                    'stars_category' => $this->dataArray['hotel_stars_category'],
+                                                                    'ratings_on_tripadvisor' => (isset($this->dataArray['hotel_ratings_on_tripadvisor']) ? $this->dataArray['hotel_ratings_on_tripadvisor'] : null),
+                                                                    'total_number_of_ratings_on_tripadvisor' => (isset($this->dataArray['hotel_total_number_of_ratings_on_tripadvisor']) ? $this->dataArray['hotel_total_number_of_ratings_on_tripadvisor'] : null),
+                                                                    'reviews_on_tripadvisor' => (isset($this->dataArray['hotel_reviews_on_tripadvisor']) ? serialize($this->dataArray['hotel_reviews_on_tripadvisor']) : null),
+                                                                    'ranking_on_tripadvisor' => (isset($this->dataArray['hotel_ranking_on_tripadvisor']) ? $this->dataArray['hotel_ranking_on_tripadvisor'] : null),
+                                                                    'badge_on_tripadvisor' => (isset($this->dataArray['hotel_badge_on_tripadvisor']) ? $this->dataArray['hotel_badge_on_tripadvisor'] : null),
+//                                                                    'ratings_on_google' => (isset($this->dataArray['ratings_on_google']) ? $this->dataArray['ratings_on_google'] : null),
+//                                                                    'total_number_of_ratings_on_google' => (isset($this->dataArray['total_number_of_ratings_on_google']) ? $this->dataArray['total_number_of_ratings_on_google'] : null),
+                                                                    'details' => serialize($this->dataArray['hotel_details']),
+                                                                    'facilities' => serialize($this->dataArray['hotel_facilities']),
+                                                                    'hotel_info' => serialize($this->dataArray['hotel_info']),
+                                                                    'policies' => $this->dataArray['hotel_policies'],
+                                                                    'city' => $this->dataArray['city'],
+                                                                    'city_id_on_eurobookings' => $this->dataArray['city_id'],
+                                                                    'country_code' => $this->dataArray['country_code'],
+                                                                    'latitude_eurobookings' => (isset($this->dataArray['hotel_latitude']) ? $this->dataArray['hotel_latitude'] : null),
+//                                                                    'latitude_google' => (isset($this->dataArray['google_latitude']) ? $this->dataArray['google_latitude'] : null),
+                                                                    'longitude_eurobookings' => (isset($this->dataArray['hotel_longitude']) ? $this->dataArray['hotel_longitude'] : null),
+//                                                                    'longitude_google' => (isset($this->dataArray['google_longitude']) ? $this->dataArray['google_longitude'] : null),
+                                                                    'hid' => $this->dataArray['hid'],
+                                                                    'hotel_url_on_eurobookings' => (isset($this->dataArray['hotel_url']) ? $this->dataArray['hotel_url'] : null),
+//                                                                    'all_data_google' => (isset($this->dataArray['all_data_google']) ? $this->dataArray['all_data_google'] : null),
+                                                                    'source' => $this->dataArray['source'],
+                                                                    'created_at' => DB::raw('now()'),
+                                                                    'updated_at' => DB::raw('now()')
+                                                                ]);
+                                                                echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dataArray['hotel_name'] . ' ' . $this->dataArray['city'] . "\n";
+                                                            }
+                                                        }
+
+                                                    } catch (\Exception $e) {
+
+                                                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorHotelDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                                                        print($e->getMessage());
+                                                    }
+                                                }
+                                                /*else {
+                                                    $resultHid = DB::table('hotels_eurobookings')->select('uid', 'name')->where('eurobooking_id', '=', $this->dataArray['hotel_eurobooking_id'])->get();
+                                                    $hotelUid = (isset($resultHid[0]->uid) ? $resultHid[0]->uid : null);
+                                                    $this->dataArray['hotel_name'] = (isset($resultHid[0]->name) ? $resultHid[0]->name : null);
+                                                    echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                                }*/
+
+
+                                                /*if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0 && !empty($hotelUid)) {
+                                                    $this->roomsData($crawler);
+                                                    $this->dataArray['all_rooms'] = array_filter($this->dataArray['all_rooms']);
+
+                                                    if (is_array($this->dataArray['all_rooms'])) {
+
+                                                        foreach ($this->dataArray['all_rooms'] as $room) {
+
+                                                            if (!empty($room['room']) || !empty($room['price'])) {
+
+                                                                try {
+                                                                    $rid = $this->dataArray['request_date'] . $this->dataArray['check_in_date'] . $this->dataArray['check_out_date'] . $this->dataArray['hotel_name'] . $room['room'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                                                    $rid = str_replace(' ', '', $rid);
+                                                                    $rid = preg_replace('/\s+/u', '', $rid);
+                                                                    if (DB::table('rooms_prices_eurobookings')->where('rid', '=', $rid)->doesntExist()) {
+
+                                                                        DB::table('rooms_prices_eurobookings')->insert([
+                                                                            'uid' => uniqid(),
+                                                                            's_no' => 1,
+                                                                            'price' => $room['price'],
+                                                                            'currency' => $this->dataArray['currency'],
+                                                                            'room' => $room['room'],
+                                                                            'short_description' => (!empty($room['details']) ? serialize($room['details']) : null),
+                                                                            'facilities' => serialize($room['room_facilities']),
+                                                                            'photo' => $room['img'],
+                                                                            'hotel_uid' => $hotelUid,
+                                                                            'hotel_eurobooking_id' => $this->dataArray['hotel_eurobooking_id'],
+                                                                            'hotel_name' => $this->dataArray['hotel_name'],
+                                                                            'number_of_adults_in_room_request' => $this->dataArray['adults'],
+                                                                            'check_in_date' => $this->dataArray['check_in_date'],
+                                                                            'check_out_date' => $this->dataArray['check_out_date'],
+                                                                            'rid' => $rid,
+                                                                            'request_date' => $this->dataArray['request_date'],
+                                                                            'source' => $this->dataArray['source'],
+                                                                            'created_at' => DB::raw('now()'),
+                                                                            'updated_at' => DB::raw('now()')
+                                                                        ]);
+                                                                        echo Carbon::now()->toDateTimeString() . ' Completed in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                                                    } else {
+                                                                        echo Carbon::now()->toDateTimeString() . ' Existeddd in-> ' . $this->dataArray['check_in_date'] . ' out-> ' . $this->dataArray['check_out_date'] . ' hotel-> ' . $this->dataArray['hotel_name'] . "\n";
+                                                                    }
+                                                                } catch (\Exception $e) {
+                                                                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorRoomsDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                                                                    print($e->getMessage());
+                                                                }
+                                                            }
+                                                        }
+                                                        $this->dataArray['all_rooms'] = null;
+                                                    }
+                                                }*/
+
+                                            } catch (\Exception $e) {
+
+                                                Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorFilteringAndDB.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                                                print($e->getMessage());
+                                            }
+                                        });
+                                    }
+
+                                });
+                            }
                         }
+                        if ($response->getStatus() != 200) {
+                            break;
+                        }
+                    } catch (\Exception $e) {
+                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                        print($e->getMessage());
                     }
-                    if ($response->getStatus() != 200) {
-                        break;
-                    }
-                } catch (\Exception $e) {
-                    Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                    print($e->getMessage());
                 }
+                $this->dataArray['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
             }
-            $this->dataArray['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dataArray['start_date'])));
         }
     }
 

@@ -64,7 +64,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
                         if ($crawler->filter('title')->count() > 0) {
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
-                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:' . $crawler->filter('title')->text() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:The requested page could not be found;' . Carbon::now()->toDateTimeString() . "\n");
                                 break 3;
                             }
                         }

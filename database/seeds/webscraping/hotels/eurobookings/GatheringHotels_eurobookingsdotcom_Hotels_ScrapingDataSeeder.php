@@ -65,6 +65,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                 while (0 == 0) {
                     try {
                         if ($this->dataArray['url'] == false) {
+                            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:falseReached;' . Carbon::now()->toDateTimeString() . "\n");
                             break 3;
                         }
 
@@ -91,7 +92,6 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                                     $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
                                         if ($this->dataArray['url'] == $node->filter('a')->attr('href')) {
                                             $this->dataArray['url'] = false;
-                                            Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:falseReached;' . Carbon::now()->toDateTimeString() . "\n");
                                         } else {
                                             $this->dataArray['url'] = $node->filter('a')->attr('href');
                                         }
@@ -100,8 +100,8 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
                                 if ($crawler->filter('div.clsPageNavigationNextDisabled')->count() > 0) {
                                     if ($crawler->filter('div.clsPageNavigationNextDisabled')->text() == 'Next Page') {
-                                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:Next Page;' . Carbon::now()->toDateTimeString() . "\n");
-                                        break 2;
+                                        Storage::append('eurobookings/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $this->dataArray['url'] . ';' . 'break-reason:NextPageDisabled;' . Carbon::now()->toDateTimeString() . "\n");
+                                        break 3;
                                     }
                                 }
                             }

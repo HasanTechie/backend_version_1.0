@@ -64,7 +64,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
 
                         if ($crawler->filter('title')->count() > 0) {
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
-                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:The requested page could not be found;' . Carbon::now()->toDateTimeString() . "\n");
+                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:The requested page could not be found;count_access_denied:' . $this->dataArray['count_access_denied'] . ';count_i:' . $this->dataArray['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                                 break 3;
                             }
                         }
@@ -72,9 +72,8 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                         if ($response->getStatus() == 403) {
                             $this->dataArray['count_i']--;
                             if ($this->dataArray['count_access_denied'] == 50) {
-                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';' . 'break-reason:' . $crawler->filter('title')->text() . ';' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                Storage::append('hrs/' . $this->dataArray['request_date'] . '/' . $this->dataArray['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:' . $crawler->filter('title')->text() . ';count_access_denied:' . $this->dataArray['count_access_denied'] . ';count_i:' . $this->dataArray['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                                 $this->dataArray['count_access_denied'] = 0;
-
                                 break 3;
                             }
                             $this->dataArray['count_access_denied']++;

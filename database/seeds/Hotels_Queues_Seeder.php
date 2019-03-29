@@ -33,6 +33,7 @@ class Hotels_Queues_Seeder extends Seeder
         shuffle($instanceArray);
 
         foreach ($instanceArray as $instance) {
+            $instance['currency'] = 'EUR';
             $instance['start_date'] = '2019-04-10';
             $instance['end_date'] = '2019-04-10';
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(2));

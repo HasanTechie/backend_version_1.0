@@ -17,11 +17,11 @@ class CreateHotelsBasicDataForGatheringTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('currency')->nullable();
+//            $table->string('currency')->nullable();
             $table->string('city');
             $table->string('city_id');
             $table->string('country_code');
-            $table->integer('total_results')->nullable();
+//            $table->integer('total_results')->nullable();
             $table->string('source');
 
             $table->timestamps();

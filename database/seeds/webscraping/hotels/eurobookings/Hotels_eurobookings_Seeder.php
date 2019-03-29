@@ -33,6 +33,7 @@ class Hotels_eurobookings_Seeder extends Seeder
         $this->dA['count_i'] = 1;
         $this->dA['count_j'] = 0;
         $this->dA['count_l'] = 0;
+        $this->dA['count_m'] = 0;
         $this->dA['request_date'] = date("Y-m-d");
 
         Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
@@ -82,7 +83,7 @@ class Hotels_eurobookings_Seeder extends Seeder
 
                         if (isset($response)) {
 
-                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . $response->getStatus());
+                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
                             Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', ($crawler->count() > 0) ? $crawler->html() : 'empty');
                             $this->dA['count_i']++;
 
@@ -113,13 +114,13 @@ class Hotels_eurobookings_Seeder extends Seeder
                                         echo 'first :' . $this->dA['url'] . "\n";
                                         $this->dA['count_j'] = 0;
                                         $crawler->filter('div.clsPageNavigationPagesActive')->nextAll()->each(function ($node) {
-                                            if ($this->dA['count_j'] == 0) {
+                                            if ($this->dA['count_m'] == 0) {
                                                 if ($node->filter('a')->count() > 0) {
                                                     if (!in_array($node->filter('a')->attr('href'), $this->dA['url_array'])) {
                                                         $this->dA['url'] = $this->dA['url_array'][] = $node->filter('a')->attr('href');
                                                     }
                                                     echo 'secon :' . $this->dA['url'] . "\n\n";
-                                                    $this->dA['count_j']++;
+                                                    $this->dA['count_m']++;
                                                 }
                                             }
                                         });
@@ -127,7 +128,7 @@ class Hotels_eurobookings_Seeder extends Seeder
 
                                     if ($crawler->filter('div.clsPageNavigationNextDisabled')->count() > 0) {
                                         if ($crawler->filter('div.clsPageNavigationNextDisabled')->text() == 'Next Page') {
-                                            if ($this->dA['count_j'] == 2) {
+                                            if ($this->dA['count_j'] == 20) {
                                                 Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $this->dA['url'] . ';' . 'break-reason:NextPageDisabled;' . Carbon::now()->toDateTimeString() . "\n");
                                                 break 3;
                                             }
@@ -135,7 +136,7 @@ class Hotels_eurobookings_Seeder extends Seeder
                                         }
                                     }
                                 } else {
-                                    if ($this->dA['count_l'] == 2) {
+                                    if ($this->dA['count_l'] == 20) {
                                         Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $this->dA['url'] . ';' . 'break-reason:NextPageNotFound;' . Carbon::now()->toDateTimeString() . "\n");
                                         break 3;
                                     }

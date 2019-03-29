@@ -30,7 +30,9 @@ class Hotels_eurobookings_Seeder extends Seeder
         $this->dA['url_array'] = [];
         $this->dA['count_access_denied'] = 0;
         $this->dA['count_same_url'] = 0;
-        $this->dA['i'] = 1;
+        $this->dA['count_i'] = 1;
+        $this->dA['count_j'] = 0;
+        $this->dA['count_l'] = 0;
         $this->dA['request_date'] = date("Y-m-d");
 
         Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
@@ -80,9 +82,9 @@ class Hotels_eurobookings_Seeder extends Seeder
 
                         if (isset($response)) {
 
-                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['i'] . ' ' . $response->getStatus());
-                            Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['i'] . '.html', ($crawler->count() > 0) ? $crawler->html() : 'empty');
-                            $this->dA['i']++;
+                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . $response->getStatus());
+                            Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', ($crawler->count() > 0) ? $crawler->html() : 'empty');
+                            $this->dA['count_i']++;
 
                             if ($response->getStatus() == 403) {
                                 if ($this->dA['count_access_denied'] == 50) {
@@ -125,10 +127,19 @@ class Hotels_eurobookings_Seeder extends Seeder
 
                                     if ($crawler->filter('div.clsPageNavigationNextDisabled')->count() > 0) {
                                         if ($crawler->filter('div.clsPageNavigationNextDisabled')->text() == 'Next Page') {
-                                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $this->dA['url'] . ';' . 'break-reason:NextPageDisabled;' . Carbon::now()->toDateTimeString() . "\n");
-                                            break 3;
+                                            if ($this->dA['count_j'] == 2) {
+                                                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $this->dA['url'] . ';' . 'break-reason:NextPageDisabled;' . Carbon::now()->toDateTimeString() . "\n");
+                                                break 3;
+                                            }
+                                            $this->dA['count_j']++;
                                         }
                                     }
+                                } else {
+                                    if ($this->dA['count_l'] == 2) {
+                                        Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $this->dA['url'] . ';' . 'break-reason:NextPageNotFound;' . Carbon::now()->toDateTimeString() . "\n");
+                                        break 3;
+                                    }
+                                    $this->dA['count_l']++;
                                 }
 
                                 if ($crawler->filter('div#idSearchList > table.clsHotelListAvailable > tr')->count() > 0) {
@@ -149,7 +160,7 @@ class Hotels_eurobookings_Seeder extends Seeder
                                             $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 
                                                 try {
-                                                    $this->dA['hotel_url'] = ($node->count()>0) ? $node->attr('href') : null;
+                                                    $this->dA['hotel_url'] = ($node->count() > 0) ? $node->attr('href') : null;
                                                     $crawler = $this->phantomRequest($this->dA['hotel_url']);
 
                                                     if ($this->dA['hotel_eurobooking_id_doesnt_exists']) {
@@ -361,7 +372,7 @@ class Hotels_eurobookings_Seeder extends Seeder
                         'updated_at' => DB::raw('now()')
                     ]);
                     echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
-                }else{
+                } else {
                     echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
                 }
             }

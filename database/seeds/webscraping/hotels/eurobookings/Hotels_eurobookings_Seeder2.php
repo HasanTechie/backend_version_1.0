@@ -25,7 +25,9 @@ class Hotels_eurobookings_Seeder extends Seeder
 
         $this->dA['adults'] = 2;
 
-        $this->setCredentials();
+//        $this->setCredentials();
+
+        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
 
         $this->dA['url_array'] = [];
         $this->dA['count_access_denied'] = 0;
@@ -43,10 +45,10 @@ class Hotels_eurobookings_Seeder extends Seeder
                 $goutteClient = new GoutteClient();
                 $guzzleClient = new GuzzleClient(array(
                     'curl' => [
-                        CURLOPT_USERAGENT => $this->dA['user_agent'],
-                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
-                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+//                        CURLOPT_USERAGENT => $this->dA['user_agent'],
+//                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_PROXY => "http://" . $this->dA['proxy'],
+//                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
                     ]
                 ));
                 $goutteClient->setClient($guzzleClient);
@@ -83,8 +85,10 @@ class Hotels_eurobookings_Seeder extends Seeder
 
                         if (isset($response)) {
 
-                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
-                            Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', ($crawler->count() > 0) ? $crawler->html() : 'empty');
+//                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
+                            if ($crawler->count() > 0) {
+                                Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', $crawler->html() );
+                            }
                             $this->dA['count_i']++;
 
                             if ($response->getStatus() == 403) {
@@ -540,8 +544,8 @@ class Hotels_eurobookings_Seeder extends Seeder
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "");
-            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+//            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $response = $client->getMessageFactory()->createResponse();

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
+class Hotels_hrs_SeederSetup extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetup extends Seeder
             ['source', '=', 'hrs.com'],
         ])->inRandomOrder()->get();
 
-        $hrs = new GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder();
+        $hrs = new Hotels_hrs_Seeder();
         foreach ($hrsBasicData as $instance) {
             $instance = (array)$instance;
             $instance['start_date'] = '2019-04-09';

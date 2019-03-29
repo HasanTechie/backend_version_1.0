@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
+class Hotels_hrs_Seeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -71,7 +71,7 @@ class GatheringHotels_hrsdotcom_Hotels_ScrapingDataSeeder extends Seeder
                         if ($crawler->filter('title')->count() > 0) {
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
                                 $this->dA['count_not_found']++;
-                                if ($this->dA['count_not_found'] == 2) {
+                                if($this->dA['count_not_found']==2){
                                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                                     break 3;
                                 }

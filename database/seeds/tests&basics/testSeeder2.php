@@ -13,6 +13,8 @@ class testSeeder2 extends Seeder
     {
         //
 
+        $marks = array(100, 65, 70, 87);
+
 //        $hotelsBasicData = DB::table('hotels_basic_data_for_gathering')->inRandomOrder()->get();
 //
 //        $i = 0;

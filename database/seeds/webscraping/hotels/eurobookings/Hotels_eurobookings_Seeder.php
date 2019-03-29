@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Seeder;
 
-class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seeder
+class Hotels_eurobookings_Seeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -30,6 +30,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
         $this->dA['url_array'] = [];
         $this->dA['count_access_denied'] = 0;
         $this->dA['count_same_url'] = 0;
+        $this->dA['i'] = 1;
         $this->dA['request_date'] = date("Y-m-d");
 
         Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
@@ -58,9 +59,9 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                 $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
 
                 if ($this->dA['k'] == -1) {
-                    $this->dA['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dA['check_in_date'] . ";end:" . $this->dA['check_out_date'] . ";rmcnf:1[" . $this->dA['adults'] . ",0];dsti:" . $this->dA['city_id'] . ";dstt:1;dsts:" . $this->dA['city'] . ";frm:9;sort:0_desc;cur:" . $this->dA['currency'] . ";";
+                    $this->dA['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dA['check_in_date'] . ";end:" . $this->dA['check_out_date'] . ";rmcnf:1[" . $this->dA['adults'] . ",0];dsti:" . $this->dA['city_id'] . ";dstt:1;" . ";frm:9;sort:0_desc;cur:" . $this->dA['currency'] . ";";
                 } else {
-                    $this->dA['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dA['check_in_date'] . ";end:" . $this->dA['check_out_date'] . ";rmcnf:1[" . $this->dA['adults'] . ",0];dsti:" . $this->dA['city_id'] . ";dstt:1;dsts:" . $this->dA['city'] . ";frm:9;sort:0_desc;cur:" . $this->dA['currency'] . ";stars:" . $this->dA['k'] . ";";
+                    $this->dA['url'] = "https://www.eurobookings.com/search.html?q=start:" . $this->dA['check_in_date'] . ";end:" . $this->dA['check_out_date'] . ";rmcnf:1[" . $this->dA['adults'] . ",0];dsti:" . $this->dA['city_id'] . ";dstt:1;" . ";frm:9;sort:0_desc;cur:" . $this->dA['currency'] . ";stars:" . $this->dA['k'] . ";";
                 }
 
                 while (0 == 0) {
@@ -69,6 +70,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 //                        $this->dA['url'] = "https://www.eurobookings.com/search.html?q=start:2019-04-10;end:2019-04-11;rmcnf:1[2,0];dsti:70801;dstt:1;dsts:Munich;frm:9;sort:0_desc;cur:EUR;";
 
                         try {
+                            echo 'main :' . $this->dA['url'] . "\n";
                             $crawler = $goutteClient->request('GET', $this->dA['url']);
                             $response = $goutteClient->getResponse();
                         } catch (\Exception $e) {
@@ -78,6 +80,9 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
 
                         if (isset($response)) {
 
+                            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['i'] . ' ' . $response->getStatus());
+                            Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['i'] . '.html', ($crawler->count() > 0) ? $crawler->html() : 'empty');
+                            $this->dA['i']++;
 
                             if ($response->getStatus() == 403) {
                                 if ($this->dA['count_access_denied'] == 50) {
@@ -90,21 +95,31 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                                 break 2;
                             }
 
-                            if (in_array($this->dA['url'], $this->dA['url_array'])) {
-                                $this->dA['count_same_url']++;
-                                if ($this->dA['count_same_url'] == 2) {
-
-                                    Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'urlArray:' . serialize($this->dA['url_array']) . 'url:' . $this->dA['url'] . ';' . 'break-reason:sameURL;count_access_denied:' . $this->dA['count_access_denied'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                    break 3;
-                                }
-                            }
+//                            if (in_array($this->dA['url'], $this->dA['url_array'])) {
+//                                $this->dA['url'] = end($this->dA['url_array']);
+//                                if ($this->dA['count_same_url'] == 8) {
+//                                    Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'urlArray:' . serialize($this->dA['url_array']) . 'url:' . $this->dA['url'] . ';' . 'break-reason:sameURL;count_access_denied:' . $this->dA['count_access_denied'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+//                                    break 3;
+//                                }
+//                                $this->dA['count_same_url']++;
+//                            }
 
                             if ($response->getStatus() == 200) {
 
                                 if ($crawler->filter('div.clsPageNavigation')->count() > 0) {
-                                    if ($crawler->filter('div.clsPageNavigationNext')->count() > 0) {
-                                        $crawler->filter('div.clsPageNavigationNext')->each(function ($node) {
-                                            $this->dA['url'] = $this->dA['url_array'][] = $node->filter('a')->attr('href');
+                                    if ($crawler->filter('div.clsPageNavigationPagesActive')->count() > 0) {
+                                        echo 'first :' . $this->dA['url'] . "\n";
+                                        $this->dA['count_j'] = 0;
+                                        $crawler->filter('div.clsPageNavigationPagesActive')->nextAll()->each(function ($node) {
+                                            if ($this->dA['count_j'] == 0) {
+                                                if ($node->filter('a')->count() > 0) {
+                                                    if (!in_array($node->filter('a')->attr('href'), $this->dA['url_array'])) {
+                                                        $this->dA['url'] = $this->dA['url_array'][] = $node->filter('a')->attr('href');
+                                                    }
+                                                    echo 'secon :' . $this->dA['url'] . "\n\n";
+                                                    $this->dA['count_j']++;
+                                                }
+                                            }
                                         });
                                     }
 
@@ -134,7 +149,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                                             $node->filter('.clsHotelNameSearchResults')->each(function ($node) {
 
                                                 try {
-                                                    $this->dA['hotel_url'] = $node->attr('href');
+                                                    $this->dA['hotel_url'] = ($node->count()>0) ? $node->attr('href') : null;
                                                     $crawler = $this->phantomRequest($this->dA['hotel_url']);
 
                                                     if ($this->dA['hotel_eurobooking_id_doesnt_exists']) {
@@ -292,6 +307,7 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                                     });
                                 }
                             }
+                            $crawler = null;
                         }
                     } catch (\Exception $e) {
                         Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/errorMain.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
@@ -345,6 +361,8 @@ class GatheringHotels_eurobookingsdotcom_Hotels_ScrapingDataSeeder extends Seede
                         'updated_at' => DB::raw('now()')
                     ]);
                     echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
+                }else{
+                    echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
                 }
             }
         } catch (\Exception $e) {

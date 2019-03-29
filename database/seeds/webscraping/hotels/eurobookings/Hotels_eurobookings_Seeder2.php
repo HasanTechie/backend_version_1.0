@@ -377,8 +377,8 @@ class Hotels_eurobookings_Seeder extends Seeder
                         'updated_at' => DB::raw('now()')
                     ]);
                     echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
-                } else {
-                    echo Carbon::now()->toDateTimeString() . ' Existeddd hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
+                    $this->dA['count_l'] = 0;
+                    $this->dA['count_j'] = 0;
                 }
             }
         } catch (\Exception $e) {

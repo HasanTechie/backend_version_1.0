@@ -216,7 +216,7 @@ class Hotels_hrs_Seeder extends Seeder
         $this->dA['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
         $this->dA['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
-        if ($crawler->count() > 0) {
+        if (count($crawler)) {
             $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
             if (count($result) > 1) {
                 $result_split = explode(',', $result[1]);

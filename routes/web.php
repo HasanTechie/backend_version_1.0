@@ -116,3 +116,7 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/home', 'HomeController@index');
 
+Route::get('/frontend', function (){
+    return view('frontend');
+});
+

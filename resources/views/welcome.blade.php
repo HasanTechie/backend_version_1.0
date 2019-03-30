@@ -137,6 +137,13 @@
             <a href="/routes">Plane Routes</a>
 
         </div>
+        <br/>
+        <br/>
+        <div class="links">
+
+            <a href="/frontend">Frontend</a>
+
+        </div>
     </div>
 </div>
 </body>

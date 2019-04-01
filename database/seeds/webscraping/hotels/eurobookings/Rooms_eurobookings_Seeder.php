@@ -19,40 +19,41 @@ class Rooms_eurobookings_Seeder extends Seeder
 
     public function mainRun($hotelURL, $dA)
     {
-        $this->dA = $dA;
-        //
-        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-
-        $this->dA['count_access_denied'] = 0;
-        $this->dA['request_date'] = date("Y-m-d");
-        Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
-
         try {
-            $client = PhantomClient::getInstance();
-            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
-            $client->getEngine()->addOption('--load-images=false');
-            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+            $this->dA = $dA;
+            //
+            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+
+            $this->dA['count_access_denied'] = 0;
+            $this->dA['request_date'] = date("Y-m-d");
+            Storage::makeDirectory('eurobookings/' . $this->dA['request_date']);
+
+            try {
+                $client = PhantomClient::getInstance();
+                $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+                $client->getEngine()->addOption('--load-images=false');
+                $client->getEngine()->addOption('--ignore-ssl-errors=true');
+                $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
 //                $client->getEngine()->addOption("--proxy=http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "");
 //                $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
-            $client->isLazy(); // Tells the client to wait for all resources before rendering
-        } catch (\Exception $e) {
+                $client->isLazy(); // Tells the client to wait for all resources before rendering
+            } catch (\Exception $e) {
 
-            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
+                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                print($e->getMessage());
+            }
 
-        try {
-            $request = $client->getMessageFactory()->createRequest($hotelURL);
-            $response = $client->getMessageFactory()->createResponse();
-            $client->send($request, $response);
-            $crawler = new Crawler($response->getContent());
-        } catch (\Exception $e) {
-            Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError2.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
+            try {
+                $request = $client->getMessageFactory()->createRequest($hotelURL);
+                $response = $client->getMessageFactory()->createResponse();
+                $client->send($request, $response);
+                $crawler = new Crawler($response->getContent());
+            } catch (\Exception $e) {
+                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError2.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                print($e->getMessage());
+            }
 
-        try {
+
             if ($response->getStatus() == 200) {
                 if ($crawler->filter('table#idEbAvailabilityRoomsTable > tbody')->count() > 0) {
                     $this->roomsData($crawler);
@@ -63,6 +64,7 @@ class Rooms_eurobookings_Seeder extends Seeder
                     }
                 }
             }
+
         } catch (\Exception $e) {
             Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/mainError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
             print($e->getMessage());

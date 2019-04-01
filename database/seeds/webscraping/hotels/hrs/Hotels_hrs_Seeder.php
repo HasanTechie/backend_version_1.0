@@ -23,6 +23,8 @@ class Hotels_hrs_Seeder extends Seeder
 
         $this->setCredentials();
 
+        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+
         $this->dA['request_date'] = date("Y-m-d");
         $this->dA['count_access_denied'] = 0;
         $this->dA['count_not_found'] = 0;
@@ -34,13 +36,11 @@ class Hotels_hrs_Seeder extends Seeder
                 $goutteClient = new GoutteClient();
                 $guzzleClient = new GuzzleClient(array(
                     'curl' => [
-                        CURLOPT_USERAGENT => $this->dA['user_agent'],
-                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
-                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
-                    ],
-//                'timeout' => 40, // Response timeout
-//                'connect_timeout' => 40, // Connection timeout
+//                        CURLOPT_USERAGENT => $this->dA['user_agent'],
+//                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_PROXY => "http://" . $this->dA['proxy'],
+//                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+                    ]
                 ));
                 $goutteClient->setClient($guzzleClient);
             } catch (\Exception $e) {
@@ -71,7 +71,7 @@ class Hotels_hrs_Seeder extends Seeder
                         if ($crawler->filter('title')->count() > 0) {
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
                                 $this->dA['count_not_found']++;
-                                if($this->dA['count_not_found']==2){
+                                if ($this->dA['count_not_found'] == 2) {
                                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                                     break 3;
                                 }
@@ -114,7 +114,7 @@ class Hotels_hrs_Seeder extends Seeder
 
                                         try {
                                             $this->dA['hotel_url'] = $url2;
-//                                        $crawler2 = $this->goutteRequest($url1);
+//                                            $crawler2 = $this->goutteRequest($url1);
                                             $crawler = $this->phantomRequest($this->dA['hotel_url']);
 
                                             $this->dA['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
@@ -442,27 +442,9 @@ class Hotels_hrs_Seeder extends Seeder
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);
-            echo Carbon::now()->toDateTimeString() . ' Completed hotel-> ' . $this->dA['hotel_name'] . ' ' . $this->dA['city'] . "\n";
-        }
-
-    }
-
-    protected function setCredentials()
-    {
-        if (rand(0, 1)) {
-            $this->dA['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
-            $this->dA['password'] = 'azuuy61773vi';
-            $this->dA['port'] = 22225;
-            $this->dA['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $this->dA['super_proxy'] = 'zproxy.lum-superproxy.io';
-        } else {
-            $this->dA['username'] = 'lum-customer-solidps-zone-allcountriesdatacenterips-route_err-pass_dyn';
-            $this->dA['password'] = 'axqcz3carpam';
-            $this->dA['port'] = 22225;
-            $this->dA['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
-            $this->dA['super_proxy'] = 'zproxy.lum-superproxy.io';
         }
     }
+
 
     protected function goutteRequest($url)
     {
@@ -470,10 +452,10 @@ class Hotels_hrs_Seeder extends Seeder
             $goutteClient = new GoutteClient();
             $guzzleClient = new GuzzleClient(array(
                 'curl' => [
-                    CURLOPT_USERAGENT => $this->dA['user_agent'],
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
-                    CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+//                        CURLOPT_USERAGENT => $this->dA['user_agent'],
+//                        CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://" . $this->dA['proxy'],
+//                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
                 ]
             ));
             $goutteClient->setClient($guzzleClient);
@@ -493,8 +475,8 @@ class Hotels_hrs_Seeder extends Seeder
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "");
-            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+//            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $response = $client->getMessageFactory()->createResponse();
@@ -502,6 +484,7 @@ class Hotels_hrs_Seeder extends Seeder
             $client->send($request, $response);
             $crawler = new Crawler($response->getContent());
             return $crawler;
+
 
         } catch (\Exception $e) {
             Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");

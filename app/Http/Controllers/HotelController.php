@@ -206,11 +206,11 @@ class HotelController extends Controller
     public function show($hotel, $dateFrom, $dateTo)
     {
         //
-        $hotels = DB::table('rooms_prices_eurobookings_data')->where([
+        $hotels = DB::table('rooms_prices_eurobookings_data')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
             ['hotel_uid', '=', $hotel],
             ['check_in_date', '>=', $dateFrom],
             ['check_in_date', '<=', $dateTo],
-        ])->get();
+        ])->limit(12)->groupBy('check_in_date')->get();
 
         return RoomPriceResource::collection($hotels);
     }

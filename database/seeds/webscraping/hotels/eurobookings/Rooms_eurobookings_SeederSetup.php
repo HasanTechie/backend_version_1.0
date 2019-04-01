@@ -12,20 +12,33 @@ class Rooms_eurobookings_SeederSetup extends Seeder
     public function run()
     {
         //
-
-        $currency = 'EUR';
-        $adults = 2;
-        $checkInDate = '2019-04-12';
-        $checkOutData = '2019-04-13';
+        $dA = [];
+        $dA['currency'] = 'EUR';
+        $dA['adults'] = 2;
+        $dA['start_date'] = '2019-04-12';
+        $dA['end_date'] = '2019-05-12';
+        $dA['source'] = 'eurobookings.com';
 
         $hotels = DB::table('hotels_eurobookings_data')->inRandomOrder()->get();
 
-        foreach ($hotels as $hotel) {
-            $hotelBasicURL = explode('?', $hotel->hotel_url_on_eurobookings);
+        while (strtotime($dA['start_date']) <= strtotime($dA['end_date'])) {
+            $dA['check_in_date'] = $dA['start_date'];
+            $dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+            foreach ($hotels as $hotel) {
+                $hotelBasicURL = explode('?', $hotel->hotel_url_on_eurobookings);
 
-            $hotelURL = $hotelBasicURL[0] . "?q=start:$checkInDate;end:$checkOutData;rmcnf:1[" . $adults . ",0];dsti:" . $hotel->city_id_on_eurobookings . ";dstt:1;dsts:" . $hotel->city . ";frm:1;sort:0_desc;cur:$currency;";
+                $hotelURL = $hotelBasicURL[0] . "?q=start:" . $dA['check_in_date'] . ";end:" . $dA['check_out_date'] . ";rmcnf:1[" . $dA['adults'] . ",0];dsti:" . $hotel->city_id_on_eurobookings . ";dstt:1;dsts:" . $hotel->city . ";frm:1;sort:0_desc;cur:" . $dA['currency'] . ";";
 
-            dd($hotelURL);
+                $dA['hotel_name'] = $hotel->name;
+                $dA['hotel_eurobooking_id'] = $hotel->eurobooking_id;
+                $dA['hotel_uid'] = $hotel->uid;
+                $dA['city'] = $hotel->city;
+
+                $room = new Rooms_eurobookings_Seeder();
+
+                $room->mainRun($hotelURL, $dA);
+            }
+            $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
         }
     }
 }

@@ -21,9 +21,9 @@ class Hotels_hrs_Seeder extends Seeder
     {
         $this->dA = $data;
 
-        $this->setCredentials();
+//        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
 
-        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+        $this->setCredentials();
 
         $this->dA['request_date'] = date("Y-m-d");
         $this->dA['count_access_denied'] = 0;
@@ -35,12 +35,15 @@ class Hotels_hrs_Seeder extends Seeder
             try {
                 $goutteClient = new GoutteClient();
                 $guzzleClient = new GuzzleClient(array(
+//                    'curl' => [
+//                        CURLOPT_PROXY => "http://" . $this->dA['proxy'],
+//                    ]
                     'curl' => [
-//                        CURLOPT_USERAGENT => $this->dA['user_agent'],
-//                        CURLOPT_RETURNTRANSFER => 1,
-                        CURLOPT_PROXY => "http://" . $this->dA['proxy'],
-//                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
-                    ]
+                        CURLOPT_USERAGENT => $this->dA['user_agent'],
+                        CURLOPT_RETURNTRANSFER => 1,
+                        CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
+                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+                    ],
                 ));
                 $goutteClient->setClient($guzzleClient);
             } catch (\Exception $e) {
@@ -207,6 +210,73 @@ class Hotels_hrs_Seeder extends Seeder
 
                 $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
             }
+        }
+    }
+
+    protected function setCredentials()
+    {
+        if (rand(0, 1)) {
+            $this->dA['username'] = 'lum-customer-solidps-zone-static-route_err-pass_dyn';
+            $this->dA['password'] = 'azuuy61773vi';
+            $this->dA['port'] = 22225;
+            $this->dA['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+            $this->dA['super_proxy'] = 'zproxy.lum-superproxy.io';
+        } else {
+            $this->dA['username'] = 'lum-customer-solidps-zone-allcountriesdatacenterips-route_err-pass_dyn';
+            $this->dA['password'] = 'axqcz3carpam';
+            $this->dA['port'] = 22225;
+            $this->dA['user_agent'] = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+            $this->dA['super_proxy'] = 'zproxy.lum-superproxy.io';
+        }
+    }
+
+    protected function goutteRequest($url)
+    {
+        try {
+            $goutteClient = new GoutteClient();
+            $guzzleClient = new GuzzleClient(array(
+                'curl' => [
+//                    CURLOPT_PROXY => "http://" . $this->dA['proxy'],
+                    CURLOPT_USERAGENT => $this->dA['user_agent'],
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
+                    CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+                ]
+            ));
+            $goutteClient->setClient($guzzleClient);
+            $crawler = $goutteClient->request('GET', $url);
+            return $crawler;
+
+        } catch (\Exception $e) {
+            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
+        }
+    }
+
+    protected function phantomRequest($url)
+    {
+        try {
+            $client = PhantomClient::getInstance();
+            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+//            $client->getEngine()->addOption('--load-images=false');
+//            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+//            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "");
+            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
+            $client->isLazy(); // Tells the client to wait for all resources before rendering
+            $request = $client->getMessageFactory()->createRequest($url);
+            $timeout = 20000; // 20 seconds
+            $request->setTimeout($timeout);
+            $response = $client->getMessageFactory()->createResponse();
+            // Send the request
+            $client->send($request, $response);
+            $crawler = new Crawler($response->getContent());
+            return $crawler;
+
+
+        } catch (\Exception $e) {
+            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            print($e->getMessage());
         }
     }
 
@@ -404,7 +474,6 @@ class Hotels_hrs_Seeder extends Seeder
 
     protected function insertHotelsDataIntoDB()
     {
-
         $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
         $this->dA['hid'] = str_replace(' ', '', $hid);
 
@@ -421,7 +490,7 @@ class Hotels_hrs_Seeder extends Seeder
                 'total_number_of_ratings_on_hrs' => (isset($this->dA['total_number_of_ratings_on_hrs']) ? $this->dA['total_number_of_ratings_on_hrs'] : null),
                 'ratings_on_google' => (isset($this->dA['ratings_on_google']) ? $this->dA['ratings_on_google'] : null),
                 'total_number_of_ratings_on_google' => (isset($this->dA['total_number_of_ratings_on_google']) ? $this->dA['total_number_of_ratings_on_google'] : null),
-                'details' => serialize($this->dA['hotel_details']),
+                'details' => (isset($this->dA['hotel_details']) ? serialize($this->dA['hotel_details']) : null),
                 'location_details' => serialize($this->dA['hotel_location_details']),
                 'surroundings_of_the_hotel' => serialize($this->dA['hotel_location_details']['surroundings_of_the_hotel']),
                 'sports_leisure_facilities' => serialize($this->dA['hotel_location_details']['sports_leisure_facilities']),
@@ -446,51 +515,6 @@ class Hotels_hrs_Seeder extends Seeder
     }
 
 
-    protected function goutteRequest($url)
-    {
-        try {
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-//                        CURLOPT_USERAGENT => $this->dA['user_agent'],
-//                        CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_PROXY => "http://" . $this->dA['proxy'],
-//                        CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
-                ]
-            ));
-            $goutteClient->setClient($guzzleClient);
-            $crawler = $goutteClient->request('GET', $url);
-            return $crawler;
-
-        } catch (\Exception $e) {
-            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
-    }
-
-    protected function phantomRequest($url)
-    {
-        try {
-            $client = PhantomClient::getInstance();
-            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
-            $client->getEngine()->addOption('--load-images=false');
-            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
-//            $client->getEngine()->addOption("--proxy-auth=" . $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "");
-            $client->isLazy(); // Tells the client to wait for all resources before rendering
-            $request = $client->getMessageFactory()->createRequest($url);
-            $response = $client->getMessageFactory()->createResponse();
-            // Send the request
-            $client->send($request, $response);
-            $crawler = new Crawler($response->getContent());
-            return $crawler;
-
-
-        } catch (\Exception $e) {
-            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/phantomRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
-    }
 
     /*protected function googleData()
     {

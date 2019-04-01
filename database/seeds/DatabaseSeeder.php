@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('ProxyCrawlSeeder');
 
 //        $this->call('Hotels_eurobookings_SeederSetup');
-//        $this->call('Rooms_eurobookings_SeederSetup');
+        $this->call('Rooms_eurobookings_SeederSetup');
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected');
 //        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
 

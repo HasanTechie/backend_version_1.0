@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Hotels_eurobookings_SeederPC;
 use Hotels_eurobookings_Seeder;
 use Hotels_hrs_Seeder;
 

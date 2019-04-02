@@ -1,5 +1,7 @@
 <?php
 
+use App\Jobs\GatherRoomsDataJob;
+
 use Illuminate\Database\Seeder;
 
 class Rooms_hrs_Queues_Seeder extends Seeder
@@ -12,5 +14,15 @@ class Rooms_hrs_Queues_Seeder extends Seeder
     public function run()
     {
         //
+        $dA['currency'] = 'EUR';
+        $dA['start_date'] = '2019-04-14';
+        $dA['end_date'] = '2019-04-14';
+        $dA['adults'] = [1, 2];
+
+        $hotels = DB::table('hotels_hrs_data')->get();
+
+        foreach ($hotels as $hotel) {
+            GatherRoomsDataJob::dispatch($hotel, $dA)->delay(now()->addSecond(mt_rand(5,100)));
+        }
     }
 }

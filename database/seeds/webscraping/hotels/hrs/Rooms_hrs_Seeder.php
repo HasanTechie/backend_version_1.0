@@ -47,10 +47,89 @@ class Rooms_hrs_Seeder extends Seeder
                     }
                     $this->dA['adult'] = $adult;
                     $this->dA['hotel_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" . (($adult > 1) ? 1 : 0) . "&children=0";
+
+                    restart2:
                     $crawler = $this->phantomRequest($this->dA['hotel_url']);
                     if ($crawler) {
                         $this->roomData($crawler);
-                        $this->insertRoomsDataIntoDB();
+
+
+                        try {
+                            if (!empty($this->dA['all_rooms'])) {
+                                if (is_array($this->dA['all_rooms'])) {
+                                    if (!empty($this->dA['room_facilities'])) {
+                                        foreach ($this->dA['all_rooms'] as $rooms) {
+                                            foreach ($rooms as $room) {
+                                                if (!empty($room['room']) && !empty($room['price'])) {
+                                                    $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
+
+                                                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                                                    $rid = str_replace(' ', '', $rid);
+
+                                                    if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
+                                                        DB::table('rooms_prices_hrs')->insert([
+                                                            'uid' => uniqid(),
+                                                            's_no' => 1,
+                                                            'price' => $room['price'],
+                                                            'currency' => $this->dA['currency'],
+                                                            'room' => $room['room'],
+                                                            'room_type' => $room['room_type'],
+                                                            'criteria' => $room['criteria'],
+                                                            'basic_conditions' => serialize($room['room_basic_conditions']),
+                                                            'photo' => $room['room_image'],
+                                                            'short_description' => $room['room_short_description'],
+                                                            'facilities' => (isset($this->dA['room_facilities']) ? serialize($this->dA['room_facilities']) : null),
+                                                            'hotel_uid' => $this->dA['hotel_uid'],
+                                                            'hotel_name' => $this->dA['hotel_name'],
+                                                            'hotel_hrs_id' => $this->dA['hotel_hrs_id'],
+                                                            'number_of_adults_in_room_request' => $this->dA['adult'],
+                                                            'check_in_date' => $this->dA['check_in_date'],
+                                                            'check_out_date' => $this->dA['check_out_date'],
+                                                            'rid' => $rid,
+                                                            'request_date' => $this->dA['request_date'],
+                                                            'source' => $this->dA['source'],
+                                                            'created_at' => DB::raw('now()'),
+                                                            'updated_at' => DB::raw('now()')
+                                                        ]);
+                                                        $this->dA['count_unauthorized'] = 0;
+                                                        $this->dA['count_access_denied'] = 0;
+                                                        $this->dA['count_not_found'] = 0;
+                                                        $this->dA['count_!200'] = 0;
+                                                        $this->dA['count_!200b'] = 0;
+                                                        $this->dA['count_!200c'] = 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if ($this->dA['count_!200b'] < 2) {
+                                            $this->dA['count_!200b']++;
+                                            goto restart2;
+                                        } else {
+                                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                        }
+                                    }
+                                } else {
+                                    if ($this->dA['count_!200c'] < 10) {
+                                        $this->dA['count_!200c']++;
+                                        goto restart2;
+                                    } else {
+                                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2a.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                    }
+                                }
+                            } else {
+                                if ($this->dA['count_!200c'] < 10) {
+                                    $this->dA['count_!200c']++;
+                                    goto restart2;
+                                } else {
+                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                }
+                            }
+                            $this->dA['all_rooms'] = null;
+
+                        } catch (Exception $e) {
+                            $this->catchException($e, 'ErrorDB');
+                        }
                     }
                 }
                 $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
@@ -145,67 +224,6 @@ class Rooms_hrs_Seeder extends Seeder
                 }
                 return $dr;
             });
-        }
-    }
-
-    protected function insertRoomsDataIntoDB()
-    {
-        try {
-            if (is_array($this->dA['all_rooms'])) {
-
-                foreach ($this->dA['all_rooms'] as $rooms) {
-                    foreach ($rooms as $room) {
-
-                        if (!empty($room['room']) && !empty($room['price'])) {
-                            $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
-
-                            $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
-                            $rid = str_replace(' ', '', $rid);
-
-                            if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
-                                DB::table('rooms_prices_hrs')->insert([
-                                    'uid' => uniqid(),
-                                    's_no' => 1,
-                                    'price' => $room['price'],
-                                    'currency' => $this->dA['currency'],
-                                    'room' => $room['room'],
-                                    'room_type' => $room['room_type'],
-                                    'criteria' => $room['criteria'],
-                                    'basic_conditions' => serialize($room['room_basic_conditions']),
-                                    'photo' => $room['room_image'],
-                                    'short_description' => $room['room_short_description'],
-                                    'facilities' => serialize($this->dA['room_facilities']),
-                                    'hotel_uid' => $this->dA['hotel_uid'],
-                                    'hotel_name' => $this->dA['hotel_name'],
-                                    'hotel_hrs_id' => $this->dA['hotel_hrs_id'],
-                                    'number_of_adults_in_room_request' => $this->dA['adult'],
-                                    'check_in_date' => $this->dA['check_in_date'],
-                                    'check_out_date' => $this->dA['check_out_date'],
-                                    'rid' => $rid,
-                                    'request_date' => $this->dA['request_date'],
-                                    'source' => $this->dA['source'],
-                                    'created_at' => DB::raw('now()'),
-                                    'updated_at' => DB::raw('now()')
-                                ]);
-                                $this->dA['count_unauthorized'] = 0;
-                                $this->dA['count_access_denied'] = 0;
-                                $this->dA['count_not_found'] = 0;
-                                $this->dA['count_!200'] = 0;
-                                $this->dA['count_!200b'] = 0;
-                                $this->dA['count_!200c'] = 0;
-                            }
-                        } else {
-                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice.log', 'url:' . $this->dA['hotel_url'] . ' ;' . Carbon::now()->toDateTimeString() . "\n");
-                        }
-                    }
-                }
-            } else {
-                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreRoomsNotFound.log', 'url:' . $this->dA['hotel_url'] . ' ;' . Carbon::now()->toDateTimeString() . "\n");
-            }
-            $this->dA['all_rooms'] = null;
-
-        } catch (Exception $e) {
-            $this->catchException($e, 'ErrorDB');
         }
     }
 }

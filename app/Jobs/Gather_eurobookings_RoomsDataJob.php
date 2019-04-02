@@ -7,24 +7,24 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Rooms_hrs_Seeder;
+use Rooms_eurobookings_Seeder;
 
-class GatherRoomsDataJob implements ShouldQueue
+class Gather_eurobookings_RoomsDataJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $dA, $hotel;
+    protected $dA, $hotelURL;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($hotel, $dA)
+    public function __construct($hotelURL, $dA)
     {
         //
         $this->dA = $dA;
-        $this->hotel = $hotel;
+        $this->hotelURL = $hotelURL;
     }
 
     /**
@@ -35,7 +35,8 @@ class GatherRoomsDataJob implements ShouldQueue
     public function handle()
     {
         //
-        $room = new Rooms_hrs_Seeder();
-        $room->mainRun($this->hotel, $this->dA);
+        $room = new Rooms_eurobookings_Seeder();
+
+        $room->mainRun($this->hotelURL, $this->dA);
     }
 }

@@ -15,8 +15,8 @@ class Hotels_hrs_SeederSetup extends Seeder
             ['source', '=', 'hrs.com'],
         ])->inRandomOrder()->get();
 
-        $hrs = new Hotels_hrs_Seeder();
         foreach ($hrsBasicData as $instance) {
+            $hrs = new Hotels_hrs_Seeder();
             $instance = (array)$instance;
             $instance['currency'] = 'EUR';
             $instance['start_date'] = '2019-04-14';

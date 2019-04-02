@@ -33,7 +33,6 @@ class Hotels_hrs_Seeder extends Seeder
             $this->dA['count_!200c'] = 0;
             $this->dA['count_i'] = 1;
             $this->dA['full_break'] = false;
-            $this->dA['half_break'] = false;
 
             Storage::makeDirectory('hrs/' . $this->dA['request_date']);
 
@@ -45,10 +44,6 @@ class Hotels_hrs_Seeder extends Seeder
                         $this->dA['full_break'] = false;
                         break 2;
                     }
-//                    if ($this->dA['half_break']) {
-//                        $this->dA['half_break'] = false;
-//                        break;
-//                    }
                     $crawler = $this->phantomRequest($this->setURL());
                     if ($crawler) {
                         $this->mainWork($crawler); //data gathering and insertion into DB
@@ -172,15 +167,16 @@ class Hotels_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-                if ($response->getStatus() != 0 && $response->getStatus() !=408) {
+                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
                 }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 1000) {
                         $this->dA['full_break'] = true;
+                    } else {
+                        $this->dA['count_!200']++;
+                        goto restart;
                     }
-                    $this->dA['count_!200']++;
-                    goto restart;
                 } else {
                     return null;
                 }

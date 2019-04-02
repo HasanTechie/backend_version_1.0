@@ -12,5 +12,18 @@ class Rooms_hrs_SeederSetup extends Seeder
     public function run()
     {
         //
+
+        $dA['currency'] = 'EUR';
+        $dA['start_date'] = '2019-04-14';
+        $dA['end_date'] = '2019-04-14';
+        $dA['adults'] = [1, 2];
+
+        $hotels = DB::table('hotels_hrs_data')->get();
+
+        foreach ($hotels as $hotel) {
+            $roomClass = new Rooms_hrs_Seeder();
+
+            $roomClass->mainRun($hotel, $dA);
+        }
     }
 }

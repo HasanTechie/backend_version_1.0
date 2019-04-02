@@ -4,7 +4,7 @@ use App\Jobs\GatherRoomsDataJob;
 
 use Illuminate\Database\Seeder;
 
-class Rooms_Queues_Seeder extends Seeder
+class Rooms_eurobookings_Queues_Seeder extends Seeder
 {
     /**
      * Run the database seeds.

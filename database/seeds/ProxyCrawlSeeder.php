@@ -18,7 +18,7 @@ class ProxyCrawlSeeder extends Seeder
     {
         //
         $url = 'https://api.myip.com/';
-        $url = 'http://www.eurobookings.com/search.html?q=start:2019-04-05;end:2019-04-06;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:9;sort:0_desc;cur:EUR;stars:0;';
+//        $url = 'http://www.eurobookings.com/search.html?q=start:2019-04-05;end:2019-04-06;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:9;sort:0_desc;cur:EUR;stars:0;';
         $proxy = 'proxy.proxycrawl.com:9000';
 
 
@@ -36,15 +36,24 @@ class ProxyCrawlSeeder extends Seeder
 
         dd($crawler->html());*/
 
-        $goutteClient = new GoutteClient();
-        $guzzleClient = new GuzzleClient(array(
-            'curl' => [
-                CURLOPT_PROXY => "http://" . $proxy,
-            ]
-        ));
-        $goutteClient->setClient($guzzleClient);
-        $crawler = $goutteClient->request('GET', $url);
-        dd($crawler->html());
-        $response = $goutteClient->getResponse();
+        while (0 == 0) {
+            $client = PhantomClient::getInstance();
+            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+//            $client->getEngine()->addOption('--load-images=false');
+//            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+            $client->getEngine()->addOption("--proxy=http://" . $proxy);
+            $client->isLazy(); // Tells the client to wait for all resources before rendering
+            $request = $client->getMessageFactory()->createRequest($url);
+            $request->setTimeout(20000);
+            $response = $client->getMessageFactory()->createResponse();
+            // Send the request
+            $client->send($request, $response);
+            $crawler = new Crawler($response->getContent());
+            if (!empty($crawler->text())) {
+                echo $crawler->text() . "\n";
+            } else {
+                echo 'empty : ' . $response->getStatus() . "\n";
+            }
+        }
     }
 }

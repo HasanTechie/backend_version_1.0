@@ -19,86 +19,41 @@ class Hotels_hrs_Seeder extends Seeder
 
     public function mainRun($data)
     {
-        $this->dA = $data;
+        try {
+            $this->dA = $data;
 
-        $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-        $this->dA['timeOut'] = 20000;
-        $this->dA['request_date'] = date("Y-m-d");
-        $this->dA['count_access_denied'] = 0;
-        $this->dA['count_unauthorized'] = 0;
-        $this->dA['count_not_found'] = 0;
-        $this->dA['count_i'] = 1;
-        Storage::makeDirectory('hrs/' . $this->dA['request_date']);
+            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+            $this->dA['timeOut'] = 20000;
+            $this->dA['request_date'] = date("Y-m-d");
+            $this->dA['count_access_denied'] = 0;
+            $this->dA['count_unauthorized'] = 0;
+            $this->dA['count_not_found'] = 0;
+            $this->dA['count_i'] = 1;
+            $this->dA['full_break'] = false;
+            $this->dA['half_break'] = false;
 
-        while (0 == 0) {
-            try {
-                $goutteClient = new GoutteClient();
-                $guzzleClient = new GuzzleClient(array(
-                    'curl' => [
-                        CURLOPT_PROXY => "http://" . $this->dA['proxy'],
-                    ]
-                ));
-                $goutteClient->setClient($guzzleClient);
-            } catch (Exception $e) {
-                $this->catchException($e, 'goutteRequestError');
-            }
+            Storage::makeDirectory('hrs/' . $this->dA['request_date']);
 
-            try {
-                while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
-                    $this->dA['check_in_date'] = $this->dA['start_date'];
-                    $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
-                    while (0 == 0) {
-                        try {
-                            $url = $this->setURL();
-                            $crawler = $goutteClient->request('GET', $url);
-                            $response = $goutteClient->getResponse();
-                        } catch (Exception $e) {
-                            $this->catchException($e, 'goutteRequestError2');
-                        }
-
-                        if ($crawler->filter('title')->count() > 0) { //page could not be found
-                            if ($crawler->filter('title')->text() == 'The requested page could not be found') {
-                                if ($this->dA['count_not_found'] == 4) {
-                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                    break 3;
-                                }
-                                $this->dA['count_not_found']++;
-                            }
-                        }
-
-                        if ($response->getStatus() == 403) { //access denied
-                            $this->dA['count_i']--;
-                            if ($this->dA['count_access_denied'] == 50) {
-                                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                $this->dA['count_access_denied'] = 0;
-                                break 3;
-                            }
-                            $this->dA['count_access_denied']++;
-                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ';minor-break-reason:' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                            break 2;
-                        }
-
-                        if ($response->getStatus() == 401) { //unauthorized
-                            $this->dA['count_i']--;
-                            if ($this->dA['count_unauthorized'] == 50) {
-                                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                $this->dA['count_unauthorized'] = 0;
-                                break 3;
-                            }
-                            $this->dA['count_unauthorized']++;
-                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ';minor-break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                            break 2;
-                        }
-
-                        if ($response->getStatus() == 200) { //success
-                            $this->mainWork($crawler); //data gathering and insertion into DB
-                        }
+            while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
+                $this->dA['check_in_date'] = $this->dA['start_date'];
+                $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+                while (0 == 0) {
+                    if ($this->dA['full_break']) {
+                        $this->dA['full_break'] = false;
+                        break 2;
                     }
-                    $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+                    if ($this->dA['half_break']) {
+                        $this->dA['half_break'] = false;
+                        break;
+                    }
+                    $url = $this->setURL();
+                    $crawler = $this->phantomRequest($url);
+                    $this->mainWork($crawler); //data gathering and insertion into DB
                 }
-            } catch (Exception $e) {
-                $this->catchException($e, 'errorMain');
+                $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
             }
+        } catch (Exception $e) {
+            $this->catchException($e, 'errorMain');
         }
     }
 
@@ -122,7 +77,7 @@ class Hotels_hrs_Seeder extends Seeder
 
                 if (!empty($this->dA['hotel_id'])) {
                     $adults = 2;
-                    $this->dA['hotel_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adults&singleRooms=0&doubleRooms=1&children=0#priceAnchor";
+                    $this->dA['hotel_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adults&singleRooms=0&doubleRooms=1&children=0";
                     $crawler = $this->phantomRequest($this->dA['hotel_url']);
                     $this->dA['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
@@ -144,25 +99,6 @@ class Hotels_hrs_Seeder extends Seeder
         print($e->getMessage());
     }
 
-    protected function goutteRequest($url)
-    {
-        try {
-            $goutteClient = new GoutteClient();
-            $guzzleClient = new GuzzleClient(array(
-                'curl' => [
-                    CURLOPT_PROXY => "http://" . $this->dA['proxy'],
-                ]
-            ));
-            $goutteClient->setClient($guzzleClient);
-            $crawler = $goutteClient->request('GET', $url);
-            return $crawler;
-
-        } catch (Exception $e) {
-            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/goutteRequestError.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-            print($e->getMessage());
-        }
-    }
-
     protected function phantomRequest($url)
     {
         try {
@@ -178,8 +114,52 @@ class Hotels_hrs_Seeder extends Seeder
             // Send the request
             $client->send($request, $response);
             $crawler = new Crawler($response->getContent());
-            return $crawler;
 
+            if ($crawler->filter('title')->count() > 0) { //page could not be found
+                if ($crawler->filter('title')->text() == 'The requested page could not be found') {
+                    if ($this->dA['count_not_found'] == 4) {
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                        $this->dA['full_break'] == true;
+                    }
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    $this->dA['count_not_found']++;
+                }
+            }
+
+            if ($response->getStatus() == 403) { //access denied
+                $this->dA['count_i']--;
+                if ($this->dA['count_access_denied'] == 50) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:(text)->' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';response->getStatus:403;count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    $this->dA['count_access_denied'] = 0;
+                    $this->dA['full_break'] == true;
+                }
+                $this->dA['count_access_denied']++;
+                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:(text)->' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';response->getStatus:403;count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                $this->dA['half_break'] == true;
+            }
+
+            if ($response->getStatus() == 401) { //unauthorized
+                $this->dA['count_i']--;
+                if ($this->dA['count_unauthorized'] == 50) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    $this->dA['count_unauthorized'] = 0;
+                    $this->dA['full_break'] == true;
+                }
+                $this->dA['count_unauthorized']++;
+                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                $this->dA['half_break'] == true;
+            }
+
+            if ($response->getStatus() == 200) {
+                return $crawler;
+            }
+//            $tempArray['response'] = $response;
+//            $tempArray['crawler'] = $crawler;
+//            if (count($tempArray) == 2) {
+//                return $tempArray;
+//            } else {
+//                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+//            }
         } catch (Exception $e) {
             $this->catchException($e, 'phantomRequestError');
         }
@@ -425,6 +405,8 @@ class Hotels_hrs_Seeder extends Seeder
                 $this->dA['count_unauthorized'] = 0;
                 $this->dA['count_access_denied'] = 0;
                 $this->dA['count_not_found'] = 0;
+            } else {
+                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }
 
         } catch (Exception $e) {

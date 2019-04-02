@@ -28,6 +28,8 @@ class Hotels_hrs_Seeder extends Seeder
             $this->dA['count_access_denied'] = 0;
             $this->dA['count_unauthorized'] = 0;
             $this->dA['count_not_found'] = 0;
+            $this->dA['count_!200'] = 0;
+            $this->dA['count_!200b'] = 0;
             $this->dA['count_i'] = 1;
             $this->dA['full_break'] = false;
             $this->dA['half_break'] = false;
@@ -42,13 +44,15 @@ class Hotels_hrs_Seeder extends Seeder
                         $this->dA['full_break'] = false;
                         break 2;
                     }
-                    if ($this->dA['half_break']) {
-                        $this->dA['half_break'] = false;
-                        break;
+//                    if ($this->dA['half_break']) {
+//                        $this->dA['half_break'] = false;
+//                        break;
+//                    }
+                    $crawler = $this->phantomRequest($this->setURL());
+                    if ($crawler) {
+                        $this->mainWork($crawler); //data gathering and insertion into DB
+                        $this->dA['count_i']++;
                     }
-                    $url = $this->setURL();
-                    $crawler = $this->phantomRequest($url);
-                    $this->mainWork($crawler); //data gathering and insertion into DB
                 }
                 $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
             }
@@ -59,7 +63,9 @@ class Hotels_hrs_Seeder extends Seeder
 
     protected function setURL()
     {
-        $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', $this->dA['city']) . "/d-" . $this->dA['city_id'] . "/" . $this->dA['count_i']++ . "#container=&locationId=" . $this->dA['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . str_replace(' ', '-', $this->dA['city']) . "%2Fd-" . $this->dA['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dA['check_in_date'] . "&departure=" . $this->dA['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
+        $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', strtolower($this->dA['city'])) . "/d-" . $this->dA['city_id'] . (($this->dA['count_i'] > 1) ? '/' . $this->dA['count_i'] : '') . "#container=&locationId=" . $this->dA['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . str_replace(' ', '-', $this->dA['city']) . "%2Fd-" . $this->dA['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dA['check_in_date'] . "&departure=" . $this->dA['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
+//        $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', strtolower($this->dA['city'])) . "/d-" . $this->dA['city_id'] . (($this->dA['count_i'] > 1) ? '/' . $this->dA['count_i'] : '');
+
         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
         return $url;
     }
@@ -68,7 +74,7 @@ class Hotels_hrs_Seeder extends Seeder
     {
         if ($crawler->filter('a.sw-hotel-list__link')->count() > 0) {
             $crawler->filter('a.sw-hotel-list__link')->each(function ($node) {
-                $this->dA['hotel_hrs_image'] = ($node->filter('div.sw-hotel-list__element__image > noscript > img')->count() > 0) ? $node->filter('div.sw-hotel-list__element__image > noscript > img')->attr('src') : null;
+                $this->dA['hotel_hrs_image'] = ($node->filter('div.sw-hotel-list__element__image > img')->count() > 0) ? $node->filter('div.sw-hotel-list__element__image > img')->attr('src') : null;
                 $tempData = ($node->count() > 0) ? $node->attr('data-gtm-click') : null;
 
                 if (isset(json_decode($tempData)->ecommerce->click->products[0]->id)) {
@@ -78,15 +84,25 @@ class Hotels_hrs_Seeder extends Seeder
                 if (!empty($this->dA['hotel_id'])) {
                     $adults = 2;
                     $this->dA['hotel_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adults&singleRooms=0&doubleRooms=1&children=0";
+                    restart2:
                     $crawler = $this->phantomRequest($this->dA['hotel_url']);
-                    $this->dA['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
+                    if ($crawler) {
+                        if ($crawler->filter('input[name="hotelnumber"]')->count() > 0) {
+                            $this->dA['hotel_hrs_id'] = $crawler->filter('input[name="hotelnumber"]')->attr('value');
+                        } else {
+                            if ($this->dA['count_!200b'] > 50) {
+                                $this->dA['hotel_hrs_id'] = null;
+                            } else {
+                                $this->dA['count_!200b']++;
+                                goto restart2;
+                            }
+                        }
 
-                    $hotelHRSidDoesntExist = DB::table('hotels_hrs')->where('hrs_id', '=', $this->dA['hotel_hrs_id'])->doesntExist();
-                    if ($hotelHRSidDoesntExist) {
-                        $this->hotelData($crawler);
-                    }
-                    if ($hotelHRSidDoesntExist) {
-                        $this->insertHotelsDataIntoDB();
+
+                        if (DB::table('hotels_hrs')->where('hrs_id', '=', $this->dA['hotel_hrs_id'])->doesntExist()) {
+                            $this->hotelData($crawler);
+                            $this->insertHotelsDataIntoDB();
+                        }
                     }
                 }
             });
@@ -102,6 +118,7 @@ class Hotels_hrs_Seeder extends Seeder
     protected function phantomRequest($url)
     {
         try {
+            restart:
             $client = PhantomClient::getInstance();
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
@@ -118,41 +135,45 @@ class Hotels_hrs_Seeder extends Seeder
             if ($crawler->filter('title')->count() > 0) { //page could not be found
                 if ($crawler->filter('title')->text() == 'The requested page could not be found') {
                     if ($this->dA['count_not_found'] == 4) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
-                        $this->dA['full_break'] == true;
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason1a:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                        $this->dA['full_break'] = true;
                     }
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;break-reason1b:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                     $this->dA['count_not_found']++;
                 }
             }
 
             if ($response->getStatus() == 403) { //access denied
-                $this->dA['count_i']--;
                 if ($this->dA['count_access_denied'] == 50) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:(text)->' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';response->getStatus:403;count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                     $this->dA['count_access_denied'] = 0;
-                    $this->dA['full_break'] == true;
+                    $this->dA['full_break'] = true;
                 }
                 $this->dA['count_access_denied']++;
-                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:(text)->' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';response->getStatus:403;count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                $this->dA['half_break'] == true;
             }
 
             if ($response->getStatus() == 401) { //unauthorized
-                $this->dA['count_i']--;
                 if ($this->dA['count_unauthorized'] == 50) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                     $this->dA['count_unauthorized'] = 0;
-                    $this->dA['full_break'] == true;
+                    $this->dA['full_break'] = true;
                 }
                 $this->dA['count_unauthorized']++;
-                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                $this->dA['half_break'] == true;
             }
 
             if ($response->getStatus() == 200) {
                 return $crawler;
+            } else {
+                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                if ($this->dA['full_break'] == false) {
+                    if ($this->dA['count_!200'] > 1000) {
+                        $this->dA['full_break'] = true;
+                    }
+                    $this->dA['count_!200']++;
+                    goto restart;
+                } else {
+                    return null;
+                }
             }
+
 //            $tempArray['response'] = $response;
 //            $tempArray['crawler'] = $crawler;
 //            if (count($tempArray) == 2) {
@@ -405,6 +426,7 @@ class Hotels_hrs_Seeder extends Seeder
                 $this->dA['count_unauthorized'] = 0;
                 $this->dA['count_access_denied'] = 0;
                 $this->dA['count_not_found'] = 0;
+                $this->dA['count_!200'] = 0;
             } else {
                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }

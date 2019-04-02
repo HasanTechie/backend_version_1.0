@@ -23,13 +23,14 @@ class Hotels_hrs_Seeder extends Seeder
             $this->dA = $data;
 
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-            $this->dA['timeOut'] = 20000;
+            $this->dA['timeOut'] = 40000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_access_denied'] = 0;
             $this->dA['count_unauthorized'] = 0;
             $this->dA['count_not_found'] = 0;
             $this->dA['count_!200'] = 0;
             $this->dA['count_!200b'] = 0;
+            $this->dA['count_!200c'] = 0;
             $this->dA['count_i'] = 1;
             $this->dA['full_break'] = false;
             $this->dA['half_break'] = false;
@@ -90,18 +91,27 @@ class Hotels_hrs_Seeder extends Seeder
                         if ($crawler->filter('input[name="hotelnumber"]')->count() > 0) {
                             $this->dA['hotel_hrs_id'] = $crawler->filter('input[name="hotelnumber"]')->attr('value');
                         } else {
-                            if ($this->dA['count_!200b'] > 50) {
-                                $this->dA['hotel_hrs_id'] = null;
-                            } else {
+                            if ($this->dA['count_!200b'] < 50) {
                                 $this->dA['count_!200b']++;
                                 goto restart2;
+                            } else {
+                                $this->dA['hotel_hrs_id'] = null;
                             }
                         }
 
-
                         if (DB::table('hotels_hrs')->where('hrs_id', '=', $this->dA['hotel_hrs_id'])->doesntExist()) {
                             $this->hotelData($crawler);
-                            $this->insertHotelsDataIntoDB();
+                            if (!empty($this->dA['hotel_name']) && !empty($this->dA['hotel_address']) && !empty($this->dA['hotel_facilities']) && !empty($this->dA['hotel_location_details'])) {
+                                $this->insertHotelsDataIntoDB();
+                            } else {
+                                if ($this->dA['count_!200c'] < 50) {
+                                    $this->dA['count_!200c']++;
+                                    goto restart2;
+                                } else {
+                                    $this->insertHotelsDataIntoDB();
+                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/emptyHotel.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                }
+                            }
                         }
                     }
                 }
@@ -162,7 +172,9 @@ class Hotels_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                if ($response->getStatus() != 0 && $response->getStatus() !=408) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 1000) {
                         $this->dA['full_break'] = true;
@@ -427,6 +439,8 @@ class Hotels_hrs_Seeder extends Seeder
                 $this->dA['count_access_denied'] = 0;
                 $this->dA['count_not_found'] = 0;
                 $this->dA['count_!200'] = 0;
+                $this->dA['count_!200b'] = 0;
+                $this->dA['count_!200c'] = 0;
             } else {
                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }

@@ -43,7 +43,7 @@ class ProxyCrawlSeeder extends Seeder
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
             $client->getEngine()->addOption("--proxy=http://" . $proxy);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
-            $request = $client->getMessageFactory()->createRequest('https://www.hrs.com/en/hotel/hamburg/d-107905');
+            $request = $client->getMessageFactory()->createRequest($url);
             $request->setTimeout(20000);
             $response = $client->getMessageFactory()->createResponse();
             // Send the request

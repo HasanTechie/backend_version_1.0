@@ -45,7 +45,6 @@ class Hotels_hrs_Seeder extends Seeder
 
             try {
                 while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
-
                     $this->dA['check_in_date'] = $this->dA['start_date'];
                     $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
                     while (0 == 0) {
@@ -57,7 +56,7 @@ class Hotels_hrs_Seeder extends Seeder
                             $this->catchException($e, 'goutteRequestError2');
                         }
 
-                        if ($crawler->filter('title')->count() > 0) {
+                        if ($crawler->filter('title')->count() > 0) { //page could not be found
                             if ($crawler->filter('title')->text() == 'The requested page could not be found') {
                                 if ($this->dA['count_not_found'] == 4) {
                                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
@@ -67,7 +66,7 @@ class Hotels_hrs_Seeder extends Seeder
                             }
                         }
 
-                        if ($response->getStatus() == 403) {
+                        if ($response->getStatus() == 403) { //access denied
                             $this->dA['count_i']--;
                             if ($this->dA['count_access_denied'] == 50) {
                                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:' . ($crawler->filter('title')->count() > 0) ? $crawler->filter('title')->text() : 'emptyTitle' . ';count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
@@ -79,7 +78,7 @@ class Hotels_hrs_Seeder extends Seeder
                             break 2;
                         }
 
-                        if ($response->getStatus() == 401) {
+                        if ($response->getStatus() == 401) { //unauthorized
                             $this->dA['count_i']--;
                             if ($this->dA['count_unauthorized'] == 50) {
                                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ';break-reason:$response->getStatus:401;count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
@@ -91,8 +90,8 @@ class Hotels_hrs_Seeder extends Seeder
                             break 2;
                         }
 
-                        if ($response->getStatus() == 200) {
-                            $this->mainWork($crawler);
+                        if ($response->getStatus() == 200) { //success
+                            $this->mainWork($crawler); //data gathering and insertion into DB
                         }
                     }
                     $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
@@ -105,7 +104,7 @@ class Hotels_hrs_Seeder extends Seeder
 
     protected function setURL()
     {
-        $url = "https://www.hrs.com/en/hotel/" . $this->dA['city'] . "/d-" . $this->dA['city_id'] . "/" . $this->dA['count_i']++ . "#container=&locationId=" . $this->dA['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . $this->dA['city'] . "%2Fd-" . $this->dA['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dA['check_in_date'] . "&departure=" . $this->dA['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
+        $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', $this->dA['city']) . "/d-" . $this->dA['city_id'] . "/" . $this->dA['count_i']++ . "#container=&locationId=" . $this->dA['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . str_replace(' ', '-', $this->dA['city']) . "%2Fd-" . $this->dA['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dA['check_in_date'] . "&departure=" . $this->dA['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
         return $url;
     }
@@ -403,12 +402,12 @@ class Hotels_hrs_Seeder extends Seeder
                     'ratings_on_google' => (isset($this->dA['ratings_on_google']) ? $this->dA['ratings_on_google'] : null),
                     'total_number_of_ratings_on_google' => (isset($this->dA['total_number_of_ratings_on_google']) ? $this->dA['total_number_of_ratings_on_google'] : null),
                     'details' => (isset($this->dA['hotel_details']) ? serialize($this->dA['hotel_details']) : null),
-                    'location_details' => serialize($this->dA['hotel_location_details']),
-                    'surroundings_of_the_hotel' => serialize($this->dA['hotel_location_details']['surroundings_of_the_hotel']),
-                    'sports_leisure_facilities' => serialize($this->dA['hotel_location_details']['sports_leisure_facilities']),
-                    'nearby_airports' => serialize($this->dA['hotel_location_details']['nearby_airports']),
-                    'facilities' => serialize($this->dA['hotel_facilities']),
-                    'in_house_services' => serialize($this->dA['in_house_services']),
+                    'location_details' => (isset($this->dA['hotel_location_details']) ? serialize($this->dA['hotel_location_details']) : null),
+                    'surroundings_of_the_hotel' => (isset($this->dA['hotel_location_details']['surroundings_of_the_hotel']) ? serialize($this->dA['hotel_location_details']['surroundings_of_the_hotel']) : null),
+                    'sports_leisure_facilities' => (isset($this->dA['hotel_location_details']['sports_leisure_facilities']) ? serialize($this->dA['hotel_location_details']['sports_leisure_facilities']) : null),
+                    'nearby_airports' => (isset($this->dA['hotel_location_details']['nearby_airports']) ? serialize($this->dA['hotel_location_details']['nearby_airports']) : null),
+                    'facilities' => (isset($this->dA['hotel_facilities']) ? serialize($this->dA['hotel_facilities']) : null),
+                    'in_house_services' => (isset($this->dA['in_house_services']) ? serialize($this->dA['in_house_services']) : null),
                     'city' => $this->dA['city'],
                     'city_id_on_hrs' => $this->dA['city_id'],
                     'country_code' => $this->dA['country_code'],

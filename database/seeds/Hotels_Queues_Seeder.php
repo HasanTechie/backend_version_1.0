@@ -37,7 +37,7 @@ class Hotels_Queues_Seeder extends Seeder
             $instance['currency'] = 'EUR';
             $instance['start_date'] = '2019-04-14';
             $instance['end_date'] = '2019-04-14';
-            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(2));
+            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(mt_rand(5, 100)));
         }
         echo "started Queue" . "\n";
     }

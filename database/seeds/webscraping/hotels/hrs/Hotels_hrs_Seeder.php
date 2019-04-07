@@ -235,11 +235,11 @@ class Hotels_hrs_Seeder extends Seeder
             if ($crawler->filter('dl#hotelinformation')->count() > 0) {
 
                 $this->dA['hotel_details']['hotel_information'] = $crawler->filter('dl#hotelinformation')->each(function ($node) {
-                    $d1['heading'] = ($node->filter('dt > h5')->count() > 0) ? $node->filter('dt > h5')->each(function ($node) {
+                    $da['heading'] = ($node->filter('dt > h5')->count() > 0) ? $node->filter('dt > h5')->each(function ($node) {
                         return trim($node->text());
                     }) : null;
 
-                    $d1['body'] = ($node->filter('dd')->count() > 0) ? $node->filter('dd')->each(function ($node) {
+                    $da['body'] = ($node->filter('dd')->count() > 0) ? $node->filter('dd')->each(function ($node) {
                         if ($node->filter('li')->count() > 0) {
                             return $node->filter('li')->each(function ($node) {
                                 return trim($node->text());
@@ -248,8 +248,8 @@ class Hotels_hrs_Seeder extends Seeder
                             return trim($node->text());
                         }
                     }) : null;
-                    for ($k = 0; $k < count($d1['heading']); $k++) {
-                        $dh[$d1['heading'][$k]] = $d1['body'][$k];
+                    for ($k = 0; $k < count($da['heading']); $k++) {
+                        $dh[$da['heading'][$k]] = $da['body'][$k];
                     }
                     return $dh;
                 });
@@ -257,13 +257,13 @@ class Hotels_hrs_Seeder extends Seeder
 
             if ($crawler->filter('dl#hdInformationMarginal')->count() > 0) {
                 $crawler->filter('dl#hdInformationMarginal')->each(function ($node) {
-                    $dl['body'] = ($node->filter('dd > p')->count() > 0) ? $node->filter('dd > p')->each(function ($node) {
-                        $dl['heading'] = ($node->filter('strong')->count() > 0) ? $node->filter('strong')->text() : null;
-                        $dl['wholetext'] = ($node->count() > 0) ? $node->text() : null;
-                        $dl['body'] = trim(str_replace($dl['heading'], '', $dl['wholetext']));
-                        return $dl;
+                    $da['body'] = ($node->filter('dd > p')->count() > 0) ? $node->filter('dd > p')->each(function ($node) {
+                        $da['heading'] = ($node->filter('strong')->count() > 0) ? $node->filter('strong')->text() : null;
+                        $da['wholetext'] = ($node->count() > 0) ? $node->text() : null;
+                        $da['body'] = trim(str_replace($da['heading'], '', $da['wholetext']));
+                        return $da;
                     }) : null;
-                    $this->dA['hotel_details']['hotel_service_times'] = $dl['body'];
+                    $this->dA['hotel_details']['hotel_service_times'] = $da['body'];
                 });
             }
 
@@ -403,8 +403,6 @@ class Hotels_hrs_Seeder extends Seeder
                     'ratings_on_hrs' => (isset($this->dA['ratings_on_hrs']) ? $this->dA['ratings_on_hrs'] : null),
                     'ratings_text_on_hrs' => (isset($this->dA['ratings_text_on_hrs']) ? $this->dA['ratings_text_on_hrs'] : null),
                     'total_number_of_ratings_on_hrs' => (isset($this->dA['total_number_of_ratings_on_hrs']) ? $this->dA['total_number_of_ratings_on_hrs'] : null),
-                    'ratings_on_google' => (isset($this->dA['ratings_on_google']) ? $this->dA['ratings_on_google'] : null),
-                    'total_number_of_ratings_on_google' => (isset($this->dA['total_number_of_ratings_on_google']) ? $this->dA['total_number_of_ratings_on_google'] : null),
                     'details' => (isset($this->dA['hotel_details']) ? serialize($this->dA['hotel_details']) : null),
                     'location_details' => (isset($this->dA['hotel_location_details']) ? serialize($this->dA['hotel_location_details']) : null),
                     'surroundings_of_the_hotel' => (isset($this->dA['hotel_location_details']['surroundings_of_the_hotel']) ? serialize($this->dA['hotel_location_details']['surroundings_of_the_hotel']) : null),
@@ -416,16 +414,17 @@ class Hotels_hrs_Seeder extends Seeder
                     'city_id_on_hrs' => $this->dA['city_id'],
                     'country_code' => $this->dA['country_code'],
                     'latitude_hrs' => (isset($this->dA['hotel_latitude']) ? $this->dA['hotel_latitude'] : null),
-                    'latitude_google' => (isset($this->dA['google_latitude']) ? $this->dA['google_latitude'] : null),
                     'longitude_hrs' => (isset($this->dA['hotel_longitude']) ? $this->dA['hotel_longitude'] : null),
-                    'longitude_google' => (isset($this->dA['google_longitude']) ? $this->dA['google_longitude'] : null),
                     'hid' => $this->dA['hid'],
                     'hotel_url_on_hrs' => (isset($this->dA['hotel_url']) ? $this->dA['hotel_url'] : null),
-                    'all_data_google' => (isset($this->dA['all_data_google']) ? $this->dA['all_data_google'] : null),
                     'source' => $this->dA['source'],
                     'created_at' => DB::raw('now()'),
                     'updated_at' => DB::raw('now()')
                 ]);
+                $this->dA['hotel_name'] = $this->dA['hotel_address'] = $this->dA['hotel_hrs_id'] = $this->dA['hotel_hrs_image'] = $this->dA['ratings_on_hrs'] = $this->dA['ratings_text_on_hrs'] =
+                $this->dA['total_number_of_ratings_on_hrs'] = $this->dA['hotel_details'] = $this->dA['hotel_location_details'] = $this->dA['hotel_facilities'] = $this->dA['in_house_services'] =
+                $this->dA['hotel_latitude'] = $this->dA['hotel_longitude'] = $this->dA['hid'] = $this->dA['hotel_url'] = null;
+
                 $this->dA['count_unauthorized'] = 0;
                 $this->dA['count_access_denied'] = 0;
                 $this->dA['count_not_found'] = 0;

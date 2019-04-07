@@ -41,7 +41,7 @@ class GatherEurobookingsRomeData extends Command
     public function handle()
     {
         //
-        echo 'GatherEurobookingsRomeData started at : ' . Carbon::now()->toDateTimeString() . "\n";
+        /*echo 'GatherEurobookingsRomeData started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
         $dataArray = [
             'adults' => 2,
@@ -57,6 +57,6 @@ class GatherEurobookingsRomeData extends Command
         $new = new GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMain();
         $new->mainRun($dataArray);
 
-        echo 'GatherEurobookingsRomeData ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
+        echo 'GatherEurobookingsRomeData ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";*/
     }
 }

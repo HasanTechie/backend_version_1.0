@@ -48,10 +48,10 @@ class Rooms_hrs_Seeder extends Seeder
                         break 2;
                     }
                     $this->dA['adult'] = $adult;
-                    $this->dA['hotel_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" . (($adult > 1) ? 1 : 0) . "&children=0";
+                    $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" . (($adult > 1) ? 1 : 0) . "&children=0";
 
                     restart2:
-                    $crawler = $this->phantomRequest($this->dA['hotel_url']);
+                    $crawler = $this->phantomRequest($this->dA['request_url']);
                     if ($crawler) {
                         $this->roomData($crawler);
 
@@ -66,7 +66,7 @@ class Rooms_hrs_Seeder extends Seeder
                                             $this->dA['count_!200b']++;
                                             goto restart2;
                                         } else {
-                                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                                         }
                                     }
                                 } else {
@@ -74,7 +74,7 @@ class Rooms_hrs_Seeder extends Seeder
                                         $this->dA['count_!200c']++;
                                         goto restart2;
                                     } else {
-                                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2a.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                                     }
                                 }
                             } else {
@@ -82,7 +82,7 @@ class Rooms_hrs_Seeder extends Seeder
                                     $this->dA['count_!200c']++;
                                     goto restart2;
                                 } else {
-                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                                 }
                             }
                             $this->dA['all_rooms'] = null;
@@ -133,12 +133,16 @@ class Rooms_hrs_Seeder extends Seeder
                             'number_of_adults_in_room_request' => $this->dA['adult'],
                             'check_in_date' => $this->dA['check_in_date'],
                             'check_out_date' => $this->dA['check_out_date'],
+                            'request_url' => $this->dA['request_url'],
                             'rid' => $rid,
                             'request_date' => $this->dA['request_date'],
                             'source' => $this->dA['source'],
                             'created_at' => DB::raw('now()'),
                             'updated_at' => DB::raw('now()')
                         ]);
+
+                        $this->dA['request_url'] = null;
+
                         $this->dA['count_unauthorized'] = 0;
                         $this->dA['count_access_denied'] = 0;
                         $this->dA['count_not_found'] = 0;

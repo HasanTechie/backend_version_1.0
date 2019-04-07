@@ -87,6 +87,7 @@
         <div class="links">
             <a href="/hotels/eurobookings">Eurbookings Prices </a>
             <a href="/hotels/hrs">HRS Prices </a>
+            <a href="/trends">Google Trends</a>
         </div>
         <br/>
         <div class="links">
@@ -97,10 +98,9 @@
         </div>
 
         <div class="links">
+            <a href="/landroutes">Search LandRoutes</a>
             <a href="/roomsprices/hotel2">Hotel EmonaAquaeductus Prices </a>
             <a href="/weathers">Weather</a>
-            <a href="/landroutes">Search LandRoutes</a>
-            <a href="/trends">Google Trends</a>
             <a href="/events">Events</a>
 
         </div>
@@ -110,7 +110,7 @@
         <div class="links">
             <a href="/flightsprices">Airfrance KLM Flights</a>
             <a href="/flights/search">Search Flights</a>
-            <a href="/landroutes">Search LandRoutes</a>
+
 
 
         </div>

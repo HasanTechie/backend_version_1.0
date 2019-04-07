@@ -25,7 +25,7 @@ class PriceController extends Controller
 
     public function hotel1Prices()
     {
-        $prices = DB::table('rooms_prices_chain_baglioni')
+        $prices = DB::table('z_ignore_rooms_prices_chain_baglioni')
             ->paginate(20);
 
         return view('roomsprices.hotel1.index', compact('prices'));
@@ -34,14 +34,14 @@ class PriceController extends Controller
     public function hotel1Show($id)
     {
 
-        $prices = DB::table('rooms_prices_chain_baglioni')->where('uid', '=', $id)->get();
+        $prices = DB::table('z_ignore_rooms_prices_chain_baglioni')->where('uid', '=', $id)->get();
 
         dd(unserialize($prices[0]->room_all_rates_and_details));
     }
 
     public function hotel2Prices()
     {
-        $prices = DB::table('rooms_prices_hotel_aquaeductus')->inRandomOrder()
+        $prices = DB::table('z_ignore_rooms_prices_hotel_aquaeductus')->inRandomOrder()
             ->paginate(20);
 
         return view('roomsprices.hotel2.index', compact('prices'));
@@ -50,14 +50,14 @@ class PriceController extends Controller
     public function hotel2Show($id)
     {
 
-        $prices = DB::table('rooms_prices_hotel_aquaeductus')->where('uid', '=', $id)->get();
+        $prices = DB::table('z_ignore_rooms_prices_hotel_aquaeductus')->where('uid', '=', $id)->get();
 
         dd($prices[0]);
     }
 
     public function hotel3Prices()
     {
-        $prices = DB::table('rooms_prices_hotel_novecento')->inRandomOrder()
+        $prices = DB::table('z_ignore_rooms_prices_hotel_novecento')->inRandomOrder()
             ->paginate(20);
 
         return view('roomsprices.hotel3.index', compact('prices'));
@@ -66,14 +66,14 @@ class PriceController extends Controller
     public function hotel3Show($id)
     {
 
-        $prices = DB::table('rooms_prices_hotel_novecento')->where('uid', '=', $id)->get();
+        $prices = DB::table('z_ignore_rooms_prices_hotel_novecento')->where('uid', '=', $id)->get();
 
         dd($prices[0]);
     }
 
     public function verticalbookingPrices()
     {
-        $prices = DB::table('rooms_prices_vertical_booking')
+        $prices = DB::table('z_ignore_rooms_prices_vertical_booking')
             ->paginate(20);
 
         return view('roomsprices.verticalbooking.index', compact('prices'));
@@ -82,7 +82,7 @@ class PriceController extends Controller
     public function verticalbookingShow($id)
     {
 
-        $prices = DB::table('rooms_prices_vertical_booking')->where('uid', '=', $id)->get();
+        $prices = DB::table('z_ignore_rooms_prices_vertical_booking')->where('uid', '=', $id)->get();
 
         dd($prices[0]);
     }
@@ -106,7 +106,7 @@ class PriceController extends Controller
     public function HRSRoomsPrices($id)
     {
 
-        $prices = DB::table('rooms_prices_hrs')->where('hotel_uid', '=', $id)->paginate(20);
+        $prices = DB::table('rooms_hrs')->where('hotel_uid', '=', $id)->paginate(20);
 
         return view('roomsprices.hrs.index', compact('prices'));
     }
@@ -114,7 +114,7 @@ class PriceController extends Controller
     public function HRSRoomsPricesShow($uid, $id)
     {
 
-        $prices = DB::table('rooms_prices_hrs')->where('uid', '=', $id)->get();
+        $prices = DB::table('rooms_hrs')->where('uid', '=', $id)->get();
         dd($prices[0]);
     }
 

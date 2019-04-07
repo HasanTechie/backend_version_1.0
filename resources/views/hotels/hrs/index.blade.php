@@ -15,7 +15,7 @@
             <th>City</th>
             <th>Country</th>
             <th>All Details</th>
-            <th>Rooms Prices</th>
+            <th>Rooms</th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
                 <td>{{$hotel->city}}</td>
                 <td>{{$hotel->country_code}}</td>
                 <td><a href="hrs/{{$hotel->uid}}" class="button is-primary is-outlined">O</a></td>
-                <td><a href="hrs/roomsprices/{{$hotel->uid}}" class="button is-success is-outlined">Rooms Prices</a>
+                <td><a href="hrs/roomsprices/{{$hotel->uid}}" class="button is-success is-outlined">Rooms</a>
                 </td>
             </tr>
         @endforeach

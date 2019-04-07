@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 //use Goutte\Client;
-//use DB;
+use DB;
 //use phpDocumentor\Reflection\Types\Array_;
 //use SKAgarwal\GoogleApi\PlacesApi;
 
@@ -206,7 +206,7 @@ class HotelController extends Controller
     public function show($hotel, $dateFrom, $dateTo)
     {
         //
-        $hotels = DB::table('rooms_prices_eurobookings_data_old')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
+        $hotels = DB::table('rooms_prices_eurobookings')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
             ['hotel_uid', '=', $hotel],
             ['check_in_date', '>=', $dateFrom],
             ['check_in_date', '<=', $dateTo],
@@ -219,7 +219,7 @@ class HotelController extends Controller
     {
         //
 
-        $dates = DB::table('rooms_prices_eurobookings_data')->select('check_in_date')->distinct('check_in_date')->where([
+        $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where([
             ['hotel_uid', '=', $hotel],
             ['check_in_date', '>=', $dateFrom],
             ['check_in_date', '<=', $dateTo],

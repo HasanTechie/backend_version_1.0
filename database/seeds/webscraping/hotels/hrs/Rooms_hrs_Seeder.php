@@ -116,8 +116,8 @@ class Rooms_hrs_Seeder extends Seeder
                     $rid = $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $this->dA['adult'] . 'hrs'; //HotelHRSId + RoomName + roomType + room Short D + number of adults + hrstag
                     $rid = str_replace(' ', '', $rid);
 
-                    if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
-                        DB::table('rooms_prices_hrs')->insert([
+                    if (DB::table('rooms_hrs')->where('rid', '=', $rid)->doesntExist()) {
+                        DB::table('rooms_hrs')->insert([
                             'uid' => uniqid(),
                             's_no' => 1,
                             'room' => $room['room'],
@@ -138,7 +138,7 @@ class Rooms_hrs_Seeder extends Seeder
                         ]);
                     }
 
-                    DB::table('rooms_prices_hrs')->insert([
+                    DB::table('prices_hrs')->insert([
                         'uid' => uniqid(),
                         'price' => $room['price'],
                         'number_of_adults_in_room_request' => $this->dA['adult'],

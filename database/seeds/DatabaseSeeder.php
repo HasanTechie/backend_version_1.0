@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('Rooms_eurobookings_Queues_Seeder');
 //        $this->call('Rooms_hrs_Queues_Seeder');
 
-        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
+//        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 
 
     }

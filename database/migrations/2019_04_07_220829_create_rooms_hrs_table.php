@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRoomsPricesHrsTable extends Migration
+class CreateRoomsHrsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateRoomsPricesHrsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rooms_prices_hrs', function (Blueprint $table) {
+        Schema::create('rooms_hrs', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->double('price')->nullable();
-            $table->double('price_should')->nullable();
             $table->string('currency')->nullable();
             $table->string('room')->nullable();
             $table->string('hotel_uid')->nullable();
@@ -30,12 +28,7 @@ class CreateRoomsPricesHrsTable extends Migration
             $table->text('photo')->nullable();
             $table->text('short_description')->nullable();
             $table->longText('facilities')->nullable();
-            $table->string('number_of_adults_in_room_request')->nullable();
-            $table->string('check_in_date')->nullable();
-            $table->string('check_out_date')->nullable();
-            $table->text('request_url')->nullable();
             $table->string('rid',254)->unique();
-            $table->string('request_date');
 
             $table->string('source');
 
@@ -50,6 +43,6 @@ class CreateRoomsPricesHrsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms_prices_hrs');
+        Schema::dropIfExists('rooms_hrs');
     }
 }

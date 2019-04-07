@@ -141,6 +141,20 @@ class Rooms_hrs_Seeder extends Seeder
                             'updated_at' => DB::raw('now()')
                         ]);
 
+                        DB::table('prices_hrs')->insert([
+                            'uid' => uniqid(),
+                            'price' => $room['price'],
+                            'number_of_adults_in_room_request' => $this->dA['adult'],
+                            'check_in_date' => $this->dA['check_in_date'],
+                            'check_out_date' => $this->dA['check_out_date'],
+                            'request_url' => $this->dA['request_url'],
+                            'rid' => $rid,
+                            'request_date' => $this->dA['request_date'],
+                            'source' => $this->dA['source'],
+                            'created_at' => DB::raw('now()'),
+                            'updated_at' => DB::raw('now()')
+                        ]);
+
                         $this->dA['request_url'] = null;
 
                         $this->dA['count_unauthorized'] = 0;

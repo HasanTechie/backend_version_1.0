@@ -35,7 +35,15 @@ class Kernel extends ConsoleKernel
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
             ->daily()
-            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNo.log'));
+            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
+
+        $schedule->command('command:gatherhrshotelsdata')
+            ->withoutOverlapping()
+            ->runInBackground()
+//            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
+            ->daily() //run once
+            ->fridays() //run only on fridays
+            ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsDataCommand.log'));
 
 //        $schedule->command('command:pushdatatofirestore')
 //            ->withoutOverlapping()

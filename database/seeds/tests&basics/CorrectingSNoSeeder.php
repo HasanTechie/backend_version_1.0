@@ -18,7 +18,7 @@ class CorrectingSNoSeeder extends Seeder
             'hotels_eurobookings',
             'hotels_hrs',
             'rooms_prices_eurobookings',
-            'rooms_prices_hrs',
+            'rooms_hrs',
             'hotels_basic_data_for_gathering'];
 
         foreach ($tables as $table) {

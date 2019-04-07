@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Goutte\Client;
-use DB;
-use phpDocumentor\Reflection\Types\Array_;
-use SKAgarwal\GoogleApi\PlacesApi;
+//use Goutte\Client;
+//use DB;
+//use phpDocumentor\Reflection\Types\Array_;
+//use SKAgarwal\GoogleApi\PlacesApi;
 
 use App\Hotel;
 use App\Http\Resources\Hotel as HotelResource;
@@ -206,7 +206,7 @@ class HotelController extends Controller
     public function show($hotel, $dateFrom, $dateTo)
     {
         //
-        $hotels = DB::table('rooms_prices_eurobookings_data')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
+        $hotels = DB::table('rooms_prices_eurobookings_data_old')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
             ['hotel_uid', '=', $hotel],
             ['check_in_date', '>=', $dateFrom],
             ['check_in_date', '<=', $dateTo],

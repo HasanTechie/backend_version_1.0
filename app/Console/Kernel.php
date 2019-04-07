@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -19,17 +22,20 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
+        if (!File::exists(storage_path() . '/mylogs/')) {
+            Storage::makeDirectory('/mylogs/');
+        }
         $schedule->command('command:correctingsno')
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->hourly()
-            ->appendOutputTo(storage_path('logs/CorrectingSNo.log'));
+            ->daily()
+            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNo.log'));
 
 //        $schedule->command('command:pushdatatofirestore')
 //            ->withoutOverlapping()

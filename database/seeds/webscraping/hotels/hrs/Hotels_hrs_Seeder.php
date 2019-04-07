@@ -34,7 +34,9 @@ class Hotels_hrs_Seeder extends Seeder
             $this->dA['count_i'] = 1;
             $this->dA['full_break'] = false;
 
-            Storage::makeDirectory('hrs/' . $this->dA['request_date']);
+            if (!File::exists(storage_path() . '/app/hrs/' . $this->dA['request_date'] . '/')) {
+                Storage::makeDirectory('hrs/' . $this->dA['request_date']);
+            }
 
             while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
                 $this->dA['check_in_date'] = $this->dA['start_date'];
@@ -143,7 +145,7 @@ class Hotels_hrs_Seeder extends Seeder
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason1a:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     }
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;break-reason1b:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;break-reason1b:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                     $this->dA['count_not_found']++;
                 }
             }
@@ -182,13 +184,6 @@ class Hotels_hrs_Seeder extends Seeder
                 }
             }
 
-//            $tempArray['response'] = $response;
-//            $tempArray['crawler'] = $crawler;
-//            if (count($tempArray) == 2) {
-//                return $tempArray;
-//            } else {
-//                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReason.log', 'url:' . $url . ' ;minor-break-reason:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-//            }
         } catch (Exception $e) {
             $this->catchException($e, 'phantomRequestError');
         }

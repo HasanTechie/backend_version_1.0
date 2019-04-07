@@ -17,7 +17,7 @@ class CreateRoomsHrsTable extends Migration
             $table->string('uid')->unique()->primary();
             $table->unsignedInteger('s_no');
 
-            $table->string('currency')->nullable();
+//            $table->string('currency')->nullable();
             $table->string('room')->nullable();
             $table->string('hotel_uid')->nullable();
             $table->string('hotel_name')->nullable();

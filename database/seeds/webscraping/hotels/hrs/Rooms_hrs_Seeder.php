@@ -105,21 +105,21 @@ class Rooms_hrs_Seeder extends Seeder
         print($e->getMessage());
     }
 
-    protected function insertRoomsDataIntoDB(){
+    protected function insertRoomsDataIntoDB()
+    {
         foreach ($this->dA['all_rooms'] as $rooms) {
             foreach ($rooms as $room) {
                 if (!empty($room['room']) && !empty($room['price'])) {
                     $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
 
-                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+//                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
+                    $rid = $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $this->dA['adult'] . 'hrs'; //HotelHRSId + RoomName + roomType + room Short D + number of adults + hrstag
                     $rid = str_replace(' ', '', $rid);
 
                     if (DB::table('rooms_prices_hrs')->where('rid', '=', $rid)->doesntExist()) {
                         DB::table('rooms_prices_hrs')->insert([
                             'uid' => uniqid(),
                             's_no' => 1,
-                            'price' => $room['price'],
-                            'currency' => $this->dA['currency'],
                             'room' => $room['room'],
                             'room_type' => $room['room_type'],
                             'criteria' => $room['criteria'],
@@ -130,40 +130,33 @@ class Rooms_hrs_Seeder extends Seeder
                             'hotel_uid' => $this->dA['hotel_uid'],
                             'hotel_name' => $this->dA['hotel_name'],
                             'hotel_hrs_id' => $this->dA['hotel_hrs_id'],
-                            'number_of_adults_in_room_request' => $this->dA['adult'],
-                            'check_in_date' => $this->dA['check_in_date'],
-                            'check_out_date' => $this->dA['check_out_date'],
-                            'request_url' => $this->dA['request_url'],
                             'rid' => $rid,
                             'request_date' => $this->dA['request_date'],
                             'source' => $this->dA['source'],
                             'created_at' => DB::raw('now()'),
                             'updated_at' => DB::raw('now()')
                         ]);
-
-                        DB::table('prices_hrs')->insert([
-                            'uid' => uniqid(),
-                            'price' => $room['price'],
-                            'number_of_adults_in_room_request' => $this->dA['adult'],
-                            'check_in_date' => $this->dA['check_in_date'],
-                            'check_out_date' => $this->dA['check_out_date'],
-                            'request_url' => $this->dA['request_url'],
-                            'rid' => $rid,
-                            'request_date' => $this->dA['request_date'],
-                            'source' => $this->dA['source'],
-                            'created_at' => DB::raw('now()'),
-                            'updated_at' => DB::raw('now()')
-                        ]);
-
-                        $this->dA['request_url'] = null;
-
-                        $this->dA['count_unauthorized'] = 0;
-                        $this->dA['count_access_denied'] = 0;
-                        $this->dA['count_not_found'] = 0;
-                        $this->dA['count_!200'] = 0;
-                        $this->dA['count_!200b'] = 0;
-                        $this->dA['count_!200c'] = 0;
                     }
+
+                    DB::table('rooms_prices_hrs')->insert([
+                        'uid' => uniqid(),
+                        'price' => $room['price'],
+                        'number_of_adults_in_room_request' => $this->dA['adult'],
+                        'check_in_date' => $this->dA['check_in_date'],
+                        'check_out_date' => $this->dA['check_out_date'],
+                        'request_url' => $this->dA['request_url'],
+                        'rid' => $rid,
+                        'created_at' => DB::raw('now()'),
+                        'updated_at' => DB::raw('now()')
+                    ]);
+
+
+                    $this->dA['count_unauthorized'] = 0;
+                    $this->dA['count_access_denied'] = 0;
+                    $this->dA['count_not_found'] = 0;
+                    $this->dA['count_!200'] = 0;
+                    $this->dA['count_!200b'] = 0;
+                    $this->dA['count_!200c'] = 0;
                 }
             }
         }

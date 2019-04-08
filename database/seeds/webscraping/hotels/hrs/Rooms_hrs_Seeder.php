@@ -62,7 +62,7 @@ class Rooms_hrs_Seeder extends Seeder
                                     if (!empty($this->dA['room_facilities'])) {
                                         $this->insertRoomsDataIntoDB();
                                     } else {
-                                        if ($this->dA['count_!200b'] < 2) {
+                                        if ($this->dA['count_!200b'] < 4) {
                                             $this->dA['count_!200b']++;
                                             goto restart2;
                                         } else {
@@ -114,7 +114,7 @@ class Rooms_hrs_Seeder extends Seeder
 
 //                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                     $rid = $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $this->dA['adult'] . 'hrs'; //HotelHRSId + RoomName + roomType + room Short D + number of adults + hrstag
-                    $rid = str_replace(' ', '', $rid);
+                    $rid = substr(str_replace(' ', '', $rid),0,254);
 
                     if (DB::table('rooms_hrs')->where('rid', '=', $rid)->doesntExist()) {
                         DB::table('rooms_hrs')->insert([
@@ -131,7 +131,6 @@ class Rooms_hrs_Seeder extends Seeder
                             'hotel_name' => $this->dA['hotel_name'],
                             'hotel_hrs_id' => $this->dA['hotel_hrs_id'],
                             'rid' => $rid,
-                            'request_date' => $this->dA['request_date'],
                             'source' => $this->dA['source'],
                             'created_at' => DB::raw('now()'),
                             'updated_at' => DB::raw('now()')
@@ -146,6 +145,7 @@ class Rooms_hrs_Seeder extends Seeder
                         'check_out_date' => $this->dA['check_out_date'],
                         'request_url' => $this->dA['request_url'],
                         'rid' => $rid,
+                        'request_date' => $this->dA['request_date'],
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);

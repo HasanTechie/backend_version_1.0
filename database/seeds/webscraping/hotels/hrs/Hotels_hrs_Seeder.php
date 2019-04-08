@@ -88,7 +88,7 @@ class Hotels_hrs_Seeder extends Seeder
                         if ($crawler->filter('input[name="hotelnumber"]')->count() > 0) {
                             $this->dA['hotel_hrs_id'] = $crawler->filter('input[name="hotelnumber"]')->attr('value');
                         } else {
-                            if ($this->dA['count_!200b'] < 50) {
+                            if ($this->dA['count_!200b'] < 24) {
                                 $this->dA['count_!200b']++;
                                 goto restart2;
                             } else {
@@ -101,7 +101,7 @@ class Hotels_hrs_Seeder extends Seeder
                             if (!empty($this->dA['hotel_name']) && !empty($this->dA['hotel_address']) && !empty($this->dA['hotel_facilities']) && !empty($this->dA['hotel_location_details'])) {
                                 $this->insertHotelsDataIntoDB();
                             } else {
-                                if ($this->dA['count_!200c'] < 50) {
+                                if ($this->dA['count_!200c'] < 24) {
                                     $this->dA['count_!200c']++;
                                     goto restart2;
                                 } else {
@@ -390,7 +390,7 @@ class Hotels_hrs_Seeder extends Seeder
     {
         try {
             $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
-            $this->dA['hid'] = str_replace(' ', '', $hid);
+            $this->dA['hid'] = substr(str_replace(' ', '', $hid),0,254);
 
             if (!empty($this->dA['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dA['hid'])->doesntExist()) {
                 DB::table('hotels_hrs')->insert([

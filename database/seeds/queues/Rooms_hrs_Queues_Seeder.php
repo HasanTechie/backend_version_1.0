@@ -16,7 +16,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         //
         $dA['currency'] = 'EUR';
         $dA['start_date'] = '2019-04-17';
-        $dA['end_date'] = '2019-04-17';
+        $dA['end_date'] = '2019-04-30';
         $dA['adults'] = [1, 2];
 
         $hotels = DB::table('hotels_hrs')->inRandomOrder()->get();

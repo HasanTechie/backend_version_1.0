@@ -44,7 +44,7 @@ class CreateHotelsEurobookingsTable extends Migration
             $table->double('longitude_eurobookings')->nullable();
             $table->double('latitude_google')->nullable();
             $table->double('longitude_google')->nullable();
-            $table->string('hid',254)->unique();
+            $table->string('hid',255)->unique();
             $table->text('hotel_url_on_eurobookings')->nullable();
             $table->longText('all_data_google')->nullable();
             $table->string('source')->nullable();

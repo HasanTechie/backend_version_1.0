@@ -28,7 +28,7 @@ class CreateRoomsHrsTable extends Migration
             $table->text('photo')->nullable();
             $table->text('short_description')->nullable();
             $table->longText('facilities')->nullable();
-            $table->string('rid',254)->unique();
+            $table->string('rid',255)->unique();
 
             $table->string('source');
 

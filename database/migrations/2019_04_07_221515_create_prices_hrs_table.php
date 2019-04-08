@@ -21,7 +21,7 @@ class CreatePricesHrsTable extends Migration
             $table->string('check_in_date')->nullable();
             $table->string('check_out_date')->nullable();
             $table->text('request_url')->nullable();
-            $table->string('rid',254);
+            $table->string('rid',255);
             $table->string('request_date');
 
             $table->timestamps();

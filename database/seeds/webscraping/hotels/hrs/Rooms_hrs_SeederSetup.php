@@ -18,9 +18,11 @@ class Rooms_hrs_SeederSetup extends Seeder
         $dA['end_date'] = '2019-04-14';
         $dA['adults'] = [1, 2];
 
-        $hotels = DB::table('hotels_hrs')->where('country_code','=','DK')->inRandomOrder()->get();
+        $hotels = DB::table('hotels_hrs')->inRandomOrder()->get();
+//        $hotels = DB::table('hotels_hrs')->where('country_code','=','DK')->inRandomOrder()->get();
 
         foreach ($hotels as $hotel) {
+
             $roomClass = new Rooms_hrs_Seeder();
 
             $roomClass->mainRun($hotel, $dA);

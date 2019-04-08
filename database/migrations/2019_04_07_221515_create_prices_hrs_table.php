@@ -15,13 +15,16 @@ class CreatePricesHrsTable extends Migration
     {
         Schema::create('prices_hrs', function (Blueprint $table) {
             $table->string('uid')->unique()->primary();
+
             $table->double('price')->nullable();
+            $table->string('currency')->nullable();
             $table->double('price_should')->nullable();
             $table->string('number_of_adults_in_room_request')->nullable();
             $table->string('check_in_date')->nullable();
             $table->string('check_out_date')->nullable();
             $table->text('request_url')->nullable();
             $table->string('rid',255);
+            $table->string('html_price',255);
             $table->string('request_date');
 
             $table->timestamps();

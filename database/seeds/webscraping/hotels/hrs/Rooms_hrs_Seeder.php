@@ -52,6 +52,7 @@ class Rooms_hrs_Seeder extends Seeder
 
                     restart2:
                     $crawler = $this->phantomRequest($this->dA['request_url']);
+
                     if ($crawler) {
                         $this->roomData($crawler);
 
@@ -114,7 +115,7 @@ class Rooms_hrs_Seeder extends Seeder
 
 //                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                     $rid = $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type'] . $room['room_short_description'] . $this->dA['adult'] . 'hrs'; //HotelHRSId + RoomName + roomType + room Short D + number of adults + hrstag
-                    $rid = substr(str_replace(' ', '', $rid),0,254);
+                    $rid = substr(str_replace(' ', '', $rid), 0, 254);
 
                     if (DB::table('rooms_hrs')->where('rid', '=', $rid)->doesntExist()) {
                         DB::table('rooms_hrs')->insert([
@@ -137,15 +138,19 @@ class Rooms_hrs_Seeder extends Seeder
                         ]);
                     }
 
+                    $room['price'] = $room['price'] . '.' . $room['cents'];
+
                     DB::table('prices_hrs')->insert([
                         'uid' => uniqid(),
                         'price' => $room['price'],
+                        'currency' => $room['currency'],
                         'number_of_adults_in_room_request' => $this->dA['adult'],
                         'check_in_date' => $this->dA['check_in_date'],
                         'check_out_date' => $this->dA['check_out_date'],
                         'request_url' => $this->dA['request_url'],
                         'rid' => $rid,
                         'request_date' => $this->dA['request_date'],
+                        'html_price' => $room['full_html_price'],
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
@@ -227,8 +232,11 @@ class Rooms_hrs_Seeder extends Seeder
 //                                                $dr['price'] = ($node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tfoot > tr > td.price')->last()->text() : null;
 //                                                $dr['price'] = ($node->filter('td.roomPrice > div > h4')->count() > 0) ? $node->filter('td.roomPrice > div > h4')->text() : null;
                 $dr['full_text_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->text() : null;
-                $dr['price_cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
-                $dr['price'] = str_replace(array($dr['price_cents'], '€'), '', $dr['full_text_price']) . '.' . $dr['price_cents'];
+                $dr['full_html_price'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice')->html() : null;
+                $dr['cents'] = ($node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->count() > 0) ? $node->filter('td.roomPrice > div > h4.price.standalonePrice > sup')->text() : null;
+                $dr['currency'] = str_replace(array(',', '.', ' '), '', preg_replace('/[0-9]+/', '', $dr['full_text_price']));
+                $dr['price'] = preg_replace('/' . trim($dr['cents']) . '$/', '', preg_replace('/[^0-9.]/', '', str_replace(' ', '', $dr['full_text_price'])));
+
 //                                                $dr['criteria'] = ($node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->count() > 0) ? $node->filter('td.roomPrice > div > div > table.data > tbody > tr > td > span')->last()->text() : null;
                 $dr['criteria'] = ($node->filter('td.roomPrice > div > div.supplements')->count() > 0) ? $node->filter('td.roomPrice > div > div.supplements')->text() : null;
                 foreach ($dr as $key => $value) {

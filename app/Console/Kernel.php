@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
             ->daily() //run once
-            ->fridays() //run only on fridays
+            ->wednesdays() //run only on wednesdays
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand.log'));
 
         $schedule->command('command:gatherhrsroomsprices')

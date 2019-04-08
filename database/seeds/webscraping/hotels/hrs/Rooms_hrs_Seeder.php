@@ -32,8 +32,8 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA['count_unauthorized'] = 0;
             $this->dA['count_not_found'] = 0;
             $this->dA['count_!200'] = 0;
-            $this->dA['count_!200b'] = 0;
-            $this->dA['count_!200c'] = 0;
+            $this->dA['noFacilitiesFound'] = 0;
+            $this->dA['count_noPriceFound'] = 0;
             $this->dA['full_break'] = false;
 
             if (!File::exists(storage_path() . '/app/hrs/' . $this->dA['request_date'] . '/')) {
@@ -63,24 +63,17 @@ class Rooms_hrs_Seeder extends Seeder
                                     if (!empty($this->dA['room_facilities'])) {
                                         $this->insertRoomsDataIntoDB();
                                     } else {
-                                        if ($this->dA['count_!200b'] < 4) {
-                                            $this->dA['count_!200b']++;
+                                        if ($this->dA['noFacilitiesFound'] < 4) {
+                                            $this->dA['noFacilitiesFound']++;
                                             goto restart2;
                                         } else {
                                             Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                                         }
                                     }
-                                } else {
-                                    if ($this->dA['count_!200c'] < 10) {
-                                        $this->dA['count_!200c']++;
-                                        goto restart2;
-                                    } else {
-                                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                    }
                                 }
                             } else {
-                                if ($this->dA['count_!200c'] < 10) {
-                                    $this->dA['count_!200c']++;
+                                if ($this->dA['count_noPriceFound'] < 3) {
+                                    $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 } else {
                                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
@@ -160,8 +153,8 @@ class Rooms_hrs_Seeder extends Seeder
                     $this->dA['count_access_denied'] = 0;
                     $this->dA['count_not_found'] = 0;
                     $this->dA['count_!200'] = 0;
-                    $this->dA['count_!200b'] = 0;
-                    $this->dA['count_!200c'] = 0;
+                    $this->dA['noFacilitiesFound'] = 0;
+                    $this->dA['count_noPriceFound'] = 0;
                 }
             }
         }

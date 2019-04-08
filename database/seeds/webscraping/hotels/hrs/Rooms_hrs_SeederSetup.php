@@ -14,11 +14,11 @@ class Rooms_hrs_SeederSetup extends Seeder
         //
 
         $dA['currency'] = 'EUR';
-        $dA['start_date'] = '2019-04-14';
-        $dA['end_date'] = '2019-04-14';
+        $dA['start_date'] = date("Y-m-d", strtotime("+10 day"));
+        $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
         $dA['adults'] = [1, 2];
 
-        $hotels = DB::table('hotels_hrs')->inRandomOrder()->get();
+        $hotels = DB::table('hotels_hrs')->get();
 //        $hotels = DB::table('hotels_hrs')->where('country_code','=','DK')->inRandomOrder()->get();
 
         foreach ($hotels as $hotel) {

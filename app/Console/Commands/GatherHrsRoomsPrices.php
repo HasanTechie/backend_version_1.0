@@ -3,18 +3,18 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use Hotels_Queues_Seeder;
+use Rooms_hrs_Queues_Seeder;
 
 use Illuminate\Console\Command;
 
-class GatherHrsHotelsData extends Command
+class GatherHrsRoomsPrices extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:gatherhrshotelsdata';
+    protected $signature = 'command:gatherhrsroomsprices';
 
     /**
      * The console command description.
@@ -41,11 +41,12 @@ class GatherHrsHotelsData extends Command
     public function handle()
     {
         //
-        echo 'GatherHrsHotelsData Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
+        //
+        echo 'GatherHrsHotels Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
-        $instance = new Hotels_Queues_Seeder();
+        $instance = new Rooms_hrs_Queues_Seeder();
         $instance->run();
 
-        echo 'GatherHrsHotelsData Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
+        echo 'GatherHrsHotels Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }
 }

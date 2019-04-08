@@ -12,21 +12,21 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 //        $this->call('ProxyCrawlSeeder');
-//
+
 //        $this->call('Hotels_eurobookings_SeederSetup');
 //        $this->call('Rooms_eurobookings_SeederSetup');
 //        $this->call('GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected');
 //        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
 //
 //        $this->call('Hotels_hrs_SeederSetup');
-//        $this->call('Rooms_hrs_SeederSetup');
+        $this->call('Rooms_hrs_SeederSetup');
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected');
 //
 //
 //        $this->call('addDataToHotelsDataTables');
 //        $this->call('Hotels_Queues_Seeder');
 //        $this->call('Rooms_eurobookings_Queues_Seeder');
-        $this->call('Rooms_hrs_Queues_Seeder');
+//        $this->call('Rooms_hrs_Queues_Seeder');
 
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 

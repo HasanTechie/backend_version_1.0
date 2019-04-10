@@ -40,6 +40,24 @@ class ProxyCrawlSeeder extends Seeder
         $crawler = new Crawler($content2);
 
         dd($crawler->html());*/
+        $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
+        $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
+        $dA['adults'] = [1, 2];
+
+        $hotels = DB::table('hotels_hrs')->whereNotIn('country_code', ['CA', 'US'])->get();
+
+        $count = 0;
+        while (strtotime($dA['start_date']) <= strtotime($dA['end_date'])) {
+            foreach ($hotels as $hotel) {
+                foreach ($dA['adults'] as $adult) {
+                    echo $count++ . "\n";
+                }
+
+            }
+            $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+        }
+
+        dd($count);
 
         $full = '99500';
         $cents = '00';

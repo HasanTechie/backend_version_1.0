@@ -32,7 +32,7 @@ class HotelController extends Controller
     {
         //
 //        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
-        $hotels = DB::table('hotels_eurobookings_data')->limit(50)->get();
+        $hotels = DB::table('hotels_eurobookings')->limit(50)->get();
         return HotelResource::collection($hotels);
     }
 

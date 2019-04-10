@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('hotels', 'HotelController@index');
 
 Route::get('rooms/hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}', 'HotelController@show');
+
 Route::get('competitors/hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}', 'HotelController@showCompetitor');

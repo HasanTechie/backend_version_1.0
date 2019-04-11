@@ -43,13 +43,13 @@ class Kernel extends ConsoleKernel
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
             ->daily() //run once
             ->wednesdays() //run only on wednesdays
-            ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand.log'));
+            ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand'.date("Y-m-d").'.log'));
 
         $schedule->command('command:gatherhrsroomsprices')
             ->withoutOverlapping()
             ->runInBackground()
             ->daily() //run once
-            ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand.log'))*/;
+            ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand'.date("Y-m-d").'.log'))*/;
 
         $schedule->command('command:gathergooglehrsdata')
             ->withoutOverlapping()

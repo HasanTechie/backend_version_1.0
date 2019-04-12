@@ -4,8 +4,6 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Rooms_hrs_Queues_Seeder;
-use Exception;
-use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Console\Command;
 
@@ -50,10 +48,5 @@ class GatherHrsRoomsPrices extends Command
         $instance->run();
 
         echo 'GatherHrsRooms Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
-    }
-
-    public function failed(Exception $e)
-    {
-        Storage::append('hrs/RoomsFailedJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
     }
 }

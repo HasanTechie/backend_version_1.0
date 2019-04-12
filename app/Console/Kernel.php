@@ -37,24 +37,24 @@ class Kernel extends ConsoleKernel
             ->twiceDaily()
             ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
 
- /*       $schedule->command('command:gatherhrshotels')
+        $schedule->command('command:gatherhrshotels')
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->daily() //run once
-            ->wednesdays() //run only on wednesdays
-            ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand'.date("Y-m-d").'.log'));
+            ->daily()//run once
+            ->wednesdays()//run only on wednesdays
+            ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand' . date("Y-m-d") . '.log'));
 
         $schedule->command('command:gatherhrsroomsprices')
             ->withoutOverlapping()
             ->runInBackground()
-            ->daily() //run once
-            ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand'.date("Y-m-d").'.log'))*/;
+            ->daily()//run once
+            ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
 
         $schedule->command('command:gathergooglehrsdata')
             ->withoutOverlapping()
             ->runInBackground()
-            ->daily() //run once
+            ->daily()//run once
             ->appendOutputTo(storage_path('app/mylogs/GatherGoogleHRSDataCommand.log'));
 
 //        $schedule->command('command:pushdatatofirestore')

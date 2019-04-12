@@ -16,13 +16,13 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         //
         $dA['currency'] = 'EUR';
         $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
-        $dA['end_date'] = date("Y-m-d", strtotime("+365 day"));
+        $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
         $dA['adults'] = [1, 2];
 
         $hotels = DB::table('hotels_hrs')->get();
 
         foreach ($hotels as $hotel) {
-            GatherRoomsDataJob::dispatch($hotel, $dA)->delay(now()->addSecond(mt_rand(5,100)));
+            GatherRoomsDataJob::dispatch($hotel, $dA)->delay(now()->addSecond(5));
         }
     }
 }

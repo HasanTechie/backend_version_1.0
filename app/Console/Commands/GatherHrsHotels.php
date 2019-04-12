@@ -51,9 +51,9 @@ class GatherHrsHotels extends Command
         echo 'GatherHrsHotels Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }
 
-    public function failed(Exception $exception)
+    public function failed(Exception $e)
     {
-        Storage::append('hrs/FailedJob/hotels/failedjob'.date("Y-m-d").'.log', $exception->getMessage() . ' ' . $exception->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/FailedJob/hotels/failedjob' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         // Send user notification of failure, etc...
     }
 }

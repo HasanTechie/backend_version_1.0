@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>SoliDPS Test</title>
+    <title>SoliDPS</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -117,9 +117,6 @@
 
         <div class="links">
             <a href="/hotels">Hotels</a>
-            <a href="/flightsprices">Airfrance KLM Flights</a>
-            <a href="/flights/search">Search Flights</a>
-
         </div>
         <br/>
         <br/>

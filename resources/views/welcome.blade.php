@@ -101,7 +101,7 @@
             <a href="/landroutes">Search LandRoutes</a>
             <a href="/roomsprices/hotel2">Hotel EmonaAquaeductus Prices </a>
             <a href="/weathers">Weather</a>
-            <a href="/events">Events</a>
+
 
         </div>
         <br/>
@@ -112,10 +112,10 @@
             <a href="/flights/search">Search Flights</a>
 
 
-
         </div>
 
         <div class="links">
+            <a href="/events">Events</a>
             <a href="/hotels">Hotels</a>
         </div>
         <br/>

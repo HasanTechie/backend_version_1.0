@@ -54,6 +54,6 @@ class GatherHrsRoomsPrices extends Command
 
     public function failed(Exception $e)
     {
-        Storage::append('hrs/FailedJob/hotels/failedjob' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/RoomsFailedJobs-' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
     }
 }

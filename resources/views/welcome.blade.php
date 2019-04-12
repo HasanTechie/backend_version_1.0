@@ -81,7 +81,7 @@
 
     <div class="content">
         <div class="title m-b-md">
-            SoliDPS app
+            SoliDPS
         </div>
 
         <div class="links">

@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->everyMinute()
+            ->twiceDaily()
             ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
 
         $schedule->command('command:gatherhrshotels')
@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
             ->runInBackground()
 //            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
             ->daily()//run once
-            ->wednesdays()//run only on wednesdays
+            ->saturdays()//run only on saturdays
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsHotelsCommand' . date("Y-m-d") . '.log'));
 
         $schedule->command('command:gatherhrsroomsprices')

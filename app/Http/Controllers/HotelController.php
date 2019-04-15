@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use Goutte\Client;
 use DB;
+
 //use phpDocumentor\Reflection\Types\Array_;
 //use SKAgarwal\GoogleApi\PlacesApi;
 
@@ -28,12 +29,17 @@ class HotelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($row, $apiKey)
     {
         //
 //        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
-        $hotels = DB::table('hotels_eurobookings')->limit(50)->get();
-        return HotelResource::collection($hotels);
+        if ($apiKey == 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW') {
+            $hotels = DB::table('hotels_eurobookings')->limit($row)->get();
+            return HotelResource::collection($hotels);
+        } else {
+            dd('Error: Incorrect API Key');
+
+        }
     }
 
     public function search()
@@ -189,7 +195,7 @@ class HotelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -200,7 +206,7 @@ class HotelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Hotel $hotel
+     * @param \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
     public function show($hotel, $dateFrom, $dateTo)
@@ -242,7 +248,7 @@ class HotelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Hotel $hotel
+     * @param \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
     public function edit(Hotel $hotel)
@@ -253,8 +259,8 @@ class HotelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Hotel $hotel
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Hotel $hotel)
@@ -265,7 +271,7 @@ class HotelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Hotel $hotel
+     * @param \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
     public function destroy(Hotel $hotel)

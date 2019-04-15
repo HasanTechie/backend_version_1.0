@@ -19,8 +19,11 @@ use Illuminate\Http\Request;
 class HotelController extends Controller
 {
 
+    protected $apiKey;
+
     public function __construct()
     {
+        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
 //        $this->middleware('auth:admin');
     }
 
@@ -33,12 +36,11 @@ class HotelController extends Controller
     {
         //
 //        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
-        if ($apiKey == 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW') {
+        if ($apiKey == $this->apiKey) {
             $hotels = DB::table('hotels_eurobookings')->limit($row)->get();
             return HotelResource::collection($hotels);
         } else {
             dd('Error: Incorrect API Key');
-
         }
     }
 
@@ -209,40 +211,47 @@ class HotelController extends Controller
      * @param \App\Hotel $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show($hotel, $dateFrom, $dateTo)
+    public function show($hotel, $dateFrom, $dateTo, $apiKey)
     {
         //
-        $hotels = DB::table('rooms_prices_eurobookings')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
-            ['hotel_uid', '=', $hotel],
-            ['check_in_date', '>=', $dateFrom],
-            ['check_in_date', '<=', $dateTo],
-        ])->limit(12)->groupBy('check_in_date')->get();
+        if ($apiKey == $this->apiKey) {
+            $hotels = DB::table('rooms_prices_eurobookings')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
+                ['hotel_uid', '=', $hotel],
+                ['check_in_date', '>=', $dateFrom],
+                ['check_in_date', '<=', $dateTo],
+            ])->limit(12)->groupBy('check_in_date')->get();
 
-        return RoomPriceResource::collection($hotels);
+            return RoomPriceResource::collection($hotels);
+        } else {
+            dd('Error: Incorrect API Key');
+        }
     }
 
-    public function showCompetitor($hotel, $dateFrom, $dateTo)
+    public function showCompetitor($hotel, $dateFrom, $dateTo, $apiKey)
     {
         //
+        if ($apiKey == $this->apiKey) {
+            $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where([
+                ['hotel_uid', '=', $hotel],
+                ['check_in_date', '>=', $dateFrom],
+                ['check_in_date', '<=', $dateTo],
+            ])->orderBy('check_in_date')->get();
+            $competitorRooms = [];
+            foreach ($dates as $date) {
 
-        $dates = DB::table('rooms_prices_eurobookings')->select('check_in_date')->distinct('check_in_date')->where([
-            ['hotel_uid', '=', $hotel],
-            ['check_in_date', '>=', $dateFrom],
-            ['check_in_date', '<=', $dateTo],
-        ])->orderBy('check_in_date')->get();
-        $competitorRooms = [];
-        foreach ($dates as $date) {
+                $CompetitorHotels = DB::table('hotels_competitors')->where('hotel_uid', '=', $hotel)->get();
 
-            $CompetitorHotels = DB::table('hotels_competitors')->where('hotel_uid', '=', $hotel)->get();
-
-            foreach ($CompetitorHotels as $competitorHotel) {
-                $competitorRooms = DB::table('rooms_prices_eurobookings_data')->where([
-                    ['check_in_date', '=', $date->check_in_date],
-                    ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-                ])->get();
+                foreach ($CompetitorHotels as $competitorHotel) {
+                    $competitorRooms = DB::table('rooms_prices_eurobookings_data')->where([
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+                    ])->get();
+                }
             }
+            return CompetitorPriceResource::collection($competitorRooms);
+        } else {
+            dd('Error: Incorrect API Key');
         }
-        return CompetitorPriceResource::collection($competitorRooms);
     }
 
     /**

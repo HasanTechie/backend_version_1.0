@@ -22,6 +22,7 @@ class CreatePricesHrsTable extends Migration
             $table->string('number_of_adults_in_room_request')->nullable();
             $table->string('check_in_date')->nullable();
             $table->string('check_out_date')->nullable();
+            $table->longText('basic_conditions')->nullable();
             $table->text('request_url')->nullable();
             $table->string('rid',255);
             $table->string('html_price',255);

@@ -19,7 +19,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
         $dA['adults'] = [1, 2];
 
-        $hotels = DB::table('hotels_hrs')->get();
+        $hotels = DB::table('hotels_hrs')->whereIn('city', ['Rome', 'Berlin'])->get();
 
         foreach ($hotels as $hotel) {
             GatherRoomsDataJob::dispatch($hotel, $dA)->delay(now()->addSecond(5));

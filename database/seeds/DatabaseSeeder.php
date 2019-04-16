@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 //        $this->call('ProxyCrawlSeeder');
-        $this->call('GatheringPublicHolidaysData');
+//        $this->call('GatheringPublicHolidaysData');
 
 //        $this->call('Hotels_eurobookings_SeederSetup');
 //        $this->call('Rooms_eurobookings_SeederSetup');

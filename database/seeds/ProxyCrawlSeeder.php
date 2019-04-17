@@ -44,8 +44,7 @@ class ProxyCrawlSeeder extends Seeder
         $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
         $dA['adults'] = [1, 2];
         $hotels = DB::table('hotels_hrs')->whereIn('city', ['Rome', 'Berlin'])->get();
-
-        dd(count($hotels));
+        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->whereIn('city', ['Rome', 'Berlin'])->get();
         foreach($hotels as $hotel){
             echo $hotel->city .' ';
         }

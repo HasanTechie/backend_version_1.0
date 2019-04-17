@@ -39,26 +39,22 @@ class ProxyCrawlSeeder extends Seeder
         $content2 = $response->getContent();
         $crawler = new Crawler($content2);
 
+
+
         dd($crawler->html());*/
-        $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
-        $dA['end_date'] = date("Y-m-d", strtotime("+120 day"));
-        $dA['adults'] = [1, 2];
-        $hotels = DB::table('hotels_hrs')->whereIn('city', ['Rome', 'Berlin'])->get();
-        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->whereIn('city', ['Rome', 'Berlin'])->get();
-        foreach($hotels as $hotel){
-            echo $hotel->city .' ';
+
+        $rooms = DB::table('rooms_hrs')->get();
+
+        foreach($rooms as $room){
+
+
+            $da= substr(str_replace($room->currency, '', preg_replace('/[0-9.]+/', '', $room->criteria)), 0, 50);
+
+            dd($da);
         }
+
         dd('raeched');
         $count = 0;
-        while (strtotime($dA['start_date']) <= strtotime($dA['end_date'])) {
-            foreach ($hotels as $hotel) {
-                foreach ($dA['adults'] as $adult) {
-                    echo $count++ . "\n";
-                }
-
-            }
-            $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
-        }
 
         dd($count);
 

@@ -37,7 +37,7 @@ class HotelController extends Controller
         //
 //        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('hotels_eurobookings')->limit($row)->get();
+            $hotels = DB::table('hotels_hrs')->limit($row)->get();
             return HotelResource::collection($hotels);
         } else {
             dd('Error: Incorrect API Key');

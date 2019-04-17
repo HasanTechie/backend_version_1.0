@@ -109,8 +109,8 @@ class Rooms_hrs_Seeder extends Seeder
 //                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                     $rid = 'hrs' . $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type']
                         . $this->dA['adult'] . //HotelHRSId + RoomName + roomType + room Short D + criteria without numbers or currencies + number of adults + hrstag
-                        substr($room['room_short_description'], 0, 60) .
-                        substr(preg_replace('/[0-9.]+/', '', $room['criteria']), 0, 60);
+                        substr(preg_replace('/[0-9.]+/', '', $room['criteria']), 0, 60) .
+                        substr($room['room_short_description'], 0, 60);
                     $rid = substr(str_replace(' ', '', $rid), 0, 254);
 
                     if (DB::table('rooms_hrs')->where('rid', '=', $rid)->doesntExist()) {

@@ -15,11 +15,9 @@ use Illuminate\Http\Request;
 class HotelController extends Controller
 {
 
-//    protected $apiKey;
 
     public function __construct()
     {
-//        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
 //        $this->middleware('auth:admin');
     }
 
@@ -31,7 +29,7 @@ class HotelController extends Controller
     public function index()
     {
         //
-            $hotels = DB::table('hotels_bacic_data')->get();
+        $hotels = DB::table('hotels_bacic_data')->get();
     }
 
     public function search()
@@ -161,29 +159,6 @@ class HotelController extends Controller
     }
 
 
-    public function getPlaces()
-    {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', "http://tour-pedia.org/api/getPlaces?location=Berlin"); //free but only one result
-
-        dd(json_decode($response->getBody()));
-    }
-
-    public function getPlaceDetails()
-    {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', "http://tour-pedia.org/api/getPlaceDetails?id=204042");
-
-        dd(json_decode($response->getBody()));
-    }
-
-    public function getReviewDetails()
-    {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=53513358ae9eef9405b2d9ac"); //free
-        dd(json_decode($response->getBody()));
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -204,17 +179,6 @@ class HotelController extends Controller
     public function show($hotel, $dateFrom, $dateTo, $apiKey)
     {
         //
-        if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('rooms_prices_hrs')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
-                ['hotel_uid', '=', $hotel],
-                ['check_in_date', '>=', $dateFrom],
-                ['check_in_date', '<=', $dateTo],
-            ])->limit(12)->groupBy('check_in_date')->get();
-
-            return RoomPriceResource::collection($hotels);
-        } else {
-            dd('Error: Incorrect API Key');
-        }
     }
 
     public function showCompetitor($hotel, $dateFrom, $dateTo, $apiKey)
@@ -279,6 +243,28 @@ class HotelController extends Controller
     }
 }
 
+/*public function getPlaces()
+{
+    $client = new \GuzzleHttp\Client();
+    $response = $client->request('GET', "http://tour-pedia.org/api/getPlaces?location=Berlin"); //free but only one result
+
+    dd(json_decode($response->getBody()));
+}
+
+public function getPlaceDetails()
+{
+    $client = new \GuzzleHttp\Client();
+    $response = $client->request('GET', "http://tour-pedia.org/api/getPlaceDetails?id=204042");
+
+    dd(json_decode($response->getBody()));
+}
+
+public function getReviewDetails()
+{
+    $client = new \GuzzleHttp\Client();
+    $response = $client->request('GET', "http://tour-pedia.org/api/getReviewDetails?id=53513358ae9eef9405b2d9ac"); //free
+    dd(json_decode($response->getBody()));
+}*/
 
 /*
         // for merging data of tourpedia and google

@@ -1,10 +1,10 @@
 @extends ('layouts.header')
 
-@section('title','Hotels')
+@section('title','Hotels Basic Data')
 @section('content')
 
 
-    <h1 class="title is-1">Hotels</h1>
+    <h1 class="title is-1">Hotels Basic Data</h1>
     <h2 class="subtitle">Total number of Hotels : <b>{{number_format($hotels->total())}}</b></h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>

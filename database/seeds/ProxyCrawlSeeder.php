@@ -45,10 +45,10 @@ class ProxyCrawlSeeder extends Seeder
 
         $rooms = DB::table('rooms_hrs')->get();
 
-        foreach($rooms as $room){
+        foreach ($rooms as $room) {
 
 
-            $da= substr(str_replace($room->currency, '', preg_replace('/[0-9.]+/', '', $room->criteria)), 0, 50);
+            $da = substr(str_replace($room->currency, '', preg_replace('/[0-9.]+/', '', $room->criteria)), 0, 50);
 
             dd($da);
         }

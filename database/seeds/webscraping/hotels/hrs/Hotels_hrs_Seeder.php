@@ -390,7 +390,7 @@ class Hotels_hrs_Seeder extends Seeder
     {
         try {
             $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
-            $this->dA['hid'] = substr(str_replace(' ', '', $hid),0,254);
+            $this->dA['hid'] = substr(str_replace(' ', '', $hid), 0, 254);
 
             if (!empty($this->dA['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dA['hid'])->doesntExist()) {
                 DB::table('hotels_hrs')->insert([

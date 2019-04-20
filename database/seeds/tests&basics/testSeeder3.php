@@ -1,4 +1,5 @@
 <?php
+
 use GuzzleHttp\Client as GuzzleClient;
 use Goutte\Client as GoutteClient;
 use JonnyW\PhantomJs\Client as PhantomClient;

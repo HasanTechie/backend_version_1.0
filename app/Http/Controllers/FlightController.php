@@ -185,7 +185,7 @@ class FlightController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -196,7 +196,7 @@ class FlightController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Flight $flight
+     * @param \App\Flight $flight
      * @return \Illuminate\Http\Response
      */
     public function show(Flight $flight)
@@ -208,7 +208,7 @@ class FlightController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Flight $flight
+     * @param \App\Flight $flight
      * @return \Illuminate\Http\Response
      */
     public function edit(Flight $flight)
@@ -219,8 +219,8 @@ class FlightController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Flight $flight
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Flight $flight
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Flight $flight)
@@ -231,7 +231,7 @@ class FlightController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Flight $flight
+     * @param \App\Flight $flight
      * @return \Illuminate\Http\Response
      */
     public function destroy(Flight $flight)

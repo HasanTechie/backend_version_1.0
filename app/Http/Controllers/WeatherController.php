@@ -39,7 +39,7 @@ class WeatherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,7 +50,7 @@ class WeatherController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Weather $weather
+     * @param \App\Weather $weather
      * @return \Illuminate\Http\Response
      */
     public function show(Weather $weather)
@@ -62,7 +62,7 @@ class WeatherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Weather $weather
+     * @param \App\Weather $weather
      * @return \Illuminate\Http\Response
      */
     public function edit(Weather $weather)
@@ -73,8 +73,8 @@ class WeatherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Weather $weather
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Weather $weather
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Weather $weather)
@@ -85,7 +85,7 @@ class WeatherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Weather $weather
+     * @param \App\Weather $weather
      * @return \Illuminate\Http\Response
      */
     public function destroy(Weather $weather)

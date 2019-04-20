@@ -155,7 +155,7 @@ class TrendController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -166,7 +166,7 @@ class TrendController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Trend $trend
+     * @param \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
     public function show(Trend $trend)
@@ -198,7 +198,7 @@ class TrendController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Trend $trend
+     * @param \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
     public function edit(Trend $trend)
@@ -209,8 +209,8 @@ class TrendController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Trend $trend
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Trend $trend)
@@ -221,7 +221,7 @@ class TrendController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Trend $trend
+     * @param \App\Trend $trend
      * @return \Illuminate\Http\Response
      */
     public function destroy(Trend $trend)

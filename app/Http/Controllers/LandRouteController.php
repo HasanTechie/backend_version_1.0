@@ -70,7 +70,7 @@ class LandRouteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -81,7 +81,7 @@ class LandRouteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\LandRoute $landRoute
+     * @param \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function show(LandRoute $landRoute)
@@ -92,7 +92,7 @@ class LandRouteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\LandRoute $landRoute
+     * @param \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function edit(LandRoute $landRoute)
@@ -103,8 +103,8 @@ class LandRouteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\LandRoute $landRoute
+     * @param \Illuminate\Http\Request $request
+     * @param \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, LandRoute $landRoute)
@@ -115,7 +115,7 @@ class LandRouteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\LandRoute $landRoute
+     * @param \App\LandRoute $landRoute
      * @return \Illuminate\Http\Response
      */
     public function destroy(LandRoute $landRoute)

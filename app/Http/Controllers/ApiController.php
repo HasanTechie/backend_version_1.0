@@ -45,7 +45,8 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPrices($rows, $hotel, $dateFrom, $dateTo, $apiKey){
+    public function HRSHotelsCompetitorsPrices($rows, $hotel, $dateFrom, $dateTo, $apiKey)
+    {
         /*if ($apiKey == $this->apiKey) {
             $dates = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select('check_in_date')->distinct('check_in_date')->where([
                 ['hotel_uid', '=', $hotel],

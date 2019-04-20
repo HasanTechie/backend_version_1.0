@@ -38,7 +38,7 @@ class RouteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,7 +49,7 @@ class RouteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Route $route
+     * @param \App\Route $route
      * @return \Illuminate\Http\Response
      */
     public function show(Route $route)
@@ -60,7 +60,7 @@ class RouteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Route $route
+     * @param \App\Route $route
      * @return \Illuminate\Http\Response
      */
     public function edit(Route $route)
@@ -71,8 +71,8 @@ class RouteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Route $route
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Route $route
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Route $route)
@@ -83,7 +83,7 @@ class RouteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Route $route
+     * @param \App\Route $route
      * @return \Illuminate\Http\Response
      */
     public function destroy(Route $route)

@@ -63,7 +63,7 @@ class AirlineController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -74,7 +74,7 @@ class AirlineController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Airline $airline
+     * @param \App\Airline $airline
      * @return \Illuminate\Http\Response
      */
     public function show(Airline $airline)
@@ -85,7 +85,7 @@ class AirlineController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Airline $airline
+     * @param \App\Airline $airline
      * @return \Illuminate\Http\Response
      */
     public function edit(Airline $airline)
@@ -96,8 +96,8 @@ class AirlineController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Airline $airline
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Airline $airline
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Airline $airline)
@@ -108,7 +108,7 @@ class AirlineController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Airline $airline
+     * @param \App\Airline $airline
      * @return \Illuminate\Http\Response
      */
     public function destroy(Airline $airline)

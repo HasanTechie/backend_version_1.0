@@ -8,4 +8,6 @@ class HotelBasicData extends Model
 {
     //
     protected $table = 'hotels_basic_data';
+    protected $primaryKey = 'uid';
+    public $incrementing = false;
 }

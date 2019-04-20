@@ -116,7 +116,7 @@
 
         <div class="links">
             <a href="/events">Events</a>
-            <a href="/hotels">Hotels</a>
+            <a href="/hotelsbasicdata">Hotels</a>
         </div>
         <br/>
         <br/>

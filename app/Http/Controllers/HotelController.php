@@ -32,7 +32,7 @@ class HotelController extends Controller
     {
 //        dd('s');
 //        return view('hotels.search');
-        return redirect('/');;
+//        return redirect('/');;
     }
 
 
@@ -72,23 +72,6 @@ class HotelController extends Controller
         $crawler = $client->submit($form);
 
         dd($crawler);*/
-    }
-
-
-    public function test2()
-    {
-        $results = DB::select('select * from hotels where id = :id', ['id' => '1']);
-
-        dd(unserialize($results[0]->all_data));
-
-    }
-
-    public function test3()
-    {
-        $results = DB::select('select * from places where id = :id', ['id' => '99950']);
-
-        dd(unserialize($results[0]->all_data));
-
     }
 
     public function hotelEurobookingsShowAll()

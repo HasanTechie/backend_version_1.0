@@ -21,7 +21,7 @@ Route::get('/places/{place}', 'PlaceController@show');
 //
 //Route::get('/hotels/create', 'HotelController@create');
 Route::get('/hotelsbasicdata/', 'HotelBasicDataController@index');
-//Route::get('/hotels/hotels/{hotel}', 'HotelController@show');
+Route::get('/hotelsbasicdata/{hotelsbasicdata}', 'HotelBasicDataController@show');
 //Route::get('/hotels/test1', 'HotelController@test1');
 //Route::get('/hotels/test2', 'HotelController@test2');
 //Route::get('/hotels/test3', 'HotelController@test3');

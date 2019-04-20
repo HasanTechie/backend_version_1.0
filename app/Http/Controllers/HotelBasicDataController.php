@@ -16,7 +16,7 @@ class HotelBasicDataController extends Controller
     public function index()
     {
         //
-        $hotels = HotelBasicData::inRandomOrder()->paginate(25);
+        $hotels = HotelBasicData::paginate(25);
         return view('hotels.hotelsbasicdata.index', compact('hotels'));
     }
 
@@ -47,9 +47,11 @@ class HotelBasicDataController extends Controller
      * @param \App\HotelBasicData $hotelBasicData
      * @return \Illuminate\Http\Response
      */
-    public function show(HotelBasicData $hotelBasicData)
+    public function show($hotelBasicData)
     {
         //
+        $hotel = HotelBasicData::where('uid', $hotelBasicData)->get();
+        return view('hotels.hotelsbasicdata.show', compact('hotel'));
     }
 
     /**

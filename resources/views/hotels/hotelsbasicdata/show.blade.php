@@ -1,6 +1,6 @@
 @extends ('layouts/header')
 
-@section('title',$hotel->name)
+@section('title','Hotel Basic Data')
 @section('content')
 
     @if(1 < 0)
@@ -166,7 +166,7 @@
 
         </div>
     @else
-        {{dd(unserialize($hotel->all_data))}}
+        {{isset($hotel[0]->all_data) ? dd(unserialize($hotel[0]->all_data)) : 'No Data Available'}}
     @endif
 
 @endsection

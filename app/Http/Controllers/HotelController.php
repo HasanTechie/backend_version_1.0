@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 
 use App\Hotel;
 use App\Http\Resources\Hotel as HotelResource;
@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
 class HotelController extends Controller
 {
 
-    protected $apiKey;
+//    protected $apiKey;
 
     public function __construct()
     {
-        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
+//        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
 //        $this->middleware('auth:admin');
     }
 
@@ -32,18 +32,6 @@ class HotelController extends Controller
     {
         //
             $hotels = DB::table('hotels_bacic_data')->get();
-    }
-
-    public function allHotels($row, $apiKey)
-    {
-        //
-//        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
-        if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('hotels_hrs')->limit($row)->get();
-            return HotelResource::collection($hotels);
-        } else {
-            dd('Error: Incorrect API Key');
-        }
     }
 
     public function search()

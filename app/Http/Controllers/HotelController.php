@@ -25,7 +25,7 @@ class HotelController extends Controller
     public function index()
     {
         //
-        $hotels = DB::table('hotels_bacic_data')->get();
+
     }
 
     public function search()

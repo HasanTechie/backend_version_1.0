@@ -20,7 +20,7 @@ Route::get('/places/{place}', 'PlaceController@show');
 
 //
 //Route::get('/hotels/create', 'HotelController@create');
-//Route::get('/hotels', 'HotelController@index');
+Route::get('/hotelsbasicdata/', 'HotelBasicDataController@index');
 //Route::get('/hotels/hotels/{hotel}', 'HotelController@show');
 //Route::get('/hotels/test1', 'HotelController@test1');
 //Route::get('/hotels/test2', 'HotelController@test2');

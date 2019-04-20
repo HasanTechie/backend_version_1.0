@@ -45,5 +45,28 @@ class ApiController extends Controller
         }
     }
 
-    
+    public function HRSHotelsCompetitorsPrices($rows, $hotel, $dateFrom, $dateTo, $apiKey){
+        /*if ($apiKey == $this->apiKey) {
+            $dates = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select('check_in_date')->distinct('check_in_date')->where([
+                ['hotel_uid', '=', $hotel],
+                ['check_in_date', '>=', $dateFrom],
+                ['check_in_date', '<=', $dateTo],
+            ])->orderBy('check_in_date')->get();
+            $competitorRooms = [];
+            foreach ($dates as $date) {
+
+                $CompetitorHotels = DB::table('hotels_competitors')->where('hotel_uid', '=', $hotel)->get();
+
+                foreach ($CompetitorHotels as $competitorHotel) {
+                    $competitorRooms = DB::table('rooms_prices_eurobookings_data')->where([
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+                    ])->get();
+                }
+            }
+            return CompetitorPriceResource::collection($competitorRooms);
+        } else {
+            dd('Error: Incorrect API Key');
+        }*/
+    }
 }

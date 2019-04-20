@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Hotel;
 
-
 use Illuminate\Http\Request;
 
 class HotelController extends Controller

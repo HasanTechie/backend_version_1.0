@@ -22,4 +22,4 @@ Route::get('hotels&get={get}&apiKey={apiKey}', 'ApiController@HRSHotels');
 
 Route::get('roomsprices&get={get}&hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}&apiKey={apiKey}', 'ApiController@HRSRoomsPrices');
 
-Route::get('competitors&hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}&apiKey={apiKey}', 'HotelController@showCompetitor');
+Route::get('competitorsprices&hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}&apiKey={apiKey}', 'ApiController@HRSHotelsCompetitorsPrices');

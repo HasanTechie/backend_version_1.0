@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-//use Goutte\Client;
 use DB;
-
-//use phpDocumentor\Reflection\Types\Array_;
-//use SKAgarwal\GoogleApi\PlacesApi;
 
 use App\Hotel;
 use App\Http\Resources\Hotel as HotelResource;
@@ -32,7 +28,13 @@ class HotelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($row, $apiKey)
+    public function index()
+    {
+        //
+            $hotels = DB::table('hotels_bacic_data')->get();
+    }
+
+    public function allHotels($row, $apiKey)
     {
         //
 //        $hotels = DB::table('hotels_eurobookings')->where('city','=','Berlin')->orderBy('total_number_of_ratings_on_tripadvisor')->get();
@@ -215,7 +217,7 @@ class HotelController extends Controller
     {
         //
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('rooms_prices_eurobookings')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
+            $hotels = DB::table('rooms_prices_hrs')->select(DB::raw('uid, avg(price) as price, check_in_date'))->where([
                 ['hotel_uid', '=', $hotel],
                 ['check_in_date', '>=', $dateFrom],
                 ['check_in_date', '<=', $dateTo],

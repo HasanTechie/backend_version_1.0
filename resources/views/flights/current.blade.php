@@ -1,11 +1,11 @@
 @extends ('layouts/header')
 
-@section('title','Flights')
+@section('title','Laminar Data - Flights')
 {{--{{phpinfo()}}--}}
 @section('content')
 
 
-    <h1 class="title is-1">Flights</h1>
+    <h1 class="title is-1">Laminar Data - Flights</h1>
     <h2 class="subtitle">total number of records : <b>{{number_format($flights->total())}}</b></h2>
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>

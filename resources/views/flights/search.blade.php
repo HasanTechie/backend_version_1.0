@@ -1,6 +1,6 @@
 @extends ('layouts/header')
 
-@section('title','Flights')
+@section('title','Laminar Data - Flights')
 {{--{{phpinfo()}}--}}
 @section('content')
 

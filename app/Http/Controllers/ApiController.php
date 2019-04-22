@@ -30,7 +30,7 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSRoomsPrices($rows, $hotel, $dateFrom, $dateTo, $apiKey)
+    public function HRSRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo)
     {
         if ($apiKey == $this->apiKey) {
             $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('avg(price) as price, check_in_date'))->where([
@@ -45,7 +45,7 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPrices($rows, $hotel, $dateFrom, $dateTo, $apiKey)
+    public function HRSHotelsCompetitorsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo)
     {
         /*if ($apiKey == $this->apiKey) {
             $dates = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select('check_in_date')->distinct('check_in_date')->where([

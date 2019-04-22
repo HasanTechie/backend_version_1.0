@@ -23,7 +23,7 @@ class ApiController extends Controller
     public function HRSHotels($rows, $apiKey)
     {
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('hotels_hrs')->limit($rows)->get();
+            $hotels = DB::table('hotels_hrs')->whereIn('city',['Berlin','Rome'])->limit($rows)->get();
             return HotelResource::collection($hotels);
         } else {
             dd('Error: Incorrect API Key');

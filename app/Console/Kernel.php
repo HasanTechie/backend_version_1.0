@@ -48,8 +48,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:gatherhrsroomsprices')
             ->withoutOverlapping()
             ->runInBackground()
-            ->dailyAt('09:05')//run once
-            ->thursdays()
+            ->dailyAt('03:05')//run once
+            ->mondays()
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
 
         $schedule->command('command:gathergooglehrsdata')

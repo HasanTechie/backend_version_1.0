@@ -23,7 +23,11 @@ class ApiController extends Controller
     public function HRSHotels($rows, $apiKey)
     {
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('hotels_hrs')->whereIn('city',['Berlin','Rome'])->limit($rows)->get();
+            if ($rows > 0) {
+                $hotels = DB::table('hotels_hrs')->whereIn('city', ['Berlin', 'Rome'])->limit($rows)->get();
+            } else {
+                $hotels = DB::table('hotels_hrs')->whereIn('city', ['Berlin', 'Rome'])->get();
+            }
             return HotelResource::collection($hotels);
         } else {
             dd('Error: Incorrect API Key');
@@ -33,12 +37,19 @@ class ApiController extends Controller
     public function HRSRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo)
     {
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, avg(price) as price, check_in_date, check_out_date'))->where([
-                ['rooms_hrs.hotel_uid', '=', $hotel],
-                ['check_in_date', '>=', $dateFrom],
-                ['check_in_date', '<=', $dateTo],
-            ])->limit($rows)->groupBy('check_in_date')->get();
-
+            if ($rows > 0) {
+                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, avg(price) as price, check_in_date, check_out_date'))->where([
+                    ['rooms_hrs.hotel_uid', '=', $hotel],
+                    ['check_in_date', '>=', $dateFrom],
+                    ['check_in_date', '<=', $dateTo],
+                ])->limit($rows)->groupBy('check_in_date')->get();
+            }else{
+                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, avg(price) as price, check_in_date, check_out_date'))->where([
+                    ['rooms_hrs.hotel_uid', '=', $hotel],
+                    ['check_in_date', '>=', $dateFrom],
+                    ['check_in_date', '<=', $dateTo],
+                ])->groupBy('check_in_date')->get();
+            }
             return RoomPriceResource::collection($hotels);
         } else {
             dd('Error: Incorrect API Key');

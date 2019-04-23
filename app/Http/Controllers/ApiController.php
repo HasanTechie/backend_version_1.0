@@ -70,12 +70,17 @@ class ApiController extends Controller
                         ['rooms_hrs.hotel_uid', '=', $competitorHotelInstance],
                         ['check_in_date', '=', $hotel->check_in_date],
                     ])->groupBy('check_in_date')->get();
-                    $dA1['price'] = $competitorsData[0]->price;
-                    $dA1['check_in_date'] = $hotel->check_in_date;
-                    $dA1['hotel_uid'] = $competitorHotelInstance;
-                    $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                    if (count($competitorsData) > 0) {
+                        $dA1['price'] = $competitorsData[0]->price;
+                        $dA1['check_in_date'] = $hotel->check_in_date;
+                        $dA1['hotel_uid'] = $competitorHotelInstance;
+                        $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                    }
 
-                    $hotel->competitorsData[] = $dA1;
+                    if (isset($dA1)) {
+                        $hotel->competitorsData[] = $dA1;
+                        $dA1 = null;
+                    }
                 }
             }
 

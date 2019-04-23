@@ -77,11 +77,11 @@ class ApiController extends Controller
                         $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
                     }
 
-                    if (isset($dA1)) {
-                        $hotel->competitorsData[] = $dA1;
-                        $dA1 = null;
-                    }
+                    $dA2[] = isset($dA1) ? $dA1 : null;
+                    $dA1 = null;
                 }
+                $hotel->competitorsData = array_filter($dA2);
+                $dA2 = null;
             }
 
             return CompetitorPriceResource::collection($prices);

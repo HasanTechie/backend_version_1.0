@@ -38,13 +38,13 @@ class ApiController extends Controller
     {
         if ($apiKey == $this->apiKey) {
             if ($rows > 0) {
-                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, avg(price) as price, check_in_date, check_out_date'))->where([
+                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
                     ['rooms_hrs.hotel_uid', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->limit($rows)->groupBy('check_in_date')->get();
             } else {
-                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, avg(price) as price, check_in_date, check_out_date'))->where([
+                $hotels = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
                     ['rooms_hrs.hotel_uid', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
@@ -63,16 +63,28 @@ class ApiController extends Controller
 //        }
 
         $competitorsuidArray = explode(',', str_replace(array('[', ']'), '', $competitorsuid));
-        dd($competitorsuidArray);
+//        dd($competitorsuidArray);
         if ($apiKey == $this->apiKey) {
             if ($rows > 0) {
+
+            } else {
+
                 $dates = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select('check_in_date')->distinct('check_in_date')->where([
                     ['hotel_uid', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->orderBy('check_in_date')->get();
 
-                $competitorsData = DB::table('')
+                foreach ($dates as $date) {
+                    foreach ($competitorsuidArray as $competitorHotelInstance) {
+                        $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
+                            ['rooms_hrs.hotel_uid', '=', $competitorHotelInstance],
+                            ['check_in_date', '==', $date->check_in_date],
+                        ])->groupBy('check_in_date')->get();
+                        dd( $competitorHotelInstance . 'date' . $date->check_in_date);
+                        dd($competitorsData);
+                    }
+                }
 //                $competitorRooms = [];
 //                foreach ($dates as $date) {
 //

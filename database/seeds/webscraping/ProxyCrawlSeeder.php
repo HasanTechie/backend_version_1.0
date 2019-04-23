@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Goutte\Client as GoutteClient;
@@ -42,33 +43,6 @@ class ProxyCrawlSeeder extends Seeder
 
 
         dd($crawler->html());*/
-
-        $rooms = DB::table('rooms_hrs')->get();
-
-        foreach ($rooms as $room) {
-
-
-            $da = substr(str_replace($room->currency, '', preg_replace('/[0-9.]+/', '', $room->criteria)), 0, 50);
-
-            dd($da);
-        }
-
-        dd('raeched');
-        $count = 0;
-
-        dd($count);
-
-        $full = '99500';
-        $cents = '00';
-        $price = preg_replace('/' . trim($cents) . '$/', '', $full) . '.' . $cents;
-        dd($price);
-
-        dd(date("Y-m-d", strtotime("+1 day")));
-
-        $text = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deloris dolorum et oris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odeveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odeniti et libero maiores nostrum. Aliquoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nuoris dolorum et eveniet in ioris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odlla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem tempora?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deleniti et libero maiores nostrum. Aliquam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem temporaLorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deleniti et libero maiores nostrum. Aliquam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem tempora??';
-
-
-        dd(substr(str_replace(' ', '', $text), 0, 240));
 
         while (0 == 0) {
             $client = PhantomClient::getInstance();

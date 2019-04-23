@@ -73,18 +73,17 @@ class ApiController extends Controller
                     ['hotel_uid', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
-                ])->orderBy('check_in_date')->get();
+                ])->limit(20)->orderBy('check_in_date')->get();
 
                 foreach ($dates as $date) {
                     foreach ($competitorsuidArray as $competitorHotelInstance) {
-                        $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
+                        $competitorsData[] = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
                             ['rooms_hrs.hotel_uid', '=', $competitorHotelInstance],
-                            ['check_in_date', '==', $date->check_in_date],
+                            ['check_in_date', '=', $date->check_in_date],
                         ])->groupBy('check_in_date')->get();
-                        dd( $competitorHotelInstance . 'date' . $date->check_in_date);
-                        dd($competitorsData);
                     }
                 }
+                dd($competitorsData);
 //                $competitorRooms = [];
 //                foreach ($dates as $date) {
 //

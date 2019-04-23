@@ -40,9 +40,9 @@ class ApiController extends Controller
                 ['rooms_hrs.hotel_uid', '=', $hotel],
                 ['check_in_date', '>=', $dateFrom],
                 ['check_in_date', '<=', $dateTo],
-            ]);
-            ($rows > 0) ? $hotels = $prices->limit($rows) : null;
-            $prices->groupBy('check_in_date')->get();
+            ])->groupBy('check_in_date');
+            ($rows > 0) ? $prices = $prices->limit($rows) : null;
+            $prices = $prices->get();
 
             return RoomPriceResource::collection($prices);
         } else {
@@ -60,9 +60,9 @@ class ApiController extends Controller
                 ['rooms_hrs.hotel_uid', '=', $hotel],
                 ['check_in_date', '>=', $dateFrom],
                 ['check_in_date', '<=', $dateTo],
-            ]);
-            ($rows > 0) ? $hotels = $prices->limit($rows) : null;
-            $prices->groupBy('check_in_date')->get();
+            ])->groupBy('check_in_date');
+            ($rows > 0) ? $prices = $prices->limit($rows) : null;
+            $prices = $prices->get();
 
             foreach ($prices as $hotel) {
                 foreach ($competitorsuidArray as $competitorHotelInstance) {

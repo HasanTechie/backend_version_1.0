@@ -13,6 +13,12 @@ class PracticeSeeder extends Seeder
     public function run()
     {
         //
+        while (0 == 0) {
+//            echo hexdec(uniqid()) . "\n";
+            echo microtime() + floor(rand()*10000) . "\n";
+        }
+
+
         $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
             ['rooms_hrs.hotel_uid', '=', '5caa74bda4c89'],
             ['check_in_date', '=', '2019-04-21'],

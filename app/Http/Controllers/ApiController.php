@@ -52,9 +52,8 @@ class ApiController extends Controller
 
     public function HRSHotelsCompetitorsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorsid)
     {
-
-
         $competitorsidArray = explode(',', str_replace(array('[', ']'), '', $competitorsid));
+
         if ($apiKey == $this->apiKey) {
             $prices = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.id', '=', 'rooms_hrs.id')->select(DB::raw('rooms_hrs.id, hotel_id,  ROUND(avg(price),2) as price, check_in_date'))->where([
                 ['rooms_hrs.hotel_id', '=', $hotel],
@@ -66,7 +65,7 @@ class ApiController extends Controller
 
             foreach ($prices as $hotel) {
                 foreach ($competitorsidArray as $competitorHotelInstance) {
-                    $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date'))->where([
+                    $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.id', '=', 'rooms_hrs.id')->select(DB::raw('hotel_id,  ROUND(avg(price),2) as price, check_in_date'))->where([
                         ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                         ['check_in_date', '=', $hotel->check_in_date],
                     ])->groupBy('check_in_date')->get();
@@ -74,7 +73,7 @@ class ApiController extends Controller
                         $dA1['price'] = $competitorsData[0]->price;
                         $dA1['check_in_date'] = $hotel->check_in_date;
                         $dA1['hotel_id'] = $competitorHotelInstance;
-                        $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                        $dA1['hotel_id'] = $competitorsData[0]->hotel_id;
                     }
 
                     $dA2[] = isset($dA1) ? $dA1 : null;

@@ -111,7 +111,7 @@ class Rooms_hrs_Seeder extends Seeder
                         substr($room['room_short_description'], 0, 60);
                     $rid = substr(str_replace(' ', '', $rid), 0, 254);
 
-                    $r = DB::table('rooms_hrs')->select('r_id')->where('rid', '=', $rid)->get();
+                    $r = DB::table('rooms_hrs')->select('rid')->where('rid', '=', $rid)->get();
                     if (count($r)) {
                         $r_id = DB::table('rooms_hrs')->insertGetId([
                             'room' => $room['room'],

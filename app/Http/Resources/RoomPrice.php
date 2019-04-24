@@ -16,7 +16,7 @@ class RoomPrice extends JsonResource
     {
 //        return parent::toArray($request);
         return [
-            'r_id' => $this->id,
+            'room_id' => $this->id,
 //            's_no' => $this->s_no,
             'price' => round($this->price,2),
 //            'currency' => $this->currency,

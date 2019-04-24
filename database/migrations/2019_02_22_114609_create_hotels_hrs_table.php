@@ -14,9 +14,7 @@ class CreateHotelsHrsTable extends Migration
     public function up()
     {
         Schema::create('hotels_hrs', function (Blueprint $table) {
-            $table->string('uid')->unique()->primary();
-            $table->unsignedInteger('s_no');
-
+            $table->increments('id')->unique();
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->text('photo')->nullable();

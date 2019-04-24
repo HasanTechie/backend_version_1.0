@@ -14,13 +14,10 @@ class CreateRoomsHrsTable extends Migration
     public function up()
     {
         Schema::create('rooms_hrs', function (Blueprint $table) {
-            $table->string('uid')->unique()->primary();
-            $table->unsignedInteger('s_no');
+            $table->increments('id')->unique();
 
             $table->string('room')->nullable();
-            $table->string('hotel_uid')->nullable();
-            $table->string('hotel_name')->nullable();
-            $table->string('hotel_hrs_id')->nullable();
+            $table->unsignedInteger('hotel_id')->index();
             $table->string('room_type')->nullable();
             $table->string('criteria')->nullable();
             $table->longText('basic_conditions')->nullable();

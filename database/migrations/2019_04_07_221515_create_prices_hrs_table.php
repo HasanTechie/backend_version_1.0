@@ -14,7 +14,7 @@ class CreatePricesHrsTable extends Migration
     public function up()
     {
         Schema::create('prices_hrs', function (Blueprint $table) {
-            $table->string('uid')->unique()->primary();
+            $table->increments('id')->unique();
 
             $table->double('price')->nullable();
             $table->string('currency')->nullable();
@@ -24,7 +24,7 @@ class CreatePricesHrsTable extends Migration
             $table->string('check_out_date')->nullable();
             $table->longText('basic_conditions')->nullable();
             $table->text('request_url')->nullable();
-            $table->string('rid',255);
+            $table->unsignedInteger('r_id')->index();
             $table->string('html_price',255);
             $table->string('request_date');
 

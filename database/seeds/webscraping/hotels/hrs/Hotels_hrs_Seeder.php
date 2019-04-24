@@ -394,8 +394,6 @@ class Hotels_hrs_Seeder extends Seeder
 
             if (!empty($this->dA['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dA['hid'])->doesntExist()) {
                 DB::table('hotels_hrs')->insert([
-                    'uid' => uniqid(),
-                    's_no' => 1,
                     'name' => $this->dA['hotel_name'],
                     'address' => $this->dA['hotel_address'],
                     'hrs_id' => $this->dA['hotel_hrs_id'],

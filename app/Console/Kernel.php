@@ -30,12 +30,12 @@ class Kernel extends ConsoleKernel
         if (!File::exists(storage_path() . '/mylogs/')) {
             Storage::makeDirectory('/mylogs/');
         }
-        $schedule->command('command:correctingsno')
-            ->withoutOverlapping()
-            ->runInBackground()
-//            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-            ->twiceDaily()
-            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
+//        $schedule->command('command:correctingsno')
+//            ->withoutOverlapping()
+//            ->runInBackground()
+////            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
+//            ->twiceDaily()
+//            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
 
         $schedule->command('command:gatherhrshotels')
             ->withoutOverlapping()
@@ -48,8 +48,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:gatherhrsroomsprices')
             ->withoutOverlapping()
             ->runInBackground()
-            ->dailyAt('03:05')//run once
-            ->mondays()
+            ->dailyAt('11:30')//run once
+            ->wednesdays()
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
 
         $schedule->command('command:gathergooglehrsdata')

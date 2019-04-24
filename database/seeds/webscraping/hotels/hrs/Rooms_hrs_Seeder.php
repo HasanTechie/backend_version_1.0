@@ -126,10 +126,10 @@ class Rooms_hrs_Seeder extends Seeder
                             'updated_at' => DB::raw('now()')
                         ]);
 
-                        $room = DB::table('rooms_hrs')->where('rid', '=', $rid)->get();
+                        $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
 
                         $room['price'] = $room['price'] . '.' . $room['cents'];
-                        if (count($room) == 1) {
+                        if (count($r) == 1) {
                             DB::table('prices_hrs')->insert([
                                 'price' => $room['price'],
                                 'currency' => $room['currency'],
@@ -138,19 +138,19 @@ class Rooms_hrs_Seeder extends Seeder
                                 'check_out_date' => $this->dA['check_out_date'],
                                 'basic_conditions' => serialize($room['room_basic_conditions']),
                                 'request_url' => $this->dA['request_url'],
-                                'r_id' => $room[0]->id,
+                                'r_id' => $r[0]->id,
                                 'request_date' => $this->dA['request_date'],
                                 'html_price' => $room['full_html_price'],
                                 'created_at' => DB::raw('now()'),
                                 'updated_at' => DB::raw('now()')
                             ]);
                         }
-                    $this->dA['count_unauthorized'] = 0;
-                    $this->dA['count_access_denied'] = 0;
-                    $this->dA['count_not_found'] = 0;
-                    $this->dA['count_!200'] = 0;
-                    $this->dA['noFacilitiesFound'] = 0;
-                    $this->dA['count_noPriceFound'] = 0;
+                        $this->dA['count_unauthorized'] = 0;
+                        $this->dA['count_access_denied'] = 0;
+                        $this->dA['count_not_found'] = 0;
+                        $this->dA['count_!200'] = 0;
+                        $this->dA['noFacilitiesFound'] = 0;
+                        $this->dA['count_noPriceFound'] = 0;
                     }
 
                 }

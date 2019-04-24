@@ -26,8 +26,6 @@ class CreateRoomsHrsTable extends Migration
             $table->longText('facilities')->nullable();
             $table->string('rid',255)->unique();
 
-            $table->string('source');
-
             $table->timestamps();
         });
     }

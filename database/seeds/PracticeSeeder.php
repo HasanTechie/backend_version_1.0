@@ -13,7 +13,31 @@ class PracticeSeeder extends Seeder
     public function run()
     {
         //
+        $started = microtime(true);
+        $i = 0;
+        while ($i < 1000000) {
+            $i++;
+            $query = hexdec('hasan');
+        }
 
+//Execute your SQL query.
+
+//Record the end time after the query has finished running.
+        $end = microtime(true);
+
+//Calculate the difference in microseconds.
+        $difference = $end - $started;
+
+//Format the time so that it only shows 10 decimal places.
+        $queryTime = number_format($difference, 10);
+
+//Print out the seconds it took for the query to execute.
+        echo "SQL query took $queryTime seconds.";
+        dd(number_format($query));
+
+//        dd(hexdec('hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection'));
+        $new = str_replace((range('a', 'z')), range(1, 26), 'hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection');
+        dd($new);
         $r_id = DB::table('rooms_hrs')->insertGetId([
             'room' => 'test',
             'room_type' => 'test',

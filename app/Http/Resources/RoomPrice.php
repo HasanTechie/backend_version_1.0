@@ -24,7 +24,7 @@ class RoomPrice extends JsonResource
 //            'photo' => $this->photo,
 //            'hotel_uid' => $this->hotel_uid,
 //            'hotel_eurobooking_id' => $this->hotel_eurobooking_id,
-            'hotel_name' => $this->hotel_name,
+            'hotel_id' => $this->hotel_id,
 //            'number_of_adults_in_room_request' => $this->number_of_adults_in_room_request,
             'check_in_date' => $this->check_in_date,
             'check_out_date' => $this->check_out_date,

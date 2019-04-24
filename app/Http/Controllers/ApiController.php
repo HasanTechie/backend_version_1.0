@@ -36,8 +36,8 @@ class ApiController extends Controller
     public function HRSRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo)
     {
         if ($apiKey == $this->apiKey) {
-            $prices = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name,  ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
-                ['rooms_hrs.hotel_uid', '=', $hotel],
+            $prices = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.id', '=', 'rooms_hrs.id')->select(DB::raw('hotel_id,  ROUND(avg(price),2) as price, check_in_date'))->where([
+                ['rooms_hrs.hotel_id', '=', $hotel],
                 ['check_in_date', '>=', $dateFrom],
                 ['check_in_date', '<=', $dateTo],
             ])->groupBy('check_in_date');

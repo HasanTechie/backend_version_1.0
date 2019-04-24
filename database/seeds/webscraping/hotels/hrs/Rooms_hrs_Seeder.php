@@ -113,6 +113,8 @@ class Rooms_hrs_Seeder extends Seeder
 
                     $r = DB::table('rooms_hrs')->select('rid')->where('rid', '=', $rid)->get();
                     if (count($r)) {
+                        $r_id = $r[0]->id;
+                    } else {
                         $r_id = DB::table('rooms_hrs')->insertGetId([
                             'room' => $room['room'],
                             'room_type' => $room['room_type'],
@@ -126,8 +128,6 @@ class Rooms_hrs_Seeder extends Seeder
                             'created_at' => DB::raw('now()'),
                             'updated_at' => DB::raw('now()')
                         ]);
-                    } else {
-                        $r_id = $r[0]->id;
                     }
 
                     $room['price'] = $room['price'] . '.' . $room['cents'];

@@ -20,6 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('hotels&get={get}&apiKey={apiKey}', 'ApiController@HRSHotels');
 
-Route::get('roomsprices&get={get}&apiKey={apiKey}&hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}', 'ApiController@HRSRoomsPrices');
+Route::get('roomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}', 'ApiController@HRSRoomsPrices');
 
-Route::get('competitorsprices&get={get}&apiKey={apiKey}&hoteluid={hotel_uid}&datefrom={dateFrom}&dateto={dateTo}&competitorsuid={competitorsuid}', 'ApiController@HRSHotelsCompetitorsPrices');
+Route::get('competitorsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'ApiController@HRSHotelsCompetitorsPrices');

@@ -16,7 +16,7 @@ class RoomPrice extends JsonResource
     {
 //        return parent::toArray($request);
         return [
-//            'uid' => $this->uid,
+            'r_id' => $this->id,
 //            's_no' => $this->s_no,
             'price' => round($this->price,2),
 //            'currency' => $this->currency,
@@ -27,7 +27,7 @@ class RoomPrice extends JsonResource
             'hotel_id' => $this->hotel_id,
 //            'number_of_adults_in_room_request' => $this->number_of_adults_in_room_request,
             'check_in_date' => $this->check_in_date,
-            'check_out_date' => $this->check_out_date,
+//            'check_out_date' => $this->check_out_date,
 //            'rid' => $this->rid,
 //            'request_date' => $this->request_date,
 //            'source' => $this->source,

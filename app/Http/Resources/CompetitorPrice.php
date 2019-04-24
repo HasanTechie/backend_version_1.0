@@ -16,10 +16,10 @@ class CompetitorPrice extends JsonResource
     {
 //        return parent::toArray($request);
         return [
-            'hotel_name' => $this->hotel_name,
+            'hotel_id' => $this->hotel_id,
             'price' => $this->price,
             'check_in_date' => $this->check_in_date,
-            'check_out_date' => $this->check_out_date,
+//            'check_out_date' => $this->check_out_date,
             'competitors_data' => $this->competitorsData,
         ];
     }

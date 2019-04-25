@@ -55,8 +55,9 @@ class ApiController extends Controller
         $competitorsidArray = explode(',', str_replace(array('[', ']'), '', $competitorsid));
 
         if ($apiKey == $this->apiKey) {
-            $prices = DB::table('prices_hrs')->select(DB::raw('rooms_hrs.id, rooms_hrs.hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date, request_date'))
-                ->join('rooms_hrs', 'rooms_hrs.id', '=', 'prices_hrs.r_id')
+            $prices = DB::table('rooms_hrs')->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date, request_date'))
+                ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
                     ['rooms_hrs.hotel_id', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
@@ -67,9 +68,10 @@ class ApiController extends Controller
 
             foreach ($prices as $hotel) {
                 foreach ($competitorsidArray as $competitorHotelInstance) {
-                    $competitorsData = DB::table('prices_hrs')
-                        ->select(DB::raw('rooms_hrs.hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                        ->join('rooms_hrs', 'rooms_hrs.id', '=', 'prices_hrs.r_id')
+                    $competitorsData = DB::table('rooms_hrs')
+                        ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id, rooms_hrs.hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                        ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                        ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                         ->where([
                         ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                         ['check_in_date', '=', $hotel->check_in_date],
@@ -78,7 +80,7 @@ class ApiController extends Controller
                         $dA1['price'] = $competitorsData[0]->price;
                         $dA1['check_in_date'] = $hotel->check_in_date;
                         $dA1['hotel_id'] = $competitorHotelInstance;
-                        $dA1['hotel_id'] = $competitorsData[0]->hotel_id;
+                        $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
                     }
 
                     $dA2[] = isset($dA1) ? $dA1 : null;

@@ -61,13 +61,16 @@ class ApiController extends Controller
                     ['rooms_hrs.hotel_id', '=', $hotel],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
-                ])->groupBy('check_in_date', 'request_date');
+                ])->groupBy('check_in_date');
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
 
             foreach ($prices as $hotel) {
                 foreach ($competitorsidArray as $competitorHotelInstance) {
-                    $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.id', '=', 'rooms_hrs.id')->select(DB::raw('hotel_id,  ROUND(avg(price),2) as price, check_in_date'))->where([
+                    $competitorsData = DB::table('prices_hrs')
+                        ->select(DB::raw('rooms_hrs.hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                        ->join('rooms_hrs', 'rooms_hrs.id', '=', 'prices_hrs.r_id')
+                        ->where([
                         ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                         ['check_in_date', '=', $hotel->check_in_date],
                     ])->groupBy('check_in_date')->get();

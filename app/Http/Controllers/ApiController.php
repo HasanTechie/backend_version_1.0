@@ -102,4 +102,8 @@ class ApiController extends Controller
             dd('Error: Incorrect API Key');
         }
     }
+
+    public function Events(){
+
+    }
 }

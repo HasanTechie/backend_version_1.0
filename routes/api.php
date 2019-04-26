@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('hotels&get={get}&apiKey={apiKey}', 'ApiController@HRSHotels');
+Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'ApiController@HRSHotels');
 
 Route::get('roomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}', 'ApiController@HRSRoomsPrices');
 

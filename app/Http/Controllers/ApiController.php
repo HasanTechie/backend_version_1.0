@@ -21,11 +21,11 @@ class ApiController extends Controller
 //        $this->middleware('auth:admin');
     }
 
-    public function HRSHotels($rows, $apiKey)
+    public function HRSHotels($rows, $apiKey, $city)
     {
         if ($apiKey == $this->apiKey) {
             $hotels = DB::table('hotels_hrs')
-                ->whereIn('city', ['Berlin', 'Rome']);
+                ->where('city', '=', $city);
             ($rows > 0) ? $hotels = $hotels->limit($rows) : null;
             $hotels = $hotels->get();
 

@@ -24,7 +24,7 @@ class Event extends JsonResource
             'url' => $this->url,
             'min_price' => $this->standard_price_including_fees_min,
             'max_price' => $this->standard_price_including_fees_max,
-//            'all_data' => $this->all_data,
+            'all_data' => $this->all_data,
         ];
     }
 }

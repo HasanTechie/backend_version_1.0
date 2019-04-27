@@ -106,7 +106,24 @@ class ApiController extends Controller
 
     public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorsid)
     {
+        if ($apiKey == $this->apiKey) {
+            $competitorsidArray = explode(',', str_replace(array('[', ']'), '', $competitorsid));
 
+            $prices = DB::table('rooms_hrs')
+                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                ->where([
+                    ['rooms_hrs.hotel_id', '=', $hotel],
+                    ['check_in_date', '>=', $dateFrom],
+                    ['check_in_date', '<=', $dateTo],
+                ])->groupBy('check_in_date');
+            ($rows > 0) ? $prices = $prices->limit($rows) : null;
+            $prices = $prices->get();
+            
+        } else {
+            dd('Error: Incorrect API Key');
+        }
     }
 
     public function Events($rows, $apiKey, $city)

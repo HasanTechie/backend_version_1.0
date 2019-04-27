@@ -109,8 +109,8 @@ class ApiController extends Controller
         if ($apiKey == $this->apiKey) {
             $competitorsidArray = explode(',', str_replace(array('[', ']'), '', $competitorsid));
 
-            $prices = DB::table('rooms_hrs')
-                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+            $dates = DB::table('rooms_hrs')
+                ->select(DB::raw('prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
@@ -118,9 +118,25 @@ class ApiController extends Controller
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
-            ($rows > 0) ? $prices = $prices->limit($rows) : null;
-            $prices = $prices->get();
-            
+            ($rows > 0) ? $dates = $dates->limit($rows) : null;
+            $dates = $dates->get();
+
+            foreach ($dates as $date) {
+
+                $mainHotelRooms = DB::table('rooms_hrs')
+                    ->select(DB::raw('rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                    ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                    ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                    ->where([
+                        ['rooms_hrs.hotel_id', '=', $hotel],
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['request_date', '<=', date("Y-m-d")],
+                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                    ])->get();
+
+                dd($mainHotelRooms);
+            }
+
         } else {
             dd('Error: Incorrect API Key');
         }

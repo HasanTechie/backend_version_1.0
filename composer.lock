@@ -820,16 +820,16 @@
         },
         {
             "name": "google/gax",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "d346b7a3f2b31bc9f0b226faa3d32bd721111b82"
+                "reference": "48387fb818c6882296710a2302a0aa973b99afb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/d346b7a3f2b31bc9f0b226faa3d32bd721111b82",
-                "reference": "d346b7a3f2b31bc9f0b226faa3d32bd721111b82",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/48387fb818c6882296710a2302a0aa973b99afb2",
+                "reference": "48387fb818c6882296710a2302a0aa973b99afb2",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +866,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2019-04-04T23:03:23+00:00"
+            "time": "2019-04-23T22:57:39+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -1368,16 +1368,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.8.13",
+            "version": "v5.8.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "837e3823e2274d22b8e281d093391b5d9c23029a"
+                "reference": "d1ba096bf809c7cbe6cb9624222326d75c92fd74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/837e3823e2274d22b8e281d093391b5d9c23029a",
-                "reference": "837e3823e2274d22b8e281d093391b5d9c23029a",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d1ba096bf809c7cbe6cb9624222326d75c92fd74",
+                "reference": "d1ba096bf809c7cbe6cb9624222326d75c92fd74",
                 "shasum": ""
             },
             "require": {
@@ -1511,7 +1511,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-04-18T15:28:45+00:00"
+            "time": "2019-04-23T13:22:19+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -2540,16 +2540,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.2.0",
+            "version": "v6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707"
+                "reference": "5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707",
-                "reference": "6fa3232ff9d3f8237c0fae4b7ff05e1baa4cd707",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
+                "reference": "5397cd05b0a0f7937c47b0adcb4c60e5ab936b6a",
                 "shasum": ""
             },
             "require": {
@@ -2598,7 +2598,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2019-03-10T07:52:41+00:00"
+            "time": "2019-04-21T09:21:45+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -5893,16 +5893,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656"
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6fda8ce1974b62b14935adc02a9ed38252eca656",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
+                "reference": "3095910f0f0fb155ac4021fc51a4a7a39ac04e8a",
                 "shasum": ""
             },
             "require": {
@@ -5917,7 +5917,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -5942,7 +5942,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-02-01T05:27:49+00:00"
+            "time": "2019-04-25T07:55:20+00:00"
         },
         {
             "name": "sebastian/exporter",

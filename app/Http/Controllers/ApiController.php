@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CompetitorPrice as CompetitorPriceResource;
+use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;
@@ -97,7 +97,7 @@ class ApiController extends Controller
                 $dA2 = null;
             }
 
-            return CompetitorPriceResource::collection($prices);
+            return CompetitorAvgPriceResource::collection($prices);
 
         } else {
             dd('Error: Incorrect API Key');

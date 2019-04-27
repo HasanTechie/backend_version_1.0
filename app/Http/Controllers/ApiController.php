@@ -56,7 +56,7 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorsid)
+    public function HRSHotelsCompetitorsAvgPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorsid)
     {
         if ($apiKey == $this->apiKey) {
             $competitorsidArray = explode(',', str_replace(array('[', ']'), '', $competitorsid));
@@ -102,6 +102,11 @@ class ApiController extends Controller
         } else {
             dd('Error: Incorrect API Key');
         }
+    }
+
+    public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorsid)
+    {
+
     }
 
     public function Events($rows, $apiKey, $city)

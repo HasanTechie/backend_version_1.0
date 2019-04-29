@@ -46,7 +46,13 @@ class Rooms_hrs_Seeder extends Seeder
                         break 2;
                     }
                     $this->dA['adult'] = $adult;
-                    $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] . "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" . $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" . date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) . "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) . "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" . (($adult > 1) ? 1 : 0) . "&children=0";
+                    $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] .
+                        "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" .
+                        $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" .
+                        date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) .
+                        "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) .
+                        "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" .
+                        (($adult > 1) ? 1 : 0) . "&children=0";
 
                     restart2:
                     $crawler = $this->phantomRequest($this->dA['request_url']);

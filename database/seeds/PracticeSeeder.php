@@ -18,7 +18,7 @@ class PracticeSeeder extends Seeder
         while ($i < 864000) {
 
             $rid = 'hrs1081Standardroomsingkaisaleroom1Incl' . mt_rand() . 'udingbreakfastClub,2Twin/SingleBed(s),25sqm/269sqft,Wirelessinternet';
-            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
+//            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
             echo $i++ . ' ';
         }
 

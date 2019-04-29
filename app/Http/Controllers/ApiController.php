@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
+use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;
@@ -88,10 +89,10 @@ class ApiController extends Controller
                         $dA1['check_in_date'] = $hotel->check_in_date;
                         $dA1['hotel_id'] = $competitorHotelInstance;
                         $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                        $dA2[] = $dA1;
+                        $dA1 = null;
                     }
 
-                    $dA2[] = isset($dA1) ? $dA1 : null;
-                    $dA1 = null;
                 }
                 $hotel->competitorsData = array_filter($dA2);
                 $dA2 = null;
@@ -122,9 +123,8 @@ class ApiController extends Controller
             $dates = $dates->get();
 
             foreach ($dates as $date) {
-
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
@@ -133,27 +133,47 @@ class ApiController extends Controller
                         ['request_date', '<=', date("Y-m-d")],
                         ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->get();
+            }
 
 
-                foreach ($mainHotelRooms as $mainHotelRoom) {
-                    foreach($competitorIdsArray as $competitorId) {
-                        dd($competitorId);
-                    }
-                    $competitorsRoom = DB::table('rooms_hrs')
-                        ->select(DB::raw('hotels_hrs.name, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+            foreach ($mainHotelRooms as $mainHotelRoom) {
+                foreach ($competitorIdsArray as $competitorId) {
+                    $competitorsRooms = DB::table('rooms_hrs')
+                        ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
                         ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
                         ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                         ->where([
-                            ['rooms_hrs.hotel_id', '=', $hotel],
+                            ['rooms_hrs.hotel_id', '=', $competitorId],
                             ['rooms_hrs.room', '=', $mainHotelRoom->room],
+                            ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
                             ['check_in_date', '=', $date->check_in_date],
                             ['request_date', '<=', date("Y-m-d")],
                             ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                         ])->get();
 
-                    dd($competitorsRoom);
+                    if (count($competitorsRooms) > 0) {
+                        foreach ($competitorsRooms as $competitorsRoomsInstance) {
+                            $dA1['price'] = $competitorsRoomsInstance->price;
+                            $dA1['room'] = $competitorsRoomsInstance->room;
+                            $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
+                            $dA1['check_in_date'] = $date->check_in_date;
+                            $dA1['request_date'] = $competitorsRoomsInstance->request_date;
+                            $dA1['hotel_id'] = $competitorId;
+                            $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
+                            if (preg_replace('/[0-9]+/', '', str_replace(' ', '', $mainHotelRoom->criteria))
+                                ==
+                                preg_replace('/[0-9]+/', '', str_replace(' ', '', $competitorsRoomsInstance->criteria))) {
+                                $dA2[] = $dA1;
+                                $dA1 = null;
+                            }
+                        }
+                    }
+
                 }
+                $mainHotelRoom->competitors = $dA2;
+                $dA2 = null;
             }
+            return CompetitorRoomPriceResource::collection($mainHotelRooms);
 
         } else {
             dd('Error: Incorrect API Key');

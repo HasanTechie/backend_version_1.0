@@ -15,9 +15,11 @@ class PracticeSeeder extends Seeder
         //
         $started = microtime(true);
         $i = 0;
-        while ($i < 1000000) {
-            $i++;
-            $query = hexdec('hasan');
+        while ($i < 864000) {
+
+            $rid = 'hrs1081Standardroomsingkaisaleroom1Incl' . mt_rand() . 'udingbreakfastClub,2Twin/SingleBed(s),25sqm/269sqft,Wirelessinternet';
+            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
+            echo $i++ . ' ';
         }
 
 //Execute your SQL query.
@@ -33,7 +35,7 @@ class PracticeSeeder extends Seeder
 
 //Print out the seconds it took for the query to execute.
         echo "SQL query took $queryTime seconds.";
-        dd(number_format($query));
+        dd('break');
 
 //        dd(hexdec('hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection'));
         $new = str_replace((range('a', 'z')), range(1, 26), 'hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection');

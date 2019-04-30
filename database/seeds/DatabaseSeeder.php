@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
 //
 //        $this->call('Hotels_hrs_SeederSetup');
-        $this->call('Rooms_hrs_SeederSetup');
+//        $this->call('Rooms_hrs_SeederSetup');
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected');
 //
 //
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CorrectingSNoSeeder');
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 //        $this->call('ProxyCrawlSeeder');
-//        $this->call('StormProxiesSeeder');
+        $this->call('StormProxiesSeeder');
 
 
     }

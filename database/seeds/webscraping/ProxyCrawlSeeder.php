@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -59,7 +60,7 @@ class ProxyCrawlSeeder extends Seeder
             $crawler = new Crawler($response->getContent());
 
             if (!empty($crawler->text())) {
-                echo $crawler->text() . "\n";
+                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
             } else {
                 echo 'empty : ' . $response->getStatus() . "\n";
             }

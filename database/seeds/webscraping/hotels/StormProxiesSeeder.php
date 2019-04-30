@@ -57,13 +57,15 @@ class StormProxiesSeeder extends Seeder
                 '163.172.36.207:15008'
             ];
 
+       dd( count($this->dA['proxy']) - 1);
+
         while (0 == 0) {
             $started = microtime(true);
             $client = PhantomClient::getInstance();
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][mt_rand(0, 32)]);
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][mt_rand(0, 31)]);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $request->setTimeout(80000);

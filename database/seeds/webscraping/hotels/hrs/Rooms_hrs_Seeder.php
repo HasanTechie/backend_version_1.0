@@ -23,43 +23,9 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
             $this->dA['city'] = $hotel->city;
 
-//            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-//            $this->dA['proxy'] = ['95.211.175.167:13151', '95.211.175.225:13151'];
-            $this->dA['proxy'] =
-                ['163.172.48.109:15005',
-                    '163.172.48.117:15005',
-                    '163.172.48.119:15005',
-                    '163.172.48.121:15005',
-                    '163.172.48.109:15006',
-                    '163.172.48.117:15006',
-                    '163.172.48.119:15006',
-                    '163.172.48.121:15006',
-                    '163.172.48.109:15007',
-                    '163.172.48.117:15007',
-                    '163.172.48.119:15007',
-                    '163.172.48.121:15007',
-                    '163.172.48.109:15008',
-                    '163.172.48.117:15008',
-                    '163.172.48.119:15008',
-                    '163.172.48.121:15008',
-                    '163.172.36.181:15005',
-                    '163.172.36.191:15005',
-                    '62.210.251.228:15005',
-                    '163.172.36.207:15005',
-                    '163.172.36.181:15006',
-                    '163.172.36.191:15006',
-                    '62.210.251.228:15006',
-                    '163.172.36.207:15006',
-                    '163.172.36.181:15007',
-                    '163.172.36.191:15007',
-                    '62.210.251.228:15007',
-                    '163.172.36.207:15007',
-                    '163.172.36.181:15008',
-                    '163.172.36.191:15008',
-                    '62.210.251.228:15008',
-                    '163.172.36.207:15008'
-                ];
-            $this->dA['timeOut'] = 80000;
+            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+            $this->dA['proxy'] = ['95.211.175.167:13151', '95.211.175.225:13151'];
+            $this->dA['timeOut'] = 180000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_access_denied'] = 0;
             $this->dA['count_unauthorized'] = 0;
@@ -201,13 +167,12 @@ class Rooms_hrs_Seeder extends Seeder
     protected function phantomRequest($url)
     {
         try {
-            $url = 'https://api.myip.com/';
             restart:
             $client = PhantomClient::getInstance();
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][mt_rand(0, 32)]);
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][count($this->dA['proxy']) - 1]);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $request->setTimeout($this->dA['timeOut']);
@@ -215,25 +180,25 @@ class Rooms_hrs_Seeder extends Seeder
             // Send the request
             $client->send($request, $response);
             $crawler = new Crawler($response->getContent());
-            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreResponseCodes.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
-//            if ($response->getStatus() == 200) {
-//                return $crawler;
-//            } else {
-////                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-//                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreResponseCodes.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
-////                }
-//                if ($this->dA['full_break'] == false) {
-//                    if ($this->dA['count_!200'] > 200) {
-//                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
-//                        $this->dA['full_break'] = true;
-//                    } else {
-//                        $this->dA['count_!200']++;
-//                        goto restart;
-//                    }
-//                } else {
-//                    return null;
-//                }
-//            }
+
+            if ($response->getStatus() == 200) {
+                return $crawler;
+            } else {
+                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                }
+                if ($this->dA['full_break'] == false) {
+                    if ($this->dA['count_!200'] > 200) {
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                        $this->dA['full_break'] = true;
+                    } else {
+                        $this->dA['count_!200']++;
+                        goto restart;
+                    }
+                } else {
+                    return null;
+                }
+            }
         } catch (Exception $e) {
             $this->catchException($e, 'phantomRequestError');
         }

@@ -142,16 +142,16 @@ class Hotels_hrs_Seeder extends Seeder
             if ($crawler->filter('title')->count() > 0) { //page could not be found
                 if ($crawler->filter('title')->text() == 'The requested page could not be found') {
                     if ($this->dA['count_not_found'] == 4) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'url:' . $url . ' ;break-reason1a:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/hotelsBreakReason1a.log', 'url:' . $url . ' ;break-reason1a:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     }
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;break-reason1b:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/hotelsIgnoredReasons2b.log', 'url:' . $url . ' ;break-reason1b:The requested page could not be found;count_access_denied:' . $this->dA['count_access_denied'] . ';count_i:' . $this->dA['count_i'] . ';response->getStatus:' . $response->getStatus() . ';' . Carbon::now()->toDateTimeString() . "\n");
                     $this->dA['count_not_found']++;
                 }
             }
 
             if ($response->getStatus() == 403) { //access denied
-                if ($this->dA['count_access_denied'] == 50) {
+                if ($this->dA['count_access_denied'] == 20) {
                     $this->dA['count_access_denied'] = 0;
                     $this->dA['full_break'] = true;
                 }
@@ -159,7 +159,7 @@ class Hotels_hrs_Seeder extends Seeder
             }
 
             if ($response->getStatus() == 401) { //unauthorized
-                if ($this->dA['count_unauthorized'] == 50) {
+                if ($this->dA['count_unauthorized'] == 20) {
                     $this->dA['count_unauthorized'] = 0;
                     $this->dA['full_break'] = true;
                 }
@@ -170,10 +170,10 @@ class Hotels_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
                 if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/hotelsIgnoredReasons3b.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_i:' . $this->dA['count_i'] . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
                 }
                 if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 1000) {
+                    if ($this->dA['count_!200'] > 200) {
                         $this->dA['full_break'] = true;
                     } else {
                         $this->dA['count_!200']++;

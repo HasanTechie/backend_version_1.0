@@ -178,7 +178,7 @@ class Rooms_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
                 if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoredReasons.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                 }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 50) {

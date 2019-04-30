@@ -34,7 +34,7 @@ class GatheringGoogleDetailsOfHRSHotelsSeeder extends Seeder
                     $response = json_decode($response->getBody())->candidates[0];
 
                     DB::table('hotels_hrs')
-                        ->where('uid', $hotel->uid)
+                        ->where('id', $hotel->id)
                         ->update([
                             'latitude_google' => isset($response->geometry->location->lat) ? $response->geometry->location->lat : null,
                             'longitude_google' => isset($response->geometry->location->lng) ? $response->geometry->location->lng : null,

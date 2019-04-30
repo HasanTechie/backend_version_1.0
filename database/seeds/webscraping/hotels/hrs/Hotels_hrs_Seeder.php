@@ -22,9 +22,8 @@ class Hotels_hrs_Seeder extends Seeder
         try {
             $this->dA = $data;
 
-//            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-            $this->dA['proxy'] = ['108.59.14.200:13152'];
-            $this->dA['timeOut'] = 180000;
+            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+            $this->dA['timeOut'] = 4000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_access_denied'] = 0;
             $this->dA['count_unauthorized'] = 0;

@@ -12,6 +12,18 @@ class PracticeSeeder extends Seeder
      */
     public function run()
     {
+
+
+        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        echo json_decode($response);
+        dd('die');
+
         //
         $started = microtime(true);
         $i = 0;

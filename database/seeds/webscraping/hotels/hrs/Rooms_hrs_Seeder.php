@@ -26,9 +26,6 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
             $this->dA['timeOut'] = 4000;
             $this->dA['request_date'] = date("Y-m-d");
-            $this->dA['count_access_denied'] = 0;
-            $this->dA['count_unauthorized'] = 0;
-            $this->dA['count_not_found'] = 0;
             $this->dA['count_!200'] = 0;
             $this->dA['noFacilitiesFound'] = 0;
             $this->dA['count_noPriceFound'] = 0;
@@ -151,9 +148,6 @@ class Rooms_hrs_Seeder extends Seeder
                         'created_at' => DB::raw('now()'),
                         'updated_at' => DB::raw('now()')
                     ]);
-                    $this->dA['count_unauthorized'] = 0;
-                    $this->dA['count_access_denied'] = 0;
-                    $this->dA['count_not_found'] = 0;
                     $this->dA['count_!200'] = 0;
                     $this->dA['noFacilitiesFound'] = 0;
                     $this->dA['count_noPriceFound'] = 0;
@@ -184,11 +178,11 @@ class Rooms_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
                 if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreBreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                 }
                 if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 200) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ';count_unauthorized:' . $this->dA['count_unauthorized'] . ';count_access_denied:' . $this->dA['count_access_denied'] . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    if ($this->dA['count_!200'] > 50) {
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     } else {
                         $this->dA['count_!200']++;

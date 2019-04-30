@@ -24,7 +24,7 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA['city'] = $hotel->city;
 
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-            $this->dA['timeOut'] = 4000;
+            $this->dA['timeOut'] = 8000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_!200'] = 0;
             $this->dA['noFacilitiesFound'] = 0;

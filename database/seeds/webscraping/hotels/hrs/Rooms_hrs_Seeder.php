@@ -23,7 +23,8 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
             $this->dA['city'] = $hotel->city;
 
-            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+//            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
+            $this->dA['proxy'] = ['95.211.175.167:13151', '95.211.175.225:13151'];
             $this->dA['timeOut'] = 40000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_access_denied'] = 0;
@@ -171,7 +172,7 @@ class Rooms_hrs_Seeder extends Seeder
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][mt_rand(0, 1)]);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $request->setTimeout($this->dA['timeOut']);

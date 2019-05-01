@@ -17,7 +17,8 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "pda/pheanstalk": "^4.0",
-        "x-fran/g-trends": "^2.0"
+        "x-fran/g-trends": "^2.0",
+        "tymon/jwt-auth": "^1.0.0-rc.4.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

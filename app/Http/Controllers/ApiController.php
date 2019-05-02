@@ -241,7 +241,7 @@ class ApiController extends Controller
                 }
                 $competitorPriceAverage = round(array_sum($dA1) / count($dA1), 2);
                 $mainHotelRoom->competitors_rooms_avg_price = $competitorPriceAverage;
-                $dA2 = null;
+                $dA1 = null;
             }
             return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);
 

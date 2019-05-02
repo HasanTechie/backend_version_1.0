@@ -233,14 +233,14 @@ class ApiController extends Controller
                             if (preg_replace('/[0-9]+/', '', str_replace(' ', '', $mainHotelRoom->criteria))
                                 ==
                                 preg_replace('/[0-9]+/', '', str_replace(' ', '', $competitorsRoomsInstance->criteria))) {
-                                $dA2[] = $competitorPrice;
-                                $dA1 = null;
+                                $dA1[] = $competitorPrice;
                             }
                         }
                     }
 
                 }
-                $mainHotelRoom->competitors_avg_rooms_price = $dA2;
+                $competitorPriceAverage = array_sum($dA1) / count($dA1);
+                $mainHotelRoom->competitors_avg_rooms_price = $competitorPriceAverage;
                 $dA2 = null;
             }
             return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);

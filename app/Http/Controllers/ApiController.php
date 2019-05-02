@@ -125,7 +125,7 @@ class ApiController extends Controller
 
             foreach ($dates as $date) {
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
@@ -199,7 +199,7 @@ class ApiController extends Controller
 
             foreach ($dates as $date) {
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.room, rooms_hrs.id as room_id, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([

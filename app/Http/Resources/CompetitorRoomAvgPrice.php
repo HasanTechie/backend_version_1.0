@@ -25,7 +25,7 @@ class CompetitorRoomAvgPrice extends JsonResource
             'check_in_date' => $this->check_in_date,
             'request_date' => $this->request_date,
 //            'check_out_date' => $this->check_out_date,
-            'competitors_avg_rooms_price' => $this->competitors,
+            'competitors_avg_rooms_price' => $this->competitors_avg_rooms_price,
         ];
     }
 }

@@ -229,24 +229,18 @@ class ApiController extends Controller
 
                     if (count($competitorsRooms) > 0) {
                         foreach ($competitorsRooms as $competitorsRoomsInstance) {
-                            $dA1['price'] = $competitorsRoomsInstance->price;
-//                            $dA1['room'] = $competitorsRoomsInstance->room;
-//                            $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
-                            $dA1['check_in_date'] = $date->check_in_date;
-//                            $dA1['request_date'] = $competitorsRoomsInstance->request_date;
-//                            $dA1['hotel_id'] = $competitorId;
-//                            $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
+                            $competitorPrice = $competitorsRoomsInstance->price;
                             if (preg_replace('/[0-9]+/', '', str_replace(' ', '', $mainHotelRoom->criteria))
                                 ==
                                 preg_replace('/[0-9]+/', '', str_replace(' ', '', $competitorsRoomsInstance->criteria))) {
-                                $dA2[] = $dA1;
+                                $dA2[] = $competitorPrice;
                                 $dA1 = null;
                             }
                         }
                     }
 
                 }
-                $mainHotelRoom->competitors = $dA2;
+                $mainHotelRoom->competitors_avg_rooms_price = $dA2;
                 $dA2 = null;
             }
             return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);

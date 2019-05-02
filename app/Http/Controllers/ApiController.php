@@ -179,6 +179,80 @@ class ApiController extends Controller
         }
     }
 
+    public function HRSHotelsCompetitorsRoomsAvgPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
+    {
+        if ($apiKey == $this->apiKey) {
+            $competitorIdsArray = explode(',', str_replace(array('[', ']'), '', $competitorIds));
+
+            $dates = DB::table('rooms_hrs')
+                ->select(DB::raw('prices_hrs.check_in_date'))
+                ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                ->where([
+                    ['rooms_hrs.hotel_id', '=', $hotel],
+                    ['check_in_date', '>=', $dateFrom],
+                    ['check_in_date', '<=', $dateTo],
+                ])->groupBy('check_in_date');
+            ($rows > 0) ? $dates = $dates->limit($rows) : null;
+            $dates = $dates->get();
+
+            foreach ($dates as $date) {
+                $mainHotelRooms = DB::table('rooms_hrs')
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                    ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                    ->where([
+                        ['rooms_hrs.hotel_id', '=', $hotel],
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['request_date', '<=', date("Y-m-d")],
+                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                    ])->get();
+            }
+
+            foreach ($mainHotelRooms as $mainHotelRoom) {
+                foreach ($competitorIdsArray as $competitorId) {
+                    $competitorsRooms = DB::table('rooms_hrs')
+                        ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                        ->join('prices_hrs', 'prices_hrs.r_id', '=', 'rooms_hrs.id')
+                        ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                        ->where([
+                            ['rooms_hrs.hotel_id', '=', $competitorId],
+                            ['rooms_hrs.room', '=', $mainHotelRoom->room],
+                            ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
+                            ['check_in_date', '=', $date->check_in_date],
+                            ['request_date', '<=', date("Y-m-d")],
+                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                        ])->get();
+
+                    if (count($competitorsRooms) > 0) {
+                        foreach ($competitorsRooms as $competitorsRoomsInstance) {
+                            $dA1['price'] = $competitorsRoomsInstance->price;
+                            $dA1['room'] = $competitorsRoomsInstance->room;
+                            $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
+                            $dA1['check_in_date'] = $date->check_in_date;
+                            $dA1['request_date'] = $competitorsRoomsInstance->request_date;
+                            $dA1['hotel_id'] = $competitorId;
+                            $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
+                            if (preg_replace('/[0-9]+/', '', str_replace(' ', '', $mainHotelRoom->criteria))
+                                ==
+                                preg_replace('/[0-9]+/', '', str_replace(' ', '', $competitorsRoomsInstance->criteria))) {
+                                $dA2[] = $dA1;
+                                $dA1 = null;
+                            }
+                        }
+                    }
+
+                }
+                $mainHotelRoom->competitors = $dA2;
+                $dA2 = null;
+            }
+            return CompetitorRoomPriceResource::collection($mainHotelRooms);
+
+        } else {
+            dd('Error: Incorrect API Key');
+        }
+    }
+
     public function Events($rows, $apiKey, $city)
     {
         if ($apiKey == $this->apiKey) {

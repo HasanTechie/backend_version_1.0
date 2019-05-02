@@ -41,7 +41,7 @@ class ApiController extends Controller
     {
         if ($apiKey == $this->apiKey) {
             $prices = DB::table('rooms_hrs')
-                ->select(DB::raw('rooms_hrs.id, hotels_hrs.name as hotel_name, hotel_id,  ROUND(avg(price),2) as price, check_in_date'))
+                ->select(DB::raw('rooms_hrs.id, hotels_hrs.name as hotel_name, room, hotel_id,  ROUND(avg(price),2) as price, check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
@@ -225,7 +225,7 @@ class ApiController extends Controller
                             ['check_in_date', '=', $date->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                        ])->groupBy('room_id')->get();
+                        ])->get();
 
                     if (count($competitorsRooms) > 0) {
                         foreach ($competitorsRooms as $competitorsRoomsInstance) {

@@ -24,8 +24,7 @@ class CreatePricesHrsTable extends Migration
             $table->date('check_out_date')->nullable()->index();
             $table->longText('basic_conditions')->nullable();
             $table->text('request_url')->nullable();
-            $table->string('rid',255)->index();
-            $table->unsignedInteger('r_id')->index();
+            $table->unsignedInteger('room_id')->index();
             $table->string('html_price',255);
             $table->date('request_date')->index();
 

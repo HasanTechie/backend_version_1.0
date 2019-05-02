@@ -142,7 +142,7 @@ class Rooms_hrs_Seeder extends Seeder
                         'check_out_date' => $this->dA['check_out_date'],
                         'basic_conditions' => serialize($room['room_basic_conditions']),
                         'request_url' => $this->dA['request_url'],
-                        'r_id' => $r_id,
+                        'room_id' => $r_id,
                         'request_date' => $this->dA['request_date'],
                         'html_price' => $room['full_html_price'],
                         'created_at' => DB::raw('now()'),

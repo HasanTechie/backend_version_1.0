@@ -239,7 +239,7 @@ class ApiController extends Controller
                     }
 
                 }
-                $competitorPriceAverage = array_sum($dA1) / count($dA1);
+                $competitorPriceAverage = round(array_sum($dA1) / count($dA1), 2);
                 $mainHotelRoom->competitors_avg_rooms_price = $competitorPriceAverage;
                 $dA2 = null;
             }

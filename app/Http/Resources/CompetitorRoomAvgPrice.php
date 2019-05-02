@@ -16,11 +16,16 @@ class CompetitorRoomAvgPrice extends JsonResource
     {
 //        return parent::toArray($request);
         return [
+            'hotel_id' => $this->hotel_id,
+            'hotel_name' => $this->hotel_name,
+            'room' => $this->room,
             'price' => $this->price,
+            'criteria' => $this->criteria,
+            'room_type' => $this->room_type,
             'check_in_date' => $this->check_in_date,
             'request_date' => $this->request_date,
 //            'check_out_date' => $this->check_out_date,
-            'competitors_data' => $this->competitors,
+            'competitors_avg_rooms_price' => $this->competitors,
         ];
     }
 }

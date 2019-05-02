@@ -209,7 +209,7 @@ class ApiController extends Controller
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', "2019-04-29"],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->get();
+                    ])->groupBy('room_id')->get();
             }
 
             foreach ($mainHotelRooms as $mainHotelRoom) {
@@ -225,7 +225,7 @@ class ApiController extends Controller
                             ['check_in_date', '=', $date->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                        ])->get();
+                        ])->groupBy('room_id')->get();
 
                     if (count($competitorsRooms) > 0) {
                         foreach ($competitorsRooms as $competitorsRoomsInstance) {

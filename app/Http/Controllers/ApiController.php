@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
+use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;
@@ -130,8 +131,8 @@ class ApiController extends Controller
                     ->where([
                         ['rooms_hrs.hotel_id', '=', $hotel],
                         ['check_in_date', '=', $date->check_in_date],
-                        ['request_date', '<=', date("Y-m-d")],
-                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+//                        ['request_date', '<=', date("Y-m-d")],
+//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->get();
             }
 
@@ -146,8 +147,8 @@ class ApiController extends Controller
                             ['rooms_hrs.room', '=', $mainHotelRoom->room],
                             ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
                             ['check_in_date', '=', $date->check_in_date],
-                            ['request_date', '<=', date("Y-m-d")],
-                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+//                            ['request_date', '<=', date("Y-m-d")],
+//                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                         ])->get();
 
                     if (count($competitorsRooms) > 0) {
@@ -204,8 +205,10 @@ class ApiController extends Controller
                     ->where([
                         ['rooms_hrs.hotel_id', '=', $hotel],
                         ['check_in_date', '=', $date->check_in_date],
-                        ['request_date', '<=', date("Y-m-d")],
-                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+//                        ['request_date', '<=', "2019-04-25"],
+//                        ['request_date', '<=', date("Y-m-d")],
+//                        ['request_date', '>=', "2019-04-29"],
+//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->get();
             }
 
@@ -220,19 +223,19 @@ class ApiController extends Controller
                             ['rooms_hrs.room', '=', $mainHotelRoom->room],
                             ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
                             ['check_in_date', '=', $date->check_in_date],
-                            ['request_date', '<=', date("Y-m-d")],
-                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+//                            ['request_date', '<=', date("Y-m-d")],
+//                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                         ])->get();
 
                     if (count($competitorsRooms) > 0) {
                         foreach ($competitorsRooms as $competitorsRoomsInstance) {
                             $dA1['price'] = $competitorsRoomsInstance->price;
-                            $dA1['room'] = $competitorsRoomsInstance->room;
-                            $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
+//                            $dA1['room'] = $competitorsRoomsInstance->room;
+//                            $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
                             $dA1['check_in_date'] = $date->check_in_date;
-                            $dA1['request_date'] = $competitorsRoomsInstance->request_date;
-                            $dA1['hotel_id'] = $competitorId;
-                            $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
+//                            $dA1['request_date'] = $competitorsRoomsInstance->request_date;
+//                            $dA1['hotel_id'] = $competitorId;
+//                            $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
                             if (preg_replace('/[0-9]+/', '', str_replace(' ', '', $mainHotelRoom->criteria))
                                 ==
                                 preg_replace('/[0-9]+/', '', str_replace(' ', '', $competitorsRoomsInstance->criteria))) {
@@ -246,7 +249,7 @@ class ApiController extends Controller
                 $mainHotelRoom->competitors = $dA2;
                 $dA2 = null;
             }
-            return CompetitorRoomPriceResource::collection($mainHotelRooms);
+            return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);
 
         } else {
             dd('Error: Incorrect API Key');

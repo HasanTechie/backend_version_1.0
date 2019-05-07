@@ -24,24 +24,27 @@ class BlazingProxiesSeeder extends Seeder
         $proxy = '207.229.93.66';
 
         while (0 == 0) {
-            $port = '102' . mt_rand(5, 9);
-            $client = PhantomClient::getInstance();
-            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+            for ($i = 5; $i < 10; $i++) {
+                $port = '102' . $i;
+                echo $port . "\n";
+                $client = PhantomClient::getInstance();
+                $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
-            $client->isLazy(); // Tells the client to wait for all resources before rendering
-            $request = $client->getMessageFactory()->createRequest($url);
+                $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
+                $client->isLazy(); // Tells the client to wait for all resources before rendering
+                $request = $client->getMessageFactory()->createRequest($url);
 //            $request->setTimeout(20000);
-            $response = $client->getMessageFactory()->createResponse();
-            // Send the request
-            $client->send($request, $response);
-            $crawler = new Crawler($response->getContent());
+                $response = $client->getMessageFactory()->createResponse();
+                // Send the request
+                $client->send($request, $response);
+                $crawler = new Crawler($response->getContent());
 
-            if (!empty($crawler->text())) {
-                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
-            } else {
-                echo 'empty : ' . $response->getStatus() . "\n";
+                if (!empty($crawler->text())) {
+                    echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
+                } else {
+                    echo 'empty : ' . $response->getStatus() . "\n";
+                }
             }
         }
     }

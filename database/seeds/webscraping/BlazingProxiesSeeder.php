@@ -23,28 +23,27 @@ class BlazingProxiesSeeder extends Seeder
 //        $url = 'https://www.hrs.com/en/hotel/Vienna/d-45883/1#container=&locationId=45883&requestUrl=%2Fen%2Fhotel%2FVienna%2Fd-45883&showAlternates=false&toggle=&arrival=2019-04-14&departure=2019-04-15&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1';
         $proxy = '207.229.93.66';
 
-        while (0 == 0) {
-            for ($i = 5; $i < 10; $i++) {
-                $port = '102' . $i;
-                echo $port . "\n";
-                $client = PhantomClient::getInstance();
-                $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+
+        for ($i = 5; $i < 10; $i++) {
+            $port = '102' . $i;
+            echo $port . "\n";
+            $client = PhantomClient::getInstance();
+            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-                $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
-                $client->isLazy(); // Tells the client to wait for all resources before rendering
-                $request = $client->getMessageFactory()->createRequest($url);
+            $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
+            $client->isLazy(); // Tells the client to wait for all resources before rendering
+            $request = $client->getMessageFactory()->createRequest($url);
 //            $request->setTimeout(20000);
-                $response = $client->getMessageFactory()->createResponse();
-                // Send the request
-                $client->send($request, $response);
-                $crawler = new Crawler($response->getContent());
+            $response = $client->getMessageFactory()->createResponse();
+            // Send the request
+            $client->send($request, $response);
+            $crawler = new Crawler($response->getContent());
 
-                if (!empty($crawler->text())) {
-                    echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
-                } else {
-                    echo 'empty : ' . $response->getStatus() . "\n";
-                }
+            if (!empty($crawler->text())) {
+                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
+            } else {
+                echo 'empty : ' . $response->getStatus() . "\n";
             }
         }
     }

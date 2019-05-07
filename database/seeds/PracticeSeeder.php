@@ -14,6 +14,12 @@ class PracticeSeeder extends Seeder
     {
 
 
+        while (0 == 0) {
+            $blazingProxy = new BlazingProxiesSeeder();
+            $blazingProxy->run();
+        }
+        dd('reached');
+
         $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

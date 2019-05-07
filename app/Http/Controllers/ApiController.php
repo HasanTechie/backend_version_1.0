@@ -168,16 +168,15 @@ class ApiController extends Controller
                                 }
                             }
                         }
-
                     }
                     $mainHotelRoom->competitors = $dA2;
-                    $mainArray[] = $mainHotelRoom;
 
                     $dA2 = null;
                 }
             }
+                dd($mainHotelRooms);
 
-            return CompetitorRoomPriceResource::collection($mainArray);
+            return CompetitorRoomPriceResource::collection($mainHotelRooms);
 
         } else {
             dd('Error: Incorrect API Key');

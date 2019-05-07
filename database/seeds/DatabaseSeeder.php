@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      * //     */
     public function run()
     {
-        $this->call('PracticeSeeder');
+//        $this->call('PracticeSeeder');
 //        $this->call('ConvertingUIDsOfTables');
 //        $this->call('GatheringPublicHolidaysData');
 
@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 //        $this->call('ProxyCrawlSeeder');
 //        $this->call('StormProxiesSeeder');
+        $this->call('BlazingProxiesSeeder');
 
 
     }

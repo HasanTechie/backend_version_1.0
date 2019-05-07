@@ -109,7 +109,6 @@ class ApiController extends Controller
     public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
     {
         if ($apiKey == $this->apiKey) {
-            $mainArray = [];
             $competitorIdsArray = explode(',', str_replace(array('[', ']'), '', $competitorIds));
 
             $dates = DB::table('rooms_hrs')
@@ -134,7 +133,7 @@ class ApiController extends Controller
                         ['check_in_date', '=', $date->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->get();
+                    ])->groupBy('check_in_date', 'room')->get();
 
                 foreach ($mainHotelRooms as $mainHotelRoom) {
                     foreach ($competitorIdsArray as $competitorId) {
@@ -174,7 +173,7 @@ class ApiController extends Controller
                     $dA2 = null;
                 }
             }
-                dd($mainHotelRooms);
+//                dd($mainHotelRooms);
 
             return CompetitorRoomPriceResource::collection($mainHotelRooms);
 

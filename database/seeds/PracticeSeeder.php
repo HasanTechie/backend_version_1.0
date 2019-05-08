@@ -15,14 +15,21 @@ class PracticeSeeder extends Seeder
     {
 
 
-        while (0 == 0) {
-            for ($i = 5; $i < 10; $i++) {
-                $port = '102' . $i;
-                $client = PhantomClient::getInstance();
-                $blazingProxy = new BlazingProxiesSeeder();
-                $blazingProxy->run($client, $port);
-            }
+//        while (0 == 0) {
+        for ($i = 5; $i < 10; $i++) {
+            $port = '102' . $i;
+            $client = PhantomClient::getInstance();
+            $blazingProxy = new BlazingProxiesSeeder();
+            $blazingProxy->run($client, $port);
         }
+
+        for ($i = 5; $i < 10; $i++) {
+            $port = '102' . $i;
+            $client = PhantomClient::getInstance();
+            $blazingProxy = new BlazingProxiesSeeder();
+            $blazingProxy->run($client, $port);
+        }
+//        }
         dd('reached');
 
         $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';

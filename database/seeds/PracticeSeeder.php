@@ -15,8 +15,11 @@ class PracticeSeeder extends Seeder
 
 
         while (0 == 0) {
-            $blazingProxy = new BlazingProxiesSeeder();
-            $blazingProxy->run();
+            for ($i = 5; $i < 10; $i++) {
+                $port = '102' . $i;
+                $blazingProxy = new BlazingProxiesSeeder();
+                $blazingProxy->run($port);
+            }
         }
         dd('reached');
 

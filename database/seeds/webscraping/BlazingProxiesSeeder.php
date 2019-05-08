@@ -12,11 +12,13 @@ class BlazingProxiesSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($port)
     {
         //
         //
+        $url = 'https://api6.ipify.org/?format=json';
         $url = 'https://api.myip.com/';
+        $url = 'http://ip-api.com/json/';
 //        $url = 'https://publicholidays.de/baden-wurttemberg/2019-dates/';
 //        $url ='https://www.schoolholidayseurope.eu/austria/';
 //        $url = 'http://www.eurobookings.com/search.html?q=start:2019-04-05;end:2019-04-06;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:9;sort:0_desc;cur:EUR;stars:0;';
@@ -24,27 +26,25 @@ class BlazingProxiesSeeder extends Seeder
         $proxy = '207.229.93.66';
 
 
-        for ($i = 5; $i < 10; $i++) {
-            $port = '102' . $i;
-            echo $port . "\n";
-            $client = PhantomClient::getInstance();
-            $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
+        echo $port . "\n";
+        $client = PhantomClient::getInstance();
+        $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
-            $client->isLazy(); // Tells the client to wait for all resources before rendering
-            $request = $client->getMessageFactory()->createRequest($url);
+        $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
+        $client->isLazy(); // Tells the client to wait for all resources before rendering
+        $request = $client->getMessageFactory()->createRequest($url);
 //            $request->setTimeout(20000);
-            $response = $client->getMessageFactory()->createResponse();
-            // Send the request
-            $client->send($request, $response);
-            $crawler = new Crawler($response->getContent());
+        $response = $client->getMessageFactory()->createResponse();
+        // Send the request
+        $client->send($request, $response);
+        $crawler = new Crawler($response->getContent());
 
-            if (!empty($crawler->text())) {
-                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
-            } else {
-                echo 'empty : ' . $response->getStatus() . "\n";
-            }
+        if (!empty($crawler->text())) {
+            echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
+        } else {
+            echo 'empty : ' . $response->getStatus() . "\n";
         }
+
     }
 }

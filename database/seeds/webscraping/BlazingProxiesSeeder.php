@@ -42,11 +42,11 @@ class BlazingProxiesSeeder extends Seeder
             $client->send($request, $response);
             $crawler = new Crawler($response->getContent());
 
-            if (!empty($crawler->text())) {
-                echo 'output is :' . $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n" . "\n";
-            } else {
+//            if (!empty($crawler->text())) {
+//                echo 'output is :' . $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n" . "\n";
+//            } else {
                 echo 'empty : ' . $response->getStatus() . "\n";
-            }
+//            }
         }
     }
 }

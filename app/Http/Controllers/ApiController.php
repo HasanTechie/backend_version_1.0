@@ -20,7 +20,6 @@ class ApiController extends Controller
     public function __construct()
     {
         $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
-//        $this->middleware('auth:admin');
     }
 
     public function HRSHotels($rows, $apiKey, $city)
@@ -133,7 +132,7 @@ class ApiController extends Controller
                         ['check_in_date', '=', $date->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->groupBy('check_in_date', 'room')->get();
+                    ])->get();
 
                 foreach ($mainHotelRooms as $mainHotelRoom) {
                     foreach ($competitorIdsArray as $competitorId) {
@@ -173,8 +172,6 @@ class ApiController extends Controller
                     $dA2 = null;
                 }
             }
-//                dd($mainHotelRooms);
-
             return CompetitorRoomPriceResource::collection($mainHotelRooms);
 
         } else {

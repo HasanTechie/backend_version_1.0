@@ -27,7 +27,7 @@ class BlazingProxiesSeeder extends Seeder
 
         while (0 == 0) {
             $port = '102' . mt_rand(5, 9);
-            echo $port . "\n";
+            echo 'proxy is : ' . $proxy . ':' . $port . "\n";
             $client = PhantomClient::getInstance();
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
             $client->getEngine()->addOption('--load-images=false');
@@ -42,7 +42,7 @@ class BlazingProxiesSeeder extends Seeder
             $crawler = new Crawler($response->getContent());
 
             if (!empty($crawler->text())) {
-                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
+                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n" . "\n";
             } else {
                 echo 'empty : ' . $response->getStatus() . "\n";
             }

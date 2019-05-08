@@ -12,7 +12,7 @@ class BlazingProxiesSeeder extends Seeder
      *
      * @return void
      */
-    public function run($port)
+    public function run($client, $port)
     {
         //
         //
@@ -27,10 +27,10 @@ class BlazingProxiesSeeder extends Seeder
 
 
         echo $port . "\n";
-        $client = PhantomClient::getInstance();
+
         $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
-//            $client->getEngine()->addOption('--load-images=false');
-//            $client->getEngine()->addOption('--ignore-ssl-errors=true');
+        $client->getEngine()->addOption('--load-images=false');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
         $client->getEngine()->addOption("--proxy=http://" . $proxy . ":" . $port);
         $client->isLazy(); // Tells the client to wait for all resources before rendering
         $request = $client->getMessageFactory()->createRequest($url);

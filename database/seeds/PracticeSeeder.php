@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use JonnyW\PhantomJs\Client as PhantomClient;
 
 class PracticeSeeder extends Seeder
 {
@@ -17,8 +18,9 @@ class PracticeSeeder extends Seeder
         while (0 == 0) {
             for ($i = 5; $i < 10; $i++) {
                 $port = '102' . $i;
+                $client = PhantomClient::getInstance();
                 $blazingProxy = new BlazingProxiesSeeder();
-                $blazingProxy->run($port);
+                $blazingProxy->run($client, $port);
             }
         }
         dd('reached');

@@ -12,7 +12,7 @@ class BlazingProxiesSeeder extends Seeder
      *
      * @return void
      */
-    public function run($client, $port)
+    public function run()
     {
         //
         //

@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 //        $this->call('ProxyCrawlSeeder');
 //        $this->call('StormProxiesSeeder');
-        $this->call('BlazingProxiesSeeder');
+//        $this->call('BlazingProxiesSeeder');
 
 
     }

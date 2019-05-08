@@ -37,6 +37,7 @@ class Kernel extends ConsoleKernel
 //            ->twiceDaily()
 //            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
 
+        /*
         $schedule->command('command:gatherhrshotels')
             ->withoutOverlapping()
             ->runInBackground()
@@ -51,7 +52,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('12:18')//run once
             ->wednesdays()
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
-
+        */
         $schedule->command('command:gathergooglehrsdata')
             ->withoutOverlapping()
             ->runInBackground()

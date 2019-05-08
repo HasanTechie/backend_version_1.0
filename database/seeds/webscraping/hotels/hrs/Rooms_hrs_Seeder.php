@@ -25,7 +25,7 @@ class Rooms_hrs_Seeder extends Seeder
 
 //            $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
             $this->dA['proxy'] = '207.229.93.66' . ':' .'102' . mt_rand(5, 9);
-            $this->dA['timeOut'] = 8000;
+//            $this->dA['timeOut'] = 8000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_!200'] = 0;
             $this->dA['noFacilitiesFound'] = 0;
@@ -169,7 +169,7 @@ class Rooms_hrs_Seeder extends Seeder
             $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
-            $request->setTimeout($this->dA['timeOut']);
+//            $request->setTimeout($this->dA['timeOut']);
             $response = $client->getMessageFactory()->createResponse();
             // Send the request
             $client->send($request, $response);

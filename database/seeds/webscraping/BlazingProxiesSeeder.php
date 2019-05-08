@@ -19,7 +19,6 @@ class BlazingProxiesSeeder extends Seeder
         $url = 'https://api6.ipify.org/?format=json';
         $url = 'http://ip-api.com/json/';
         $url = 'https://api.myip.com/';
-        $url = 'https://www.hrs.com/hotelData.do?hotelnumber=84373&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=27&startDateMonth=04&startDateYear=2019&endDateDay=28&endDateMonth=04&endDateYear=2019&adults=2&singleRooms=0&doubleRooms=1&children=0';
 //        $url = 'https://publicholidays.de/baden-wurttemberg/2019-dates/';
 //        $url ='https://www.schoolholidayseurope.eu/austria/';
 //        $url = 'http://www.eurobookings.com/search.html?q=start:2019-04-05;end:2019-04-06;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:9;sort:0_desc;cur:EUR;stars:0;';

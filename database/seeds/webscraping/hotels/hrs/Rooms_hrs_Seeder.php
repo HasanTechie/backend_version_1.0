@@ -64,7 +64,7 @@ class Rooms_hrs_Seeder extends Seeder
                                     if (!empty($this->dA['room_facilities'])) {
                                         $this->insertRoomsDataIntoDB();
                                     } else {
-                                        if ($this->dA['noFacilitiesFound'] < 4) {
+                                        if ($this->dA['noFacilitiesFound'] < 3) {
                                             $this->dA['noFacilitiesFound']++;
                                             goto restart2;
                                         } else {
@@ -73,7 +73,7 @@ class Rooms_hrs_Seeder extends Seeder
                                     }
                                 }
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 3) {
+                                if ($this->dA['count_noPriceFound'] < 2) {
                                     $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 } else {
@@ -181,7 +181,7 @@ class Rooms_hrs_Seeder extends Seeder
                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoredReasons.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                 }
                 if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 50) {
+                    if ($this->dA['count_!200'] > 15) {
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     } else {

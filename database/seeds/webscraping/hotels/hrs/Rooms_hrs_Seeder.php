@@ -190,9 +190,9 @@ class Rooms_hrs_Seeder extends Seeder
                         $this->dA['full_break'] = true;
                     } else {
                         if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                            $this->dA['count_!200b']++;
-                        } else {
                             $this->dA['count_!200']++;
+                        } else {
+                            $this->dA['count_!200b']++;
                         }
                         goto restart;
                     }

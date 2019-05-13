@@ -62,7 +62,6 @@ class Hotels_hrs_Seeder extends Seeder
     protected function setURL()
     {
         $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', strtolower($this->dA['city'])) . "/d-" . $this->dA['city_id'] . (($this->dA['count_i'] > 1) ? '/' . $this->dA['count_i'] : '') . "#container=&locationId=" . $this->dA['city_id'] . "&requestUrl=%2Fen%2Fhotel%2F" . str_replace(' ', '-', $this->dA['city']) . "%2Fd-" . $this->dA['city_id'] . "&showAlternates=false&toggle=&arrival=" . $this->dA['check_in_date'] . "&departure=" . $this->dA['check_out_date'] . "&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1";
-//        $url = "https://www.hrs.com/en/hotel/" . str_replace(' ', '-', strtolower($this->dA['city'])) . "/d-" . $this->dA['city_id'] . (($this->dA['count_i'] > 1) ? '/' . $this->dA['count_i'] : '');
 
         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/url.log', $url . ' ' . Carbon::now()->toDateTimeString() . "\n");
         return $url;

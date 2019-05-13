@@ -107,7 +107,6 @@ class Rooms_hrs_Seeder extends Seeder
                 if (!empty($room['room']) && !empty($room['price'])) {
                     $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
 
-//                    $rid = $this->dA['request_date'] . $this->dA['check_in_date'] . $this->dA['check_out_date'] . $this->dA['hotel_name'] . $room['room'] . $room['room_type'] . $room['price']; //Requestdate + CheckInDate + CheckOutDate + HotelId + RoomName + number of adults
                     $rid = 'hrs' . $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type']
                         . $this->dA['adult'] . //HotelHRSId + RoomName + roomType + room Short D + criteria without numbers or currencies + number of adults + hrstag
                         substr(preg_replace('/[0-9.]+/', '', $room['criteria']), 0, 60) .
@@ -179,9 +178,6 @@ class Rooms_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-//                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-//                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoredReasons.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-//                }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 5) {
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");

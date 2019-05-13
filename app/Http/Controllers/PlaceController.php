@@ -24,11 +24,6 @@ class PlaceController extends Controller
         return view('places.index', compact('places'));
     }
 
-    public function phpinfo()
-    {
-        echo phpinfo();
-    }
-
     /**
      * Show the form for creating a new resource.
      *

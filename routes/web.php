@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/phpinfo', 'PlaceController@phpinfo');
-
 Route::get('/places', 'PlaceController@index');
 Route::get('/places/{place}', 'PlaceController@show');
 

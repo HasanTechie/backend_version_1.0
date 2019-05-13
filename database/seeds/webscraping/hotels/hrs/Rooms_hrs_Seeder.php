@@ -179,9 +179,9 @@ class Rooms_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoredReasons.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                }
+//                if ($response->getStatus() != 0 && $response->getStatus() != 408) {
+//                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoredReasons.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+//                }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 5) {
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");

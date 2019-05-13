@@ -17,7 +17,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         $dA['currency'] = 'EUR';
         $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
         $dA['end_date'] = date("Y-m-d", strtotime("+240 day"));
-        $dA['adults'] = [1, 2];
+        $dA['adults'] = [2];
 
         $hotels = DB::table('hotels_hrs')->select('id','hrs_id','city')->whereIn('city', ['Rome', 'Berlin'])->get();
 

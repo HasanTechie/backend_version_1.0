@@ -184,9 +184,9 @@ class Rooms_hrs_Seeder extends Seeder
 //                }
                 if ($this->dA['full_break'] == false) {
                     if ($this->dA['count_!200'] > 5) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                    } elseif ($this->dA['count_!200b'] > 20) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReason.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    } elseif ($this->dA['count_!200b'] > 50) {
+                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     } else {
                         if ($response->getStatus() != 0 && $response->getStatus() != 408) {

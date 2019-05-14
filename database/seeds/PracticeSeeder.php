@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use JonnyW\PhantomJs\Client as PhantomClient;
@@ -14,28 +15,29 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
-        dd('die');
 
-        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        echo json_decode($response);
-        dd('die');
+//        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
+//        $ch = curl_init($url);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+//        $response = curl_exec($ch);
+//        curl_close($ch);
+//
+//        echo json_decode($response);
 
         //
         $started = microtime(true);
-        $i = 0;
-        while ($i < 864000) {
+//        $i = 0;
+//        while ($i < 864000) {
+//
+//            $rid = 'hrs1081Standardroomsingkaisaleroom1Incl' . mt_rand() . 'udingbreakfastClub,2Twin/SingleBed(s),25sqm/269sqft,Wirelessinternet';
+////            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
+//            echo $i++ . ' ';
+//        }
 
-            $rid = 'hrs1081Standardroomsingkaisaleroom1Incl' . mt_rand() . 'udingbreakfastClub,2Twin/SingleBed(s),25sqm/269sqft,Wirelessinternet';
-//            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
-            echo $i++ . ' ';
-        }
-
+        $request_date = date("Y-m-d");
+        $city = 'Berlin';
+        Storage::append('hrs/' . $request_date . '/' . $city . '/' . 'awein' . '.log', Carbon::now()->toDateTimeString() . "\n");
 //Execute your SQL query.
 
 //Record the end time after the query has finished running.

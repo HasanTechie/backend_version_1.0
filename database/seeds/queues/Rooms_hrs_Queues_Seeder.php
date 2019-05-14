@@ -22,6 +22,9 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         $hotels = DB::table('hotels_hrs')->select('id','hrs_id','city')->whereIn('city', ['Rome', 'Berlin'])->get();
 
         foreach ($hotels as $hotel) {
+            $dA['hotel_id'] = $hotel->id;
+            $dA['hotel_hrs_id'] = $hotel->hrs_id;
+            $dA['city'] = $hotel->city;
             GatherRoomsDataJob::dispatch($hotel, $dA)->delay(now()->addSecond(2));
         }
     }

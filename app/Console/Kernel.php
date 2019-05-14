@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:gathergooglehrsdata')
             ->withoutOverlapping()
             ->runInBackground()
-            ->daily()//run once
+            ->weekly()//run once
             ->appendOutputTo(storage_path('app/mylogs/GatherGoogleHRSDataCommand.log'));
 
 //        $schedule->command('command:pushdatatofirestore')

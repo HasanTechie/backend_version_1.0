@@ -15,8 +15,6 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
-        $rooms = DB::table('rooms_hrs')->get();
-        dd($rooms);
 
 //        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
 //        $ch = curl_init($url);
@@ -36,10 +34,11 @@ class PracticeSeeder extends Seeder
 ////            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
 //            echo $i++ . ' ';
 //        }
-
-        $request_date = date("Y-m-d");
-        $city = 'Berlin';
-        Storage::append('hrs/' . $request_date . '/' . $city . '/' . 'awein' . '.log', Carbon::now()->toDateTimeString() . "\n");
+//        $i = 0;
+//        while ($i < 800000) {
+            echo mt_rand(5, 500) . " ";
+//            echo $i++ . " ";
+//        }
 //Execute your SQL query.
 
 //Record the end time after the query has finished running.

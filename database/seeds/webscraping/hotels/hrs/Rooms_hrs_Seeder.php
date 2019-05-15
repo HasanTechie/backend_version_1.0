@@ -22,7 +22,7 @@ class Rooms_hrs_Seeder extends Seeder
             $this->dA = $dA;
 
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
-            $this->dA['timeOut'] = 8000;
+//            $this->dA['timeOut'] = 8000;
             $this->dA['request_date'] = date("Y-m-d");
             $this->dA['count_!200'] = 0;
             $this->dA['count_!200b'] = 0;
@@ -149,7 +149,7 @@ class Rooms_hrs_Seeder extends Seeder
             $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
-            $request->setTimeout($this->dA['timeOut']);
+//            $request->setTimeout($this->dA['timeOut']);
             $response = $client->getMessageFactory()->createResponse();
             // Send the request
             $client->send($request, $response);
@@ -158,21 +158,19 @@ class Rooms_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-                if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 3) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                        $this->dA['full_break'] = true;
-                    } elseif ($this->dA['count_!200b'] > 20) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                        $this->dA['full_break'] = true;
+                if ($this->dA['count_!200'] > 2) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+
+                } elseif ($this->dA['count_!200b'] > 5) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+
+                } else {
+                    if ($response->getStatus() != 0 && $response->getStatus() != 408) {
+                        $this->dA['count_!200']++;
                     } else {
-                        if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                            $this->dA['count_!200']++;
-                        } else {
-                            $this->dA['count_!200b']++;
-                        }
-                        goto restart;
+                        $this->dA['count_!200b']++;
                     }
+                    goto restart;
                 }
             }
         } catch (Exception $e) {

@@ -107,7 +107,7 @@ class ApiController extends Controller
                         }
 
                     }
-                    $hotel->competitorsData = $dA2;
+                    $hotel->competitorsData = array_filter($dA2);
                     $dA2 = null;
                 }
 
@@ -138,10 +138,10 @@ class ApiController extends Controller
             $prices = $prices->get();
 
             if (isset($prices)) {
-                $i=0;
+                $i = 0;
                 foreach ($prices as $hotel) {
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
-                        $competitorsData = DB::table('rooms_hrs')
+                        $competitorsData1[] = $competitorsData = DB::table('rooms_hrs')
                             ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                             ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                             ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
@@ -155,18 +155,30 @@ class ApiController extends Controller
 //                            $dA1['check_in_date'] = $hotel->check_in_date;
 //                            $dA1['hotel_id'] = $competitorHotelInstance;
                             $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
-
                             $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : 'null');
                             $dA1 = null;
                         }
-
-
-                        if ($i == 2) {
-                            dd($competitorsData);
-                        }
-                        $i++;
-
                     }
+
+                    $testCheck = '';
+                    $i = 0;
+                    foreach (array_keys($dA2) as $index => $key ) {
+
+                        if ($i == 0) {
+                            $testCheck = count($dA2[$key]);
+                            $i++;
+                        }
+                        if ($testCheck != count($dA2[$key])) {
+                            array_push($dA2[$key], null);
+                        }
+                    }
+
+//                    dd($dA2);
+
+                    foreach ($competitorsData1 as $instance1020) {
+//                        dd($instance1020);
+                    }
+
 
 //                    $hotel->competitorsData = $dA2;
 //                    $dA2 = null;

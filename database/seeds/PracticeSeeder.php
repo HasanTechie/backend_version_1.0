@@ -15,7 +15,21 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        /*
+        $date1 = date("Y-m-d", strtotime("+200 day"));
+        $date2 = date("Y-m-d", strtotime("+300 day"));
+        echo 'date1 : ' . $date1 . "\n";
+        echo 'date2 : ' . $date2 . "\n";
+        if ($date1 > $date2) {
+            echo 'date1 > date2';
+        } else {
+            echo 'date1 not > date2';
+        }
 
+        echo "\n";
+        dd();
+
+        */
 //        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
 //        $ch = curl_init($url);
 //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -36,7 +50,11 @@ class PracticeSeeder extends Seeder
 //        }
 //        $i = 0;
 //        while ($i < 800000) {
-            echo mt_rand(5, 500) . " ";
+
+        if (!File::exists(storage_path() . '/app/hrs/' . date("Y-m-d") . '/')) {
+            Storage::makeDirectory('hrs/' . date("Y-m-d"));
+        }
+//        echo mt_rand(5, 500) . " ";
 //            echo $i++ . " ";
 //        }
 //Execute your SQL query.

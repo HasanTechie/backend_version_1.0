@@ -22,7 +22,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
 
         foreach ($hotels as $hotel) {
             $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
-            $dA['end_date'] = date("Y-m-d", strtotime("+240 day"));
+            $dA['end_date'] = date("Y-m-d", strtotime("+365 day"));
             $dA['hotel_id'] = $hotel->id;
             $dA['hotel_hrs_id'] = $hotel->hrs_id;
             $dA['city'] = $hotel->city;
@@ -42,7 +42,11 @@ class Rooms_hrs_Queues_Seeder extends Seeder
 
                     GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(mt_rand(5, 500)));
                 }
-                $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+                if ($dA['start_date'] < date("Y-m-d", strtotime("+240 day"))) {
+                    $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+                } else {
+                    $dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($dA['start_date'])));
+                }
             }
         }
     }

@@ -88,7 +88,7 @@ class Rooms_hrs_Seeder extends Seeder
 
                                 }
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 3) {
+                                if ($this->dA['count_noPriceFound'] < 4) {
                                     $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 }

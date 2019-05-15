@@ -159,9 +159,10 @@ class Rooms_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
                 if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 5) {
+                    if ($this->dA['count_!200'] > 3) {
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                    } elseif ($this->dA['count_!200b'] > 70) {
+                        $this->dA['full_break'] = true;
+                    } elseif ($this->dA['count_!200b'] > 20) {
                         Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                         $this->dA['full_break'] = true;
                     } else {
@@ -172,8 +173,6 @@ class Rooms_hrs_Seeder extends Seeder
                         }
                         goto restart;
                     }
-                } else {
-                    return null;
                 }
             }
         } catch (Exception $e) {

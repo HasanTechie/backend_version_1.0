@@ -30,15 +30,16 @@ class Kernel extends ConsoleKernel
         if (!File::exists(storage_path() . '/mylogs/')) {
             Storage::makeDirectory('/mylogs/');
         }
-//        $schedule->command('command:correctingsno')
-//            ->withoutOverlapping()
-//            ->runInBackground()
-////            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
-//            ->twiceDaily()
-//            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
 
         /*
+        $schedule->command('command:correctingsno')
+            ->withoutOverlapping()
+            ->runInBackground()
+//            ->onOneServer() //need cache driver, more info at : https://laravel.com/docs/5.7/scheduling
+            ->twiceDaily()
+            ->appendOutputTo(storage_path('app/mylogs/CorrectingSNoCommand.log'));
         */
+
         $schedule->command('command:gatherhrshotels')
             ->withoutOverlapping()
             ->runInBackground()
@@ -52,31 +53,32 @@ class Kernel extends ConsoleKernel
             ->dailyAt('05:12')//run once
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
 
+        /*
+                $schedule->command('command:gathergooglehrsdata')
+                    ->withoutOverlapping()
+                    ->runInBackground()
+                    ->weekly()//run once
+                    ->appendOutputTo(storage_path('app/mylogs/GatherGoogleHRSDataCommand.log'));
 
-        $schedule->command('command:gathergooglehrsdata')
-            ->withoutOverlapping()
-            ->runInBackground()
-            ->weekly()//run once
-            ->appendOutputTo(storage_path('app/mylogs/GatherGoogleHRSDataCommand.log'));
+                $schedule->command('command:pushdatatofirestore')
+                    ->withoutOverlapping()
+                    ->runInBackground()
+                    ->daily()
+                    ->appendOutputTo(storage_path('logs/PushDataToFirestore.log'));
+        */
+        /*
+                $schedule->command('command:gathereurobookingsberlindata')
+                    ->withoutOverlapping()
+                    ->runInBackground()
+                    ->daily()
+                    ->appendOutputTo(storage_path('logs/GatherEurobookingsBerlinData.log'));
 
-//        $schedule->command('command:pushdatatofirestore')
-//            ->withoutOverlapping()
-//            ->runInBackground()
-//            ->daily()
-//            ->appendOutputTo(storage_path('logs/PushDataToFirestore.log'));
-
-//        $schedule->command('command:gathereurobookingsberlindata')
-//            ->withoutOverlapping()
-//            ->runInBackground()
-//            ->daily()
-//            ->appendOutputTo(storage_path('logs/GatherEurobookingsBerlinData.log'));
-//
-//        $schedule->command('command:gathereurobookingsromedata')
-//            ->withoutOverlapping()
-//            ->runInBackground()
-//            ->daily()
-//            ->appendOutputTo(storage_path('logs/GatherEurobookingsRomeData.log'));
-
+                $schedule->command('command:gathereurobookingsromedata')
+                    ->withoutOverlapping()
+                    ->runInBackground()
+                    ->daily()
+                    ->appendOutputTo(storage_path('logs/GatherEurobookingsRomeData.log'));
+        */
     }
 
     /**

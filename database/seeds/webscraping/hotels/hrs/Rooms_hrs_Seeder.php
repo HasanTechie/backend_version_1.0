@@ -3,6 +3,7 @@
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Seeder;
 
@@ -15,13 +16,10 @@ class Rooms_hrs_Seeder extends Seeder
      */
     protected $dA = [];
 
-    public function mainRun($hotel, $dA)
+    public function mainRun($dA)
     {
         try {
             $this->dA = $dA;
-            $this->dA['hotel_id'] = $hotel->id;
-            $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
-            $this->dA['city'] = $hotel->city;
 
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
             $this->dA['timeOut'] = 8000;
@@ -36,59 +34,41 @@ class Rooms_hrs_Seeder extends Seeder
                 Storage::makeDirectory('hrs/' . $this->dA['request_date']);
             }
 
-            while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
-                $this->dA['check_in_date'] = $this->dA['start_date'];
-                $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
-                foreach ($this->dA['adults'] as $adult) {
-                    if ($this->dA['full_break'] == true) {
-                        break 2;
-                    }
-                    $this->dA['adult'] = $adult;
-                    $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] .
-                        "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" .
-                        $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" .
-                        date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) .
-                        "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) .
-                        "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" .
-                        (($adult > 1) ? 1 : 0) . "&children=0";
+            restart2:
+            $crawler = $this->phantomRequest($this->dA['request_url']);
 
-                    restart2:
-                    $crawler = $this->phantomRequest($this->dA['request_url']);
+            if ($crawler) {
+                $this->roomData($crawler);
 
-                    if ($crawler) {
-                        $this->roomData($crawler);
-
-                        try {
-                            if (!empty($this->dA['all_rooms'])) {
-                                if (is_array($this->dA['all_rooms'])) {
-                                    if (!empty($this->dA['room_facilities'])) {
-                                        $this->insertRoomsDataIntoDB();
-                                    } else {
-                                        if ($this->dA['noFacilitiesFound'] < 3) {
-                                            $this->dA['noFacilitiesFound']++;
-                                            goto restart2;
-                                        } else {
-                                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                        }
-                                    }
-                                }
+                try {
+                    if (!empty($this->dA['all_rooms'])) {
+                        if (is_array($this->dA['all_rooms'])) {
+                            if (!empty($this->dA['room_facilities'])) {
+                                $this->insertRoomsDataIntoDB();
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 2) {
-                                    $this->dA['count_noPriceFound']++;
+                                if ($this->dA['noFacilitiesFound'] < 3) {
+                                    $this->dA['noFacilitiesFound']++;
                                     goto restart2;
                                 } else {
-                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyFacilities1a.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                                 }
                             }
-                            $this->dA['all_rooms'] = null;
-
-                        } catch (Exception $e) {
-                            $this->catchException($e, 'ErrorDB');
+                        }
+                    } else {
+                        if ($this->dA['count_noPriceFound'] < 2) {
+                            $this->dA['count_noPriceFound']++;
+                            goto restart2;
+                        } else {
+                            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
                         }
                     }
+                    $this->dA['all_rooms'] = null;
+
+                } catch (Exception $e) {
+                    $this->catchException($e, 'ErrorDB');
                 }
-                $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
             }
+
         } catch (Exception $e) {
             $this->catchException($e, 'errorMain');
         }

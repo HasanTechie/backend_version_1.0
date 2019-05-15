@@ -23,11 +23,10 @@ class GatherRoomsDataJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($hotel, $dA)
+    public function __construct($dA)
     {
         //
         $this->dA = $dA;
-        $this->hotel = $hotel;
     }
 
     /**
@@ -40,7 +39,7 @@ class GatherRoomsDataJob implements ShouldQueue
         //
         try {
             $room = new Rooms_hrs_Seeder();
-            $room->mainRun($this->hotel, $this->dA);
+            $room->mainRun($this->dA);
         } catch (Exception $e) {
             Storage::append('hrs/RoomsFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         }

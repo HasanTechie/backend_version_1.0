@@ -15,6 +15,8 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        $rooms = DB::table('rooms_hrs')->get();
+        dd($rooms);
 
 //        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
 //        $ch = curl_init($url);

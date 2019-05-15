@@ -3,6 +3,7 @@
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Seeder;
 
@@ -72,33 +73,22 @@ class Rooms_hrs_Seeder extends Seeder
                                                 $rid = substr(str_replace(' ', '', $rid), 0, 254);
 
                                                 $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
+
                                                 if (count($r)) {
                                                     $r_id = $r[0]->id;
                                                 } else {
                                                     $this->roomDataFacilities($crawler);
-
-                                                    $r_id = DB::table('rooms_hrs')->insertGetId([
-                                                        'room' => $room['room'],
-                                                        'room_type' => $room['room_type'],
-                                                        'criteria' => $room['criteria'],
-                                                        'basic_conditions' => serialize($room['room_basic_conditions']),
-                                                        'photo' => $room['room_image'],
-                                                        'short_description' => $room['room_short_description'],
-                                                        'facilities' => (isset($this->dA['room_facilities']) ? serialize($this->dA['room_facilities']) : null),
-                                                        'hotel_id' => $this->dA['hotel_id'],
-                                                        'rid' => $rid,
-                                                        'created_at' => DB::raw('now()'),
-                                                        'updated_at' => DB::raw('now()')
-                                                    ]);
+                                                    $r_id = $this->insertRoomsDataIntoDB($room, $rid);
                                                 }
-                                                $this->insertRoomsDataIntoDB($room, $r_id);
+
+                                                $this->insertRoomsPricesDataIntoDB($room, $r_id);
                                             }
                                         }
                                     }
 
                                 }
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 2) {
+                                if ($this->dA['count_noPriceFound'] < 1) {
                                     $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 }
@@ -113,7 +103,11 @@ class Rooms_hrs_Seeder extends Seeder
                         }
                     }
                 }
-                $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+                if ($this->dA['start_date'] < date("Y-m-d", strtotime("+240 day"))) {
+                    $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+                } else {
+                    $this->dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($this->dA['start_date'])));
+                }
             }
         } catch (Exception $e) {
             $this->catchException($e, 'errorMain');
@@ -126,10 +120,27 @@ class Rooms_hrs_Seeder extends Seeder
         print($e->getMessage());
     }
 
-    protected function insertRoomsDataIntoDB($room, $r_id)
+    protected function insertRoomsDataIntoDB($room, $rid)
     {
+        $r_id = DB::table('rooms_hrs')->insertGetId([
+            'room' => $room['room'],
+            'room_type' => $room['room_type'],
+            'criteria' => $room['criteria'],
+            'basic_conditions' => serialize($room['room_basic_conditions']),
+            'photo' => $room['room_image'],
+            'short_description' => $room['room_short_description'],
+            'facilities' => (isset($this->dA['room_facilities']) ? serialize($this->dA['room_facilities']) : null),
+            'hotel_id' => $this->dA['hotel_id'],
+            'rid' => $rid,
+            'created_at' => DB::raw('now()'),
+            'updated_at' => DB::raw('now()')
+        ]);
 
+        return $r_id;
+    }
 
+    protected function insertRoomsPricesDataIntoDB($room, $r_id)
+    {
         $room['price'] = $room['price'] . '.' . $room['cents'];
         DB::table('prices_hrs')->insert([
             'price' => $room['price'],
@@ -173,23 +184,23 @@ class Rooms_hrs_Seeder extends Seeder
             if ($response->getStatus() == 200) {
                 return $crawler;
             } else {
-                if ($this->dA['full_break'] == false) {
-                    if ($this->dA['count_!200'] > 2) {
-                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                        return null;
-                    } elseif ($this->dA['count_408&0'] > 2) {
+//                if ($this->dA['full_break'] == false) {
+                if ($this->dA['count_!200'] > 2) {
+                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+                    return null;
+                } elseif ($this->dA['count_408&0'] > 2) {
 //                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
-                        return null;
+                    return null;
 //                        $this->dA['full_break'] = true;
+                } else {
+                    if ($response->getStatus() != 0 && $response->getStatus() != 408) {
+                        $this->dA['count_!200']++;
                     } else {
-                        if ($response->getStatus() != 0 && $response->getStatus() != 408) {
-                            $this->dA['count_!200']++;
-                        } else {
-                            $this->dA['count_408&0']++;
-                        }
-                        goto restart;
+                        $this->dA['count_408&0']++;
                     }
+                    goto restart;
                 }
+//                }
             }
         } catch (Exception $e) {
             $this->catchException($e, 'phantomRequestError');

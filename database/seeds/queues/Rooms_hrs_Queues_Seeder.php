@@ -27,7 +27,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
             $dA['hotel_hrs_id'] = $hotel->hrs_id;
             $dA['city'] = $hotel->city;
 
-            GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(mt_rand(5, 500)));
+            GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(mt_rand(5, 250)));
         }
 
     }

@@ -173,10 +173,9 @@ class ApiController extends Controller
                         $dA2 = null;
                     }
                     return CompetitorRoomPriceResource::collection($mainHotelRooms);
-                } else {
-                    dd('Error: Data Not Found');
                 }
             }
+            dd('Error: Data Not Found');
         } else {
             dd('Error: Incorrect API Key');
         }
@@ -248,9 +247,9 @@ class ApiController extends Controller
 //                $dA1 = null;
                 $mainHotelRoom->competitors_rooms_avg_price = $competitorPriceAverage;
                 return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);
-            } else {
-                dd('Error: Data Not Found');
             }
+
+            dd('Error: Data Not Found');
 
         } else {
             dd('Error: Incorrect API Key');

@@ -30,7 +30,10 @@ class ApiController extends Controller
             ($rows > 0) ? $hotels = $hotels->limit($rows) : null;
             $hotels = $hotels->get();
 
-            return HotelResource::collection($hotels);
+            if (isset($hotels)) {
+                return HotelResource::collection($hotels);
+            }
+            dd('Error: Data Not Found :  HRSHotels');
         } else {
             dd('Error: Incorrect API Key');
         }
@@ -51,7 +54,13 @@ class ApiController extends Controller
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
 
-            return RoomPriceResource::collection($prices);
+            if (isset($prices)) {
+
+                return RoomPriceResource::collection($prices);
+            }
+
+            dd('Error: Data Not Found :  HRSRoomsPrices');
+
         } else {
             dd('Error: Incorrect API Key');
         }
@@ -74,31 +83,35 @@ class ApiController extends Controller
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
 
-            foreach ($prices as $hotel) {
-                foreach ($competitorIdsArray as $competitorHotelInstance) {
-                    $competitorsData = DB::table('rooms_hrs')
-                        ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                        ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                        ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                        ->where([
-                            ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
-                            ['check_in_date', '=', $hotel->check_in_date],
-                        ])->groupBy('check_in_date')->get();
-                    if (count($competitorsData) > 0) {
-                        $dA1['price'] = $competitorsData[0]->price;
-                        $dA1['check_in_date'] = $hotel->check_in_date;
-                        $dA1['hotel_id'] = $competitorHotelInstance;
-                        $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
-                        $dA2[] = $dA1;
-                        $dA1 = null;
+            if (isset($prices)) {
+
+                foreach ($prices as $hotel) {
+                    foreach ($competitorIdsArray as $competitorHotelInstance) {
+                        $competitorsData = DB::table('rooms_hrs')
+                            ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                            ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                            ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                            ->where([
+                                ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
+                                ['check_in_date', '=', $hotel->check_in_date],
+                            ])->groupBy('check_in_date')->get();
+                        if (count($competitorsData) > 0) {
+                            $dA1['price'] = $competitorsData[0]->price;
+                            $dA1['check_in_date'] = $hotel->check_in_date;
+                            $dA1['hotel_id'] = $competitorHotelInstance;
+                            $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                            $dA2[] = $dA1;
+                            $dA1 = null;
+                        }
+
                     }
-
+                    $hotel->competitorsData = array_filter($dA2);
+                    $dA2 = null;
                 }
-                $hotel->competitorsData = array_filter($dA2);
-                $dA2 = null;
-            }
 
-            return CompetitorAvgPriceResource::collection($prices);
+                return CompetitorAvgPriceResource::collection($prices);
+            }
+            dd('Error: Data Not Found :  HRSHotelsCompetitorsAvgPrices');
 
         } else {
             dd('Error: Incorrect API Key');
@@ -175,7 +188,7 @@ class ApiController extends Controller
                     return CompetitorRoomPriceResource::collection($mainHotelRooms);
                 }
             }
-            dd('Error: Data Not Found');
+            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');
         }
@@ -249,7 +262,7 @@ class ApiController extends Controller
                 return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);
             }
 
-            dd('Error: Data Not Found');
+            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsAvgPrices');
 
         } else {
             dd('Error: Incorrect API Key');
@@ -261,10 +274,14 @@ class ApiController extends Controller
         if ($apiKey == $this->apiKey) {
             $events = DB::table('events')
                 ->where('city', '=', $city);
-            ($rows > 0) ? $events = $events->limit($rows) : null;
-            $events = $events->get();
 
-            return EventResource::collection($events);
+            if (isset($events)) {
+                ($rows > 0) ? $events = $events->limit($rows) : null;
+                $events = $events->get();
+
+                return EventResource::collection($events);
+            }
+            dd('Error: Data Not Found : Events');
 
         } else {
             dd('Error: Incorrect API Key');

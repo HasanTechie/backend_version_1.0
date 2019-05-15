@@ -159,57 +159,40 @@ class ApiController extends Controller
                         }
                     }
 
-                    $testCheck = '';
+                    $firstArrayLenght = '';
                     $i = 0;
                     foreach (array_keys($dA2) as $index => $key) {
 
                         if ($i == 0) {
-                            $testCheck = count($dA2[$key]);
+                            $firstArrayLenght = count($dA2[$key]);
                             $i++;
                         }
-                        if ($testCheck != count($dA2[$key])) {
+                        if ($firstArrayLenght != count($dA2[$key])) {
                             array_push($dA2[$key], null);
                         }
                     }
-
-
-//                    $hotel->competitorsData = $dA2;
                 }
-//                dd($dA2);
+
 
                 $check_in_dates = [];
                 foreach ($prices as $price) {
                     $check_in_dates[] = $price->check_in_date;
                 }
 
-                $dA4 = [];
-                foreach ($dA2 as $instance1046=>$value) {
+                $competitorsData = [];
+                foreach ($dA2 as $key=>$value) {
 
-                    $dA3['name'] = $instance1046;
+                    $dA3['name'] = $key;
                     $dA3['data'] = $value;
 
-                    $dA4[]=$dA3;
-
+                    $competitorsData[]=$dA3;
                 }
-
 
                 $object = (object) array(
                     'xAxis' => $check_in_dates,
-                    'yAxis' => $dA4
+                    'yAxis' => $competitorsData
                 );
 
-//                dd($object);
-
-//                $competitorsData = [];
-//                foreach ($prices as $price) {
-//                    $competitorsData[] = $price->competitorsData;
-//
-//                    foreach ($price->competitorsData as $competitorInstance) {
-//                        dd($competitorInstance);
-//                    }
-//                }
-//
-//                dd($competitorsData);
 
                 return CompetitorAvgPriceResourceApex::make($object);
             }

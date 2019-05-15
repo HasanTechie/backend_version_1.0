@@ -138,10 +138,9 @@ class ApiController extends Controller
             $prices = $prices->get();
 
             if (isset($prices)) {
-                $i = 0;
                 foreach ($prices as $hotel) {
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
-                        $competitorsData1[] = $competitorsData = DB::table('rooms_hrs')
+                        $competitorsData = DB::table('rooms_hrs')
                             ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                             ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                             ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
@@ -162,7 +161,7 @@ class ApiController extends Controller
 
                     $testCheck = '';
                     $i = 0;
-                    foreach (array_keys($dA2) as $index => $key ) {
+                    foreach (array_keys($dA2) as $index => $key) {
 
                         if ($i == 0) {
                             $testCheck = count($dA2[$key]);
@@ -173,35 +172,46 @@ class ApiController extends Controller
                         }
                     }
 
-//                    dd($dA2);
-
-                    foreach ($competitorsData1 as $instance1020) {
-//                        dd($instance1020);
-                    }
-
 
 //                    $hotel->competitorsData = $dA2;
-//                    $dA2 = null;
                 }
-                dd($dA2);
+//                dd($dA2);
 
                 $check_in_dates = [];
                 foreach ($prices as $price) {
                     $check_in_dates[] = $price->check_in_date;
                 }
 
-                $competitorsData = [];
-                foreach ($prices as $price) {
-                    $competitorsData[] = $price->competitorsData;
+                $dA4 = [];
+                foreach ($dA2 as $instance1046=>$value) {
 
-                    foreach ($price->competitorsData as $competitorInstance) {
-                        dd($competitorInstance);
-                    }
+                    $dA3['name'] = $instance1046;
+                    $dA3['data'] = $value;
+
+                    $dA4[]=$dA3;
+
                 }
 
-                dd($competitorsData);
 
-                return CompetitorAvgPriceResourceApex::collection($prices);
+                $object = (object) array(
+                    'xAxis' => $check_in_dates,
+                    'yAxis' => $dA4
+                );
+
+//                dd($object);
+
+//                $competitorsData = [];
+//                foreach ($prices as $price) {
+//                    $competitorsData[] = $price->competitorsData;
+//
+//                    foreach ($price->competitorsData as $competitorInstance) {
+//                        dd($competitorInstance);
+//                    }
+//                }
+//
+//                dd($competitorsData);
+
+                return CompetitorAvgPriceResourceApex::make($object);
             }
             dd('Error: Data Not Found :  HRSHotelsCompetitorsAvgPrices');
 

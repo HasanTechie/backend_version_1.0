@@ -95,6 +95,7 @@ class ApiController extends Controller
                                 ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                                 ['check_in_date', '=', $hotel->check_in_date],
                             ])->groupBy('check_in_date')->get();
+
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = $competitorsData[0]->price;
                             $dA1['check_in_date'] = $hotel->check_in_date;
@@ -255,10 +256,10 @@ class ApiController extends Controller
                         }
 
                     }
+                    $competitorPriceAverage = round(array_sum($dA1) / count($dA1), 2);
+                    $dA1 = null;
+                    $mainHotelRoom->competitors_rooms_avg_price = $competitorPriceAverage;
                 }
-                $competitorPriceAverage = round(array_sum($dA1) / count($dA1), 2);
-//                $dA1 = null;
-                $mainHotelRoom->competitors_rooms_avg_price = $competitorPriceAverage;
                 return CompetitorRoomAvgPriceResource::collection($mainHotelRooms);
             }
 

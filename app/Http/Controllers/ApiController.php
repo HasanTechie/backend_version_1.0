@@ -107,7 +107,7 @@ class ApiController extends Controller
                         }
 
                     }
-                    $hotel->competitorsData = array_filter($dA2);
+                    $hotel->competitorsData = $dA2;
                     $dA2 = null;
                 }
 
@@ -138,7 +138,7 @@ class ApiController extends Controller
             $prices = $prices->get();
 
             if (isset($prices)) {
-
+                $i=0;
                 foreach ($prices as $hotel) {
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
                         $competitorsData = DB::table('rooms_hrs')
@@ -151,18 +151,43 @@ class ApiController extends Controller
                             ])->groupBy('check_in_date')->get();
 
                         if (count($competitorsData) > 0) {
-                            $dA1['price'] = $competitorsData[0]->price;
-                            $dA1['check_in_date'] = $hotel->check_in_date;
-                            $dA1['hotel_id'] = $competitorHotelInstance;
+                            $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : 'null');
+//                            $dA1['check_in_date'] = $hotel->check_in_date;
+//                            $dA1['hotel_id'] = $competitorHotelInstance;
                             $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
-                            $dA2[] = $dA1;
+
+                            $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : 'null');
                             $dA1 = null;
                         }
 
+
+                        if ($i == 2) {
+                            dd($competitorsData);
+                        }
+                        $i++;
+
                     }
-                    $hotel->competitorsData = array_filter($dA2);
-                    $dA2 = null;
+
+//                    $hotel->competitorsData = $dA2;
+//                    $dA2 = null;
                 }
+                dd($dA2);
+
+                $check_in_dates = [];
+                foreach ($prices as $price) {
+                    $check_in_dates[] = $price->check_in_date;
+                }
+
+                $competitorsData = [];
+                foreach ($prices as $price) {
+                    $competitorsData[] = $price->competitorsData;
+
+                    foreach ($price->competitorsData as $competitorInstance) {
+                        dd($competitorInstance);
+                    }
+                }
+
+                dd($competitorsData);
 
                 return CompetitorAvgPriceResourceApex::collection($prices);
             }

@@ -42,3 +42,8 @@ Route::get('competitorsroomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&
 Route::get('competitorsroomsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'ApiController@HRSHotelsCompetitorsRoomsAvgPrices');
 
 Route::get('events&get={get}&apiKey={apiKey}&city={city}', 'ApiController@Events');
+
+
+
+
+Route::get('competitorsavgpricesapex&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'ApiController@HRSHotelsCompetitorsAvgPricesApex');

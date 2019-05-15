@@ -185,10 +185,10 @@ class Rooms_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
 //                if ($this->dA['full_break'] == false) {
-                if ($this->dA['count_!200'] > 2) {
+                if ($this->dA['count_!200'] > 4) {
                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
-                } elseif ($this->dA['count_408&0'] > 2) {
+                } elseif ($this->dA['count_408&0'] > 20) {
 //                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
 //                        $this->dA['full_break'] = true;

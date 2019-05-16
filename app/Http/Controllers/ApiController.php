@@ -120,7 +120,7 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsAvgPricesApex($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
+    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds, $room)
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', str_replace(array('[', ']'), '', $competitorIds));
@@ -180,15 +180,15 @@ class ApiController extends Controller
                 }
 
                 $competitorsData = [];
-                foreach ($dA2 as $key=>$value) {
+                foreach ($dA2 as $key => $value) {
 
                     $dA3['name'] = $key;
                     $dA3['data'] = $value;
 
-                    $competitorsData[]=$dA3;
+                    $competitorsData[] = $dA3;
                 }
 
-                $object = (object) array(
+                $object = (object)array(
                     'xAxis' => $check_in_dates,
                     'yAxis' => $competitorsData
                 );

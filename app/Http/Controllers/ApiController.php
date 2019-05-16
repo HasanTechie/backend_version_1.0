@@ -125,6 +125,13 @@ class ApiController extends Controller
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
 
+            if (empty($dateFrom)) {
+                $dateFrom = '2019-01-01';
+            }
+            if (empty($dateTo)) {
+                $dateFrom = '2021-01-01';
+            }
+
             $prices = DB::table('rooms_hrs')
                 ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')

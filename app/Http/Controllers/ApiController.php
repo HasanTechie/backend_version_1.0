@@ -123,7 +123,7 @@ class ApiController extends Controller
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds, $room)
     {
         if ($apiKey == $this->apiKey) {
-            $competitorIdsArray = explode(',', str_replace(array('[', ']'), '', $competitorIds));
+            $competitorIdsArray = explode(',', $competitorIds);
 
             $prices = DB::table('rooms_hrs')
                 ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))

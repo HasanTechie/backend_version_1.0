@@ -15,9 +15,9 @@ class CompetitorPriceApex extends JsonResource
     public function toArray($request)
     {
         return [
+            'rooms' => $this->rooms,
             'xAxis' => $this->xAxis,
-            'yAxis' => $this->yAxis,
-            'rooms' => $this->rooms
+            'yAxis' => $this->yAxis
         ];
     }
 }

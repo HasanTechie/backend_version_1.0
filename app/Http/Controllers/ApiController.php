@@ -125,6 +125,9 @@ class ApiController extends Controller
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
 
+            if ($room == 'All') {
+                $returnAllRooms = true;
+            }
             /*
             if (empty($dateFrom)) {
                 $dateFrom = '2019-01-01';
@@ -144,6 +147,7 @@ class ApiController extends Controller
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
+            ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
 
@@ -157,7 +161,9 @@ class ApiController extends Controller
                             ->where([
                                 ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                                 ['check_in_date', '=', $hotel->check_in_date],
-                            ])->groupBy('check_in_date')->get();
+                            ]);
+                        ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
+                        $competitorsData = $competitorsData->groupBy('check_in_date')->get();
 
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : 'null');
@@ -191,7 +197,6 @@ class ApiController extends Controller
                 }
 
 
-
                 $check_in_datesArray = [];
                 foreach ($prices as $price) {
                     $check_in_datesArray[] = $price->check_in_date;
@@ -207,9 +212,9 @@ class ApiController extends Controller
                 }
 
                 $object = (object)array(
+                    'rooms' => $roomsArray,
                     'xAxis' => $check_in_datesArray,
-                    'yAxis' => $competitorsDataArray,
-                    'rooms' => $roomsArray
+                    'yAxis' => $competitorsDataArray
                 );
 
 

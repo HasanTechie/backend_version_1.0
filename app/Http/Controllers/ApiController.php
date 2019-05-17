@@ -187,8 +187,10 @@ class ApiController extends Controller
 
                 $roomsArray = ['All'];
                 foreach ($rooms as $roomInstance) {
+                dd($rooms);
                     $roomsArray[] = $roomInstance->room;
                 }
+
 
 
                 $check_in_dates = [];

@@ -183,6 +183,13 @@ class ApiController extends Controller
                     }
                 }
 
+                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotel)->get();
+
+                $roomsArray = ['All'];
+                foreach ($rooms as $roomInstance) {
+                    $roomsArray[] = $roomInstance->room;
+                }
+
 
                 $check_in_dates = [];
                 foreach ($prices as $price) {
@@ -200,7 +207,8 @@ class ApiController extends Controller
 
                 $object = (object)array(
                     'xAxis' => $check_in_dates,
-                    'yAxis' => $competitorsData
+                    'yAxis' => $competitorsData,
+                    'rooms' => $roomsArray
                 );
 
 

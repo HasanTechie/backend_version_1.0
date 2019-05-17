@@ -15,6 +15,13 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+
+
+
+        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id','=',21)->get();
+
+
+        dd($rooms);
         /*
         $date1 = date("Y-m-d", strtotime("+200 day"));
         $date2 = date("Y-m-d", strtotime("+300 day"));

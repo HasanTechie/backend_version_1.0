@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
-use App\Http\Resources\CompetitorAvgPriceApex as CompetitorAvgPriceResourceApex;
+use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
 use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
 use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
 use App\Http\Resources\Event as EventResource;
@@ -212,7 +212,7 @@ class ApiController extends Controller
                 );
 
 
-                return CompetitorAvgPriceResourceApex::make($object);
+                return CompetitorPriceResourceApex::make($object);
             }
             dd('Error: Data Not Found :  HRSHotelsCompetitorsAvgPrices');
 

@@ -120,7 +120,7 @@ class ApiController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds, $room)
+    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotelId, $dateFrom, $dateTo, $competitorIds, $room)
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
@@ -140,7 +140,7 @@ class ApiController extends Controller
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
-                    ['rooms_hrs.hotel_id', '=', $hotel],
+                    ['rooms_hrs.hotel_id', '=', $hotelId],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
@@ -183,33 +183,32 @@ class ApiController extends Controller
                     }
                 }
 
-                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotel)->get();
+                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();
 
                 $roomsArray = ['All'];
                 foreach ($rooms as $roomInstance) {
-                dd($rooms);
                     $roomsArray[] = $roomInstance->room;
                 }
 
 
 
-                $check_in_dates = [];
+                $check_in_datesArray = [];
                 foreach ($prices as $price) {
-                    $check_in_dates[] = $price->check_in_date;
+                    $check_in_datesArray[] = $price->check_in_date;
                 }
 
-                $competitorsData = [];
+                $competitorsDataArray = [];
                 foreach ($dA2 as $key => $value) {
 
                     $dA3['name'] = $key;
                     $dA3['data'] = $value;
 
-                    $competitorsData[] = $dA3;
+                    $competitorsDataArray[] = $dA3;
                 }
 
                 $object = (object)array(
-                    'xAxis' => $check_in_dates,
-                    'yAxis' => $competitorsData,
+                    'xAxis' => $check_in_datesArray,
+                    'yAxis' => $competitorsDataArray,
                     'rooms' => $roomsArray
                 );
 

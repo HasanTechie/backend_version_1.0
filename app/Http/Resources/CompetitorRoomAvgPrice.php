@@ -14,7 +14,6 @@ class CompetitorRoomAvgPrice extends JsonResource
      */
     public function toArray($request)
     {
-//        return parent::toArray($request);
         return [
             'hotel_id' => $this->hotel_id,
             'hotel_name' => $this->hotel_name,

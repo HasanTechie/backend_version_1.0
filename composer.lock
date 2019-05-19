@@ -730,16 +730,16 @@
         },
         {
             "name": "google/cloud-firestore",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-firestore.git",
-                "reference": "a61c5e36debe4c8bef688a8e9455fd07d2eac67f"
+                "reference": "aef07b9c4b3dc015545ff323d2174e64446bdca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-firestore/zipball/a61c5e36debe4c8bef688a8e9455fd07d2eac67f",
-                "reference": "a61c5e36debe4c8bef688a8e9455fd07d2eac67f",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-firestore/zipball/aef07b9c4b3dc015545ff323d2174e64446bdca2",
+                "reference": "aef07b9c4b3dc015545ff323d2174e64446bdca2",
                 "shasum": ""
             },
             "require": {
@@ -777,7 +777,7 @@
                 "Apache-2.0"
             ],
             "description": "Cloud Firestore client for PHP",
-            "time": "2019-05-09T12:01:06+00:00"
+            "time": "2019-05-15T17:30:22+00:00"
         },
         {
             "name": "google/common-protos",
@@ -1861,16 +1861,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.17.1",
+            "version": "2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "96acbc0c03782e8115156dd4dd8b736267155066"
+                "reference": "8322b7bd1805be31867c13bf3cdaab948a0dd406"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/96acbc0c03782e8115156dd4dd8b736267155066",
-                "reference": "96acbc0c03782e8115156dd4dd8b736267155066",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/8322b7bd1805be31867c13bf3cdaab948a0dd406",
+                "reference": "8322b7bd1805be31867c13bf3cdaab948a0dd406",
                 "shasum": ""
             },
             "require": {
@@ -1917,7 +1917,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-04-27T18:04:27+00:00"
+            "time": "2019-05-16T18:44:35+00:00"
         },
         {
             "name": "nikic/php-parser",

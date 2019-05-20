@@ -50,7 +50,7 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
-        
+
         'adminapi' => [
             'driver' => 'passport',
             'provider' => 'admins',

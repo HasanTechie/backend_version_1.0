@@ -25,9 +25,12 @@ class ApiController extends Controller
 
     public function HRSHotels($rows, $apiKey, $city)
     {
+
         if ($apiKey == $this->apiKey) {
-            $hotels = DB::table('hotels_hrs')
-                ->where('city', '=', $city);
+            $hotels = DB::table('hotels_hrs');
+            if ($city != 'All') {
+                $hotels = $hotels->where('city', '=', $city);
+            }
             ($rows > 0) ? $hotels = $hotels->limit($rows) : null;
             $hotels = $hotels->get();
 

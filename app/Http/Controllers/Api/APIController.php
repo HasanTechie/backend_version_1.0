@@ -119,7 +119,6 @@ class APIController extends Controller
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
 
-//            dd($competitorIdsArray);
             if (!in_array($hotelId, $competitorIdsArray)) {
                 array_unshift($competitorIdsArray, $hotelId);
             }

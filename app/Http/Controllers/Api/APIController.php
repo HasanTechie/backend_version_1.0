@@ -118,7 +118,9 @@ class APIController extends Controller
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
-//            array_unshift($competitorIdsArray,$hotelId);
+
+//            dd($competitorIdsArray);
+            array_unshift($competitorIdsArray, $hotelId);
             if ($room == 'All') {
                 $returnAllRooms = true;
             }
@@ -142,6 +144,7 @@ class APIController extends Controller
             ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
+
             if (isset($prices)) {
 
                 foreach ($prices as $priceInstance) {
@@ -191,10 +194,12 @@ class APIController extends Controller
                     $check_in_datesArray[] = $price->check_in_date;
                 }
                 $competitorsDataArray = [];
-                foreach ($dA2 as $key => $value) {
-                    $dA3['name'] = $key;
-                    $dA3['data'] = $value;
-                    $competitorsDataArray[] = $dA3;
+                if (isset($dA2)) {
+                    foreach ($dA2 as $key => $value) {
+                        $dA3['name'] = $key;
+                        $dA3['data'] = $value;
+                        $competitorsDataArray[] = $dA3;
+                    }
                 }
                 $object = (object)array(
                     'rooms' => $roomsArray,

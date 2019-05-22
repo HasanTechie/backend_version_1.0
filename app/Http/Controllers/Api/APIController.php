@@ -120,7 +120,9 @@ class APIController extends Controller
             $competitorIdsArray = explode(',', $competitorIds);
 
 //            dd($competitorIdsArray);
-            array_unshift($competitorIdsArray, $hotelId);
+            if (!in_array($hotelId, $competitorIdsArray)) {
+                array_unshift($competitorIdsArray, $hotelId);
+            }
             if ($room == 'All') {
                 $returnAllRooms = true;
             }

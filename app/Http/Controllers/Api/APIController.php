@@ -118,6 +118,7 @@ class APIController extends Controller
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
+            array_unshift($competitorIdsArray,$hotelId);
             if ($room == 'All') {
                 $returnAllRooms = true;
             }
@@ -142,7 +143,8 @@ class APIController extends Controller
             ($rows > 0) ? $prices = $prices->limit($rows) : null;
             $prices = $prices->get();
             if (isset($prices)) {
-                foreach ($prices as $hotel) {
+
+                foreach ($prices as $priceInstance) {
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
                         $competitorsData = DB::table('rooms_hrs')
                             ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
@@ -150,10 +152,11 @@ class APIController extends Controller
                             ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                             ->where([
                                 ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
-                                ['check_in_date', '=', $hotel->check_in_date],
+                                ['check_in_date', '=', $priceInstance->check_in_date],
                             ]);
                         ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
                         $competitorsData = $competitorsData->groupBy('check_in_date')->get();
+
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : 'null');
 //                            $dA1['check_in_date'] = $hotel->check_in_date;
@@ -165,13 +168,16 @@ class APIController extends Controller
                     }
                     $firstArrayLenght = '';
                     $i = 0;
-                    foreach (array_keys($dA2) as $index => $key) {
-                        if ($i == 0) {
-                            $firstArrayLenght = count($dA2[$key]);
-                            $i++;
-                        }
-                        if ($firstArrayLenght != count($dA2[$key])) {
-                            array_push($dA2[$key], null);
+                    if (isset($dA2)) {
+
+                        foreach (array_keys($dA2) as $index => $key) {
+                            if ($i == 0) {
+                                $firstArrayLenght = count($dA2[$key]);
+                                $i++;
+                            }
+                            if ($firstArrayLenght != count($dA2[$key])) {
+                                array_push($dA2[$key], null);
+                            }
                         }
                     }
                 }

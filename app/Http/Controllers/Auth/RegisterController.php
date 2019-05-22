@@ -70,6 +70,8 @@ class RegisterController extends Controller
             'uid' => $data['uid'],
             'name' => $data['name'],
             'email' => $data['email'],
+            "hotel_id" => $data['hotel_id'],
+            "status" => 0,
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -80,9 +82,10 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create([
             "_token" => $request->input('_token'),
-            "uid" => uniqid(),
             "name" => $request->input('name'),
             "email" => $request->input('email'),
+//            "hotel_id" => $request->input('hotel_id'),
+//            "status" => 0,
             "password" => $request->input('password'),
             "password_confirmation" => $request->input('password_confirmation'),
         ])));

@@ -29,33 +29,52 @@ class AuthController extends Controller
         $user->hotel_id = $request->hotel_id;
         $user->save();
 
-        $http = new GuzzleClient;
-        $response = $http->post(url('oauth/token'), [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => env('OAUTH_GRANT_SECRET_ID'),
-                'client_secret' => env('OAUTH_GRANT_SECRET_KEY'),
-                'username' => $request->email,
-                'password' => $request->password,
-                'scope' => '',
-            ],
-        ]);
-        return response(['data' => json_decode((string)$response->getBody(), true)]);
+//        $validatedData['password'] = bcrypt($request->password);
+//        $validatedData['status'] = 0;
+//        $validatedData['hotel_id'] = $request->hotel_id;
+
+//        return $validatedData;
+
+//        $user = User::create($validatedData);
+
+        $accessToken = $user->createToken('authToken')->accessToken;
+
+        return response(['user' => $user, 'access_token' => $accessToken]);
+
+        /*        $http = new GuzzleClient;
+                $response = $http->post(url('oauth/token'), [
+                    'form_params' => [
+                        'grant_type' => 'password',
+                        'client_id' => env('OAUTH_GRANT_SECRET_ID'),
+                        'client_secret' => env('OAUTH_GRANT_SECRET_KEY'),
+                        'username' => $request->email,
+                        'password' => $request->password,
+                        'scope' => '',
+                    ],
+                ]);
+                return response(['auth' => json_decode((string)$response->getBody(), true)]);*/
     }
 
     public function login(Request $request)
     {
-        $request->validate([
+        $loginData = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-        $user = User::where('email', $request->email)->first();
+        /*$user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return response(['status' => 'error', 'message' => 'User not found']);
+        }*/
+
+        if (!auth()->attempt($loginData)) {
+            return response(['message' => 'Invalid credentials']);
         }
 
-        if (Hash::check($request->password, $user->password)) {
+        $accessToken = auth()->user()->createToken('authToken')->accessToken;
+        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+
+        /*if (Hash::check($request->password, $user->password)) {
             $http = new GuzzleClient;
             $response = $http->post(url('oauth/token'), [
                 'form_params' => [
@@ -67,12 +86,12 @@ class AuthController extends Controller
                     'scope' => '',
                 ],
             ]);
-            return response(['data' => json_decode((string)$response->getBody(), true)]);
-        }
+            return response(['auth' => json_decode((string)$response->getBody(), true)]);
+        }*/
     }
 
 
-    public function refreshToken()
+    /*public function refreshToken()
     {
         $http = new GuzzleClient;
         $response = $http->post(url('oauth/token'), [
@@ -85,5 +104,5 @@ class AuthController extends Controller
             ],
         ]);
         return json_decode((string)$response->getBody(), true);
-    }
+    }*/
 }

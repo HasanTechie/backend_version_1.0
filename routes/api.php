@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,21 +15,24 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
-Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'APIController@HRSHotels');
+Route::post('/register', 'Api\AuthController@register');
+Route::post('/login', 'Api\AuthController@login');
 
-Route::get('roomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}', 'APIController@HRSRoomsPrices');
+Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@HRSHotels');
 
-Route::get('competitorsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'APIController@HRSHotelsCompetitorsAvgPrices');
+Route::get('roomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}', 'Api\APIController@HRSRoomsPrices');
 
-Route::get('competitorsroomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'APIController@HRSHotelsCompetitorsRoomsPrices');
+Route::get('competitorsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\APIController@HRSHotelsCompetitorsAvgPrices');
 
-Route::get('competitorsroomsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'APIController@HRSHotelsCompetitorsRoomsAvgPrices');
+Route::get('competitorsroomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\APIController@HRSHotelsCompetitorsRoomsPrices');
 
-Route::get('events&get={get}&apiKey={apiKey}&city={city}', 'APIController@Events');
+Route::get('competitorsroomsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\APIController@HRSHotelsCompetitorsRoomsAvgPrices');
+
+Route::get('events&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@Events');
 
 
-Route::get('competitorspricesapex&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={datefrom}&dateto={dateto}&competitorsid={competitorsid}&room={room}', 'APIController@HRSHotelsCompetitorsPricesApex');
+Route::get('competitorspricesapex&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={datefrom}&dateto={dateto}&competitorsid={competitorsid}&room={room}', 'Api\APIController@HRSHotelsCompetitorsPricesApex');

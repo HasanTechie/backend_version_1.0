@@ -118,7 +118,7 @@ class APIController extends Controller
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
-            array_unshift($competitorIdsArray,$hotelId);
+//            array_unshift($competitorIdsArray,$hotelId);
             if ($room == 'All') {
                 $returnAllRooms = true;
             }

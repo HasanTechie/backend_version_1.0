@@ -33,7 +33,6 @@ class APIController extends Controller
             } else {
                 $hotels = $hotels->where('city', '=', $city);
             }
-            $hotels = $hotels->orderBy('name', 'asc');
             ($rows > 0) ? $hotels = $hotels->limit($rows) : null;
             $hotels = $hotels->get();
             if (isset($hotels)) {

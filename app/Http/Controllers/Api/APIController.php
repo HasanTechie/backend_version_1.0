@@ -172,16 +172,16 @@ class APIController extends Controller
                             $dA1 = null;
                         }
                     }
-                    $firstArrayLenght = '';
+                    $firstArrayLength = '';
                     $i = 0;
                     if (isset($dA2)) {
 
                         foreach (array_keys($dA2) as $index => $key) {
                             if ($i == 0) {
-                                $firstArrayLenght = count($dA2[$key]);
+                                $firstArrayLength = count($dA2[$key]);
                                 $i++;
                             }
-                            if ($firstArrayLenght != count($dA2[$key])) {
+                            if ($firstArrayLength != count($dA2[$key])) {
                                 array_push($dA2[$key], null);
                             }
                         }

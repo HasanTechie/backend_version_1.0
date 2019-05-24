@@ -21,6 +21,7 @@ class Hotel extends JsonResource
             'name' => $this->name,
             'address' => $this->address,
             'city' => $this->city,
+            'status' => true
         ];
     }
 }

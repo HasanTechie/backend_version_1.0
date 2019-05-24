@@ -9,7 +9,7 @@ class CompetitorAvgPrice extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -19,7 +19,7 @@ class CompetitorAvgPrice extends JsonResource
             'hotel_name' => $this->hotel_name,
             'price' => $this->price,
             'check_in_date' => $this->check_in_date,
-            'competitors_data' => $this->competitorsData,
+            'competitors_data' => (isset($this->competitorsData) ? $this->competitorsData : null),
         ];
     }
 }

@@ -103,8 +103,10 @@ class APIController extends Controller
                             $dA1 = null;
                         }
                     }
-                    $hotel->competitorsData = array_filter($dA2);
-                    $dA2 = null;
+                    if (isset($dA2)) {
+                        $hotel->competitorsData = array_filter($dA2);
+                        $dA2 = null;
+                    }
                 }
                 return CompetitorAvgPriceResource::collection($prices);
             }

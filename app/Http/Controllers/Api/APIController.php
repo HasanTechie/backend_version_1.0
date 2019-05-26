@@ -233,7 +233,7 @@ class APIController extends Controller
             $dates = $dates->get();
             foreach ($dates as $date) {
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, avg(prices_hrs.price), criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, avg(prices_hrs.price) as price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
@@ -246,7 +246,7 @@ class APIController extends Controller
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
                             $competitorsRooms = DB::table('rooms_hrs')
-                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, avg(prices_hrs.price), prices_hrs.request_date'))
+                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, avg(prices_hrs.price) as price, prices_hrs.request_date'))
                                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                                 ->where([

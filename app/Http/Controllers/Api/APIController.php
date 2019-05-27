@@ -242,7 +242,7 @@ class APIController extends Controller
                         ['check_in_date', '=', $date->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->groupBy('room','criteria','check_in_date','room_type','price')->get();
+                    ])->groupBy('room', 'criteria', 'check_in_date', 'room_type')->get();
 
                 if (isset($mainHotelRooms)) {
                     foreach ($mainHotelRooms as $mainHotelRoom) {
@@ -258,10 +258,10 @@ class APIController extends Controller
                                     ['check_in_date', '=', $date->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                                ])->groupBy('room','criteria','check_in_date','room_type','price')->get();
+                                ])->groupBy('room', 'criteria', 'check_in_date', 'room_type')->get();
                             if (count($competitorsRooms) > 0) {
                                 foreach ($competitorsRooms as $competitorsRoomsInstance) {
-                                    $dA1['price'] = round($competitorsRoomsInstance->price,2);
+                                    $dA1['price'] = round($competitorsRoomsInstance->price, 2);
                                     $dA1['room'] = $competitorsRoomsInstance->room;
                                     $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
                                     $dA1['check_in_date'] = $date->check_in_date;
@@ -280,10 +280,10 @@ class APIController extends Controller
                         $mainHotelRoom->competitors = $dA2;
                         $dA2 = null;
                     }
-                    return CompetitorRoomPriceResource::collection($mainHotelRooms);
                 }
             }
-            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
+            return CompetitorRoomPriceResource::collection($mainHotelRooms);
+//            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');
         }

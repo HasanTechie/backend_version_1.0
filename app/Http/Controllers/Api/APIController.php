@@ -243,9 +243,10 @@ class APIController extends Controller
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->groupBy('room', 'criteria', 'check_in_date', 'room_type')->get();
-
-                if (isset($mainHotelRooms)) {
-                    foreach ($mainHotelRooms as $mainHotelRoom) {
+            }
+            if (isset($mainHotelRooms)) {
+                foreach ($mainHotelRooms as $mainHotelRoom) {
+                    foreach ($dates as $date) {
                         foreach ($competitorIdsArray as $competitorId) {
                             $competitorsRooms = DB::table('rooms_hrs')
                                 ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
@@ -277,12 +278,13 @@ class APIController extends Controller
                                 }
                             }
                         }
-                        $mainHotelRoom->competitors = $dA2;
-                        $dA2 = null;
                     }
+                    $mainHotelRoom->competitors = $dA2;
+                    $dA2 = null;
                 }
+                return CompetitorRoomPriceResource::collection($mainHotelRooms);
             }
-            return CompetitorRoomPriceResource::collection($mainHotelRooms);
+
 //            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');

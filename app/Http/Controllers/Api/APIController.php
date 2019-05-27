@@ -242,7 +242,7 @@ class APIController extends Controller
                         ['check_in_date', '=', $date->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->groupBy('room', 'criteria', 'check_in_date', 'room_type')->get();
+                    ])->groupBy('room', 'criteria', 'check_in_date', 'room_type', 'price')->get();
             }
             if (isset($mainHotelRooms)) {
                 foreach ($mainHotelRooms as $mainHotelRoom) {
@@ -259,7 +259,7 @@ class APIController extends Controller
                                     ['check_in_date', '=', $date->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                                ])->groupBy('room', 'criteria', 'check_in_date', 'room_type')->get();
+                                ])->groupBy('room', 'criteria', 'check_in_date', 'room_type', 'price')->get();
                             if (count($competitorsRooms) > 0) {
                                 foreach ($competitorsRooms as $competitorsRoomsInstance) {
                                     $dA1['price'] = round($competitorsRoomsInstance->price, 2);
@@ -279,11 +279,11 @@ class APIController extends Controller
                             }
                         }
                     }
-                    $mainHotelRoom->competitors = $dA2;
-                    $dA2 = null;
                 }
-                return CompetitorRoomPriceResource::collection($mainHotelRooms);
+                $mainHotelRoom->competitors = $dA2;
+                $dA2 = null;
             }
+            return CompetitorRoomPriceResource::collection($mainHotelRooms);
 
 //            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {

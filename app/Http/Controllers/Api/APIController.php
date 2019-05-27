@@ -243,7 +243,7 @@ class APIController extends Controller
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->groupBy('room', 'criteria', 'check_in_date', 'room_type', 'price')->get();
-                if (isset($mainHotelRooms)) {
+//                if (isset($mainHotelRooms)) {
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
                             $competitorsRooms = DB::table('rooms_hrs')
@@ -279,9 +279,8 @@ class APIController extends Controller
                         $mainHotelRoom->competitors = $dA2;
                         $dA2 = null;
                     }
-                    return CompetitorRoomPriceResource::collection($mainHotelRooms);
-                }
             }
+                    return CompetitorRoomPriceResource::collection($mainHotelRooms);
 
 //            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {

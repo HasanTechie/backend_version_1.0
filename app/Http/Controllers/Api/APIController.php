@@ -70,7 +70,7 @@ class APIController extends Controller
     public function HRSHotelsCompetitorsAvgPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
     {
         if ($apiKey == $this->apiKey) {
-            $competitorIdsArray = explode(',', str_replace(array('[', ']'), '', $competitorIds));
+            $competitorIdsArray = explode(',', $competitorIds);
             $prices = DB::table('rooms_hrs')
                 ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')

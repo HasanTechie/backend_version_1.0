@@ -285,8 +285,10 @@ class APIController extends Controller
                         $dateInstance->room_type = $mainHotelRoom->room_type;
                         $dateInstance->check_in_date = $mainHotelRoom->check_in_date;
                         $dateInstance->request_date = $mainHotelRoom->request_date;
-                        $dateInstance->competitors = $dA2;
-                        $dA2 = null;
+                        if (isset($dA2)) {
+                            $dateInstance->competitors = $dA2;
+                            $dA2 = null;
+                        }
                     }
                 }
             }

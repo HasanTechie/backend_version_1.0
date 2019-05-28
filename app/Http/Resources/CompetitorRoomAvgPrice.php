@@ -9,7 +9,7 @@ class CompetitorRoomAvgPrice extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -19,13 +19,13 @@ class CompetitorRoomAvgPrice extends JsonResource
             'hotel_name' => $this->hotel_name,
             'room_id' => $this->room_id,
             'room' => $this->room,
-            'price' => $this->price,
+            'price' => round($this->price,2),
             'criteria' => $this->criteria,
             'room_type' => $this->room_type,
             'check_in_date' => $this->check_in_date,
             'request_date' => $this->request_date,
 //            'check_out_date' => $this->check_out_date,
-            'competitors_rooms_avg_price' => $this->competitors_rooms_avg_price,
+            'competitors_rooms_avg_price' => (isset($this->competitors_rooms_avg_price) ? $this->competitors_rooms_avg_price : null),
         ];
     }
 }

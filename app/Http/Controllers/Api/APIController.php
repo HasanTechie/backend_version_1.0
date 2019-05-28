@@ -95,7 +95,7 @@ class APIController extends Controller
                             ])->groupBy('check_in_date')->get();
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = $competitorsData[0]->price;
-                            $dA1['check_in_date'] = $hotel->check_in_date;
+                            $dA1['check_in_date'] = $hotelPrice->check_in_date;
                             $dA1['hotel_id'] = $competitorHotelInstance;
                             $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
                             $dA2[] = $dA1;

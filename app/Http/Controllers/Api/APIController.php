@@ -361,11 +361,13 @@ class APIController extends Controller
                         $dateInstance->room_type = $mainHotelRoom->room_type;
                         $dateInstance->check_in_date = $mainHotelRoom->check_in_date;
                         $dateInstance->request_date = $mainHotelRoom->request_date;
-                        if (is_array($dA2) && (count($dA2) > 0)) {
-                            $competitorsRoomsAvgPrice = round(array_sum($dA2) / count($dA2), 2);
+                        if (isset($dA2)) {
+                            if (is_array($dA2) && (count($dA2) > 0)) {
+                                $competitorsRoomsAvgPrice = round(array_sum($dA2) / count($dA2), 2);
+                            }
+                            $dateInstance->competitors_rooms_avg_price = $competitorsRoomsAvgPrice;
+                            $dA2 = null;
                         }
-                        $dateInstance->competitors_rooms_avg_price = $competitorsRoomsAvgPrice;
-                        $dA2 = null;
                     }
                 }
             }

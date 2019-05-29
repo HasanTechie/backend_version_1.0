@@ -18,6 +18,7 @@ class CreateCompetitorsTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('competitor_id');
             $table->timestamps();
+
         });
     }
 

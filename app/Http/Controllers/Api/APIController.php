@@ -293,7 +293,6 @@ class APIController extends Controller
                 }
             }
             return CompetitorRoomPriceResource::collection($dates);
-
 //            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');

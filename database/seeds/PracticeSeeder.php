@@ -19,7 +19,7 @@ class PracticeSeeder extends Seeder
         dd(url('oauth/token'));
 
 
-        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id','=',21)->get();
+        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', 21)->get();
 
 
         dd($rooms);

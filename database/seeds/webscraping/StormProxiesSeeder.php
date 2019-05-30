@@ -57,7 +57,7 @@ class StormProxiesSeeder extends Seeder
                 '163.172.36.207:15008'
             ];
 
-       dd( count($this->dA['proxy']) - 1);
+        dd(count($this->dA['proxy']) - 1);
 
         while (0 == 0) {
             $started = microtime(true);

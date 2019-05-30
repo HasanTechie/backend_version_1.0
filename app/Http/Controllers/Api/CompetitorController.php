@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Competitor as CompetitorResource;
+
 use Illuminate\Http\Request;
 
 class CompetitorController extends Controller
@@ -14,12 +16,13 @@ class CompetitorController extends Controller
     public function index()
     {
         //
+        return CompetitorResource::collection(auth()->user()->comepeitors()->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -30,7 +33,7 @@ class CompetitorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -41,7 +44,7 @@ class CompetitorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

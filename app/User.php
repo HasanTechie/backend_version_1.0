@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Competitor;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Passport\HasApiTokens;
@@ -40,4 +42,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function competitors()
+    {
+        return $this->hasMany(Comepetitor::class);
+    }
 }

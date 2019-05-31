@@ -21,7 +21,6 @@ class CreateCitiesTable extends Migration
             $table->string('name')->nullable();
 
 
-
             $table->string('country_code')->nullable();
             $table->string('country')->nullable();
             $table->double('latitude')->nullable();

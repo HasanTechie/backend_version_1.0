@@ -30,7 +30,8 @@
                 <td>{{$hotel->city}}</td>
                 <td>{{$hotel->country}}</td>
                 <td>{{$hotel->phone}}</td>
-                <td><a href="{{isset($hotel->website) ? $hotel->website : '#'}}" class="button is-link is-outlined">Website</a></td>
+                <td><a href="{{isset($hotel->website) ? $hotel->website : '#'}}" class="button is-link is-outlined">Website</a>
+                </td>
                 <td>{{$hotel->latitude}}</td>
                 <td>{{$hotel->longitude}}</td>
                 <td><a href="/hotelsbasicdata/{{$hotel->uid}}" class="button is-primary is-outlined">Details</a></td>

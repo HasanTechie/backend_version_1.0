@@ -41,7 +41,7 @@ class CreateHotelsHrsTable extends Migration
             $table->string('phone')->nullable();
             $table->text('website')->nullable();
             $table->text('hotel_url_on_hrs')->nullable();
-            $table->string('hid',255)->unique();
+            $table->string('hid', 255)->unique();
             $table->longText('all_data_google')->nullable();
             $table->string('source')->nullable();
 

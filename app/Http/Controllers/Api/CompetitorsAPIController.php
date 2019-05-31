@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Competitor as CompetitorResource;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,24 +43,23 @@ class CompetitorsAPIController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($user_id, $competitor_hotel_id)
     {
         //
+        $deleted = DB::table('competitors')->where([
+            ['user_id', '=', $user_id],
+            ['competitor_hotel_id', '=', $competitor_hotel_id]
+        ])->delete();
+
+        if ($deleted) {
+            return response(['message' => 'Record Deleted']);
+        } else {
+            return response(['message' => 'No Records Deleted']);
+        }
     }
 }

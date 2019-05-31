@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Competitor extends Model
 {
     //
-    protected $guarded = ['user_id'];
+    protected $guarded = ['user_id','competitor_hotel_id'];
 
     public function creator()
     {

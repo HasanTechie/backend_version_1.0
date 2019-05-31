@@ -31,6 +31,14 @@ class CompetitorsAPIController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'user_id' => 'required',
+            'competitor_hotel_id' => 'required'
+        ]);
+
+        $competitor = auth()->user()->competitors()->create($request->all());
+
+        return new CompetitorResource($competitor->load('creator'));
     }
 
     /**

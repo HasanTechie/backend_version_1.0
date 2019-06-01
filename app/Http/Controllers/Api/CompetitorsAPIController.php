@@ -34,12 +34,20 @@ class CompetitorsAPIController extends Controller
         //
         $request->validate([
             'user_id' => 'required',
-            'competitor_hotel_id' => 'required'
+            'hotel_id' => 'required'
         ]);
 
-        $competitor = auth()->user()->competitors()->create($request->all());
+        if (DB::table('competitors')->where([
+            ['user_id', '=', $request->user_id],
+            ['hotel_id', '=', $request->hotel_id]
+        ])->doesntExist()) {
+            $competitor = auth()->user()->competitors()->create($request->all());
+            return new CompetitorResource($competitor->load('creator'));
+        } else {
+            response(['message' => 'Record already exists']);
+        }
 
-        return new CompetitorResource($competitor->load('creator'));
+
     }
 
     /**
@@ -48,12 +56,12 @@ class CompetitorsAPIController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($user_id, $competitor_hotel_id)
+    public function destroy($user_id, $hotel_id)
     {
         //
         $deleted = DB::table('competitors')->where([
             ['user_id', '=', $user_id],
-            ['competitor_hotel_id', '=', $competitor_hotel_id]
+            ['hotel_id', '=', $hotel_id]
         ])->delete();
 
         if ($deleted) {

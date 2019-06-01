@@ -7,7 +7,7 @@ Route::post('/login', 'Api\AuthController@login');
 
 Route::get('/competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');
 Route::post('/competitors', 'Api\CompetitorsAPIController@store')->middleware('auth:api');
-Route::get('/competitors&user_id={user_id}&competitor_hotel_id={competitor_hotel_id}', 'Api\CompetitorsAPIController@destroy')->middleware('auth:api');
+Route::get('/competitors&user_id={user_id}&hotel_id={hotel_id}', 'Api\CompetitorsAPIController@destroy')->middleware('auth:api');
 
 Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@HRSHotels');
 

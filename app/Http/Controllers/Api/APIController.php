@@ -118,7 +118,7 @@ class APIController extends Controller
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotelId, $dateFrom, $dateTo, $competitorIds, $room)
     {
 
-        dd(auth()->user()->getAuthIdentifier());
+//        dd(auth()->user()->getAuthIdentifier());
 
 
         if ($apiKey == $this->apiKey) {

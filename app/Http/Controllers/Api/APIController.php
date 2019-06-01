@@ -115,8 +115,11 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotelId, $dateFrom, $dateTo, $competitorIds, $room)
+    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userId, $dateFrom, $dateTo, $competitorIds, $room)
     {
+
+        dd('reached0');
+        $hotelId=3045;
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
 

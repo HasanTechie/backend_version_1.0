@@ -19,6 +19,7 @@ class CreateCompetitorsTable extends Migration
             $table->unsignedBigInteger('hotel_id');
             $table->string('name')->nullable();
             $table->string('address')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
 
         });

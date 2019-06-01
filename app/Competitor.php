@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Competitor extends Model
 {
     //
-    protected $fillable = ['user_id', 'hotel_id', 'name', 'address'];
+    protected $fillable = ['user_id', 'hotel_id', 'name', 'address', 'city'];
 
     public function creator()
     {

@@ -115,18 +115,24 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $hotelId, $dateFrom, $dateTo, $competitorIds, $room)
+    public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {
-
-//        dd(auth()->user()->getAuthIdentifier());
 
 
         if ($apiKey == $this->apiKey) {
-            $competitorIdsArray = explode(',', $competitorIds);
 
-            if (!in_array($hotelId, $competitorIdsArray)) {
-                array_unshift($competitorIdsArray, $hotelId);
+            $competitorIds = DB::table('competitors')->select('hotel_id')->where('user_id', '=', $userid)->get();
+            $competitorIdsArray = [];
+            foreach ($competitorIds as $competitorIdInstance1) {
+                $competitorIdsArray[] = $competitorIdInstance1->hotel_id;
             }
+
+            $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
+
+            if (!in_array($hotelId[0]->hotel_id, $competitorIdsArray)) {
+                array_unshift($competitorIdsArray, $hotelId[0]->hotel_id);
+            }
+
             if ($room == 'All') {
                 $returnAllRooms = true;
             }
@@ -143,7 +149,7 @@ class APIController extends Controller
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
-                    ['rooms_hrs.hotel_id', '=', $hotelId],
+                    ['rooms_hrs.hotel_id', '=', $hotelId[0]->hotel_id],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
@@ -190,7 +196,7 @@ class APIController extends Controller
                         }
                     }
                 }
-                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();
+                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId[0]->hotel_id)->get();
                 $roomsArray = ['All'];
                 foreach ($rooms as $roomInstance) {
                     $roomsArray[] = $roomInstance->room;

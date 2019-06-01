@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', 'Api\AuthController@register');
-Route::post('/login', 'Api\AuthController@login');
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
 
-Route::get('/competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');
-Route::post('/competitors', 'Api\CompetitorsAPIController@store')->middleware('auth:api');
-Route::get('/competitors&user_id={user_id}&hotel_id={hotel_id}', 'Api\CompetitorsAPIController@destroy')->middleware('auth:api');
+Route::get('competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');
+Route::post('competitors', 'Api\CompetitorsAPIController@store')->middleware('auth:api');
+Route::get('competitors&user_id={user_id}&hotel_id={hotel_id}', 'Api\CompetitorsAPIController@destroy')->middleware('auth:api');
 
 Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@HRSHotels');
 
@@ -21,4 +21,4 @@ Route::get('competitorsroomsavgprices&get={get}&apiKey={apiKey}&hotelid={hotel_i
 
 Route::get('events&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@Events');
 
-Route::get('competitorspricesapex&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={datefrom}&dateto={dateto}&competitorsid={competitorsid}&room={room}', 'Api\APIController@HRSHotelsCompetitorsPricesApex');
+Route::get('competitorspricesapex&get={get}&apiKey={apiKey}&userid={userid}&datefrom={datefrom}&dateto={dateto}&room={room}', 'Api\APIController@HRSHotelsCompetitorsPricesApex');

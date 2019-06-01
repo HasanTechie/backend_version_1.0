@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Competitor;
+//use App\Competitor;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,9 +12,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
-
-    protected $primaryKey = 'uid'; // or null
-    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +42,6 @@ class User extends Authenticatable
 
     public function competitors()
     {
-        return $this->hasMany(Comepetitor::class);
+        return $this->hasMany(Competitor::class);
     }
 }

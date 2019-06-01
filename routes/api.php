@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', 'Api\AuthController@register');
 Route::post('/login', 'Api\AuthController@login');
-Route::apiResource('/competitors', 'Api\CompetitorController');
+
+Route::apiResource('/competitors', 'Api\CompetitorsAPIController')->middleware('auth:api');
 
 Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'Api\APIController@HRSHotels');
 

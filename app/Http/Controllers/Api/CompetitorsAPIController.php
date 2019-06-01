@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Competitor as CompetitorResource;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class CompetitorController extends Controller
+//use App\Competitor;
+
+class CompetitorsAPIController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +19,7 @@ class CompetitorController extends Controller
     public function index()
     {
         //
-        return CompetitorResource::collection(auth()->user()->comepeitors()->get());
+        return CompetitorResource::collection(auth()->user()->competitors()->with('creator')->get());
     }
 
     /**

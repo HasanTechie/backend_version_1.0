@@ -228,7 +228,7 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
+    public function HRSHotelsCompetitorsRoomsPricesOld($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
@@ -311,7 +311,7 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsRoomsAvgPrices($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
+    public function HRSHotelsCompetitorsRoomsAvgPricesOld($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
     {
         if ($apiKey == $this->apiKey) {
             $competitorIdsArray = explode(',', $competitorIds);
@@ -389,7 +389,7 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsRoomsPricesNew($rows, $apiKey, $userid, $dateFrom, $dateTo)
+    public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $userid, $dateFrom, $dateTo)
     {
         if ($apiKey == $this->apiKey) {
 
@@ -482,16 +482,24 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsRoomsAvgPricesNew($rows, $apiKey, $userid, $dateFrom, $dateTo)
+    public function HRSHotelsCompetitorsRoomsAvgPrices($rows, $apiKey, $userid, $dateFrom, $dateTo)
     {
         if ($apiKey == $this->apiKey) {
-            $competitorIdsArray = explode(',', $competitorIds);
+            $competitorIds = DB::table('competitors')->select('hotel_id')->where('user_id', '=', $userid)->get();
+            $competitorIdsArray = [];
+            foreach ($competitorIds as $competitorIdInstance1) {
+                $competitorIdsArray[] = $competitorIdInstance1->hotel_id;
+            }
+
+            $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
+            $hotelId = $hotelId[0]->hotel_id;
+
             $dates = DB::table('rooms_hrs')
                 ->select(DB::raw('prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
-                    ['rooms_hrs.hotel_id', '=', $hotel],
+                    ['rooms_hrs.hotel_id', '=', $hotelId],
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
@@ -504,7 +512,7 @@ class APIController extends Controller
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
-                        ['rooms_hrs.hotel_id', '=', $hotel],
+                        ['rooms_hrs.hotel_id', '=', $hotelId],
                         ['check_in_date', '=', $dateInstance->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],

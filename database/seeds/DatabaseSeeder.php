@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call('PracticeSeeder');
 //        $this->call('ConvertingUIDsOfTables');
-//        $this->call('GatheringPublicHolidaysData');
+//        $this->call('GatheringPublicHolidaysDataSeeder');
 
 //        $this->call('Hotels_eurobookings_SeederSetup');
 //        $this->call('Rooms_eurobookings_SeederSetup');

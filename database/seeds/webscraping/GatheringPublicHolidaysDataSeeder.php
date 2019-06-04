@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
 
-class GatheringPublicHolidaysData extends Seeder
+class GatheringPublicHolidaysDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

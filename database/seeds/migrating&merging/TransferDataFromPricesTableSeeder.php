@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Database\Seeder;
 
 class TransferDataFromPricesTableSeeder extends Seeder
@@ -15,11 +17,18 @@ class TransferDataFromPricesTableSeeder extends Seeder
 
         $dateToCompare = date("Y-m-d", strtotime("-7 day"));//only keep past 7days data.
 
-        $prices = DB::table('prices_hrs')->get();
-        foreach($prices as $price){
-            if($price->request_date <= $dateToCompare){
+//        $prices = DB::table('prices_hrs')->get(); //alot of  RAM consumption
 
+        $firstId = DB::table('prices_hrs')->first();
+        $lastId = DB::table('prices_hrs')->latest()->first();
+
+
+        for ($i = $firstId->id; $i < $lastId->id; $i++) {
+            $price = DB::table('prices_hrs')->where('id', '=', $i)->get();
+            if ($price[0]->request_date <= $dateToCompare) {
+                DB::table('prices_hrs_data')->insert((array) $price[0]);
             }
+            dd('break');
         }
     }
 }

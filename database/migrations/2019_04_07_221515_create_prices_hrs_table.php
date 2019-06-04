@@ -14,7 +14,7 @@ class CreatePricesHrsTable extends Migration
     public function up()
     {
         Schema::create('prices_hrs', function (Blueprint $table) {
-            $table->increments('id')->unique();
+            $table->bigIncrements('id')->unique();
 
             $table->double('price')->nullable();
             $table->double('price_should')->nullable();

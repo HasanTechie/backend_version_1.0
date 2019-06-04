@@ -11,7 +11,8 @@ class DatabaseSeeder extends Seeder
      * //     */
     public function run()
     {
-        $this->call('PracticeSeeder');
+//        $this->call('PracticeSeeder');
+        $this->call('TransferDataFromPricesTableSeeder');
 //        $this->call('ConvertingUIDsOfTables');
 //        $this->call('GatheringPublicHolidaysDataSeeder');
 

@@ -12,5 +12,14 @@ class TransferDataFromPricesTableSeeder extends Seeder
     public function run()
     {
         //
+
+        $dateToCompare = date("Y-m-d", strtotime("-7 day"));//only keep past 7days data.
+
+        $prices = DB::table('prices_hrs')->get();
+        foreach($prices as $price){
+            if($price->request_date <= $dateToCompare){
+
+            }
+        }
     }
 }

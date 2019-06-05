@@ -41,11 +41,11 @@ class TransferPricesDataToAnotherTable extends Command
     public function handle()
     {
         //
-        echo 'GatherHrsRooms Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
+        echo 'TransferPricesDataToAnotherTable Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
         $instance = new TransferDataFromPricesTableSeeder();
         $instance->run();
 
-        echo 'GatherHrsRooms Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
+        echo 'TransferPricesDataToAnotherTable Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }
 }

@@ -56,7 +56,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:transferpricesdatatoanothertable')
             ->withoutOverlapping()
             ->runInBackground()
-            ->dailyAt('07:14')//run once
+            ->dailyAt('06:50')//run once
             ->appendOutputTo(storage_path('app/mylogs/TransferPricesDataToAnotherTableCommand' . date("Y-m-d") . '.log'));
 
         /*

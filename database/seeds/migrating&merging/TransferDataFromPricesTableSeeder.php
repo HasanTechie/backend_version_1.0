@@ -25,9 +25,11 @@ class TransferDataFromPricesTableSeeder extends Seeder
 
         for ($i = $firstId->id; $i < $lastId->id; $i++) {
             $price = DB::table('prices_hrs')->where('id', '=', $i)->get();
-            if ($price[0]->request_date <= $dateToCompare) {
-                DB::table('prices_hrs')->where('id', '=', $price[0]->id)->delete();
-                DB::table('prices_hrs_data')->insert((array)$price[0]);
+            if (count($price) > 0) {
+                if ($price[0]->request_date <= $dateToCompare) {
+                    DB::table('prices_hrs')->where('id', '=', $price[0]->id)->delete();
+                    DB::table('prices_hrs_data')->insert((array)$price[0]);
+                }
             }
         }
     }

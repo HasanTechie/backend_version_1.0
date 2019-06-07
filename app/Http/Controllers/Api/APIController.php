@@ -448,7 +448,7 @@ class APIController extends Controller
         }
     }
 
-    public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $userid, $dateFrom, $dateTo)
+    public function HRSHotelsCompetitorsRoomsPrices($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {
         if ($apiKey == $this->apiKey) {
 
@@ -471,6 +471,7 @@ class APIController extends Controller
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
+            ($room != 'All') ? $dates = $dates->where('room', '=', $room) : null;
             ($rows > 0) ? $dates = $dates->limit($rows) : null;
             $dates = $dates->get();
 
@@ -484,7 +485,9 @@ class APIController extends Controller
                         ['check_in_date', '=', $dateInstance->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->groupBy('room', 'criteria', 'room_type')->get();
+                    ])->groupBy('room', 'criteria', 'room_type');
+                ($room != 'All') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
+                $mainHotelRooms = $mainHotelRooms->get();
                 if (isset($mainHotelRooms)) {
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
@@ -499,7 +502,9 @@ class APIController extends Controller
                                     ['check_in_date', '=', $dateInstance->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                                ])->groupBy('room', 'criteria', 'room_type')->get();
+                                ])->groupBy('room', 'criteria', 'room_type');
+                            ($room != 'All') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
+                            $competitorsRooms = $competitorsRooms->get();
                             if (count($competitorsRooms) > 0) {
                                 foreach ($competitorsRooms as $competitorsRoomsInstance) {
                                     $dA1['price'] = round($competitorsRoomsInstance->price, 2);

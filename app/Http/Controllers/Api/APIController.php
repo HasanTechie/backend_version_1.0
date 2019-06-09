@@ -29,7 +29,7 @@ class APIController extends Controller
         if ($apiKey == $this->apiKey) {
             $hotels = DB::table('hotels_hrs');
             if ($city == 'All') {
-                $hotels = $hotels->whereIn('city', ['Rome', 'Berlin']);
+//                $hotels = $hotels->whereIn('city', ['Rome', 'Berlin']);
             } else {
                 $hotels = $hotels->where('city', '=', $city);
             }

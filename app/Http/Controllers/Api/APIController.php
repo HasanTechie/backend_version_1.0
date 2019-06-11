@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
-use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
-use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
-use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
+//use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
+//use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
+//use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
+//use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
 use App\Http\Resources\Event as EventResource;
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;

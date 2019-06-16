@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 class CompetitorsPriceAPIController extends Controller
 {
     //
+    protected $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
+    }
+    
     public function HRSHotelsCompetitorsAvgPricesOld($rows, $apiKey, $hotel, $dateFrom, $dateTo, $competitorIds)
     {
         if ($apiKey == $this->apiKey) {

@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class EventsAPIController extends Controller
 {
+    protected $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
+    }
     //
     public function Events($rows, $apiKey, $city)
     {

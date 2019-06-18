@@ -13,19 +13,19 @@ Route::get('hotels&get={get}&apiKey={apiKey}&city={city}', 'Api\HotelsAPIControl
 
 Route::get('roomsprices&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}', 'Api\HotelsAPIController@HRSRoomsPrices');
 
-//old
+//old method
 Route::get('competitorsavgpricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsAvgPricesOld');
-//old
+//old method
 Route::get('competitorsroomspricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsPricesOld');
-//old
+//old method
 Route::get('competitorsroomsavgpricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsAvgPricesOld');
 
 
-//new
+//new method
 Route::get('competitorsavgprices&get={get}&apiKey={apiKey}&userid={userid}&datefrom={dateFrom}&dateto={dateTo}&room={room}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsAvgPrices');
-//new
+//new method
 Route::get('competitorsroomsprices&get={get}&apiKey={apiKey}&userid={userid}&datefrom={dateFrom}&dateto={dateTo}&room={room}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsPrices');
-//new
+//new method
 Route::get('competitorsroomsavgprices&get={get}&apiKey={apiKey}&userid={userid}&datefrom={dateFrom}&dateto={dateTo}&room={room}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsAvgPrices');
 
 Route::get('events&get={get}&apiKey={apiKey}&city={city}', 'Api\EventsAPIController@Events');

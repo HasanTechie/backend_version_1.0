@@ -5,6 +5,7 @@ use Goutte\Client as GoutteClient;
 use JonnyW\PhantomJs\Client as PhantomClient;
 use Symfony\Component\DomCrawler\Crawler;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Seeder;
 
@@ -67,10 +68,10 @@ class Hotels_hrs_Seeder extends Seeder
         return $url;
     }
 
-    protected function mainWork($crawler)
+    protected function mainWork($crawler0)
     {
-        if ($crawler->filter('a.sw-hotel-list__link')->count() > 0) {
-            $crawler->filter('a.sw-hotel-list__link')->each(function ($node) {
+        if ($crawler0->filter('a.sw-hotel-list__link')->count() > 0) {
+            $crawler0->filter('a.sw-hotel-list__link')->each(function ($node) {
                 $this->dA['hotel_hrs_image'] = ($node->filter('div.sw-hotel-list__element__image > img')->count() > 0) ? $node->filter('div.sw-hotel-list__element__image > img')->attr('src') : null;
                 $tempData = ($node->count() > 0) ? $node->attr('data-gtm-click') : null;
 
@@ -95,20 +96,20 @@ class Hotels_hrs_Seeder extends Seeder
                             }
                         }
 
-                        if (DB::table('hotels_hrs')->where('hrs_id', '=', $this->dA['hotel_hrs_id'])->doesntExist()) {
-                            $this->hotelData($crawler);
-                            if (!empty($this->dA['hotel_name']) && !empty($this->dA['hotel_address']) && !empty($this->dA['hotel_facilities']) && !empty($this->dA['hotel_location_details'])) {
-                                $this->insertHotelsDataIntoDB();
+//                        if (DB::table('hotels_hrs')->where('hrs_id', '=', $this->dA['hotel_hrs_id'])->doesntExist()) {
+                        $this->hotelData($crawler);
+                        if (!empty($this->dA['hotel_name']) && !empty($this->dA['hotel_address']) && !empty($this->dA['hotel_facilities']) && !empty($this->dA['hotel_location_details'])) {
+                            $this->insertHotelsDataIntoDB();
+                        } else {
+                            if ($this->dA['count_!200c'] < 24) {
+                                $this->dA['count_!200c']++;
+                                goto restart2;
                             } else {
-                                if ($this->dA['count_!200c'] < 24) {
-                                    $this->dA['count_!200c']++;
-                                    goto restart2;
-                                } else {
-                                    $this->insertHotelsDataIntoDB();
-                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/emptyHotel.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-                                }
+                                $this->insertHotelsDataIntoDB();
+                                Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/emptyHotel.log', 'url:' . $this->dA['hotel_url'] . ' ' . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
                             }
                         }
+//                        }
                     }
                 }
             });
@@ -130,10 +131,10 @@ class Hotels_hrs_Seeder extends Seeder
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
 //            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][count($this->dA['proxy']) - 1]);
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+//            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
-            $request->setTimeout($this->dA['timeOut']);
+//            $request->setTimeout($this->dA['timeOut']);
             $response = $client->getMessageFactory()->createResponse();
             // Send the request
             $client->send($request, $response);
@@ -196,6 +197,13 @@ class Hotels_hrs_Seeder extends Seeder
             $this->dA['hotel_address'] = ($crawler->filter('address.hotelAdress')->count() > 0) ? $crawler->filter('address.hotelAdress')->text() : null;
             $this->dA['hotel_hrs_id'] = ($crawler->filter('input[name="hotelnumber"]')->count() > 0) ? $crawler->filter('input[name="hotelnumber"]')->attr('value') : null;
 
+            if ($crawler->filter('div.starContainer')->count() > 0) {
+                $this->dA['hotel_hrs_stars'] = preg_replace('/[^0-9]/', '', $crawler->filter('div.starContainer span:first-child')->attr('class'));
+            }
+            dd($this->dA);
+
+
+            dd($this->dA);
             if (count($crawler)) {
                 $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
                 if (count($result) > 1) {
@@ -392,6 +400,7 @@ class Hotels_hrs_Seeder extends Seeder
             $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
             $this->dA['hid'] = substr(str_replace(' ', '', $hid), 0, 254);
 
+            dd('reachedasdasd');
             if (!empty($this->dA['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dA['hid'])->doesntExist()) {
                 DB::table('hotels_hrs')->insert([
                     'name' => $this->dA['hotel_name'],
@@ -430,6 +439,9 @@ class Hotels_hrs_Seeder extends Seeder
                 $this->dA['count_!200b'] = 0;
                 $this->dA['count_!200c'] = 0;
             } else {
+//                DB::table('hotels_hrs')
+//                    ->where('hrs_id', $this->dA['hotel_hrs_id'])
+//                    ->update(['stars' => 1]);
                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }
 

@@ -18,6 +18,7 @@ class CreateHotelsHrsTable extends Migration
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->text('photo')->nullable();
+            $table->string('stars')->nullable();
             $table->unsignedInteger('hrs_id')->nullable()->index();
             $table->string('city')->nullable();
             $table->unsignedInteger('city_id_on_hrs')->nullable()->index();

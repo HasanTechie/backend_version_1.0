@@ -200,10 +200,7 @@ class Hotels_hrs_Seeder extends Seeder
             if ($crawler->filter('div.starContainer')->count() > 0) {
                 $this->dA['hotel_hrs_stars'] = preg_replace('/[^0-9]/', '', $crawler->filter('div.starContainer span:first-child')->attr('class'));
             }
-            dd($this->dA);
 
-
-            dd($this->dA);
             if (count($crawler)) {
                 $result = preg_split('/"hotelLocationLatitude":/', $crawler->html());
                 if (count($result) > 1) {
@@ -400,13 +397,13 @@ class Hotels_hrs_Seeder extends Seeder
             $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
             $this->dA['hid'] = substr(str_replace(' ', '', $hid), 0, 254);
 
-            dd('reachedasdasd');
             if (!empty($this->dA['hid']) && DB::table('hotels_hrs')->where('hid', '=', $this->dA['hid'])->doesntExist()) {
                 DB::table('hotels_hrs')->insert([
                     'name' => $this->dA['hotel_name'],
                     'address' => $this->dA['hotel_address'],
                     'hrs_id' => $this->dA['hotel_hrs_id'],
                     'photo' => (!empty($this->dA['hotel_hrs_image']) ? $this->dA['hotel_hrs_image'] : null),
+                    'stars' => (!empty($this->dA['hotel_hrs_stars']) ? $this->dA['hotel_hrs_stars'] : null),
                     'ratings_on_hrs' => (isset($this->dA['ratings_on_hrs']) ? $this->dA['ratings_on_hrs'] : null),
                     'ratings_text_on_hrs' => (isset($this->dA['ratings_text_on_hrs']) ? $this->dA['ratings_text_on_hrs'] : null),
                     'total_number_of_ratings_on_hrs' => (isset($this->dA['total_number_of_ratings_on_hrs']) ? $this->dA['total_number_of_ratings_on_hrs'] : null),
@@ -432,18 +429,49 @@ class Hotels_hrs_Seeder extends Seeder
                 $this->dA['total_number_of_ratings_on_hrs'] = $this->dA['hotel_details'] = $this->dA['hotel_location_details'] = $this->dA['hotel_facilities'] = $this->dA['in_house_services'] =
                 $this->dA['hotel_latitude'] = $this->dA['hotel_longitude'] = $this->dA['hid'] = $this->dA['hotel_url'] = null;
 
-                $this->dA['count_unauthorized'] = 0;
-                $this->dA['count_access_denied'] = 0;
-                $this->dA['count_not_found'] = 0;
-                $this->dA['count_!200'] = 0;
-                $this->dA['count_!200b'] = 0;
-                $this->dA['count_!200c'] = 0;
+//                $this->dA['count_unauthorized'] = 0;
+//                $this->dA['count_access_denied'] = 0;
+//                $this->dA['count_not_found'] = 0;
+//                $this->dA['count_!200'] = 0;
+//                $this->dA['count_!200b'] = 0;
+//                $this->dA['count_!200c'] = 0;
             } else {
-//                DB::table('hotels_hrs')
-//                    ->where('hrs_id', $this->dA['hotel_hrs_id'])
-//                    ->update(['stars' => 1]);
+                DB::table('hotels_hrs')
+                    ->where('hrs_id', $this->dA['hotel_hrs_id'])
+                    ->update([
+                        'name' => $this->dA['hotel_name'],
+                        'address' => $this->dA['hotel_address'],
+                        'hrs_id' => $this->dA['hotel_hrs_id'],
+                        'photo' => (!empty($this->dA['hotel_hrs_image']) ? $this->dA['hotel_hrs_image'] : null),
+                        'stars' => (!empty($this->dA['hotel_hrs_stars']) ? $this->dA['hotel_hrs_stars'] : null),
+                        'ratings_on_hrs' => (isset($this->dA['ratings_on_hrs']) ? $this->dA['ratings_on_hrs'] : null),
+                        'ratings_text_on_hrs' => (isset($this->dA['ratings_text_on_hrs']) ? $this->dA['ratings_text_on_hrs'] : null),
+                        'total_number_of_ratings_on_hrs' => (isset($this->dA['total_number_of_ratings_on_hrs']) ? $this->dA['total_number_of_ratings_on_hrs'] : null),
+                        'details' => (isset($this->dA['hotel_details']) ? serialize($this->dA['hotel_details']) : null),
+                        'location_details' => (isset($this->dA['hotel_location_details']) ? serialize($this->dA['hotel_location_details']) : null),
+                        'surroundings_of_the_hotel' => (isset($this->dA['hotel_location_details']['surroundings_of_the_hotel']) ? serialize($this->dA['hotel_location_details']['surroundings_of_the_hotel']) : null),
+                        'sports_leisure_facilities' => (isset($this->dA['hotel_location_details']['sports_leisure_facilities']) ? serialize($this->dA['hotel_location_details']['sports_leisure_facilities']) : null),
+                        'nearby_airports' => (isset($this->dA['hotel_location_details']['nearby_airports']) ? serialize($this->dA['hotel_location_details']['nearby_airports']) : null),
+                        'facilities' => (isset($this->dA['hotel_facilities']) ? serialize($this->dA['hotel_facilities']) : null),
+                        'in_house_services' => (isset($this->dA['in_house_services']) ? serialize($this->dA['in_house_services']) : null),
+                        'city' => $this->dA['city'],
+                        'city_id_on_hrs' => $this->dA['city_id'],
+                        'country_code' => $this->dA['country_code'],
+                        'latitude_hrs' => (isset($this->dA['hotel_latitude']) ? $this->dA['hotel_latitude'] : null),
+                        'longitude_hrs' => (isset($this->dA['hotel_longitude']) ? $this->dA['hotel_longitude'] : null),
+                        'hid' => $this->dA['hid'],
+                        'hotel_url_on_hrs' => (isset($this->dA['hotel_url']) ? $this->dA['hotel_url'] : null),
+                        'source' => $this->dA['source'],
+                        'updated_at' => DB::raw('now()'),
+                    ]);
                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }
+            $this->dA['count_unauthorized'] = 0;
+            $this->dA['count_access_denied'] = 0;
+            $this->dA['count_not_found'] = 0;
+            $this->dA['count_!200'] = 0;
+            $this->dA['count_!200b'] = 0;
+            $this->dA['count_!200c'] = 0;
 
         } catch (Exception $e) {
             $this->catchException($e, 'ErrorDB');

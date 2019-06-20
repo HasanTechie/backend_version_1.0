@@ -1,11 +1,9 @@
 <?php
 
-use App\Jobs\GatherRoomsDataJob;
-//use Illuminate\Support\Facades\DB;
-
+use App\Jobs\GatherHighPriorityRoomsDataJob;
 use Illuminate\Database\Seeder;
 
-class Rooms_hrs_Queues_Seeder extends Seeder
+class Rooms_hrs_high_priority_Queues_Seeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -26,14 +24,13 @@ class Rooms_hrs_Queues_Seeder extends Seeder
             $dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
 
 
-            GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(2));
-            
+            GatherHighPriorityRoomsDataJob::dispatch($dA)->onQueue('high')->delay(now()->addSecond(2));
+
             if ($dA['start_date'] < date("Y-m-d", strtotime("+180 day"))) {
                 $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
             } else {
                 $dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($dA['start_date'])));
             }
         }
-
     }
 }

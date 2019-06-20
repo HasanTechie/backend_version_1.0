@@ -12,11 +12,11 @@ class ConvertingUIDsOfTables extends Seeder
     public function run()
     {
 //        //
-        $hotels = DB::table('hotels_hrs')->get();
+        $hotels = DB::table('hotels_basic_data_for_gathering')->get();
 //
         $i = 1;
         foreach ($hotels as $hotel) {
-            DB::table('hotels_hrs')
+            DB::table('hotels_basic_data_for_gathering')
                 ->where('uid', $hotel->uid)
                 ->update(['uid' => $i]);
 //            DB::table('rooms_hrs')

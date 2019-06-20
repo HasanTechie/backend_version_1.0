@@ -14,9 +14,7 @@ class CreateHotelsBasicDataForGatheringTable extends Migration
     public function up()
     {
         Schema::create('hotels_basic_data_for_gathering', function (Blueprint $table) {
-            $table->string('uid')->unique()->primary();
-            $table->unsignedInteger('s_no');
-
+            $table->increments('id')->unique();
 //            $table->string('currency')->nullable();
             $table->string('city');
             $table->string('city_id');

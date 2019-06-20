@@ -466,6 +466,7 @@ class Hotels_hrs_Seeder extends Seeder
                     ]);
                 Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/AlreadyExisted.log', 'url:' . $this->dA['hotel_url'] . ' ;$hid:' . (!empty($this->dA['hid']) ? $this->dA['hid'] : 'emptyHid') . ';count_i:' . $this->dA['count_i'] . ';' . Carbon::now()->toDateTimeString() . "\n");
             }
+            echo $this->dA['hotel_hrs_id'] . ' ';
             $this->dA['count_unauthorized'] = 0;
             $this->dA['count_access_denied'] = 0;
             $this->dA['count_not_found'] = 0;

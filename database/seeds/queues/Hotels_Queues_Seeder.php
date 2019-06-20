@@ -15,7 +15,7 @@ class Hotels_Queues_Seeder extends Seeder
     {
         //
 //        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
-        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->whereIn('city', ['Rome', 'Berlin'])->get();
+        $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->get();
 
         $instanceArray = [];
 

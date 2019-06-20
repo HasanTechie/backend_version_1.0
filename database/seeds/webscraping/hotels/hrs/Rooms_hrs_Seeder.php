@@ -34,9 +34,12 @@ class Rooms_hrs_Seeder extends Seeder
                 Storage::makeDirectory('hrs/' . $this->dA['request_date']);
             }
 
-            while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
-                $this->dA['check_in_date'] = $this->dA['start_date'];
-                $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+            $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
+            foreach ($hotels as $hotel) {
+                $this->dA['hotel_id'] = $hotel->id;
+                $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
+                $this->dA['city'] = $hotel->city;
+
                 foreach ($this->dA['adults'] as $adult) {
 //                    if ($this->dA['full_break'] == true) {
 //                        break 2;
@@ -103,11 +106,7 @@ class Rooms_hrs_Seeder extends Seeder
                         }
                     }
                 }
-                if ($this->dA['start_date'] < date("Y-m-d", strtotime("+240 day"))) {
-                    $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
-                } else {
-                    $this->dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($this->dA['start_date'])));
-                }
+
             }
         } catch (Exception $e) {
             $this->catchException($e, 'errorMain');

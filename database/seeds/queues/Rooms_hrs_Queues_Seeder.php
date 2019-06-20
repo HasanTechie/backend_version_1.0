@@ -20,14 +20,19 @@ class Rooms_hrs_Queues_Seeder extends Seeder
         $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
         $dA['end_date'] = date("Y-m-d", strtotime("+365 day"));
 
-        $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
 
-        foreach ($hotels as $hotel) {
-            $dA['hotel_id'] = $hotel->id;
-            $dA['hotel_hrs_id'] = $hotel->hrs_id;
-            $dA['city'] = $hotel->city;
+        while (strtotime($dA['start_date']) <= strtotime($dA['end_date'])) {
+            $dA['check_in_date'] = $dA['start_date'];
+            $dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+
 
             GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(2));
+            
+            if ($dA['start_date'] < date("Y-m-d", strtotime("+180 day"))) {
+                $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+            } else {
+                $dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($dA['start_date'])));
+            }
         }
 
     }

@@ -21,7 +21,7 @@ class Hotels_eurobookings_SeederSetup extends Seeder
                 $instance['end_date'] = '2019-04-12';
                 $instance['currency'] = 'EUR';
                 $instance['k'] = $k;
-                $euroBooking->mainRun($instance);
+                $euroBooking->run($instance);
             }
         }
     }

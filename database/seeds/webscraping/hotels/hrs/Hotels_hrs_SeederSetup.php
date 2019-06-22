@@ -21,7 +21,7 @@ class Hotels_hrs_SeederSetup extends Seeder
             $instance['currency'] = 'EUR';
             $instance['start_date'] = '2019-07-14';
             $instance['end_date'] = '2019-07-14';
-            $hrs->mainRun($instance);
+            $hrs->run($instance);
         }
     }
 }

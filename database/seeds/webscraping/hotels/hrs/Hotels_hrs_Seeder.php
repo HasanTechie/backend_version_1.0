@@ -18,7 +18,7 @@ class Hotels_hrs_Seeder extends Seeder
      */
     protected $dA = [];
 
-    public function mainRun($data)
+    public function run($data)
     {
         try {
             $this->dA = $data;

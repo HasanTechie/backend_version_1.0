@@ -16,7 +16,7 @@ class Rooms_hrs_Seeder extends Seeder
      */
     protected $dA = [];
 
-    public function mainRun($dA)
+    public function run($dA)
     {
         try {
             $this->dA = $dA;

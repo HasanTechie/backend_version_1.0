@@ -27,7 +27,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederSetupSelected extends
         ];
 
         foreach ($dataArray as $instance) {
-            $euroBooking->mainRun($instance);
+            $euroBooking->run($instance);
 
         }
 

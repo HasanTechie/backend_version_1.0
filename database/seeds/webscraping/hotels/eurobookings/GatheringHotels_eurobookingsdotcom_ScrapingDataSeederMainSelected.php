@@ -17,7 +17,7 @@ class GatheringHotels_eurobookingsdotcom_ScrapingDataSeederMainSelected extends 
 
     protected $dataArray = [];
 
-    public function mainRun(array $data)
+    public function run(array $data)
     {
         //
         $this->dataArray = $data;

@@ -17,7 +17,7 @@ class testSeeder3 extends Seeder
      */
     protected $dA = [];
 
-    public function mainRun($data)
+    public function run($data)
     {
         $this->dA = $data;
 

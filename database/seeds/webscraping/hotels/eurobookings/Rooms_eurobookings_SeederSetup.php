@@ -36,7 +36,7 @@ class Rooms_eurobookings_SeederSetup extends Seeder
 
                 $room = new Rooms_eurobookings_Seeder();
 
-                $room->mainRun($hotelURL, $dA);
+                $room->run($hotelURL, $dA);
             }
             $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
         }

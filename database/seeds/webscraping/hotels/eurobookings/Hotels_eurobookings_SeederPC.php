@@ -18,7 +18,7 @@ class Hotels_eurobookings_SeederPC extends Seeder
 
     protected $dA = [];
 
-    public function mainRun(array $data)
+    public function run(array $data)
     {
         //
         $this->dA = $data;

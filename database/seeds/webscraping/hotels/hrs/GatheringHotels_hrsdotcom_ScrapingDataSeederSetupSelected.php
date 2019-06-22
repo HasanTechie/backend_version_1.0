@@ -49,7 +49,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected extends Seeder
 
         foreach ($dataArray as $instance) {
 
-            $hrs->mainRun($instance);
+            $hrs->run($instance);
         }
     }
 }

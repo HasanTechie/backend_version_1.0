@@ -25,7 +25,7 @@ class Rooms_hrs_SeederSetup extends Seeder
 
             $roomClass = new Rooms_hrs_Seeder();
 
-            $roomClass->mainRun($hotel, $dA);
+            $roomClass->run($hotel, $dA);
         }
     }
 }

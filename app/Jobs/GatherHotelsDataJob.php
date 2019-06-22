@@ -44,11 +44,11 @@ class GatherHotelsDataJob implements ShouldQueue
 
             if ($this->hotelsBasicData['source'] == 'eurobookings.com') {
                 $myClass = new Hotels_eurobookings_Seeder();
-                $myClass->mainRun($this->hotelsBasicData);
+                $myClass->run($this->hotelsBasicData);
             }
             if ($this->hotelsBasicData['source'] == 'hrs.com') {
                 $myClass = new Hotels_hrs_Seeder();
-                $myClass->mainRun($this->hotelsBasicData);
+                $myClass->run($this->hotelsBasicData);
             }
         } catch (Exception $e) {
             Storage::append('hrs/HotelsFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");

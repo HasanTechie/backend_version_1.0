@@ -16,7 +16,7 @@ class GatheringHotels_hrsdotcom_ScrapingDataSeederMainSelected extends Seeder
      */
     protected $dataArray = [];
 
-    public function mainRun($data)
+    public function run($data)
     {
         $this->dataArray = $data;
         $this->dataArray['source'] = 'hrs.com';

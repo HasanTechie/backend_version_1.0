@@ -17,7 +17,7 @@ class Rooms_eurobookings_Seeder extends Seeder
      */
     protected $dA = [];
 
-    public function mainRun($hotelURL, $dA)
+    public function run($hotelURL, $dA)
     {
         try {
             $this->dA = $dA;

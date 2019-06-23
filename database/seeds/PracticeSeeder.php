@@ -15,14 +15,37 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
+        $hotelCompetitorsIds = json_decode(json_encode($hotelCompetitorsIds), true);
 
-        dd(url('oauth/token'));
+        $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
+        $hotelOwnersIds = json_decode(json_encode($hotelOwnersIds), true);
+
+        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
 
 
-        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', 21)->get();
+        foreach ($selectedHotels as $hotelInstance) {
 
 
-        dd($rooms);
+            $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->where('id', '=', $hotelInstance['hotel_id'])->get();
+
+            if (count($hotels) == 1) {
+
+                dd($hotels[0]->id);
+                $this->dA['hotel_id'] = $hotels[0]->id;
+                $this->dA['hotel_hrs_id'] = $hotels[0]->hrs_id;
+                $this->dA['city'] = $hotels[0]->city;
+                dd($hotels);
+            }
+
+        }
+//        dd(url('oauth/token'));
+
+
+//        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', 21)->get();
+
+
+//        dd($rooms);
         /*
         $date1 = date("Y-m-d", strtotime("+200 day"));
         $date2 = date("Y-m-d", strtotime("+300 day"));
@@ -35,9 +58,9 @@ class PracticeSeeder extends Seeder
         }
 
         echo "\n";
-        dd();
 
         */
+        dd();
 //        $url = 'http://falcon.proxyrotator.com:51337/?apiKey=6vuJP7FsAUfxqK4BQEhzweVYmDW2yMbN&get=true';
 //        $ch = curl_init($url);
 //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

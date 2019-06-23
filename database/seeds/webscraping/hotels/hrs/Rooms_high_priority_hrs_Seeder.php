@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Database\Seeder;
 
-class Rooms_hrs_Seeder extends Seeder
+class Rooms_high_priority_hrs_Seeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -36,7 +36,6 @@ class Rooms_hrs_Seeder extends Seeder
             }
 
             $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
-
             foreach ($hotels as $hotel) {
                 $this->dA['hotel_id'] = $hotel->id;
                 $this->dA['hotel_hrs_id'] = $hotel->hrs_id;

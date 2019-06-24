@@ -53,6 +53,13 @@ class Kernel extends ConsoleKernel
             ->dailyAt('05:20')//run once
             ->appendOutputTo(storage_path('app/mylogs/GatherHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
 
+        $schedule->command('command:gatherhighpriorityhrsroomsprices')
+            ->withoutOverlapping()
+            ->runInBackground()
+            ->dailyAt('08:20')//run once
+            ->appendOutputTo(storage_path('app/mylogs/GatherhighpriorityHrsRoomsPricesCommand' . date("Y-m-d") . '.log'));
+
+
         $schedule->command('command:transferpricesdatatoanothertable')
             ->withoutOverlapping()
             ->runInBackground()

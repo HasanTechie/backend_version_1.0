@@ -54,71 +54,72 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
                     $this->dA['hotel_id'] = $hotels[0]->id;
                     $this->dA['hotel_hrs_id'] = $hotels[0]->hrs_id;
                     $this->dA['city'] = $hotels[0]->city;
-                }
 
-                foreach ($this->dA['adults'] as $adult) {
+
+                    foreach ($this->dA['adults'] as $adult) {
 //                    if ($this->dA['full_break'] == true) {
 //                        break 2;
 //                    }
-                    $this->dA['adult'] = $adult;
-                    $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] .
-                        "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" .
-                        $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" .
-                        date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) .
-                        "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) .
-                        "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" .
-                        (($adult > 1) ? 1 : 0) . "&children=0";
+                        $this->dA['adult'] = $adult;
+                        $this->dA['request_url'] = "https://www.hrs.com/hotelData.do?hotelnumber=" . $this->dA['hotel_hrs_id'] .
+                            "&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=" .
+                            $this->dA['currency'] . "&startDateDay=" . date("d", strtotime($this->dA['check_in_date'])) . "&startDateMonth=" .
+                            date("m", strtotime($this->dA['check_in_date'])) . "&startDateYear=" . date("Y", strtotime($this->dA['check_in_date'])) .
+                            "&endDateDay=" . date("d", strtotime($this->dA['check_out_date'])) . "&endDateMonth=" . date("m", strtotime($this->dA['check_out_date'])) .
+                            "&endDateYear=" . date("Y", strtotime($this->dA['check_out_date'])) . "&adults=$adult&singleRooms=" . (($adult == 1) ? 1 : 0) . "&doubleRooms=" .
+                            (($adult > 1) ? 1 : 0) . "&children=0";
 
-                    restart2:
-                    $crawler = $this->phantomRequest($this->dA['request_url']);
+                        restart2:
+                        $crawler = $this->phantomRequest($this->dA['request_url']);
 
-                    if ($crawler) {
-                        $this->roomData($crawler);
+                        if ($crawler) {
+                            $this->roomData($crawler);
 
-                        try {
-                            if (!empty($this->dA['all_rooms'])) {
-                                if (is_array($this->dA['all_rooms'])) {
+                            try {
+                                if (!empty($this->dA['all_rooms'])) {
+                                    if (is_array($this->dA['all_rooms'])) {
 
-                                    foreach ($this->dA['all_rooms'] as $rooms) {
-                                        foreach ($rooms as $room) {
-                                            if (!empty($room['room']) && !empty($room['price'])) {
+                                        foreach ($this->dA['all_rooms'] as $rooms) {
+                                            foreach ($rooms as $room) {
+                                                if (!empty($room['room']) && !empty($room['price'])) {
 
-                                                $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
+                                                    $room['room_type'] = ($this->dA['adult'] > 1) ? 'doubleroom' : 'singleroom';
 
-                                                $rid = 'hrs' . $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type']
-                                                    . $this->dA['adult'] . //HotelHRSId + RoomName + roomType + room Short D + criteria without numbers or currencies + number of adults + hrstag
-                                                    substr(preg_replace('/[0-9.]+/', '', $room['criteria']), 0, 60) .
-                                                    substr($room['room_short_description'], 0, 60);
-                                                $rid = substr(str_replace(' ', '', $rid), 0, 254);
+                                                    $rid = 'hrs' . $this->dA['hotel_hrs_id'] . $room['room'] . $room['room_type']
+                                                        . $this->dA['adult'] . //HotelHRSId + RoomName + roomType + room Short D + criteria without numbers or currencies + number of adults + hrstag
+                                                        substr(preg_replace('/[0-9.]+/', '', $room['criteria']), 0, 60) .
+                                                        substr($room['room_short_description'], 0, 60);
+                                                    $rid = substr(str_replace(' ', '', $rid), 0, 254);
 
-                                                $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
+                                                    $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
 
-                                                if (count($r)) {
-                                                    $r_id = $r[0]->id;
-                                                } else {
-                                                    $this->roomDataFacilities($crawler);
-                                                    $r_id = $this->insertRoomsDataIntoDB($room, $rid);
+                                                    if (count($r)) {
+                                                        $r_id = $r[0]->id;
+                                                    } else {
+                                                        $this->roomDataFacilities($crawler);
+                                                        $r_id = $this->insertRoomsDataIntoDB($room, $rid);
+                                                    }
+
+                                                    $this->insertRoomsPricesDataIntoDB($room, $r_id);
                                                 }
-
-                                                $this->insertRoomsPricesDataIntoDB($room, $r_id);
                                             }
                                         }
-                                    }
 
-                                }
-                            } else {
-                                if ($this->dA['count_noPriceFound'] < 2) {
-                                    $this->dA['count_noPriceFound']++;
-                                    goto restart2;
-                                }
+                                    }
+                                } else {
+                                    if ($this->dA['count_noPriceFound'] < 2) {
+                                        $this->dA['count_noPriceFound']++;
+                                        goto restart2;
+                                    }
 //                                else {
 //                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
 //                                }
-                            }
-                            $this->dA['all_rooms'] = null;
+                                }
+                                $this->dA['all_rooms'] = null;
 
-                        } catch (Exception $e) {
-                            $this->catchException($e, 'ErrorDB');
+                            } catch (Exception $e) {
+                                $this->catchException($e, 'ErrorDB');
+                            }
                         }
                     }
                 }
@@ -131,7 +132,7 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
 
     protected function catchException($e, $fileName)
     {
-        Storage::append('hrs/' . $this->dA['request_date'] . '/' . (isset($this->dA['city']) ? $this->dA['city'] : 'CityNotFound')  . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/' . $this->dA['request_date'] . '/' . (isset($this->dA['city']) ? $this->dA['city'] : 'CityNotFound') . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         print($e->getMessage());
     }
 

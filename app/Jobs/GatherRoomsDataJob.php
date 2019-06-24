@@ -42,12 +42,12 @@ class GatherRoomsDataJob implements ShouldQueue
             $room = new Rooms_hrs_Seeder();
             $room->run($this->dA);
         } catch (Exception $e) {
-            Storage::append('hrs/RoomsFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            Storage::append('hrs/' . date("Y-m-d") . '/RoomsFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         }
     }
 
     public function failed(Exception $e)
     {
-        Storage::append('hrs/RoomsFailedJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/' . date("Y-m-d") . '/RoomsFailedJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
     }
 }

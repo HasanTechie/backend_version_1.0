@@ -120,7 +120,7 @@ class Rooms_hrs_Seeder extends Seeder
 
     protected function catchException($e, $fileName)
     {
-        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/' . $this->dA['request_date'] . '/' . (isset($this->dA['city']) ? $this->dA['city'] : 'CityNotFound') . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         print($e->getMessage());
     }
 

@@ -42,12 +42,12 @@ class GatherHighPriorityRoomsDataJob implements ShouldQueue
             $room = new Rooms_high_priority_hrs_Seeder();
             $room->run($this->dA);
         } catch (Exception $e) {
-            Storage::append('hrs/RoomsHighPriorityFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+            Storage::append('hrs/' . date("Y-m-d") . '/RoomsHighPriorityFailedTCJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
         }
     }
 
     public function failed(Exception $e)
     {
-        Storage::append('hrs/RoomsHighPriorityFailedJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        Storage::append('hrs/' . date("Y-m-d") . '/RoomsHighPriorityFailedJobs' . date("Y-m-d") . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
     }
 }

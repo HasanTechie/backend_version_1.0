@@ -15,15 +15,27 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
-        /*
+
+        $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
+
+        $hotels = json_decode(json_encode($hotels), true);
+
+        shuffle($hotels);
+
+        dd($hotels);
+
         $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
         $hotelCompetitorsIds = json_decode(json_encode($hotelCompetitorsIds), true);
 
         $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
         $hotelOwnersIds = json_decode(json_encode($hotelOwnersIds), true);
 
-        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
+//        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
 
+
+        shuffle($hotelOwnersIds);
+
+        dd($hotelOwnersIds);
 
         foreach ($selectedHotels as $hotelInstance) {
 
@@ -40,7 +52,7 @@ class PracticeSeeder extends Seeder
             }
 
         }
-        */
+
 //        dd(url('oauth/token'));
 
 

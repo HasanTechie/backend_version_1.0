@@ -37,10 +37,13 @@ class Rooms_hrs_Seeder extends Seeder
 
             $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
 
+            $hotels = json_decode(json_encode($hotels), true);
+            shuffle($hotels);
+
             foreach ($hotels as $hotel) {
-                $this->dA['hotel_id'] = $hotel->id;
-                $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
-                $this->dA['city'] = $hotel->city;
+                $this->dA['hotel_id'] = $hotel['id'];
+                $this->dA['hotel_hrs_id'] = $hotel['hrs_id'];
+                $this->dA['city'] = $hotel['city'];
 
                 foreach ($this->dA['adults'] as $adult) {
 //                    if ($this->dA['full_break'] == true) {

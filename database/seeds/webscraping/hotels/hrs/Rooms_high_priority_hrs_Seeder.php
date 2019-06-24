@@ -43,6 +43,7 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
 
             $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
 
+            shuffle($selectedHotels);
 
             foreach ($selectedHotels as $hotelInstance) {
 

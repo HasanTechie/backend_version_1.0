@@ -93,7 +93,7 @@ class Rooms_hrs_Seeder extends Seeder
 
                                 }
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 4) {
+                                if ($this->dA['count_noPriceFound'] < 2) {
                                     $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 }
@@ -186,10 +186,10 @@ class Rooms_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
 //                if ($this->dA['full_break'] == false) {
-                if ($this->dA['count_!200'] > 5) {
+                if ($this->dA['count_!200'] > 3) {
                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
-                } elseif ($this->dA['count_408&0'] > 50) {
+                } elseif ($this->dA['count_408&0'] > 12) {
 //                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
 //                        $this->dA['full_break'] = true;

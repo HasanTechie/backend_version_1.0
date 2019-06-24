@@ -15,6 +15,7 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        /*
         $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
         $hotelCompetitorsIds = json_decode(json_encode($hotelCompetitorsIds), true);
 
@@ -39,6 +40,7 @@ class PracticeSeeder extends Seeder
             }
 
         }
+        */
 //        dd(url('oauth/token'));
 
 

@@ -35,11 +35,25 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
                 Storage::makeDirectory('hrs/' . $this->dA['request_date']);
             }
 
-            $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
-            foreach ($hotels as $hotel) {
-                $this->dA['hotel_id'] = $hotel->id;
-                $this->dA['hotel_hrs_id'] = $hotel->hrs_id;
-                $this->dA['city'] = $hotel->city;
+            $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
+            $hotelCompetitorsIds = json_decode(json_encode($hotelCompetitorsIds), true);
+
+            $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
+            $hotelOwnersIds = json_decode(json_encode($hotelOwnersIds), true);
+
+            $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
+
+
+            foreach ($selectedHotels as $hotelInstance) {
+
+
+                $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->where('id', '=', $hotelInstance['hotel_id'])->get();
+
+                if (count($hotels) == 1) {
+                    $this->dA['hotel_id'] = $hotels[0]->id;
+                    $this->dA['hotel_hrs_id'] = $hotels[0]->hrs_id;
+                    $this->dA['city'] = $hotels[0]->city;
+                }
 
                 foreach ($this->dA['adults'] as $adult) {
 //                    if ($this->dA['full_break'] == true) {
@@ -92,7 +106,7 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
 
                                 }
                             } else {
-                                if ($this->dA['count_noPriceFound'] < 4) {
+                                if ($this->dA['count_noPriceFound'] < 2) {
                                     $this->dA['count_noPriceFound']++;
                                     goto restart2;
                                 }
@@ -185,10 +199,10 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
                 return $crawler;
             } else {
 //                if ($this->dA['full_break'] == false) {
-                if ($this->dA['count_!200'] > 5) {
+                if ($this->dA['count_!200'] > 3) {
                     Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/minorBreakReasonA.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
-                } elseif ($this->dA['count_408&0'] > 50) {
+                } elseif ($this->dA['count_408&0'] > 12) {
 //                        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/BreakReasonB.log', 'url:' . $url . ' ;minor-break-reason4b:(getStatus())->' . $response->getStatus() . ' ' . Carbon::now()->toDateTimeString() . "\n");
                     return null;
 //                        $this->dA['full_break'] = true;

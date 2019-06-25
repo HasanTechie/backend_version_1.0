@@ -39,6 +39,5 @@ class Hotels_Queues_Seeder extends Seeder
             $instance['end_date'] = date("Y-m-d", strtotime("+5 day"));
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(5));
         }
-        echo "started Queue" . "\n";
     }
 }

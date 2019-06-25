@@ -36,7 +36,7 @@ class Rooms_eurobookings_Queues_Seeder extends Seeder
                 $dA['city'] = $hotel->city;
 
                 echo $i++ . ' ';
-                Gather_eurobookings_RoomsDataJob::dispatch($hotelURL, $dA)->delay(now()->addSecond(1));
+//                Gather_eurobookings_RoomsDataJob::dispatch($hotelURL, $dA)->delay(now()->addSecond(1));
             }
             $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
         }

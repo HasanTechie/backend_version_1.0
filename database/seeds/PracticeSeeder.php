@@ -16,6 +16,42 @@ class PracticeSeeder extends Seeder
     {
 
 
+
+
+        $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
+
+        $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
+
+
+        $selectedHotelsArray=[];
+
+        foreach($hotelCompetitorsIds as $hotelCompetitorsIdInstance){
+
+            $selectedHotelsArray[] = $hotelCompetitorsIdInstance->hotel_id;
+        }
+
+        foreach($hotelOwnersIds as $hotelOwnersIdsInstance){
+
+            $selectedHotelsArray[] = $hotelOwnersIdsInstance->hotel_id;
+        }
+
+        $selectedHotelsArray = array_unique($selectedHotelsArray);
+
+        $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->whereNotIn('id',$selectedHotelsArray)->get();
+
+        $hotels = json_decode(json_encode($hotels), true);
+        shuffle($hotels);
+
+        dd($hotels);
+
+        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
+
+        shuffle($selectedHotels);
+
+        dd($selectedHotels);
+
+        dd($hotels);
+
         $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
 
         $hotels = json_decode(json_encode($hotels), true);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
@@ -9,6 +9,7 @@ use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CompetitorsPriceAPIController extends Controller
 {

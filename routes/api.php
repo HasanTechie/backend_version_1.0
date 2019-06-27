@@ -9,6 +9,8 @@ Route::post('login', 'Api\AuthController@login');
 Route::post('uploadImages', 'Api\FilesController@imagesStore')->middleware('auth:api');
 Route::post('uploadCSVs', 'Api\FilesController@CSVsStore')->middleware('auth:api');
 
+Route::post('uploadResponseCSVs&apiKey={apiKey}', 'Api\FilesController@ResponseCSVsStore');
+
 
 Route::get('competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');
 Route::post('competitors', 'Api\CompetitorsAPIController@store')->middleware('auth:api');

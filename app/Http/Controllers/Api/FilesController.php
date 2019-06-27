@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\DB;
 class FilesController extends Controller
 {
     //
+    protected $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
+    }
+
     public function imagesStore(Request $request)
     {
         $uploadedFiles = $request->images;
 
         foreach ($uploadedFiles as $uploadedFile) {
-            $file=  $uploadedFile->store('images');
+            $file = $uploadedFile->store('images');
 
             $fileName = $uploadedFile->getClientOriginalName();
             $fileURL = Storage::url($file);
@@ -28,6 +35,7 @@ class FilesController extends Controller
                 'file_name' => $fileName,
                 'file_url' => $fileURL,
                 'file_type' => $fileType,
+                'uploaded_by' => 'user',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);
@@ -55,6 +63,7 @@ class FilesController extends Controller
                 'file_name' => $fileName,
                 'file_url' => $fileURL,
                 'file_type' => $fileType,
+                'uploaded_by' => 'user',
                 'created_at' => DB::raw('now()'),
                 'updated_at' => DB::raw('now()')
             ]);
@@ -62,5 +71,36 @@ class FilesController extends Controller
 
         return response(['status' => 'success'], 200);
 
+    }
+
+    public function ResponseCSVsStore(Request $request, $apiKey)
+    {
+
+        if ($apiKey == $this->apiKey) {
+
+            $uploadedFiles = $request->CSVs;
+
+            foreach ($uploadedFiles as $uploadedFile) {
+
+                $file = $uploadedFile->storeAs('CSVs', \Str::random(40) . '.' . $uploadedFile->getClientOriginalExtension());
+                $fileName = $uploadedFile->getClientOriginalName();
+                $fileURL = Storage::url($file);
+                $fileType = pathinfo($file)['extension'];
+
+                DB::table('files')->insert([
+                    'file_name' => $fileName,
+                    'file_url' => $fileURL,
+                    'file_type' => $fileType,
+                    'uploaded_by' => 'ml_algorithm',
+                    'created_at' => DB::raw('now()'),
+                    'updated_at' => DB::raw('now()')
+                ]);
+            }
+
+            return response(['status' => 'success'], 200);
+
+        } else {
+            dd('Error: Incorrect API Key');
+        }
     }
 }

@@ -79,6 +79,7 @@ class FilesController extends Controller
         if ($apiKey == $this->apiKey) {
 
             $uploadedFiles = $request->CSVs;
+            $userID = $request->user_id;
 
             foreach ($uploadedFiles as $uploadedFile) {
 
@@ -88,6 +89,7 @@ class FilesController extends Controller
                 $fileType = pathinfo($file)['extension'];
 
                 DB::table('files')->insert([
+                    'user_id' => $userID,
                     'file_name' => $fileName,
                     'file_url' => $fileURL,
                     'file_type' => $fileType,

@@ -415,7 +415,11 @@ class CompetitorsPriceAPIController extends Controller
             $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
             $hotelId = $hotelId[0]->hotel_id;
 
-            $competitorIdsArray = explode(',', $competitorIds);
+//            if (!in_array($hotelId, $competitorIdsArray)) {
+//                array_unshift($competitorIdsArray, $hotelId);
+//            }
+
+
             $dates = DB::table('rooms_hrs')
                 ->select(DB::raw('prices_hrs.check_in_date, rooms_hrs.room as room'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
@@ -444,6 +448,7 @@ class CompetitorsPriceAPIController extends Controller
                 ($room != 'All') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
                 $mainHotelRooms = $mainHotelRooms->get();
 
+
                 if (isset($mainHotelRooms)) {
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
@@ -461,6 +466,9 @@ class CompetitorsPriceAPIController extends Controller
                                 ])->groupBy('room', 'criteria', 'room_type');
                             ($room != 'All') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
                             $competitorsRooms = $competitorsRooms->get();
+
+
+
 
                             if (count($competitorsRooms) > 0) {
                                 foreach ($competitorsRooms as $competitorsRoomsInstance) {

@@ -6,6 +6,7 @@ use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
 use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
 use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
+use App\Http\Resources\CompetitorAllRoomPrice as CompetitorAllRoomPriceResource;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -411,9 +412,11 @@ class CompetitorsPriceAPIController extends Controller
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
-            ($room != 'All') ? $dates = $dates->where('room', '=', $room) : null;
             ($rows > 0) ? $dates = $dates->limit($rows) : null;
             $dates = $dates->get();
+
+            return CompetitorAllRoomPriceResource::collection($dates);
+
             dd('Error: Data Not Found :  HRSAllRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');

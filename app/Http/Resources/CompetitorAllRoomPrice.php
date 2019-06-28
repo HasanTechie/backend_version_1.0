@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AllRoomPrice extends JsonResource
+class CompetitorAllRoomPrice extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,8 @@ class AllRoomPrice extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'check_in_date' => $this->check_in_date
+        ];
     }
 }

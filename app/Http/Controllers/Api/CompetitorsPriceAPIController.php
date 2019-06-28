@@ -86,7 +86,6 @@ class CompetitorsPriceAPIController extends Controller
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {
 
-
         if ($apiKey == $this->apiKey) {
 
             $competitorIds = DB::table('competitors')->select('hotel_id')->where('user_id', '=', $userid)->get();
@@ -211,8 +210,8 @@ class CompetitorsPriceAPIController extends Controller
 //            }
 
 
-            $dates = DB::table('rooms_hrs')
-                ->select(DB::raw('prices_hrs.check_in_date, rooms_hrs.room as room'))
+            $prices = DB::table('rooms_hrs')
+                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
@@ -220,11 +219,11 @@ class CompetitorsPriceAPIController extends Controller
                     ['check_in_date', '>=', $dateFrom],
                     ['check_in_date', '<=', $dateTo],
                 ])->groupBy('check_in_date');
-            ($room != 'All') ? $dates = $dates->where('room', '=', $room) : null;
-            ($rows > 0) ? $dates = $dates->limit($rows) : null;
-            $dates = $dates->get();
+            ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
+            ($rows > 0) ? $prices = $prices->limit($rows) : null;
+            $prices = $prices->get();
 
-            foreach ($dates as $dateInstance) {
+            foreach ($prices as $priceInstance) {
 
                 $mainHotelRooms = DB::table('rooms_hrs')
                     ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room as room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
@@ -232,7 +231,7 @@ class CompetitorsPriceAPIController extends Controller
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
                         ['rooms_hrs.hotel_id', '=', $hotelId],
-                        ['check_in_date', '=', $dateInstance->check_in_date],
+                        ['check_in_date', '=', $priceInstance->check_in_date],
 //                        ['request_date', '<=', date("Y-m-d")],
 //                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                     ])->groupBy('room', 'criteria', 'room_type');
@@ -251,7 +250,7 @@ class CompetitorsPriceAPIController extends Controller
                                     ['rooms_hrs.hotel_id', '=', $competitorId],
                                     ['rooms_hrs.room', '=', $mainHotelRoom->room],
                                     ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
-                                    ['check_in_date', '=', $dateInstance->check_in_date],
+                                    ['check_in_date', '=', $priceInstance->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                                 ])->groupBy('room', 'criteria', 'room_type');
@@ -263,7 +262,7 @@ class CompetitorsPriceAPIController extends Controller
                                     $dA1['price'] = round($competitorsRoomsInstance->price, 2);
                                     $dA1['room'] = $competitorsRoomsInstance->room;
                                     $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
-                                    $dA1['check_in_date'] = $dateInstance->check_in_date;
+                                    $dA1['check_in_date'] = $priceInstance->check_in_date;
                                     $dA1['request_date'] = $competitorsRoomsInstance->request_date;
                                     $dA1['hotel_id'] = $competitorId;
                                     $dA1['hotel_name'] = $competitorsRoomsInstance->hotel_name;
@@ -277,23 +276,23 @@ class CompetitorsPriceAPIController extends Controller
                                 }
                             }
                         }
-                        $dateInstance->hotel_name = $mainHotelRoom->hotel_name;
-                        $dateInstance->hotel_id = $mainHotelRoom->hotel_id;
-                        $dateInstance->room_id = $mainHotelRoom->room_id;
-                        $dateInstance->room = $mainHotelRoom->room;
-                        $dateInstance->price = $mainHotelRoom->price;
-                        $dateInstance->criteria = $mainHotelRoom->criteria;
-                        $dateInstance->room_type = $mainHotelRoom->room_type;
-                        $dateInstance->check_in_date = $mainHotelRoom->check_in_date;
-                        $dateInstance->request_date = $mainHotelRoom->request_date;
+                        $priceInstance->hotel_name = $mainHotelRoom->hotel_name;
+                        $priceInstance->hotel_id = $mainHotelRoom->hotel_id;
+                        $priceInstance->room_id = $mainHotelRoom->room_id;
+                        $priceInstance->room = $mainHotelRoom->room;
+                        $priceInstance->price = $mainHotelRoom->price;
+                        $priceInstance->criteria = $mainHotelRoom->criteria;
+                        $priceInstance->room_type = $mainHotelRoom->room_type;
+                        $priceInstance->check_in_date = $mainHotelRoom->check_in_date;
+                        $priceInstance->request_date = $mainHotelRoom->request_date;
                         if (isset($dA2)) {
-                            $dateInstance->competitors = $dA2;
+                            $priceInstance->competitors = $dA2;
                             $dA2 = null;
                         }
                     }
                 }
             }
-            return CompetitorRoomPriceResource::collection($dates);
+            return CompetitorRoomPriceResource::collection($prices);
 //            dd('Error: Data Not Found : HRSHotelsCompetitorsRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');
@@ -386,6 +385,36 @@ class CompetitorsPriceAPIController extends Controller
             }
             return CompetitorRoomAvgPriceResource::collection($dates);
 
+        } else {
+            dd('Error: Incorrect API Key');
+        }
+    }
+
+    public function HRSHotelsCompetitorAllRoomsPrices($rows, $apiKey, $userid, $dateFrom, $dateTo)
+    {
+        if ($apiKey == $this->apiKey) {
+            $competitorIds = DB::table('competitors')->select('hotel_id')->where('user_id', '=', $userid)->get();
+            $competitorIdsArray = [];
+            foreach ($competitorIds as $competitorIdInstance1) {
+                $competitorIdsArray[] = $competitorIdInstance1->hotel_id;
+            }
+
+            $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
+            $hotelId = $hotelId[0]->hotel_id;
+
+            $dates = DB::table('rooms_hrs')
+                ->select(DB::raw('prices_hrs.check_in_date'))
+                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                ->where([
+                    ['rooms_hrs.hotel_id', '=', $hotelId],
+                    ['check_in_date', '>=', $dateFrom],
+                    ['check_in_date', '<=', $dateTo],
+                ])->groupBy('check_in_date');
+            ($room != 'All') ? $dates = $dates->where('room', '=', $room) : null;
+            ($rows > 0) ? $dates = $dates->limit($rows) : null;
+            $dates = $dates->get();
+            dd('Error: Data Not Found :  HRSAllRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');
         }

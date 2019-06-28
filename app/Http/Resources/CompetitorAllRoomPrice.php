@@ -15,7 +15,8 @@ class CompetitorAllRoomPrice extends JsonResource
     public function toArray($request)
     {
         return [
-            'check_in_date' => $this->check_in_date
+            'check_in_date' => $this->check_in_date,
+            'data' => $this->data
         ];
     }
 }

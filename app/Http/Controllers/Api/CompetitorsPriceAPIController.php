@@ -415,6 +415,40 @@ class CompetitorsPriceAPIController extends Controller
             ($rows > 0) ? $dates = $dates->limit($rows) : null;
             $dates = $dates->get();
 
+            foreach ($dates as $date) {
+                $mainHotelRooms = DB::table('rooms_hrs')
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                    ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                    ->where([
+                        ['rooms_hrs.hotel_id', '=', $hotelId],
+                        ['check_in_date', '=', $date->check_in_date],
+//                        ['request_date', '<=', date("Y-m-d")],
+//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                    ])->groupBy('room');
+                $mainHotelRooms = $mainHotelRooms->get();
+
+                $date->data[] = $mainHotelRooms;
+
+                foreach ($competitorIdsArray as $competitorId) {
+                    $competitorsRooms = DB::table('rooms_hrs')
+                        ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                        ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                        ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                        ->where([
+                            ['rooms_hrs.hotel_id', '=', $competitorId],
+                            ['check_in_date', '=', $date->check_in_date],
+//                            ['request_date', '<=', date("Y-m-d")],
+//                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                        ])->groupBy('room');
+                    $competitorsRooms = $competitorsRooms->get();
+
+                    if (count($competitorsRooms) > 0) {
+                        $date->data[] = $competitorsRooms;
+                    }
+                }
+            }
+
             return CompetitorAllRoomPriceResource::collection($dates);
 
             dd('Error: Data Not Found :  HRSAllRoomsPrices');

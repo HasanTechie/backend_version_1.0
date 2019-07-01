@@ -212,7 +212,7 @@ class CompetitorsPriceAPIController extends Controller
 
 
             $prices = DB::table('rooms_hrs')
-                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, price_should,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                 ->where([
@@ -227,7 +227,7 @@ class CompetitorsPriceAPIController extends Controller
             foreach ($prices as $priceInstance) {
 
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room as room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, price_should, rooms_hrs.id as room_id, rooms_hrs.room as room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
@@ -244,7 +244,7 @@ class CompetitorsPriceAPIController extends Controller
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
                             $competitorsRooms = DB::table('rooms_hrs')
-                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.id as room_id, rooms_hrs.room as room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, price_should, criteria, rooms_hrs.id as room_id, rooms_hrs.room as room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                                 ->where([
@@ -261,6 +261,7 @@ class CompetitorsPriceAPIController extends Controller
                             if (count($competitorsRooms) > 0) {
                                 foreach ($competitorsRooms as $competitorsRoomsInstance) {
                                     $dA1['price'] = round($competitorsRoomsInstance->price, 2);
+                                    $dA1['price_should'] = round($competitorsRoomsInstance->price_should, 2);
                                     $dA1['room'] = $competitorsRoomsInstance->room;
                                     $dA1['room_criteria'] = $competitorsRoomsInstance->criteria;
                                     $dA1['check_in_date'] = $priceInstance->check_in_date;
@@ -281,6 +282,7 @@ class CompetitorsPriceAPIController extends Controller
                         $priceInstance->hotel_id = $mainHotelRoom->hotel_id;
                         $priceInstance->room_id = $mainHotelRoom->room_id;
                         $priceInstance->room = $mainHotelRoom->room;
+                        $priceInstance->price_should = $mainHotelRoom->price_should;
                         $priceInstance->price = $mainHotelRoom->price;
                         $priceInstance->criteria = $mainHotelRoom->criteria;
                         $priceInstance->room_type = $mainHotelRoom->room_type;
@@ -327,7 +329,7 @@ class CompetitorsPriceAPIController extends Controller
 
             foreach ($dates as $dateInstance) {
                 $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
@@ -342,7 +344,7 @@ class CompetitorsPriceAPIController extends Controller
                     foreach ($mainHotelRooms as $mainHotelRoom) {
                         foreach ($competitorIdsArray as $competitorId) {
                             $competitorsRooms = DB::table('rooms_hrs')
-                                ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
                                 ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                                 ->where([
@@ -370,7 +372,6 @@ class CompetitorsPriceAPIController extends Controller
                         $dateInstance->room_id = $mainHotelRoom->room_id;
                         $dateInstance->room = $mainHotelRoom->room;
                         $dateInstance->price = $mainHotelRoom->price;
-                        $dateInstance->price_should = $mainHotelRoom->price_should;
                         $dateInstance->criteria = $mainHotelRoom->criteria;
                         $dateInstance->room_type = $mainHotelRoom->room_type;
                         $dateInstance->check_in_date = $mainHotelRoom->check_in_date;

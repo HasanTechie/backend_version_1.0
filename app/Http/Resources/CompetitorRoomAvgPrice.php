@@ -20,6 +20,7 @@ class CompetitorRoomAvgPrice extends JsonResource
             'room_id' => $this->room_id,
             'room' => $this->room,
             'price' => round($this->price, 2),
+            'price_should' => round($this->price_should, 2),
             'criteria' => $this->criteria,
             'room_type' => $this->room_type,
             'check_in_date' => $this->check_in_date,

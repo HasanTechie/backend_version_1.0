@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      * //     */
     public function run()
     {
-        $this->call('PracticeSeeder');
+//        $this->call('PracticeSeeder');
 //        $this->call('TransferDataFromPricesTableSeeder');
 //        $this->call('ConvertingUIDsOfTables');
 //        $this->call('GatheringPublicHolidaysDataSeeder');
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call('Rooms_hrs_Queues_Seeder');
 //        $this->call('CorrectingSNoSeeder');
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
-//        $this->call('ProxyCrawlSeeder');
+        $this->call('ProxyCrawlSeeder');
 //        $this->call('StormProxiesSeeder');
 //        $this->call('BlazingProxiesSeeder');
 

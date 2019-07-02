@@ -22,11 +22,12 @@ class ProxyCrawlSeeder extends Seeder
     {
         //
         $url = 'https://api.myip.com/';
+        $url = 'https://www.hotelhunter.com/Hotel/Search?fileName=H10_Berlin_KuDamm&destination=place:Berlin&radius=0mi&checkin=2019-07-13&checkout=2019-07-14&Rooms=1&adults_1=2&returnPath=%2FHotels%2FSearch%3Fdestination%3Dplace%3ABerlin%26radius%3D0mi%26checkin%3D2019-07-13%26checkout%3D2019-07-14%26Rooms%3D1%26adults_1%3D2%26pageSize%3D15%26pageIndex%3D0%26sort%3DPopularity-desc%26showSoldOut%3Dfalse%26scroll%3D1431%26HotelID%3D%26mapState%3Dexpanded%253D0';
 //        $url = 'https://publicholidays.de/baden-wurttemberg/2019-dates/';
 //        $url ='https://www.schoolholidayseurope.eu/austria/';
 //        $url = 'http://www.eurobookings.com/search.html?q=start:2019-04-05;end:2019-04-06;rmcnf:1[2,0];dsti:3023;dstt:1;dsts:Rome;frm:9;sort:0_desc;cur:EUR;stars:0;';
 //        $url = 'https://www.hrs.com/en/hotel/Vienna/d-45883/1#container=&locationId=45883&requestUrl=%2Fen%2Fhotel%2FVienna%2Fd-45883&showAlternates=false&toggle=&arrival=2019-04-14&departure=2019-04-15&lang=en&minPrice=false&roomType=double&singleRoomCount=0&doubleRoomCount=1';
-        $proxy = 'proxy.proxycrawl.com:9000';
+//        $proxy = 'proxy.proxycrawl.com:9000';
 
 
         /*$client = PhantomClient::getInstance();
@@ -50,17 +51,18 @@ class ProxyCrawlSeeder extends Seeder
             $client->getEngine()->setPath(base_path() . '/bin/phantomjs');
 //            $client->getEngine()->addOption('--load-images=false');
 //            $client->getEngine()->addOption('--ignore-ssl-errors=true');
-            $client->getEngine()->addOption("--proxy=http://" . $proxy);
+//            $client->getEngine()->addOption("--proxy=http://" . $proxy);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
-            $request->setTimeout(20000);
+//            $request->setTimeout(20000);
             $response = $client->getMessageFactory()->createResponse();
             // Send the request
             $client->send($request, $response);
             $crawler = new Crawler($response->getContent());
 
-            if (!empty($crawler->text())) {
-                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
+            if ($crawler->count()) {
+                echo $crawler->html();
+//                echo $crawler->text() . ' ' . Carbon::now()->toDateTimeString() . "\n";
             } else {
                 echo 'empty : ' . $response->getStatus() . "\n";
             }

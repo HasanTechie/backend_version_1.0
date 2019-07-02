@@ -18,6 +18,7 @@ class PracticeSeeder extends Seeder
 
 
 
+        dd('reached');
         $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
 
         $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();

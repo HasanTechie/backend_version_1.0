@@ -34,49 +34,51 @@ class CompetitorsPriceAPIController extends Controller
 
             $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
 
-            $hotelId = $hotelId[0]->hotel_id;
+            if(count($hotelId)) {
+                $hotelId = $hotelId[0]->hotel_id;
 
-            $prices = DB::table('rooms_hrs')
-                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                ->where([
-                    ['rooms_hrs.hotel_id', '=', $hotelId],
-                    ['check_in_date', '>=', $dateFrom],
-                    ['check_in_date', '<=', $dateTo],
-                ])->groupBy('check_in_date');
-            ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
-            ($rows > 0) ? $prices = $prices->limit($rows) : null;
-            $prices = $prices->get();
-            if (isset($prices)) {
-                foreach ($prices as $hotelPrice) {
-                    foreach ($competitorIdsArray as $competitorHotelInstance) {
-                        $competitorsData = DB::table('rooms_hrs')
-                            ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                            ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                            ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                            ->where([
-                                ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
-                                ['check_in_date', '=', $hotelPrice->check_in_date],
-                            ]);
-                        ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
-                        $competitorsData = $competitorsData->groupBy('check_in_date')->get();
+                $prices = DB::table('rooms_hrs')
+                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                    ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                    ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                    ->where([
+                        ['rooms_hrs.hotel_id', '=', $hotelId],
+                        ['check_in_date', '>=', $dateFrom],
+                        ['check_in_date', '<=', $dateTo],
+                    ])->groupBy('check_in_date');
+                ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
+                ($rows > 0) ? $prices = $prices->limit($rows) : null;
+                $prices = $prices->get();
+                if (isset($prices)) {
+                    foreach ($prices as $hotelPrice) {
+                        foreach ($competitorIdsArray as $competitorHotelInstance) {
+                            $competitorsData = DB::table('rooms_hrs')
+                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                                ->where([
+                                    ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
+                                    ['check_in_date', '=', $hotelPrice->check_in_date],
+                                ]);
+                            ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
+                            $competitorsData = $competitorsData->groupBy('check_in_date')->get();
 
-                        if (count($competitorsData) > 0) {
-                            $dA1['price'] = $competitorsData[0]->price;
-                            $dA1['check_in_date'] = $hotelPrice->check_in_date;
-                            $dA1['hotel_id'] = $competitorHotelInstance;
-                            $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
-                            $dA2[] = $dA1;
-                            $dA1 = null;
+                            if (count($competitorsData) > 0) {
+                                $dA1['price'] = $competitorsData[0]->price;
+                                $dA1['check_in_date'] = $hotelPrice->check_in_date;
+                                $dA1['hotel_id'] = $competitorHotelInstance;
+                                $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                                $dA2[] = $dA1;
+                                $dA1 = null;
+                            }
+                        }
+                        if (isset($dA2)) {
+                            $hotelPrice->competitorsData = array_filter($dA2);
+                            $dA2 = null;
                         }
                     }
-                    if (isset($dA2)) {
-                        $hotelPrice->competitorsData = array_filter($dA2);
-                        $dA2 = null;
-                    }
+                    return CompetitorAvgPriceResource::collection($prices);
                 }
-                return CompetitorAvgPriceResource::collection($prices);
             }
             dd('Error: Data Not Found :  HRSHotelsCompetitorsAvgPrices');
         } else {
@@ -410,57 +412,59 @@ class CompetitorsPriceAPIController extends Controller
             }
 
             $hotelId = DB::table('users')->select('hotel_id')->where('id', '=', $userid)->get();
-            $hotelId = $hotelId[0]->hotel_id;
+            if(count($hotelId)) {
+                $hotelId = $hotelId[0]->hotel_id;
 
-            $dates = DB::table('rooms_hrs')
-                ->select(DB::raw('prices_hrs.check_in_date'))
-                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                ->where([
-                    ['rooms_hrs.hotel_id', '=', $hotelId],
-                    ['check_in_date', '>=', $dateFrom],
-                    ['check_in_date', '<=', $dateTo],
-                ])->groupBy('check_in_date');
-            ($rows > 0) ? $dates = $dates->limit($rows) : null;
-            $dates = $dates->get();
-
-            foreach ($dates as $date) {
-                $mainHotelRooms = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
+                $dates = DB::table('rooms_hrs')
+                    ->select(DB::raw('prices_hrs.check_in_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                     ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                     ->where([
                         ['rooms_hrs.hotel_id', '=', $hotelId],
-                        ['check_in_date', '=', $date->check_in_date],
-//                        ['request_date', '<=', date("Y-m-d")],
-//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                    ])->groupBy('room');
-                $mainHotelRooms = $mainHotelRooms->get();
+                        ['check_in_date', '>=', $dateFrom],
+                        ['check_in_date', '<=', $dateTo],
+                    ])->groupBy('check_in_date');
+                ($rows > 0) ? $dates = $dates->limit($rows) : null;
+                $dates = $dates->get();
 
-                $date->data[] = $mainHotelRooms;
-
-                foreach ($competitorIdsArray as $competitorId) {
-                    $competitorsRooms = DB::table('rooms_hrs')
-                        ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                foreach ($dates as $date) {
+                    $mainHotelRooms = DB::table('rooms_hrs')
+                        ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, rooms_hrs.id as room_id, rooms_hrs.room, prices_hrs.price, criteria, room_type, check_in_date, prices_hrs.request_date'))
                         ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                         ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                         ->where([
-                            ['rooms_hrs.hotel_id', '=', $competitorId],
+                            ['rooms_hrs.hotel_id', '=', $hotelId],
                             ['check_in_date', '=', $date->check_in_date],
+//                        ['request_date', '<=', date("Y-m-d")],
+//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
+                        ])->groupBy('room');
+                    $mainHotelRooms = $mainHotelRooms->get();
+
+                    $date->data[] = $mainHotelRooms;
+
+                    foreach ($competitorIdsArray as $competitorId) {
+                        $competitorsRooms = DB::table('rooms_hrs')
+                            ->select(DB::raw('hotels_hrs.name as hotel_name, price_should, hotels_hrs.id as hotel_id, criteria, rooms_hrs.room, prices_hrs.price, prices_hrs.request_date'))
+                            ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                            ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                            ->where([
+                                ['rooms_hrs.hotel_id', '=', $competitorId],
+                                ['check_in_date', '=', $date->check_in_date],
 //                            ['request_date', '<=', date("Y-m-d")],
 //                            ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
-                        ])->groupBy('room');
-                    $competitorsRooms = $competitorsRooms->get();
+                            ])->groupBy('room');
+                        $competitorsRooms = $competitorsRooms->get();
 
-                    if (count($competitorsRooms) > 0) {
-                        $date->data[] = $competitorsRooms;
+                        if (count($competitorsRooms) > 0) {
+                            $date->data[] = $competitorsRooms;
+                        }
                     }
                 }
+
+                return CompetitorAllRoomPriceResource::collection($dates);
+
             }
-
-            return CompetitorAllRoomPriceResource::collection($dates);
-
-            dd('Error: Data Not Found :  HRSAllRoomsPrices');
+            dd('Error: Data Not Found :  HRSHotelsCompetitorAllRoomsPrices');
         } else {
             dd('Error: Incorrect API Key');
         }

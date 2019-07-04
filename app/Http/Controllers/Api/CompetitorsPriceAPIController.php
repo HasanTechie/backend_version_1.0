@@ -107,14 +107,6 @@ class CompetitorsPriceAPIController extends Controller
                     array_unshift($competitorIdsArray, $hotelId);
                 }
 
-                /*
-                if (empty($dateFrom)) {
-                    $dateFrom = '2019-01-01';
-                }
-                if (empty($dateTo)) {
-                    $dateTo = '2021-01-01';
-                }
-                */
                 $prices = DB::table('rooms_hrs')
                     ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                     ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
@@ -212,10 +204,6 @@ class CompetitorsPriceAPIController extends Controller
             if (count($hotelId)) {
                 $hotelId = $hotelId[0]->hotel_id;
 
-//            if (!in_array($hotelId, $competitorIdsArray)) {
-//                array_unshift($competitorIdsArray, $hotelId);
-//            }
-
 
                 $prices = DB::table('rooms_hrs')
                     ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id, price_should,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
@@ -239,8 +227,6 @@ class CompetitorsPriceAPIController extends Controller
                         ->where([
                             ['rooms_hrs.hotel_id', '=', $hotelId],
                             ['check_in_date', '=', $priceInstance->check_in_date],
-//                        ['request_date', '<=', date("Y-m-d")],
-//                        ['request_date', '>=', date("Y-m-d", strtotime("-5 day"))],
                         ])->groupBy('room', 'criteria', 'room_type');
                     ($room != 'All') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
                     $mainHotelRooms = $mainHotelRooms->get();

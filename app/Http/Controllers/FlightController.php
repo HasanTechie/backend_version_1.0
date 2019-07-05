@@ -75,9 +75,8 @@ class FlightController extends Controller
 
     public function current()
     {
-        $flights = Flight::inRandomOrder()->where('flight_status', 'Airborne')->paginate(25); //limit to 2000
+        $flights = Flight::inRandomOrder()->where('flight_status', 'Airborne')->paginate(25);
 
-//        $flights = Flight::inRandomOrder()->inRandomOrder()->paginate(25); //limit to 2000
         return view('flights.current', compact('flights'));
     }
 
@@ -85,8 +84,6 @@ class FlightController extends Controller
     {
 
         if ($request->method() == 'POST') {
-
-//            dd($request);
 
             $flights = DB::table('flights')
                 ->Join('planes', 'flights.aircraft_code', '=', 'planes.icao')

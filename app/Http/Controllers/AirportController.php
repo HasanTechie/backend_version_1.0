@@ -19,38 +19,7 @@ class AirportController extends Controller
      */
     public function index()
     {
-        //
-//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat";
-//
-//        $contenta = file_get_contents($url);
-//
-//        $content = explode("\n",$contenta);
-
-//        foreach ($content as $line)
-//        {
-//            $airport = new Airport();
-//
-//            $airport->airport_id = $line;
-//            $airport->name = 'testing';
-//            $airport->city = 'testing';
-//            $airport->country = 'testing';
-//            $airport->IATA = 'testing';
-//            $airport->ICAO = 'testing';
-//            $airport->latitude = 1;
-//            $airport->longitude = 2;
-//            $airport->altitude = 3;
-//            $airport->timezone = 4;
-//            $airport->DST = 'testing';
-//            $airport->Tz_database_time_zone = 'testing';
-//            $airport->type = 'testing';
-//            $airport->source = 'testing';
-//            $airport->save();
-//
-//        }
-
-//        return $content;
-
-        $airports = Airport::inRandomOrder()->paginate(25); //limit to 2000
+        $airports = Airport::inRandomOrder()->paginate(25);
         return view('airports.index', compact('airports'));
     }
 

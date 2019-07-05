@@ -22,18 +22,16 @@ class LandRouteController extends Controller
     public function index()
     {
         //
-        //
         // Unbeatabil => AIzaSyBA1e2qFRgt6xW17Goo_IwPAWkCcrqXTqY
         // soliDPS => AIzaSyA5UftG8KTrwTL_FR6LFY7iH7P51Tim3Cg
-        $key = 'AIzaSyDQb12hXetLTc0FEuLPKrs9W1-9MXDaPUU';
+        /*$key = 'AIzaSyDQb12hXetLTc0FEuLPKrs9W1-9MXDaPUU';
 
-//
-//        $client = new \GuzzleHttp\Client();
-//        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJ685WIFYViEgRHlHvBbiD5nE&destination=place_id:ChIJA01I-8YVhkgRGJb0fW4UX7Y&key=$key"); //free but only one result
-//
-//        $data= json_decode($response->getBody());
-        $data = " ";
-//        dd($data);
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', "https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJ685WIFYViEgRHlHvBbiD5nE&destination=place_id:ChIJA01I-8YVhkgRGJb0fW4UX7Y&key=$key"); //free but only one result
+
+        $data= json_decode($response->getBody());
+        dd($data);*/
+        $data = "";
 
 
         $hotels = DB::table('hotels_basic_data')->where('city', '=', 'berlin')->get();

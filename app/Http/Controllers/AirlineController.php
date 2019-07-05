@@ -19,33 +19,6 @@ class AirlineController extends Controller
      */
     public function index()
     {
-        //
-//        $url = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airlines.dat";
-//
-//        $contenta = file_get_contents($url);
-//
-//        $content = explode("\n",$contenta);
-
-//        foreach ($content as $line)
-//        {
-//            $airline = new Airline();
-//
-//            $airline->airline_id = $line;
-//            $airline->name = 'testing';
-//            $airline->alias = 'testing';
-//            $airline->IATA = 'testing';
-//            $airline->ICAO = 'testing';
-//            $airline->ICAO = 'testing';
-//            $airline->callsign = 1;
-//            $airline->country = 2;
-//            $airline->active = 3;
-//            $airline->save();
-//
-//
-//        }
-
-//        return $content;
-
         $airlines = Airline::inRandomOrder()->paginate(25); //limit to 2000
         return view('airlines.index', compact('airlines'));
     }

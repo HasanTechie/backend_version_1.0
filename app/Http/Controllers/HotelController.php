@@ -30,9 +30,7 @@ class HotelController extends Controller
 
     public function search()
     {
-//        dd('s');
-//        return view('hotels.search');
-//        return redirect('/');;
+        //
     }
 
 

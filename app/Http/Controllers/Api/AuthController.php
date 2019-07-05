@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
-use GuzzleHttp\Client as GuzzleClient;
-use Illuminate\Support\Facades\Hash;
+
+/*use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Support\Facades\Hash;*/
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,13 +30,14 @@ class AuthController extends Controller
         $user->hotel_id = $request->hotel_id;
         $user->save();
 
-//        $validatedData['password'] = bcrypt($request->password);
-//        $validatedData['status'] = 0;
-//        $validatedData['hotel_id'] = $request->hotel_id;
 
-//        return $validatedData;
+/*        $validatedData['password'] = bcrypt($request->password);
+        $validatedData['status'] = 0;
+        $validatedData['hotel_id'] = $request->hotel_id;
 
-//        $user = User::create($validatedData);
+        return $validatedData;
+
+        $user = User::create($validatedData);*/
 
         $accessToken = $user->createToken('authToken')->accessToken;
 
@@ -89,7 +91,6 @@ class AuthController extends Controller
             return response(['auth' => json_decode((string)$response->getBody(), true)]);
         }*/
     }
-
 
     /*public function refreshToken()
     {

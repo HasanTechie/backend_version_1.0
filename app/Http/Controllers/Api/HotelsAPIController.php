@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Hotel as HotelResource;
 use App\Http\Resources\RoomPrice as RoomPriceResource;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

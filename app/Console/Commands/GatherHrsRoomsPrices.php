@@ -41,7 +41,6 @@ class GatherHrsRoomsPrices extends Command
     public function handle()
     {
         //
-        //
         echo 'GatherHrsRooms Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
         $instance = new Rooms_hrs_Queues_Seeder();

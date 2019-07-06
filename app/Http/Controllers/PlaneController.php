@@ -19,7 +19,7 @@ class PlaneController extends Controller
      */
     public function index()
     {
-        $planes = Plane::inRandomOrder()->orderBy('capacity', 'desc')->paginate(25); //limit to 2000
+        $planes = Plane::inRandomOrder()->orderBy('capacity', 'desc')->paginate(25);
         return view('planes.index', compact('planes'));
     }
 

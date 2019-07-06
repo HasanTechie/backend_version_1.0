@@ -41,7 +41,6 @@ class GatherhighpriorityHrsRoomsPrices extends Command
     public function handle()
     {
         //
-        //
         echo 'GatherhighpriorityHrsRoomsPrices Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
         $instance = new Rooms_hrs_high_priority_Queues_Seeder();

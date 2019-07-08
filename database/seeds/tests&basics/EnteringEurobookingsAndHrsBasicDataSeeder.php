@@ -484,8 +484,6 @@ class EnteringEurobookingsAndHrsBasicDataSeeder extends Seeder
 
 //        $dataArray [] = [
 //            
-//            
-//            
 //            'city' => 'null',
 //            'city_id' => null,
 //            'country_code' => 'null',

@@ -49,8 +49,8 @@ class MigratingDataFromOneTableToAnotherSeeder5 extends Seeder
 }
 
 
-//                $results2 = DB::table('cities')->select(DB::raw('uid, ROUND(latitude,1) as lati , ROUND(longitude,1) as longi'))->havingRaw(
-//                    'lati=' . round($instance1->latitude, 1) . ' AND longi=' . round($instance1->longitude, 1) . ' '
-//                )->get();
-//
-//                if (count($results2) < 1) {
+/*                $results2 = DB::table('cities')->select(DB::raw('uid, ROUND(latitude,1) as lati , ROUND(longitude,1) as longi'))->havingRaw(
+                    'lati=' . round($instance1->latitude, 1) . ' AND longi=' . round($instance1->longitude, 1) . ' '
+                )->get();
+
+                if (count($results2) < 1) {*/

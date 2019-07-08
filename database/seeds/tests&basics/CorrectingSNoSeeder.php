@@ -12,7 +12,6 @@ class CorrectingSNoSeeder extends Seeder
     public function run()
     {
         //
-
 //        $tables = ['hotels_hrs'];
         $tables = [
             'hotels_eurobookings',

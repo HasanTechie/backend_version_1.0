@@ -24,13 +24,13 @@ class Hotels_Queues_Seeder extends Seeder
 
             $instanceArray [] = $instance;
         }
-//        for ($k = -1; $k <= 5; $k++) {
-//            foreach ($eurobookingsHotelsBasicData as $instance) {
-//                $instance = (array)$instance;
-//                $instance['k'] = $k;
-//                $instanceArray [] = $instance;
-//            }
-//        }
+        /*for ($k = -1; $k <= 5; $k++) {
+            foreach ($eurobookingsHotelsBasicData as $instance) {
+                $instance = (array)$instance;
+                $instance['k'] = $k;
+                $instanceArray [] = $instance;
+            }
+        }*/
         shuffle($instanceArray);
 
         foreach ($instanceArray as $instance) {

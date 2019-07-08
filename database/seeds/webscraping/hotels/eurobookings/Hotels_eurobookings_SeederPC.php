@@ -82,11 +82,11 @@ class Hotels_eurobookings_SeederPC extends Seeder
                             $client->send($request, $response);
                             $crawler = new Crawler($response->getContent());
 
-//                            if (count($crawler)) {
-//                                Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', $crawler->html());
-//                                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
-//                            }
-//                            $this->dA['count_i']++;
+                            /*if (count($crawler)) {
+                                Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', $crawler->html());
+                                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
+                            }
+                            $this->dA['count_i']++;*/
 
                         } catch (\Exception $e) {
                             Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/PhantomRequestError3.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
@@ -210,10 +210,10 @@ class Hotels_eurobookings_SeederPC extends Seeder
             $guzzleClient = new GuzzleClient(array(
                 'curl' => [
                     CURLOPT_PROXY => "http://" . $this->dA['proxy'],
-//                    CURLOPT_USERAGENT => $this->dA['user_agent'],
-//                    CURLOPT_RETURNTRANSFER => 1,
-//                    CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
-//                    CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",
+                    /*CURLOPT_USERAGENT => $this->dA['user_agent'],
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => "http://" . $this->dA['super_proxy'] . ":" . $this->dA['port'] . "",
+                    CURLOPT_PROXYUSERPWD => $this->dA['username'] . "-session-" . mt_rand() . ":" . $this->dA['password'] . "",*/
                 ]
             ));
             $goutteClient->setClient($guzzleClient);

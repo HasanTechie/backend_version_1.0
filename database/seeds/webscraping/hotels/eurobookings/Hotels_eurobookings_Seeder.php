@@ -82,11 +82,11 @@ class Hotels_eurobookings_Seeder extends Seeder
                             $client->send($request, $response);
                             $crawler = new Crawler($response->getContent());
 
-//                            if (count($crawler)) {
-//                                Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', $crawler->html());
-//                                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
-//                            }
-//                            $this->dA['count_i']++;
+                           /* if (count($crawler)) {
+                                Storage::put('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/eurobookings' . $this->dA['count_i'] . '.html', $crawler->html());
+                                Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/responseCode.log', $this->dA['count_i'] . ' ' . (!empty($response->getStatus()) ? $response->getStatus() : 'noResponse'));
+                            }
+                            $this->dA['count_i']++;*/
 
                         } catch (\Exception $e) {
                             Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/PhantomRequestError3.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
@@ -110,14 +110,14 @@ class Hotels_eurobookings_Seeder extends Seeder
                                     break 2;
                                 }
 
-//                            if (in_array($this->dA['url'], $this->dA['url_array'])) {
-//                                $this->dA['url'] = end($this->dA['url_array']);
-//                                if ($this->dA['count_same_url'] == 8) {
-//                                    Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'urlArray:' . serialize($this->dA['url_array']) . 'url:' . $this->dA['url'] . ';' . 'break-reason:sameURL;count_access_denied:' . $this->dA['count_access_denied'] . ';' . Carbon::now()->toDateTimeString() . "\n");
-//                                    break 3;
-//                                }
-//                                $this->dA['count_same_url']++;
-//                            }
+                            /*if (in_array($this->dA['url'], $this->dA['url_array'])) {
+                                $this->dA['url'] = end($this->dA['url_array']);
+                                if ($this->dA['count_same_url'] == 8) {
+                                    Storage::append('eurobookings/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/breakReason.log', 'urlArray:' . serialize($this->dA['url_array']) . 'url:' . $this->dA['url'] . ';' . 'break-reason:sameURL;count_access_denied:' . $this->dA['count_access_denied'] . ';' . Carbon::now()->toDateTimeString() . "\n");
+                                    break 3;
+                                }
+                                $this->dA['count_same_url']++;
+                            }*/
 
                                 if ($response->getStatus() == 200) {
 

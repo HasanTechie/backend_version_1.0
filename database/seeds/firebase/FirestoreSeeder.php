@@ -41,18 +41,18 @@ class FirestoreSeeder extends Seeder
                 ->collection('properties')//hotels
                 ->document($mainHotel['hotel_uid']);
 
-//                $mainHotelData = DB::table('hotels_eurobookings')->where([
-//                    ['uid', '=', $mainHotel['hotel_uid']]
-//                ])->get();
+               /* $mainHotelData = DB::table('hotels_eurobookings')->where([
+                    ['uid', '=', $mainHotel['hotel_uid']]
+                ])->get();*/
 
 
             $properties->set([
                 'name' => $mainHotel['hotel_name'],
-//                    'address' => $hotel->address,
-//                    'city' => $hotel->city,
-//                    'country' => $hotel->country,
-//                    'phone' => $hotel->phone,
-//                    'website' => $hotel->website,
+                    /*'address' => $hotel->address,
+                    'city' => $hotel->city,
+                    'country' => $hotel->country,
+                    'phone' => $hotel->phone,
+                    'website' => $hotel->website,*/
             ]);
 
             foreach ($dates as $date) {
@@ -258,10 +258,10 @@ class FirestoreSeeder extends Seeder
                                             $options->set([
                                                 'real_price' => $room->price,
                                                 'competitor' => $roomArrayWithCompetitorsInstance,
-//                                    'suggested_price' => $suggestedPrice,
-//                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
-//                                    'hint' => $competitor->action,
-//                                    'name' => 'Normal'
+                                  /*  'suggested_price' => $suggestedPrice,
+                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
+                                    'hint' => $competitor->action,
+                                    'name' => 'Normal'*/
                                             ]);
 
                                         $assets2 = $properties
@@ -336,10 +336,10 @@ class FirestoreSeeder extends Seeder
                     'weather' => ((count($weather) > 0) ? $weather : null),
                     'events' => (count($eventArray) > 0) ? $eventArray : null,
                     'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
-//                        'market_suggestions' => [
-//                            'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
-//                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
-//                        ]
+                        /*'market_suggestions' => [
+                            'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
+                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
+                        ]*/
                 ]);
 //                $marketValueOffsetArray = [];
                 $rooms = [];

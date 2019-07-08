@@ -13,7 +13,7 @@ class GatheringSingaporeHotelDataSeeder extends Seeder
     {
         //
         $url = 'https://api.jael.ee/datasets/hotels?country=singapore';
-        $client = new \GuzzleHttp\Client();
+        $client = new GuzzleHttp\Client();
         $response = $client->request('GET', "$url"); //free but only one result
 
 

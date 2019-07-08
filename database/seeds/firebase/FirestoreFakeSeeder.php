@@ -38,14 +38,14 @@ class FirestoreFakeSeeder extends Seeder
                 ->document($hotel->uid);
 
             //forbidden by max
-//            $properties->set([
-//                'name' => $hotel->name,
-//                'address' => $hotel->address,
-//                'city' => $hotel->city,
-//                'country' => $hotel->country,
-//                'phone' => $hotel->phone,
-//                'website' => $hotel->website,
-//            ]);
+           /* $properties->set([
+                'name' => $hotel->name,
+                'address' => $hotel->address,
+                'city' => $hotel->city,
+                'country' => $hotel->country,
+                'phone' => $hotel->phone,
+                'website' => $hotel->website,
+            ]);*/
 
 
             if ($hotel->uid == '5c62bce9f062b') {
@@ -281,9 +281,6 @@ class FirestoreFakeSeeder extends Seeder
                                     ->collection('analytics')//dates
                                     ->document($date->check_in_date);
 
-//                                if ($i == 2) {
-//                                    dd($room);
-//                                }
                                 $analytics2->set([
                                     'real_price' => $realPrice,
                                     'competitor_price' => $competitorPrice,

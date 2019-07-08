@@ -14,7 +14,6 @@ class TrawexSeeder extends Seeder
     public function run()
     {
         //
-        //
         $headers = [
             'accept-language' => 'en-US',
             'content-type' => 'application/json',
@@ -45,7 +44,6 @@ class TrawexSeeder extends Seeder
             'json' => json_decode($body),
             'headers' => $headers
         ]);
-
 
         $response = json_decode($response->getBody());
 

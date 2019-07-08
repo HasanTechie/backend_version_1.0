@@ -12,8 +12,6 @@ class UpdateFlightsData extends Seeder
     public function run()
     {
         //
-        //Laminar Data API
-
         $apiArray = Array(
             'scheduled', 'completed', 'airborne'
         );

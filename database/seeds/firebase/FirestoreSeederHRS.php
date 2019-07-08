@@ -41,18 +41,18 @@ class FirestoreSeederHRS extends Seeder
                 ->collection('properties')//hotels
                 ->document($mainHotel['hotel_uid']);
 
-//                $mainHotelData = DB::table('hotels_hrs')->where([
-//                    ['uid', '=', $mainHotel['hotel_uid']]
-//                ])->get();
+/*                $mainHotelData = DB::table('hotels_hrs')->where([
+                    ['uid', '=', $mainHotel['hotel_uid']]
+                ])->get();*/
 
 
             $properties->set([
                 'name' => $mainHotel['hotel_name'],
-//                    'address' => $hotel->address,
-//                    'city' => $hotel->city,
-//                    'country' => $hotel->country,
-//                    'phone' => $hotel->phone,
-//                    'website' => $hotel->website,
+                   /* 'address' => $hotel->address,
+                    'city' => $hotel->city,
+                    'country' => $hotel->country,
+                    'phone' => $hotel->phone,
+                    'website' => $hotel->website,*/
             ]);
 
             foreach ($dates as $date) {
@@ -127,28 +127,28 @@ class FirestoreSeederHRS extends Seeder
                     ['hotel_name', '=', $mainHotel['hotel_name']],
                 ])->get();
 
-//
-//                $competitorRoomArray = [];
-//                foreach ($CompetitorHotels as $competitorHotel) {
-//                    $competitorRooms = DB::table('rooms_prices_hrs')->select('*')->where([
-//                        ['check_in_date', '=', $date->check_in_date],
-//                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
-//                    ])->groupBy('room', 'short_description','uid')->get();
-//
-//
-//                    if (!empty($competitorRooms)) {
-//                        foreach ($competitorRooms as $competitorRoom) {
-//
-//                            $competitorRoomArray[] = [
-//                                'competitor_price' => $competitorRoom->price,
-//                                'competitor_room' => $competitorRoom->room,
-//                                'competitor_hotel' => $competitorRoom->hotel_name,
-//                                'competitor_short_description' => $competitorRoom->short_description,
-//                            ];
-//                            $allCompetitorPrice[] = $competitorRoom->price;
-//                        }
-//                    }
-//                }
+/*
+                $competitorRoomArray = [];
+                foreach ($CompetitorHotels as $competitorHotel) {
+                    $competitorRooms = DB::table('rooms_prices_hrs')->select('*')->where([
+                        ['check_in_date', '=', $date->check_in_date],
+                        ['hotel_uid', '=', $competitorHotel->hotel_competitor_uid],
+                    ])->groupBy('room', 'short_description','uid')->get();
+
+
+                    if (!empty($competitorRooms)) {
+                        foreach ($competitorRooms as $competitorRoom) {
+
+                            $competitorRoomArray[] = [
+                                'competitor_price' => $competitorRoom->price,
+                                'competitor_room' => $competitorRoom->room,
+                                'competitor_hotel' => $competitorRoom->hotel_name,
+                                'competitor_short_description' => $competitorRoom->short_description,
+                            ];
+                            $allCompetitorPrice[] = $competitorRoom->price;
+                        }
+                    }
+                }*/
 
 
                 $rooms = DB::table('rooms_prices_hrs')->select('*')->where([
@@ -200,10 +200,10 @@ class FirestoreSeederHRS extends Seeder
                             $options->set([
                                 'real_price' => $room->price,
                                 'competitor' => $competitorRoomArray,
-//                                    'suggested_price' => $suggestedPrice,
-//                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
-//                                    'hint' => $competitor->action,
-//                                    'name' => 'Normal'
+                                    /*'suggested_price' => $suggestedPrice,
+                                    'market_value_offset_for_room' => round($marketValueOffset, 2),
+                                    'hint' => $competitor->action,
+                                    'name' => 'Normal'*/
                             ]);
 
 
@@ -279,10 +279,10 @@ class FirestoreSeederHRS extends Seeder
                     'weather' => ((count($weather) > 0) ? $weather : null),
                     'events' => (count($eventArray) > 0) ? $eventArray : null,
                     'hints' => ((count($eventIndicator) > 0) ? $eventIndicator : null),
-//                        'market_suggestions' => [
-//                            'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
-//                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
-//                        ]
+                        /*'market_suggestions' => [
+                            'max_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(max($marketValueOffsetArray), 2) : null,
+                            'min_marketvalue_offset' => (count($marketValueOffsetArray) > 0) ? round(min($marketValueOffsetArray), 2) : null,
+                        ]*/
                 ]);
 //                $marketValueOffsetArray = [];
                 $rooms = [];

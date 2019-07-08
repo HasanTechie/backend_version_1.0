@@ -57,8 +57,6 @@ class GatheringTourPediaPlacesDetailsReviewsSeeder extends Seeder
                     }
                 }
 
-//            dd(serialize($reviewsArray));
-
                 DB::table('places_test')
                     ->where('place_id', $response1->id)
                     ->update([

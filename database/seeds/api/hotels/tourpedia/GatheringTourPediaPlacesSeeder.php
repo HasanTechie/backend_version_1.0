@@ -24,7 +24,6 @@ class GatheringTourPediaPlacesSeeder extends Seeder
                 $response = json_decode($response->getBody());
 
                 foreach ($response as $instance) {
-                    //place_id,name,address,category,location,lat,lng,numReviews,reviews,polarity,details,originalId,subCategory,source
                     DB::table('places')->insert([
                         'place_id' => (isset($instance->id) ? $instance->id : null),
                         'name' => (isset($instance->name) ? $instance->name : 'Not Available'),

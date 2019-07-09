@@ -20,10 +20,6 @@ class PracticeSeeder extends Seeder
 
 //        dd(url('oauth/token'));
 
-
-//        $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', 21)->get();
-
-
 //        dd($rooms);
         /*
         $date1 = date("Y-m-d", strtotime("+200 day"));
@@ -55,7 +51,6 @@ class PracticeSeeder extends Seeder
 //        while ($i < 864000) {
 //
 //            $rid = 'hrs1081Standardroomsingkaisaleroom1Incl' . mt_rand() . 'udingbreakfastClub,2Twin/SingleBed(s),25sqm/269sqft,Wirelessinternet';
-////            $r = DB::table('rooms_hrs')->select('id')->where('rid', '=', $rid)->get();
 //            echo $i++ . ' ';
 //        }
 //        $i = 0;
@@ -96,7 +91,6 @@ class PracticeSeeder extends Seeder
         dd(date("Y-m-d", strtotime("+1 day")));
 
         $text = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deloris dolorum et oris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odeveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odeniti et libero maiores nostrum. Aliquoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nuoris dolorum et eveniet in ioris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odste non nulla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odlla odoris dolorum et eveniet in iste non nulla odoris dolorum et eveniet in iste non nulla odam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem tempora?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deleniti et libero maiores nostrum. Aliquam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem temporaLorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium deleniti et libero maiores nostrum. Aliquam corporis dolorum et eveniet in iste non nulla odio optio quaerat quasi quo, rem tempora??';
-
 
         dd(substr(str_replace(' ', '', $text), 0, 240));
     }

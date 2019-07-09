@@ -111,9 +111,6 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
                                         $this->dA['count_noPriceFound']++;
                                         goto restart2;
                                     }
-//                                else {
-//                                    Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/ignoreEmptyRoomOrPrice2b.log', 'url:' . $this->dA['request_url'] . ' ' . ';' . Carbon::now()->toDateTimeString() . "\n");
-//                                }
                                 }
                                 $this->dA['all_rooms'] = null;
 

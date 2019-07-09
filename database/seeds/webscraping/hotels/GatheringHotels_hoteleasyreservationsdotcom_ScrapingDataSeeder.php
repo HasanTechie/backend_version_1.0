@@ -134,103 +134,101 @@ class GatheringHotels_hoteleasyreservationsdotcom_ScrapingDataSeeder extends See
         });
 
 
-//        $crawler->filter('.flexible-row > .cellflex')->each(function ($node,$i=0) {
-//        $crawler->filter('body')->each(function ($node, $i = 0) {
-//
-//            $node->filter('.testoTitoloCamera')->each(function ($node1, $i = 0) {
-////                $dataArray['name'] = $node1->text();
-//
-//                print $node1->text() . "\n";
-//
-//            });
-//
-//            $node->filter('.cellflex')->each(function ($node2, $i = 0) {
-//
-////                $dataArray['day'] = $node2->filter('.weekDayFlex')->text();
-////                $dataArray['month'] = $node2->filter('.ddmonthFlex')->text();
-////                $dataArray['price'] = $node2->filter('#spanPriceFlex0')->text();
-////                print $node2->filter('.weekDayFlex')->text() . "\n";
-////                print $node2->filter('.ddmonthFlex')->text() . "\n";
-////                print $node2->filter('#spanPriceFlex0')->text() . "\n";
-//                print $node2->text() . "\n";
-//
-////                dd($dataArray);
-//            });
-//        });
-//
+      /*  $crawler->filter('.flexible-row > .cellflex')->each(function ($node,$i=0) {
+        $crawler->filter('body')->each(function ($node, $i = 0) {
 
-//        $crawler->filter(".bloccoCamera.hvr-grow-shadow")->each(function ($node, $i = 0) {
-//        $crawler->filter("[name='bloccoCamera_1']")->each(function ($node) {
-//
-//            global $dataArray;
-//            $dataArray['room'] = $node->filter(".testoTitoloCamera")->text() . "\n";
-//            print $node->filter(".testoTitoloCamera")->text() . "\n";
-//
-//            $node->filter('.cellflex')->each(function ($node2, $i = 0) {
-//
-//                global $dataArray;
-//////
+            $node->filter('.testoTitoloCamera')->each(function ($node1, $i = 0) {
+//                $dataArray['name'] = $node1->text();
+
+                print $node1->text() . "\n";
+
+            });
+
+            $node->filter('.cellflex')->each(function ($node2, $i = 0) {
+
 //                $dataArray['day'] = $node2->filter('.weekDayFlex')->text();
 //                $dataArray['month'] = $node2->filter('.ddmonthFlex')->text();
-//                if ($_SESSION["i"] == 21) {
-//                    $_SESSION["i"] = 0;
-//                }
-//                $dataArray['price'] = $node2->filter('#spanPriceFlex' . $_SESSION["i"]++)->text();
-
-
-//                if (!empty($node2->filter('.weekDayFlex'))) {
-//
-//                    print $node2->filter('.weekDayFlex')->text() . "\n";
-//                    print $node2->filter('.ddmonthFlex')->text() . "\n";
-//                    print $node2->filter('#spanPriceFlex0')->text() . "\n";
-//                }
+//                $dataArray['price'] = $node2->filter('#spanPriceFlex0')->text();
 //                print $node2->filter('.weekDayFlex')->text() . "\n";
 //                print $node2->filter('.ddmonthFlex')->text() . "\n";
+//                print $node2->filter('#spanPriceFlex0')->text() . "\n";
+                print $node2->text() . "\n";
 
-//                $i = 0;
-//                if ($i > 21) {
-//                    $i = 0;
-//                } else {
-//                    if ($i != 0) {
-//                        $i++;
-//                    }
-//                }
-
-
-//                if ($_SESSION["i"] == 21) {
-//                    $_SESSION["i"] = 0;
-//                }
-//                print $node2->filter("#spanPriceFlex" . $_SESSION["i"]++)->text() . "\n";
-
-
-//
-//                dd();
 //                dd($dataArray);
-
-//                print_r($dataArray);
-//            });
-//
-//        });
+            });
+        });*/
 
 
-//        $crawler->filter("[name='bloccoCamera_1']")->each(function ($node, $i = 0) {
-//
-//            dd($node);
-//        });
+       /* $crawler->filter(".bloccoCamera.hvr-grow-shadow")->each(function ($node, $i = 0) {
+        $crawler->filter("[name='bloccoCamera_1']")->each(function ($node) {
 
-//        $crawler->filter('.cellflex')->each(function ($node, $i = 0) {
-//            print $node->text() . "\n";
-//
-//            $day = $node->filter('.weekDayFlex')->text();
-//            $month = $node->filter('.ddmonthFlex')->text();
-//            $price = $node->filter('#spanPriceFlex0')->text();
-//            $room = $node->filter('.testoTitoloCamera')->text();
-//
-//
-//        });
+            global $dataArray;
+            $dataArray['room'] = $node->filter(".testoTitoloCamera")->text() . "\n";
+            print $node->filter(".testoTitoloCamera")->text() . "\n";
+
+            $node->filter('.cellflex')->each(function ($node2, $i = 0) {
+
+                global $dataArray;
+////
+                $dataArray['day'] = $node2->filter('.weekDayFlex')->text();
+                $dataArray['month'] = $node2->filter('.ddmonthFlex')->text();
+                if ($_SESSION["i"] == 21) {
+                    $_SESSION["i"] = 0;
+                }
+                $dataArray['price'] = $node2->filter('#spanPriceFlex' . $_SESSION["i"]++)->text();*/
 
 
-//        dd($crawler);
+           /*     if (!empty($node2->filter('.weekDayFlex'))) {
+
+                    print $node2->filter('.weekDayFlex')->text() . "\n";
+                    print $node2->filter('.ddmonthFlex')->text() . "\n";
+                    print $node2->filter('#spanPriceFlex0')->text() . "\n";
+                }
+                print $node2->filter('.weekDayFlex')->text() . "\n";
+                print $node2->filter('.ddmonthFlex')->text() . "\n";
+
+                $i = 0;
+                if ($i > 21) {
+                    $i = 0;
+                } else {
+                    if ($i != 0) {
+                        $i++;
+                    }
+                }*/
+
+
+        /*        if ($_SESSION["i"] == 21) {
+                    $_SESSION["i"] = 0;
+                }
+                print $node2->filter("#spanPriceFlex" . $_SESSION["i"]++)->text() . "\n";
+
+
+
+                dd();
+                dd($dataArray);
+
+                print_r($dataArray);
+            });
+
+        });*/
+
+
+       /* $crawler->filter("[name='bloccoCamera_1']")->each(function ($node, $i = 0) {
+
+            dd($node);
+        });
+
+        $crawler->filter('.cellflex')->each(function ($node, $i = 0) {
+            print $node->text() . "\n";
+
+            $day = $node->filter('.weekDayFlex')->text();
+            $month = $node->filter('.ddmonthFlex')->text();
+            $price = $node->filter('#spanPriceFlex0')->text();
+            $room = $node->filter('.testoTitoloCamera')->text();
+
+
+        });
+       */
 
 
     }

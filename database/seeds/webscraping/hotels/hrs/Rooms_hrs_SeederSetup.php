@@ -19,7 +19,6 @@ class Rooms_hrs_SeederSetup extends Seeder
         $dA['adults'] = [1, 2];
 
         $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
-//        $hotels = DB::table('hotels_hrs')->where('country_code','=','DK')->inRandomOrder()->get();
 
         foreach ($hotels as $hotel) {
 

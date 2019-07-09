@@ -218,19 +218,19 @@ class GatheringHotels_gcdotsynxisdotcom_ScrapingDataSeeder extends Seeder
     }
 }
 
-//                $crawler->filter('.ProductsHeader.Br2.Mrgn1.Pdng4')->each(function ($node) {
-//
-//
-////                    $node->click('View Rates')->link();
-//
-//
-//
-////                    $node->filter('.hSize2')->each(function ($node2) {
-////                        print $node2->text() . " ";
-////                    });
-////                    $node->filter('.Price.tBold.hSize1')->each(function ($node1) {
-////                    });
-//                    $node->filter('.Bg6.Br1')->each(function ($node1) {
-//                        print $node1->text() . "\n";
+/*  $crawler->filter('.ProductsHeader.Br2.Mrgn1.Pdng4')->each(function ($node) {
+
+
+//                    $node->click('View Rates')->link();
+
+
+
+//                    $node->filter('.hSize2')->each(function ($node2) {
+//                        print $node2->text() . " ";
 //                    });
-//                });
+//                    $node->filter('.Price.tBold.hSize1')->each(function ($node1) {
+//                    });
+      $node->filter('.Bg6.Br1')->each(function ($node1) {
+          print $node1->text() . "\n";
+      });
+  });*/

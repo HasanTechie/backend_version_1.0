@@ -18,78 +18,6 @@ class PracticeSeeder extends Seeder
 
 
 
-        dd('reached');
-        $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
-
-        $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
-
-
-        $selectedHotelsArray=[];
-
-        foreach($hotelCompetitorsIds as $hotelCompetitorsIdInstance){
-
-            $selectedHotelsArray[] = $hotelCompetitorsIdInstance->hotel_id;
-        }
-
-        foreach($hotelOwnersIds as $hotelOwnersIdsInstance){
-
-            $selectedHotelsArray[] = $hotelOwnersIdsInstance->hotel_id;
-        }
-
-        $selectedHotelsArray = array_unique($selectedHotelsArray);
-
-        $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->whereNotIn('id',$selectedHotelsArray)->get();
-
-        $hotels = json_decode(json_encode($hotels), true);
-        shuffle($hotels);
-
-        dd($hotels);
-
-        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
-
-        shuffle($selectedHotels);
-
-        dd($selectedHotels);
-
-        dd($hotels);
-
-        $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->whereIn('city', ['Rome', 'Berlin'])->get();
-
-        $hotels = json_decode(json_encode($hotels), true);
-
-        shuffle($hotels);
-
-        dd($hotels);
-
-        $hotelCompetitorsIds = DB::table('competitors')->select('hotel_id')->distinct()->get();
-        $hotelCompetitorsIds = json_decode(json_encode($hotelCompetitorsIds), true);
-
-        $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
-        $hotelOwnersIds = json_decode(json_encode($hotelOwnersIds), true);
-
-//        $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
-
-
-        shuffle($hotelOwnersIds);
-
-        dd($hotelOwnersIds);
-
-        foreach ($selectedHotels as $hotelInstance) {
-
-
-            $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->where('id', '=', $hotelInstance['hotel_id'])->get();
-
-            if (count($hotels) == 1) {
-
-                dd($hotels[0]->id);
-                $this->dA['hotel_id'] = $hotels[0]->id;
-                $this->dA['hotel_hrs_id'] = $hotels[0]->hrs_id;
-                $this->dA['city'] = $hotels[0]->city;
-                dd($hotels);
-            }
-
-        }
-
 //        dd(url('oauth/token'));
 
 
@@ -133,9 +61,6 @@ class PracticeSeeder extends Seeder
 //        $i = 0;
 //        while ($i < 800000) {
 
-        if (!File::exists(storage_path() . '/app/hrs/' . date("Y-m-d") . '/')) {
-            Storage::makeDirectory('hrs/' . date("Y-m-d"));
-        }
 //        echo mt_rand(5, 500) . " ";
 //            echo $i++ . " ";
 //        }
@@ -157,37 +82,6 @@ class PracticeSeeder extends Seeder
 //        dd(hexdec('hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection'));
         $new = str_replace((range('a', 'z')), range(1, 26), 'hrs389035Businessroomsingleroom1Reductionsforseniorcitizensagedandover(-EUR)Alsowithwritingdesk,sittingareaandInternetconnection');
         dd($new);
-        $r_id = DB::table('rooms_hrs')->insertGetId([
-            'room' => 'test',
-            'room_type' => 'test',
-            'criteria' => 'test',
-            'basic_conditions' => 'test',
-            'photo' => 'test',
-            'short_description' => 'test',
-            'facilities' => 'test',
-            'hotel_id' => 2,
-            'rid' => 'test',
-            'created_at' => DB::raw('now()'),
-            'updated_at' => DB::raw('now()')
-        ]);
-
-        dd($r_id);
-
-        $competitorsData = DB::table('rooms_hrs')->join('prices_hrs', 'prices_hrs.rid', '=', 'rooms_hrs.rid')->select(DB::raw('hotel_name, ROUND(avg(price),2) as price, check_in_date, check_out_date'))->where([
-            ['rooms_hrs.hotel_uid', '=', '5caa74bda4c89'],
-            ['check_in_date', '=', '2019-04-21'],
-        ])->groupBy('check_in_date')->get();
-
-        dd($competitorsData);
-        $rooms = DB::table('rooms_hrs')->get();
-
-        foreach ($rooms as $room) {
-
-
-            $da = substr(str_replace($room->currency, '', preg_replace('/[0-9.]+/', '', $room->criteria)), 0, 50);
-
-            dd($da);
-        }
 
         dd('raeched');
         $count = 0;

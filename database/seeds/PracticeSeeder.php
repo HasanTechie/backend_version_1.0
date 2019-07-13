@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use JonnyW\PhantomJs\Client as PhantomClient;
 
 class PracticeSeeder extends Seeder
@@ -16,6 +17,12 @@ class PracticeSeeder extends Seeder
     {
 
 
+        $filename = 'test_reservations.csv';
+        $url = Storage::url('test_reservations.csv');
+        $url = Storage::url($filename);
+
+        dd($url);
+        dd( response()->download(storage_path('app/public/' . $filename)));
 
 
 //        dd(url('oauth/token'));

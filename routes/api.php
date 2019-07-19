@@ -6,7 +6,7 @@ Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
 
 
-Route::post('uploadImages', 'Api\UploadImagesController@store')->middleware('auth:api');
+Route::post('uploadImages', 'Api\FilesController@imagesStore')->middleware('auth:api');
 
 
 Route::get('competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');

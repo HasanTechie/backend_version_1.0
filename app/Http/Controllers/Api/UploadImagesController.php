@@ -14,6 +14,7 @@ class UploadImagesController extends Controller
 
         $uploadedFile->store('images');
 
+
         return response(['status' => 'success'], 200);
 
     }

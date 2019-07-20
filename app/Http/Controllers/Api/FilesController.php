@@ -10,9 +10,11 @@ class FilesController extends Controller
     //
     public function imagesStore(Request $request)
     {
-        $uploadedFile = $request->picture;
+        $uploadedFiles = $request->images;
 
-        $uploadedFile->store('images');
+        foreach ($uploadedFiles as $uploadedFile) {
+            $uploadedFile->store('images');
+        }
 
         return response(['status' => 'success'], 200);
 
@@ -20,9 +22,11 @@ class FilesController extends Controller
 
     public function CSVsStore(Request $request)
     {
-        $uploadedFile = $request->picture;
+        $uploadedFiles = $request->CSVs;
 
-        $uploadedFile->store('CSVs');
+        foreach ($uploadedFiles as $uploadedFile) {
+            $uploadedFile->store('CSVs');
+        }
 
         return response(['status' => 'success'], 200);
 

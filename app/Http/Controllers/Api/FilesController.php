@@ -17,4 +17,14 @@ class FilesController extends Controller
         return response(['status' => 'success'], 200);
 
     }
+
+    public function CSVsStore(Request $request)
+    {
+        $uploadedFile = $request->picture;
+
+        $uploadedFile->store('CSVs');
+
+        return response(['status' => 'success'], 200);
+
+    }
 }

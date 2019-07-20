@@ -7,6 +7,7 @@ Route::post('login', 'Api\AuthController@login');
 
 
 Route::post('uploadImages', 'Api\FilesController@imagesStore')->middleware('auth:api');
+Route::post('uploadCSVs', 'Api\FilesController@CSVsStore')->middleware('auth:api');
 
 
 Route::get('competitors', 'Api\CompetitorsAPIController@index')->middleware('auth:api');

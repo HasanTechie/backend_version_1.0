@@ -14,9 +14,12 @@ class FilesController extends Controller
         $uploadedFiles = $request->images;
 
         foreach ($uploadedFiles as $uploadedFile) {
-            $fileName=  $uploadedFile->store('images');
+            $file=  $uploadedFile->store('images');
 
-            dd(Storage::url($fileName));
+            $fileName = $uploadedFile->getClientOriginalName();
+            $fileURL = Storage::url($file);
+            $fileType = pathinfo($file)['extension'];
+            $userID = $request->user()->id;
 
         }
 
@@ -29,9 +32,12 @@ class FilesController extends Controller
         $uploadedFiles = $request->CSVs;
 
         foreach ($uploadedFiles as $uploadedFile) {
-           $fileName= $uploadedFile->store('CSVs');
+           $file= $uploadedFile->store('CSVs');
 
-            dd(Storage::url($fileName));
+            $fileName = $uploadedFile->getClientOriginalName();
+            $fileURL = Storage::url($file);
+            $fileType = pathinfo($file)['extension'];
+            $userID = $request->user()->id;
         }
 
         return response(['status' => 'success'], 200);

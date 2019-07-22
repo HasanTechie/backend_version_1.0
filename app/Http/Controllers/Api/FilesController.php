@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class FilesController extends Controller
 {
@@ -20,6 +21,16 @@ class FilesController extends Controller
             $fileURL = Storage::url($file);
             $fileType = pathinfo($file)['extension'];
             $userID = $request->user()->id;
+
+
+            DB::table('files')->insert([
+                'user_id' => $userID,
+                'file_name' => $fileName,
+                'file_url' => $fileURL,
+                'file_type' => $fileType,
+                'created_at' => DB::raw('now()'),
+                'updated_at' => DB::raw('now()')
+            ]);
 
         }
 

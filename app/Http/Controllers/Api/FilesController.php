@@ -43,13 +43,8 @@ class FilesController extends Controller
         $uploadedFiles = $request->CSVs;
 
         foreach ($uploadedFiles as $uploadedFile) {
-//           $file= $uploadedFile->store('CSVs');
-
-//            Storage::disk('public')->put($uploadedFile->getClientOriginalName(), 'Contents');
 
             $file = $uploadedFile->storeAs('CSVs', \Str::random(40) . '.' . $uploadedFile->getClientOriginalExtension());
-
-//           dd($uploadedFile->getClientOriginalName());
             $fileName = $uploadedFile->getClientOriginalName();
             $fileURL = Storage::url($file);
             $fileType = pathinfo($file)['extension'];

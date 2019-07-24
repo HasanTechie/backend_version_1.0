@@ -27,6 +27,7 @@ class FilesController extends Controller
                 Storage::makeDirectory('images');
             }
 
+
             $file = $uploadedFile->store('images');
 
             $fileName = $uploadedFile->getClientOriginalName();
@@ -34,6 +35,10 @@ class FilesController extends Controller
             $fileType = pathinfo($file)['extension'];
             $userID = $request->user()->id;
 
+            Storage::append('Images.log', $fileName);
+            Storage::append('Images.log', $fileURL);
+            Storage::append('Images.log', $fileType);
+            Storage::append('Images.log', $userID);
 
             DB::table('files')->insert([
                 'user_id' => $userID,
@@ -66,6 +71,11 @@ class FilesController extends Controller
             $fileURL = Storage::url($file);
             $fileType = pathinfo($file)['extension'];
             $userID = $request->user()->id;
+
+            Storage::append('CSVs.log', $fileName);
+            Storage::append('CSVs.log', $fileURL);
+            Storage::append('CSVs.log', $fileType);
+            Storage::append('CSVs.log', $userID);
 
             DB::table('files')->insert([
                 'user_id' => $userID,

@@ -23,10 +23,6 @@ class FilesController extends Controller
         $uploadedFiles = $request->images;
 
         foreach ($uploadedFiles as $uploadedFile) {
-            if (!File::exists(storage_path() . '/app/public/images/')) {
-                Storage::makeDirectory('images');
-            }
-
 
             $file = $uploadedFile->store('images');
 
@@ -34,11 +30,6 @@ class FilesController extends Controller
             $fileURL = Storage::url($file);
             $fileType = pathinfo($file)['extension'];
             $userID = $request->user()->id;
-
-            Storage::append('Images.log', $fileName);
-            Storage::append('Images.log', $fileURL);
-            Storage::append('Images.log', $fileType);
-            Storage::append('Images.log', $userID);
 
             DB::table('files')->insert([
                 'user_id' => $userID,
@@ -62,20 +53,11 @@ class FilesController extends Controller
 
         foreach ($uploadedFiles as $uploadedFile) {
 
-            if (!File::exists(storage_path() . '/app/public/CSVs/')) {
-                Storage::makeDirectory('CSVs');
-            }
-
             $file = $uploadedFile->storeAs('CSVs', \Str::random(40) . '.' . $uploadedFile->getClientOriginalExtension());
             $fileName = $uploadedFile->getClientOriginalName();
             $fileURL = Storage::url($file);
             $fileType = pathinfo($file)['extension'];
             $userID = $request->user()->id;
-
-            Storage::append('CSVs.log', $fileName);
-            Storage::append('CSVs.log', $fileURL);
-            Storage::append('CSVs.log', $fileType);
-            Storage::append('CSVs.log', $userID);
 
             DB::table('files')->insert([
                 'user_id' => $userID,

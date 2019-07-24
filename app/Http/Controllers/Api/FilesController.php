@@ -22,6 +22,10 @@ class FilesController extends Controller
         $uploadedFiles = $request->images;
 
         foreach ($uploadedFiles as $uploadedFile) {
+            if (!File::exists(storage_path() . '/app/public/images/')) {
+                Storage::makeDirectory('images');
+            }
+
             $file = $uploadedFile->store('images');
 
             $fileName = $uploadedFile->getClientOriginalName();
@@ -52,6 +56,10 @@ class FilesController extends Controller
 
         foreach ($uploadedFiles as $uploadedFile) {
 
+            if (!File::exists(storage_path() . '/app/public/CSVs/')) {
+                Storage::makeDirectory('CSVs');
+            }
+
             $file = $uploadedFile->storeAs('CSVs', \Str::random(40) . '.' . $uploadedFile->getClientOriginalExtension());
             $fileName = $uploadedFile->getClientOriginalName();
             $fileURL = Storage::url($file);
@@ -68,6 +76,8 @@ class FilesController extends Controller
                 'updated_at' => DB::raw('now()')
             ]);
         }
+
+
 
         return response(['status' => 'success'], 200);
 

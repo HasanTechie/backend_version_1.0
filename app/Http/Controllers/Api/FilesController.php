@@ -108,4 +108,19 @@ class FilesController extends Controller
             dd('Error: Incorrect API Key');
         }
     }
+
+    public function getProcessedCSVs($rows,$apiKey,$userid){
+        if ($apiKey == $this->apiKey) {
+
+            $processedCSVs = DB::table('files')->where([
+                ['user_id','=',$userid],
+                ['uploaded_by','=','ml_algorithm']
+            ])->get();
+
+            dd($processedCSVs);
+
+        } else {
+            dd('Error: Incorrect API Key');
+        }
+    }
 }

@@ -40,3 +40,5 @@ Route::get('competitorsavgpricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}
 Route::get('competitorsroomspricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsPricesOld');
 //old method
 Route::get('competitorsroomsavgpricesold&get={get}&apiKey={apiKey}&hotelid={hotel_id}&datefrom={dateFrom}&dateto={dateTo}&competitorsid={competitorsid}', 'Api\CompetitorsPriceAPIController@HRSHotelsCompetitorsRoomsAvgPricesOld');
+
+Route::get('getprocessedcsvs&get={get}&apiKey={apiKey}&userid={userid}', 'Api\FilesController@getProcessedCSVs');

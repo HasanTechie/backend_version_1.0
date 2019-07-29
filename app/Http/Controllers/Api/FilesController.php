@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Http\Resources\ProcessedCSVs;
 
 class FilesController extends Controller
 {
@@ -117,7 +119,7 @@ class FilesController extends Controller
                 ['uploaded_by','=','ml_algorithm']
             ])->get();
 
-            dd($processedCSVs);
+            return ProcessedCSVs::collection($processedCSVs);
 
         } else {
             dd('Error: Incorrect API Key');

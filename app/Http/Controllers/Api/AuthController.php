@@ -7,6 +7,7 @@ use App\User;
 /*use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Hash;*/
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -31,13 +32,13 @@ class AuthController extends Controller
         $user->save();
 
 
-/*        $validatedData['password'] = bcrypt($request->password);
-        $validatedData['status'] = 0;
-        $validatedData['hotel_id'] = $request->hotel_id;
+        /*        $validatedData['password'] = bcrypt($request->password);
+                $validatedData['status'] = 0;
+                $validatedData['hotel_id'] = $request->hotel_id;
 
-        return $validatedData;
+                return $validatedData;
 
-        $user = User::create($validatedData);*/
+                $user = User::create($validatedData);*/
 
         $accessToken = $user->createToken('authToken')->accessToken;
 
@@ -73,8 +74,14 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials']);
         }
 
+        $city = DB::table('hotels_hrs')->select('city')->where('id', '=', auth()->user()->hotel_id)->get();
+
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+        return response([
+            'user' => auth()->user(),
+            'city' => ((count($city) > 0) ? $city[0]->city : null),
+            'access_token' => $accessToken
+        ]);
 
         /*if (Hash::check($request->password, $user->password)) {
             $http = new GuzzleClient;

@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use JonnyW\PhantomJs\Client as PhantomClient;
+use Illuminate\Support\Facades\File;
 
 class PracticeSeeder extends Seeder
 {

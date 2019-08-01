@@ -72,8 +72,6 @@ class FilesController extends Controller
             ]);
         }
 
-
-
         return response(['status' => 'success'], 200);
 
     }

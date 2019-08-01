@@ -46,7 +46,7 @@ class CompetitorsPriceAPIController extends Controller
                         ['check_in_date', '>=', $dateFrom],
                         ['check_in_date', '<=', $dateTo],
                     ])->groupBy('check_in_date');
-                ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
+                (strtolower($room) != 'all') ? $prices = $prices->where('room', '=', $room) : null;
                 ($rows > 0) ? $prices = $prices->limit($rows) : null;
                 $prices = $prices->get();
                 if (isset($prices)) {
@@ -60,7 +60,7 @@ class CompetitorsPriceAPIController extends Controller
                                     ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                                     ['check_in_date', '=', $hotelPrice->check_in_date],
                                 ]);
-                            ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
+                            (strtolower($room) != 'all') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
                             $competitorsData = $competitorsData->groupBy('check_in_date')->get();
 
                             if (count($competitorsData) > 0) {
@@ -116,7 +116,7 @@ class CompetitorsPriceAPIController extends Controller
                         ['check_in_date', '>=', $dateFrom],
                         ['check_in_date', '<=', $dateTo],
                     ])->groupBy('check_in_date');
-                ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
+                (strtolower($room) != 'all') ? $prices = $prices->where('room', '=', $room) : null;
                 ($rows > 0) ? $prices = $prices->limit($rows) : null;
                 $prices = $prices->get();
 
@@ -132,7 +132,7 @@ class CompetitorsPriceAPIController extends Controller
                                     ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
                                     ['check_in_date', '=', $priceInstance->check_in_date],
                                 ]);
-                            ($room != 'All') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
+                            (strtolower($room) != 'all') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
                             $competitorsData = $competitorsData->groupBy('check_in_date')->get();
 
                             if (count($competitorsData) > 0) {
@@ -212,7 +212,7 @@ class CompetitorsPriceAPIController extends Controller
                         ['check_in_date', '>=', $dateFrom],
                         ['check_in_date', '<=', $dateTo],
                     ])->groupBy('check_in_date');
-                ($room != 'All') ? $prices = $prices->where('room', '=', $room) : null;
+                (strtolower($room) != 'all') ? $prices = $prices->where('room', '=', $room) : null;
                 ($rows > 0) ? $prices = $prices->limit($rows) : null;
                 $prices = $prices->get();
 
@@ -226,7 +226,7 @@ class CompetitorsPriceAPIController extends Controller
                             ['rooms_hrs.hotel_id', '=', $hotelId],
                             ['check_in_date', '=', $priceInstance->check_in_date],
                         ])->groupBy('room', 'criteria', 'room_type');
-                    ($room != 'All') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
+                    (strtolower($room) != 'all') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
                     $mainHotelRooms = $mainHotelRooms->get();
 
 
@@ -243,7 +243,7 @@ class CompetitorsPriceAPIController extends Controller
                                         ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
                                         ['check_in_date', '=', $priceInstance->check_in_date],
                                     ])->groupBy('room', 'criteria', 'room_type');
-                                ($room != 'All') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
+                                (strtolower($room) != 'all') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
                                 $competitorsRooms = $competitorsRooms->get();
 
                                 if (count($competitorsRooms) > 0) {
@@ -313,7 +313,7 @@ class CompetitorsPriceAPIController extends Controller
                         ['check_in_date', '>=', $dateFrom],
                         ['check_in_date', '<=', $dateTo],
                     ])->groupBy('check_in_date');
-                ($room != 'All') ? $dates = $dates->where('room', '=', $room) : null;
+                (strtolower($room) != 'all') ? $dates = $dates->where('room', '=', $room) : null;
                 ($rows > 0) ? $dates = $dates->limit($rows) : null;
                 $dates = $dates->get();
 
@@ -326,7 +326,7 @@ class CompetitorsPriceAPIController extends Controller
                             ['rooms_hrs.hotel_id', '=', $hotelId],
                             ['check_in_date', '=', $dateInstance->check_in_date],
                         ])->groupBy('room', 'criteria', 'room_type');
-                    ($room != 'All') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
+                    (strtolower($room) != 'all') ? $mainHotelRooms = $mainHotelRooms->where('room', '=', $room) : null;
                     $mainHotelRooms = $mainHotelRooms->get();
                     if (isset($mainHotelRooms)) {
                         foreach ($mainHotelRooms as $mainHotelRoom) {
@@ -341,7 +341,7 @@ class CompetitorsPriceAPIController extends Controller
                                         ['rooms_hrs.room_type', '=', $mainHotelRoom->room_type],
                                         ['check_in_date', '=', $dateInstance->check_in_date],
                                     ])->groupBy('room', 'criteria', 'room_type');
-                                ($room != 'All') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
+                                (strtolower($room) != 'all') ? $competitorsRooms = $competitorsRooms->where('room', '=', $room) : null;
                                 $competitorsRooms = $competitorsRooms->get();
                                 if (count($competitorsRooms) > 0) {
                                     foreach ($competitorsRooms as $competitorsRoomsInstance) {

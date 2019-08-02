@@ -141,6 +141,7 @@ class CompetitorsPriceAPIController extends Controller
                                 $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : 'null');
                                 $dA1 = null;
                             }
+
                         }
                         $firstArrayLength = 0;
                         $i = 0;
@@ -148,7 +149,7 @@ class CompetitorsPriceAPIController extends Controller
 
                             $tempPrice = 0;
                             foreach (array_keys($dA2) as $index => $key) {
-                                if (isset($dA2[$key][0])) {
+                                if (isset($dA2[$key][0])) { // to be deleted
                                     $tempPrice = $dA2[$key][0];
                                 }
 
@@ -166,6 +167,7 @@ class CompetitorsPriceAPIController extends Controller
                             }
                         }
                     }
+
                     $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();
                     $roomsArray = ['All'];
                     foreach ($rooms as $roomInstance) {
@@ -176,6 +178,24 @@ class CompetitorsPriceAPIController extends Controller
                         $check_in_datesArray[] = $price->check_in_date;
                     }
                     $competitorsDataArray = [];
+
+                    if(isset($dA2)){
+                        $i=0;
+                        foreach($dA2 as $dA2instance){
+                            if($i==1){
+                                dd($dA2instance);
+                            }
+                            $i++;
+                            $tempPrice = 0;
+                            foreach($dA2instance as $dA2InstanceKaInstance){
+                                if(empty($dA2InstanceKaInstance)){
+                                    $dA2InstanceKaInstance = $tempPrice;
+                                }
+                                $tempPrice = $dA2InstanceKaInstance;
+                            }
+                        }
+                    }
+
                     if (isset($dA2)) {
                         foreach ($dA2 as $key => $value) {
                             $dA3['name'] = $key;

@@ -142,11 +142,19 @@ class CompetitorsPriceAPIController extends Controller
                                 $dA1 = null;
                             }
                         }
-                        $firstArrayLength = '';
+                        $firstArrayLength = 0;
                         $i = 0;
                         if (isset($dA2)) {
 
+                            $tempPrice = 0;
                             foreach (array_keys($dA2) as $index => $key) {
+                                if (isset($dA2[$key][0])) {
+                                    $tempPrice = $dA2[$key][0];
+                                }
+
+                                if($dA2[$key][0] == 98.56){ // to be deleted
+                                    dd('reached');
+                                }
                                 if ($i == 0) {
                                     $firstArrayLength = count($dA2[$key]);
                                     $i++;
@@ -154,6 +162,7 @@ class CompetitorsPriceAPIController extends Controller
                                 if ($firstArrayLength != count($dA2[$key])) {
                                     array_push($dA2[$key], null);
                                 }
+//                                    dd($dA2);
                             }
                         }
                     }

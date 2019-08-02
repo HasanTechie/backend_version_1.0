@@ -171,17 +171,17 @@ class CompetitorsPriceAPIController extends Controller
 
                     if (isset($dA2)) {
 
-//                        foreach ($dA2 as $key => $dA2instance) {
-//                            $tempPrice = 0;
-//                            foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
-//                                if (empty($dA2InstanceKaInstance)) {
-//                                    $dA2[$key][$key2] = $tempPrice;
-//                                }
-//                                if (!empty($dA2InstanceKaInstance)) {
-//                                    $tempPrice = $dA2InstanceKaInstance;
-//                                }
-//                            }
-//                        }
+                        foreach ($dA2 as $key => $dA2instance) {
+                            $tempPrice = 0;
+                            foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
+                                if (empty($dA2InstanceKaInstance)) {
+                                    $dA2[$key][$key2] = $tempPrice;
+                                }
+                                if (!empty($dA2InstanceKaInstance)) {
+                                    $tempPrice = $dA2InstanceKaInstance;
+                                }
+                            }
+                        }
 
                         foreach ($dA2 as $key => $value) {
                             $dA3['name'] = $key;

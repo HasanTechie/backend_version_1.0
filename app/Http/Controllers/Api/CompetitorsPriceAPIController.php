@@ -146,16 +146,7 @@ class CompetitorsPriceAPIController extends Controller
                         $firstArrayLength = 0;
                         $i = 0;
                         if (isset($dA2)) {
-
-                            $tempPrice = 0;
                             foreach (array_keys($dA2) as $index => $key) {
-                                if (isset($dA2[$key][0])) { // to be deleted
-                                    $tempPrice = $dA2[$key][0];
-                                }
-
-                                if ($dA2[$key][0] == 98.56) { // to be deleted
-                                    dd('reached');
-                                }
                                 if ($i == 0) {
                                     $firstArrayLength = count($dA2[$key]);
                                     $i++;
@@ -163,7 +154,6 @@ class CompetitorsPriceAPIController extends Controller
                                 if ($firstArrayLength != count($dA2[$key])) {
                                     array_push($dA2[$key], null);
                                 }
-//                                    dd($dA2);
                             }
                         }
                     }
@@ -180,27 +170,19 @@ class CompetitorsPriceAPIController extends Controller
                     $competitorsDataArray = [];
 
                     if (isset($dA2)) {
-                        $i = 0;
+
                         foreach ($dA2 as $key=>$dA2instance) {
-                            if ($i == 1) {
-//                                dd($dA2instance);
-                            }
-                            $i++;
                             $tempPrice = 0;
                             foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
                                 if (empty($dA2InstanceKaInstance)) {
                                     $dA2[$key][$key2] = $tempPrice;
-//                                    $dA2[$dA2instance]$dA2InstanceKaInstance = $tempPrice;
                                 }
                                 if (!empty($dA2InstanceKaInstance)) {
                                     $tempPrice = $dA2InstanceKaInstance;
                                 }
-//                            dd($dA2[$key][$key2]);
                             }
                         }
-                    }
 
-                    if (isset($dA2)) {
                         foreach ($dA2 as $key => $value) {
                             $dA3['name'] = $key;
                             $dA3['data'] = $value;

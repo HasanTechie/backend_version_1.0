@@ -153,7 +153,7 @@ class CompetitorsPriceAPIController extends Controller
                                     $tempPrice = $dA2[$key][0];
                                 }
 
-                                if($dA2[$key][0] == 98.56){ // to be deleted
+                                if ($dA2[$key][0] == 98.56) { // to be deleted
                                     dd('reached');
                                 }
                                 if ($i == 0) {
@@ -179,19 +179,23 @@ class CompetitorsPriceAPIController extends Controller
                     }
                     $competitorsDataArray = [];
 
-                    if(isset($dA2)){
-                        $i=0;
-                        foreach($dA2 as $dA2instance){
-                            if($i==1){
-                                dd($dA2instance);
+                    if (isset($dA2)) {
+                        $i = 0;
+                        foreach ($dA2 as $key=>$dA2instance) {
+                            if ($i == 1) {
+//                                dd($dA2instance);
                             }
                             $i++;
                             $tempPrice = 0;
-                            foreach($dA2instance as $dA2InstanceKaInstance){
-                                if(empty($dA2InstanceKaInstance)){
-                                    $dA2InstanceKaInstance = $tempPrice;
+                            foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
+                                if (empty($dA2InstanceKaInstance)) {
+                                    $dA2[$key][$key2] = $tempPrice;
+//                                    $dA2[$dA2instance]$dA2InstanceKaInstance = $tempPrice;
                                 }
-                                $tempPrice = $dA2InstanceKaInstance;
+                                if (!empty($dA2InstanceKaInstance)) {
+                                    $tempPrice = $dA2InstanceKaInstance;
+                                }
+//                            dd($dA2[$key][$key2]);
                             }
                         }
                     }

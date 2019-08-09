@@ -15,7 +15,7 @@ class CreateHotelIdsForDataGatheringTable extends Migration
     {
         Schema::create('hotel_ids_for_data_gathering', function (Blueprint $table) {
             $table->bigIncrements('id')->unique();
-            $table->unsignedBigInteger('hotel_id');
+            $table->unsignedBigInteger('hotel_id')->unique();
             $table->string('city');
             $table->string('country_code');
             $table->string('source');

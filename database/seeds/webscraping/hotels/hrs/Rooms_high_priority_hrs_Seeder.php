@@ -41,7 +41,11 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
             $hotelOwnersIds = DB::table('users')->select('hotel_id')->distinct()->get();
             $hotelOwnersIds = json_decode(json_encode($hotelOwnersIds), true);
 
-            $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds), SORT_REGULAR);
+            $hotelManualIds = DB::table('hotel_ids_for_data_gathering')->select('hotel_id')->distinct()->get();
+            $hotelManualIds = json_decode(json_encode($hotelManualIds), true);
+
+
+            $selectedHotels = array_unique(array_merge($hotelCompetitorsIds, $hotelOwnersIds, $hotelManualIds), SORT_REGULAR);
 
             shuffle($selectedHotels);
 
@@ -50,7 +54,6 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
             dd('beak');
 
             foreach ($selectedHotels as $hotelInstance) {
-
 
                 $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->where('id', '=', $hotelInstance['hotel_id'])->get();
 

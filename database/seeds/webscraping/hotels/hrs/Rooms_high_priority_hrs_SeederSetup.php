@@ -25,8 +25,8 @@ class Rooms_high_priority_hrs_SeederSetup extends Seeder
 
             echo 'GatherhighpriorityHrsRoomsPrices Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
-            $instance = new Rooms_hrs_high_priority_Queues_Seeder();
-            $instance->run();
+            $instance = new Rooms_high_priority_hrs_Seeder();
+            $instance->run($dA);
 
             echo 'GatherhighpriorityHrsRoomsPrices Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
 

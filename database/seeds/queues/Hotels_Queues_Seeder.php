@@ -21,6 +21,8 @@ class Hotels_Queues_Seeder extends Seeder
             DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
         }
 
+        DB::table('failed_jobs')->truncate();
+
         //
 //        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
         $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->get();

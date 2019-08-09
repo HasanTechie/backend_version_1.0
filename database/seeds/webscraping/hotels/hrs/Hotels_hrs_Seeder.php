@@ -38,10 +38,10 @@ class Hotels_hrs_Seeder extends Seeder
             if (!File::exists(storage_path() . '/app/hrs/' . $this->dA['request_date'] . '/')) {
                 Storage::makeDirectory('hrs/' . $this->dA['request_date']);
             }
-
-            while (strtotime($this->dA['start_date']) <= strtotime($this->dA['end_date'])) {
-                $this->dA['check_in_date'] = $this->dA['start_date'];
-                $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+            $date = date("Y-m-d", strtotime("+14 day"));
+            while (strtotime($date) <= strtotime($date)) {
+                $this->dA['check_in_date'] = $date;
+                $this->dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($date)));
                 while (0 == 0) {
                     if ($this->dA['full_break']) {
                         $this->dA['full_break'] = false;
@@ -53,7 +53,7 @@ class Hotels_hrs_Seeder extends Seeder
                         $this->dA['count_i']++;
                     }
                 }
-                $this->dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($this->dA['start_date'])));
+                $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
             }
         } catch (Exception $e) {
             $this->catchException($e, 'errorMain');

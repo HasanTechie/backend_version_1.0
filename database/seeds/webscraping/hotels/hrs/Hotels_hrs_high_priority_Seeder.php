@@ -18,11 +18,9 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
      */
     protected $dA = [];
 
-    public function run($data)
+    public function run()
     {
         try {
-            $this->dA = $data;
-
             $this->dA['proxy'] = 'proxy.proxycrawl.com:9000';
             $this->dA['timeOut'] = 8000;
             $this->dA['request_date'] = date("Y-m-d");
@@ -40,7 +38,7 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
                 Storage::makeDirectory('hrs/' . $this->dA['request_date']);
             }
 
-            $date = date("Y-m-d", strtotime("+5 day"));
+            $date = date("Y-m-d", strtotime("+14 day"));
 
             while (strtotime($date) <= strtotime($date)) {
                 $this->dA['check_in_date'] = $date;
@@ -64,13 +62,14 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
     {
 
         $hotelManualIds = DB::table('hotel_ids_for_data_gathering')->get();
-        $hotelManualIds = json_decode(json_encode($hotelManualIds), true);
 
+        foreach ($hotelManualIds as $hotelInstance) {
 
-        $selectedHotels = array_unique($hotelManualIds, SORT_REGULAR);
-
-        foreach ($selectedHotels as $hotelInstance) {
-            $this->dA['hotel_id'] = $hotelInstance['hotel_id'];
+            $this->dA['hotel_id'] = $hotelInstance->hotel_id;
+            $this->dA['city'] = $hotelInstance->city;
+            $this->dA['city_id'] = $hotelInstance->city_id;
+            $this->dA['country_code'] = $hotelInstance->country_code;
+            $this->dA['source'] = $hotelInstance->source;
 
             if (!empty($this->dA['hotel_id'])) {
                 $adults = 2;
@@ -78,6 +77,7 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
                 restart2:
                 $crawler = $this->phantomRequest($this->dA['hotel_url']);
                 if ($crawler) {
+
                     if ($crawler->filter('input[name="hotelnumber"]')->count() > 0) {
                         $this->dA['hotel_hrs_id'] = $crawler->filter('input[name="hotelnumber"]')->attr('value');
                     } else {
@@ -110,7 +110,11 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
 
     protected function catchException($e, $fileName)
     {
-        Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        if (!empty($this->dA['city'])) {
+            Storage::append('hrs/' . $this->dA['request_date'] . '/' . $this->dA['city'] . '/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        } else {
+            Storage::append('hrs/' . $this->dA['request_date'] . '/unknown/' . $fileName . '.log', $e->getMessage() . ' ' . $e->getLine() . ' ' . Carbon::now()->toDateTimeString() . "\n");
+        }
         print($e->getMessage());
     }
 
@@ -123,7 +127,7 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
             $client->getEngine()->addOption('--load-images=false');
             $client->getEngine()->addOption('--ignore-ssl-errors=true');
 //            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy'][count($this->dA['proxy']) - 1]);
-            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
+//            $client->getEngine()->addOption("--proxy=http://" . $this->dA['proxy']);
             $client->isLazy(); // Tells the client to wait for all resources before rendering
             $request = $client->getMessageFactory()->createRequest($url);
             $request->setTimeout($this->dA['timeOut']);
@@ -387,7 +391,6 @@ class Hotels_hrs_high_priority_Seeder extends Seeder
     protected function insertHotelsDataIntoDB()
     {
 
-        dd('brea');
         try {
             $hid = $this->dA['hotel_name'] . $this->dA['hotel_address'];
             $this->dA['hid'] = substr(str_replace(' ', '', $hid), 0, 254);

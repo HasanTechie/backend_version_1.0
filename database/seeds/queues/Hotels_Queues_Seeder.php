@@ -35,8 +35,7 @@ class Hotels_Queues_Seeder extends Seeder
 
         foreach ($instanceArray as $instance) {
             $instance['currency'] = 'EUR';
-            $instance['start_date'] = date("Y-m-d", strtotime("+5 day"));
-            $instance['end_date'] = date("Y-m-d", strtotime("+5 day"));
+
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(5));
         }
     }

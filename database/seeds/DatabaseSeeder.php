@@ -22,9 +22,10 @@ class DatabaseSeeder extends Seeder
 //        $this->call('EnteringEurobookingsAndHrsBasicDataSeeder');
 //
 //        $this->call('Hotels_hrs_SeederSetup');
+        $this->call('Hotels_hrs_high_priority_Seeder');
 //        $this->call('Rooms_hrs_SeederSetup');
-        $this->call('Rooms_high_priority_hrs_SeederSetup');
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected');
+//        $this->call('Rooms_high_priority_hrs_SeederSetup');
 //
 //
 //        $this->call('addDataToHotelsDataTables');

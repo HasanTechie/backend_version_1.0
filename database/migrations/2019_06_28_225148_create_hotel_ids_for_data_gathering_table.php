@@ -17,6 +17,7 @@ class CreateHotelIdsForDataGatheringTable extends Migration
             $table->bigIncrements('id')->unique();
             $table->unsignedBigInteger('hotel_id')->unique();
             $table->string('city');
+            $table->string('city_id');
             $table->string('country_code');
             $table->string('source');
             $table->timestamps();

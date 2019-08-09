@@ -15,9 +15,8 @@ class Hotels_Queues_Seeder extends Seeder
      */
     public function run()
     {
-
-        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
-
+        //empty job queue before sending new jobs.
+        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->get();
         foreach($notReservedJobs as $notReservedJob){
             DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
         }

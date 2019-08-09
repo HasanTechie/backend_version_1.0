@@ -20,14 +20,14 @@ class HotelsAPIController extends Controller
         $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
     }
 
-    public function HRSHotels($rows, $apiKey, $city)
+    public function HRSHotels($rows, $apiKey, $countryCode)
     {
         if ($apiKey == $this->apiKey) {
             $hotels = DB::table('hotels_hrs');
-            if ($city == 'All') {
+            if ($countryCode == 'All') {
 //                $hotels = $hotels->whereIn('city', ['Rome', 'Berlin']);
             } else {
-                $hotels = $hotels->where('city', '=', $city);
+                $hotels = $hotels->where('country_code', '=', $countryCode);
             }
             ($rows > 0) ? $hotels = $hotels->limit($rows) : null;
             $hotels = $hotels->get();

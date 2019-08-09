@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\GatherHotelsDataJob;
+use App\Jobs\GatherHighPriorityHotelsDataJob;
 
 use Illuminate\Database\Seeder;
 
@@ -38,5 +39,7 @@ class Hotels_Queues_Seeder extends Seeder
 
             GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(5));
         }
+
+        GatherHighPriorityHotelsDataJob::dispatch()->onQueue('high')->delay(now()->addSecond(5));
     }
 }

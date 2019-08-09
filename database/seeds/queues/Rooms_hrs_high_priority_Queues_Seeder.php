@@ -15,7 +15,7 @@ class Rooms_hrs_high_priority_Queues_Seeder extends Seeder
         //
 
         //empty job queue before sending new jobs.
-        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue', '=', 'high')->get();
+        $notReservedJobs = DB::table('jobs')->select('id')->where('queue', '=', 'high')->get();
         foreach ($notReservedJobs as $notReservedJob) {
             DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
         }

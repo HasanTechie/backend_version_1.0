@@ -50,9 +50,6 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
             shuffle($selectedHotels);
 
 
-            dd($selectedHotels);
-            dd('beak');
-
             foreach ($selectedHotels as $hotelInstance) {
 
                 $hotels = DB::table('hotels_hrs')->select('id', 'hrs_id', 'city')->where('id', '=', $hotelInstance['hotel_id'])->get();

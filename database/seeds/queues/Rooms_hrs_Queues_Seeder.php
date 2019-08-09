@@ -15,6 +15,13 @@ class Rooms_hrs_Queues_Seeder extends Seeder
     public function run()
     {
         //
+
+        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
+
+        foreach($notReservedJobs as $notReservedJob){
+            DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
+        }
+
         $dA['currency'] = 'EUR';
         $dA['adults'] = [2];
         $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
@@ -27,7 +34,7 @@ class Rooms_hrs_Queues_Seeder extends Seeder
 
 
             GatherRoomsDataJob::dispatch($dA)->delay(now()->addSecond(2));
-            
+
             if ($dA['start_date'] < date("Y-m-d", strtotime("+180 day"))) {
                 $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
             } else {

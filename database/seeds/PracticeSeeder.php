@@ -17,6 +17,12 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
+
+        foreach($notReservedJobs as $notReservedJob){
+            DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
+        }
+
         /*
                 $filename = 'test_reservations.csv';
                 $url = Storage::url('test_reservations.csv');

@@ -43,6 +43,7 @@ class GatherHrsHotels extends Command
         //
         echo 'GatherHrsHotels Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
 
+
         $instance = new Hotels_Queues_Seeder();
         $instance->run();
 

@@ -13,6 +13,13 @@ class Rooms_hrs_high_priority_Queues_Seeder extends Seeder
     public function run()
     {
         //
+
+        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue', '=', 'high')->get();
+
+        foreach ($notReservedJobs as $notReservedJob) {
+            DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
+        }
+
         $dA['currency'] = 'EUR';
         $dA['adults'] = [2];
         $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
@@ -27,7 +34,7 @@ class Rooms_hrs_high_priority_Queues_Seeder extends Seeder
             GatherHighPriorityRoomsDataJob::dispatch($dA)->onQueue('high')->delay(now()->addSecond(2));
 
 //            if ($dA['start_date'] < date("Y-m-d", strtotime("+180 day"))) {
-                $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
+            $dA['start_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
 //            } else {
 //                $dA['start_date'] = date("Y-m-d", strtotime("+7 day", strtotime($dA['start_date'])));
 //            }

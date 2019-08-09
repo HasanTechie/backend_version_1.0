@@ -4,6 +4,7 @@ use App\Jobs\GatherHotelsDataJob;
 use App\Jobs\GatherHighPriorityHotelsDataJob;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class Hotels_Queues_Seeder extends Seeder
 {
@@ -14,6 +15,13 @@ class Hotels_Queues_Seeder extends Seeder
      */
     public function run()
     {
+
+        $notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
+
+        foreach($notReservedJobs as $notReservedJob){
+            DB::table('jobs')->where('id', '=', $notReservedJob->id)->delete();
+        }
+
         //
 //        $eurobookingsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'eurobookings.com')->get();
         $hrsHotelsBasicData = DB::table('hotels_basic_data_for_gathering')->where('source', '=', 'hrs.com')->get();

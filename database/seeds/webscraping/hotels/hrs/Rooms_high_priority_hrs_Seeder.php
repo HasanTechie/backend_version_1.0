@@ -45,6 +45,10 @@ class Rooms_high_priority_hrs_Seeder extends Seeder
 
             shuffle($selectedHotels);
 
+
+            dd($selectedHotels);
+            dd('beak');
+
             foreach ($selectedHotels as $hotelInstance) {
 
 

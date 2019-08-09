@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      * //     */
     public function run()
     {
-        $this->call('PracticeSeeder');
+//        $this->call('PracticeSeeder');
 //        $this->call('TransferDataFromPricesTableSeeder');
 //        $this->call('ConvertingUIDsOfTables');
 //        $this->call('GatheringPublicHolidaysDataSeeder');
@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
 //
 //        $this->call('Hotels_hrs_SeederSetup');
 //        $this->call('Rooms_hrs_SeederSetup');
+        $this->call('Rooms_high_priority_hrs_SeederSetup');
 //        $this->call('GatheringHotels_hrsdotcom_ScrapingDataSeederSetupSelected');
 //
 //

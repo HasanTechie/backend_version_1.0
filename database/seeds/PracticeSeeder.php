@@ -17,13 +17,14 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
+        /*
+                $filename = 'test_reservations.csv';
+                $url = Storage::url('test_reservations.csv');
+                $url = Storage::url($filename);
 
-        $filename = 'test_reservations.csv';
-        $url = Storage::url('test_reservations.csv');
-        $url = Storage::url($filename);
+                dd($url);
 
-        dd($url);
-        dd( response()->download(storage_path('app/public/' . $filename)));
+                dd( response()->download(storage_path('app/public/' . $filename)));*/
 
 
 //        dd(url('oauth/token'));

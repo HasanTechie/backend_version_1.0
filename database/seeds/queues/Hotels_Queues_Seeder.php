@@ -42,9 +42,9 @@ class Hotels_Queues_Seeder extends Seeder
         foreach ($instanceArray as $instance) {
             $instance['currency'] = 'EUR';
 
-            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(5));
+            GatherHotelsDataJob::dispatch($instance)->delay(now()->addSecond(2));
         }
 
-        GatherHighPriorityHotelsDataJob::dispatch()->onQueue('high')->delay(now()->addSecond(5));
+        GatherHighPriorityHotelsDataJob::dispatch()->onQueue('high')->delay(now()->addSecond(2));
     }
 }

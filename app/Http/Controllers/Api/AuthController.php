@@ -74,7 +74,7 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials']);
         }
 
-        $hotelsBasic = DB::table('hotels_hrs')->select('city','country_code')->where('id', '=', auth()->user()->hotel_id)->get();
+        $hotelsBasic = DB::table('hotels_hrs')->select('city', 'country_code')->where('id', '=', auth()->user()->hotel_id)->get();
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         return response([
@@ -99,6 +99,37 @@ class AuthController extends Controller
             return response(['auth' => json_decode((string)$response->getBody(), true)]);
         }*/
     }
+
+    /*
+    public function register(Request $request)
+    {
+
+
+
+                $validatedData['password'] = bcrypt($request->password);
+                $validatedData['status'] = 0;
+                $validatedData['hotel_id'] = $request->hotel_id;
+
+                return $validatedData;
+
+                $user = User::create($validatedData);
+
+
+
+                $http = new GuzzleClient;
+                $response = $http->post(url('oauth/token'), [
+                    'form_params' => [
+                        'grant_type' => 'password',
+                        'client_id' => env('OAUTH_GRANT_SECRET_ID'),
+                        'client_secret' => env('OAUTH_GRANT_SECRET_KEY'),
+                        'username' => $request->email,
+                        'password' => $request->password,
+                        'scope' => '',
+                    ],
+                ]);
+                return response(['auth' => json_decode((string)$response->getBody(), true)]);
+    }
+    */
 
     /*public function refreshToken()
     {

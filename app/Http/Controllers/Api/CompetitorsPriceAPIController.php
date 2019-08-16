@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use App\Http\Resources\CompetitorPriceApex as CompetitorPriceResourceApex;
+use App\Http\Resources\CompetitorAllRoomPrice as CompetitorAllRoomPriceResource;
 use App\Http\Resources\CompetitorRoomPrice as CompetitorRoomPriceResource;
 use App\Http\Resources\CompetitorRoomAvgPrice as CompetitorRoomAvgPriceResource;
-use App\Http\Resources\CompetitorAllRoomPrice as CompetitorAllRoomPriceResource;
+use App\Http\Resources\CompetitorAvgPrice as CompetitorAvgPriceResource;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -21,8 +21,6 @@ class CompetitorsPriceAPIController extends Controller
     {
         $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
     }
-
-
 
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {

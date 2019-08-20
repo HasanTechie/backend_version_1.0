@@ -50,7 +50,7 @@ class CompetitorsPriceAPIController extends Controller
 
                 $check_in_datesArray = [];
                 $date = ($dateFrom < date("Y-m-d")) ? date("Y-m-d") : $dateFrom;
-                $endDate = $dateTo;
+                $endDate = ($dateTo > date("Y-m-d", strtotime("+365 day"))) ? date("Y-m-d", strtotime("+365 day")) : $dateTo;;
 
                 while (strtotime($date) <= strtotime($endDate)) {
 

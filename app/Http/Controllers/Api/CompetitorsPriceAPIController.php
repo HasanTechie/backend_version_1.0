@@ -125,11 +125,15 @@ class CompetitorsPriceAPIController extends Controller
                     foreach ($dA2 as $key => $value) {
 
                         $a = array_filter($value);
-                        $average = round(array_sum($a) / count($a), 2);
+                        if (count($a) > 0) {
+                            $average = round(array_sum($a) / count($a), 2);
+                        } else {
+                            $average = 0;
+                        }
 
-                        foreach ($value as $key => $valueInstance) {
+                        foreach ($value as $key2 => $valueInstance) {
                             if ($valueInstance == 0) {
-                                $value[$key] = $average;
+                                $value[$key2] = $average;
                             }
                         }
 

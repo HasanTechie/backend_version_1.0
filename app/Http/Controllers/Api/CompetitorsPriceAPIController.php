@@ -43,95 +43,84 @@ class CompetitorsPriceAPIController extends Controller
                     array_unshift($competitorIdsArray, $hotelId);
                 }
 
-                $prices = DB::table('rooms_hrs')
-                    ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                    ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                    ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                    ->where([
-                        ['rooms_hrs.hotel_id', '=', $hotelId],
-                        ['check_in_date', '>=', $dateFrom],
-                        ['check_in_date', '<=', $dateTo],
-                    ])->groupBy('check_in_date');
-                (strtolower($room) != 'all') ? $prices = $prices->where('room', '=', $room) : null;
-                ($rows > 0) ? $prices = $prices->limit($rows) : null;
-                $prices = $prices->get();
+                $check_in_datesArray = [];
+                for ($i = 0; $i < 365; $i++) {
 
-                if (isset($prices)) {
+                    $date = date("Y-m-d", strtotime($i . " day"));
 
-                    foreach ($prices as $priceInstance) {
-                        foreach ($competitorIdsArray as $competitorHotelInstance) {
-                            $competitorsData = DB::table('rooms_hrs')
-                                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
-                                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
-                                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
-                                ->where([
-                                    ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
-                                    ['check_in_date', '=', $priceInstance->check_in_date],
-                                ]);
-                            (strtolower($room) != 'all') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
-                            $competitorsData = $competitorsData->groupBy('check_in_date')->get();
+                    foreach ($competitorIdsArray as $competitorHotelInstance) {
+                        $competitorsData = DB::table('rooms_hrs')
+                            ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                            ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                            ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                            ->where([
+                                ['rooms_hrs.hotel_id', '=', $competitorHotelInstance],
+                                ['check_in_date', '=', $date],
+                            ]);
+                        (strtolower($room) != 'all') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
+                        $competitorsData = $competitorsData->groupBy('check_in_date')->get();
 
-                            if (count($competitorsData) > 0) {
-                                $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : 'null');
-                                $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
-                                $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : 'null');
-                                $dA1 = null;
-                            }
-
+                        if (count($competitorsData) > 0) {
+                            $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : 'null');
+                            $dA1['hotel_name'] = $competitorsData[0]->hotel_name;
+                            $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : 'null');
+                            $dA1 = null;
                         }
-                        $firstArrayLength = 0;
-                        $i = 0;
-                        if (isset($dA2)) {
-                            foreach (array_keys($dA2) as $index => $key) {
-                                if ($i == 0) {
-                                    $firstArrayLength = count($dA2[$key]);
-                                    $i++;
-                                }
-                                if ($firstArrayLength != count($dA2[$key])) {
-                                    array_push($dA2[$key], null);
-                                }
-                            }
-                        }
-                    }
 
-                    $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();
-                    $roomsArray = ['All'];
-                    foreach ($rooms as $roomInstance) {
-                        $roomsArray[] = $roomInstance->room;
                     }
-                    $check_in_datesArray = [];
-                    foreach ($prices as $price) {
-                        $check_in_datesArray[] = $price->check_in_date;
-                    }
-                    $competitorsDataArray = [];
-
+                    $firstArrayLength = 0;
+                    $i = 0;
                     if (isset($dA2)) {
-
-                        foreach ($dA2 as $key => $dA2instance) {
-                            $tempPrice = 0;
-                            foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
-                                if (empty($dA2InstanceKaInstance)) {
-                                    $dA2[$key][$key2] = $tempPrice;
-                                }
-                                if (!empty($dA2InstanceKaInstance)) {
-                                    $tempPrice = $dA2InstanceKaInstance;
-                                }
+                        foreach (array_keys($dA2) as $index => $key) {
+                            if ($i == 0) {
+                                $firstArrayLength = count($dA2[$key]);
+                                $i++;
+                            }
+                            if ($firstArrayLength != count($dA2[$key])) {
+                                array_push($dA2[$key], null);
                             }
                         }
+                    }
 
-                        foreach ($dA2 as $key => $value) {
-                            $dA3['name'] = $key;
-                            $dA3['data'] = $value;
-                            $competitorsDataArray[] = $dA3;
+                    $check_in_datesArray[] = $date;
+
+
+                }
+
+                $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();
+                $roomsArray = ['All'];
+                foreach ($rooms as $roomInstance) {
+                    $roomsArray[] = $roomInstance->room;
+                }
+                $competitorsDataArray = [];
+
+                if (isset($dA2)) {
+
+                    foreach ($dA2 as $key => $dA2instance) {
+                        $tempPrice = 0;
+                        foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
+                            if (empty($dA2InstanceKaInstance)) {
+                                $dA2[$key][$key2] = $tempPrice;
+                            }
+                            if (!empty($dA2InstanceKaInstance)) {
+                                $tempPrice = $dA2InstanceKaInstance;
+                            }
                         }
                     }
-                    $object = (object)array(
-                        'rooms' => $roomsArray,
-                        'xAxis' => $check_in_datesArray,
-                        'yAxis' => $competitorsDataArray
-                    );
-                    return CompetitorPriceResourceApex::make($object);
+
+                    foreach ($dA2 as $key => $value) {
+                        $dA3['name'] = $key;
+                        $dA3['data'] = $value;
+                        $competitorsDataArray[] = $dA3;
+                    }
                 }
+                $object = (object)array(
+                    'rooms' => $roomsArray,
+                    'xAxis' => $check_in_datesArray,
+                    'yAxis' => $competitorsDataArray
+                );
+                return CompetitorPriceResourceApex::make($object);
+
             }
             dd('Error: Data Not Found :  HRSHotelsCompetitorsAvgPrices');
         } else {

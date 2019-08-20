@@ -17,10 +17,21 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
-        for ($i = 0; $i < 365; $i++) {
+        /*$dA['date'] = '2020-07-27';
+        $dA['end_date'] = '2020-08-17';
+
+
+        while (strtotime($dA['date']) <= strtotime($dA['end_date'])) {
+
+            echo $dA['date'] . "\n";
+
+            $dA['date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['date'])));
+        }*/
+
+/*        for ($i = 0; $i < 365; $i++) {
 
             echo date("Y-m-d", strtotime($i . " day")) . ' ' . $i. "\n";
-        }
+        }*/
 
         /*$notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
 

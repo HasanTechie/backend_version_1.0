@@ -44,9 +44,10 @@ class CompetitorsPriceAPIController extends Controller
                 }
 
                 $check_in_datesArray = [];
-                for ($i = 0; $i < 365; $i++) {
+                $date = $dateFrom;
+                $endDate = $dateTo;
 
-                    $date = date("Y-m-d", strtotime($i . " day"));
+                while (strtotime($date) <= strtotime($endDate)) {
 
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
                         $competitorsData = DB::table('rooms_hrs')
@@ -84,7 +85,7 @@ class CompetitorsPriceAPIController extends Controller
 
                     $check_in_datesArray[] = $date;
 
-
+                    $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
                 }
 
                 $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId)->get();

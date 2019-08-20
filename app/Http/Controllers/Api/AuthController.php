@@ -53,11 +53,12 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials']);
         }
 
-        $hotelsBasic = DB::table('hotels_hrs')->select('city', 'country_code')->where('id', '=', auth()->user()->hotel_id)->get();
+        $hotelsBasic = DB::table('hotels_hrs')->select('name','city', 'country_code')->where('id', '=', auth()->user()->hotel_id)->get();
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         return response([
             'user' => auth()->user(),
+            'hotel_name' => ((count($hotelsBasic) > 0) ? $hotelsBasic[0]->name : null),
             'city' => ((count($hotelsBasic) > 0) ? $hotelsBasic[0]->city : null),
             'country_code' => ((count($hotelsBasic) > 0) ? $hotelsBasic[0]->country_code : null),
             'access_token' => $accessToken

@@ -17,21 +17,39 @@ class PracticeSeeder extends Seeder
     public function run()
     {
 
-        /*$dA['date'] = '2020-07-27';
-        $dA['end_date'] = '2020-08-17';
+
+        $date = '2019-09-01';
+        $endDate = '2019-09-05';
+
+        $prices = [];
+        while (strtotime($date) <= strtotime($endDate)) {
+
+            $competitorsData = DB::table('rooms_hrs')
+                ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
+                ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                ->where([
+                    ['rooms_hrs.hotel_id', '=', 3045],
+                    ['check_in_date', '=', $date],
+                ]);
+            $competitorsData = $competitorsData->groupBy('check_in_date')->get();
+
+            if ($competitorsData->count() > 0) {
+
+                $prices[] = $competitorsData[0]->price;
+                echo $date . "\n";
+            }
 
 
-        while (strtotime($dA['date']) <= strtotime($dA['end_date'])) {
+            $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
+        }
 
-            echo $dA['date'] . "\n";
+        dd($prices);
 
-            $dA['date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['date'])));
-        }*/
+        /*        for ($i = 0; $i < 365; $i++) {
 
-/*        for ($i = 0; $i < 365; $i++) {
-
-            echo date("Y-m-d", strtotime($i . " day")) . ' ' . $i. "\n";
-        }*/
+                    echo date("Y-m-d", strtotime($i . " day")) . ' ' . $i. "\n";
+                }*/
 
         /*$notReservedJobs = DB::table('jobs')->select('id')->whereNull('reserved_at')->where('queue','=','default')->get();
 

@@ -15,7 +15,7 @@ class TransferDataFromPricesTableSeeder extends Seeder
     {
         //
 
-        $dateToCompare = date("Y-m-d", strtotime("-1 day"));//only keep past 1day data.
+        $dateToCompare = date("Y-m-d", strtotime("-3 day"));//only keep past 3day data.
 
 //        $prices = DB::table('prices_hrs')->get(); //alot of  RAM consumption
 

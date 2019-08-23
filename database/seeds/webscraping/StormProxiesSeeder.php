@@ -20,8 +20,6 @@ class StormProxiesSeeder extends Seeder
         $url = 'https://api.myip.com/';
         $url = 'https://www.hrs.com/hotelData.do?hotelnumber=4982&activity=offer&availability=true&l=en&customerId=413388037&forwardName=defaultSearch&searchType=default&xdynpar_dyn=&fwd=gbgCt&client=en&currency=EUR&startDateDay=01&startDateMonth=05&startDateYear=2019&endDateDay=02&endDateMonth=05&endDateYear=2019&adults=1&singleRooms=1&doubleRooms=0&children=0#priceAnchor';
 
-//        $proxies = ['95.211.175.167:13151', '95.211.175.225:13151'];
-//        $this->dA['proxy'] = ['95.211.175.167:13151', '95.211.175.225:13151'];
         $this->dA['proxy'] =
             ['163.172.48.109:15005',
                 '163.172.48.117:15005',

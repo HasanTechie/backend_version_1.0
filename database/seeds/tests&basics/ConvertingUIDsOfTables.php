@@ -15,9 +15,9 @@ class ConvertingUIDsOfTables extends Seeder
         $hotels = DB::table('hotels_basic_data_for_gathering')->get();
         $i = 1;
         foreach ($hotels as $hotel) {
-            DB::table('hotels_basic_data_for_gathering')
+            /*DB::table('hotels_basic_data_for_gathering')
                 ->where('uid', $hotel->uid)
-                ->update(['uid' => $i]);
+                ->update(['uid' => $i]);*/
             /*DB::table('rooms_hrs')
                 ->where('hotel_uid', $hotel->uid)
                 ->update(['hotel_uid' => $i]);*/

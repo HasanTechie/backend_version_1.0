@@ -26,7 +26,7 @@ class AuthController extends Controller
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->status = 0;
+        $user->status = 1;
         $user->password = bcrypt($request->password);
         $user->hotel_id = $request->hotel_id;
         $user->save();
@@ -83,9 +83,6 @@ class AuthController extends Controller
     /*
     public function register(Request $request)
     {
-
-
-
                 $validatedData['password'] = bcrypt($request->password);
                 $validatedData['status'] = 0;
                 $validatedData['hotel_id'] = $request->hotel_id;

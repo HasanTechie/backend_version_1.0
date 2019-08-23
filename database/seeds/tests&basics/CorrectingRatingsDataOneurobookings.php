@@ -25,7 +25,7 @@ class CorrectingRatingsDataOneurobookings extends Seeder
 
             if (isset($results2[0])) {
 
-                DB::table('rooms_prices_eurobookings')
+                /*DB::table('rooms_prices_eurobookings')
                     ->where([
                         ['hotel_address', $instance->hotel_address],
                         ['hotel_name', $instance->hotel_name],
@@ -42,7 +42,7 @@ class CorrectingRatingsDataOneurobookings extends Seeder
                         'hotel_number_of_ratings_on_tripadvisor' => $results2[0]->hotel_number_of_ratings_on_tripadvisor,
                         'hotel_ranking_on_tripadvisor' => $results2[0]->hotel_ranking_on_tripadvisor,
                         'hotel_badge_on_tripadvisor' => $results2[0]->hotel_badge_on_tripadvisor,
-                    ]);
+                    ]);*/
 
                 echo $results2[0]->hotel_uid . ' ' . Carbon\Carbon::now()->toDateTimeString() . "\n";
             }

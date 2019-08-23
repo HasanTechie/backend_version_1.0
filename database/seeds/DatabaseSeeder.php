@@ -35,9 +35,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call('CorrectingSNoSeeder');
 //        $this->call('GatheringGoogleDetailsOfHRSHotelsSeeder');
 //        $this->call('ProxyCrawlSeeder');
-//        $this->call('StormProxiesSeeder');
-//        $this->call('BlazingProxiesSeeder');
-
 
     }
 }
@@ -127,6 +124,9 @@ class DatabaseSeeder extends Seeder
 //        $this->call('EnteringHotelCompetitorsSeeder');
 //        $this->call('MergingEurobookingsHRSSeeder');
 //        $this->call('TestingGooglePlacesSeeder');
+
+//        $this->call('StormProxiesSeeder');
+//        $this->call('BlazingProxiesSeeder');
 
 
 //        $this->call('TrawexSeeder');

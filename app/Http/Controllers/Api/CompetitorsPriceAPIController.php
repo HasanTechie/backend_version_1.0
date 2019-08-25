@@ -137,9 +137,11 @@ class CompetitorsPriceAPIController extends Controller
                             }
                         }
 
-                        $dA3['name'] = $key;
-                        $dA3['data'] = $value;
-                        $competitorsDataArray[] = $dA3;
+                        if(array_sum($value)!=0){
+                            $dA3['name'] = $key;
+                            $dA3['data'] = $value;
+                            $competitorsDataArray[] = $dA3;
+                        }
                     }
                 }
                 $object = (object)array(

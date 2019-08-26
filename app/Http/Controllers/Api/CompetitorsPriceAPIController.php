@@ -111,7 +111,7 @@ class CompetitorsPriceAPIController extends Controller
 
                 if (isset($dA2)) {
 
-                    /*foreach ($dA2 as $key => $dA2instance) {
+                    foreach ($dA2 as $key => $dA2instance) {
                         $tempPrice = 0;
                         foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
                             if (empty($dA2InstanceKaInstance)) {
@@ -121,10 +121,10 @@ class CompetitorsPriceAPIController extends Controller
                                 $tempPrice = $dA2InstanceKaInstance;
                             }
                         }
-                    }*/
+                    }
                     foreach ($dA2 as $key => $value) {
 
-                        /*$a = array_filter($value);
+                        $a = array_filter($value);
                         if (count($a) > 0) {
                             $average = round(array_sum($a) / count($a), 2);
                         } else {
@@ -135,7 +135,7 @@ class CompetitorsPriceAPIController extends Controller
                             if ($valueInstance == 0) {
                                 $value[$key2] = $average;
                             }
-                        }*/
+                        }
 
                         if (array_sum($value) != 0) {
                             $dA3['name'] = $key;

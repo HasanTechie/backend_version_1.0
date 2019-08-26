@@ -17,7 +17,8 @@ class CompetitorPriceApex extends JsonResource
         return [
             'rooms' => $this->rooms,
             'xAxis' => $this->xAxis,
-            'yAxis' => $this->yAxis
+            'yAxis' => $this->yAxis,
+            'dataTable' => $this->dataTable
         ];
     }
 }

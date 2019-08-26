@@ -122,6 +122,8 @@ class CompetitorsPriceAPIController extends Controller
                             }
                         }
                     }
+                    $j = 1;
+                    $dA5[] = ['text' => 'Dates', 'align' => 'left', 'sortable' => false, 'value' => 'date'];
                     foreach ($dA2 as $key => $value) {
 
                         $a = array_filter($value);
@@ -138,16 +140,23 @@ class CompetitorsPriceAPIController extends Controller
                         }
 
                         if (array_sum($value) != 0) {
-                            $dA3['name'] = $key;
+                            $dA3['name'] = $dA4['text'] = $key;
+                            $dA4['value'] = 'p' . $j++;
+                            $dA5[] = $dA4;
                             $dA3['data'] = $value;
                             $competitorsDataArray[] = $dA3;
                         }
                     }
                 }
+
                 $object = (object)array(
                     'rooms' => $roomsArray,
                     'xAxis' => $check_in_datesArray,
-                    'yAxis' => $competitorsDataArray
+                    'yAxis' => $competitorsDataArray,
+                    'dataTable' => [
+                        'headers' => $dA5,
+                        'tableData' => ['test']
+                    ]
                 );
                 return CompetitorPriceResourceApex::make($object);
 

@@ -180,9 +180,9 @@ class CompetitorsPriceAPIController extends Controller
                     'rooms' => $roomsArray,
                     'xAxis' => $check_in_datesArray,
                     'yAxis' => $competitorsDataArray,
-                    'dataTable' => [
-                        'headersAllDates' => $dA5,
-                        'tableDataAllDates' => [$dA7]
+                    'dataTableAllData' => [
+                        'headers' => $dA5,
+                        'tableData' => [$dA7]
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

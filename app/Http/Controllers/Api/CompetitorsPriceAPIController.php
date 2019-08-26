@@ -91,9 +91,20 @@ class CompetitorsPriceAPIController extends Controller
                         $dA6['date'] = $date;
                         $k = 1;
                         foreach ($dA2A as $dA2AKaInstance) {
-
-                            $dA6['p' . $k++] = $dA2AKaInstance;
+                            $pValue = 'p' . $k++;
+                            if (!empty($dA2AKaInstance)) {
+                                $dA6[$pValue] = $dA2AKaInstance;
+                            } else {
+                                if (isset($dA8)) {
+                                    $dA6[$pValue] = $dA8[$pValue];
+                                } else {
+                                    $dA6[$pValue] = null;
+                                }
+                            }
                         }
+
+
+                        $dA8 = $dA6;
                         $dA2A = [];
                         $dA7[] = $dA6;
                         $dA6 = [];
@@ -170,8 +181,8 @@ class CompetitorsPriceAPIController extends Controller
                     'xAxis' => $check_in_datesArray,
                     'yAxis' => $competitorsDataArray,
                     'dataTable' => [
-                        'headers' => $dA5,
-                        'tableData' => [$dA7]
+                        'headersAllDates' => $dA5,
+                        'tableDataAllDates' => [$dA7]
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

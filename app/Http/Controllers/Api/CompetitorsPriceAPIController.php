@@ -52,6 +52,7 @@ class CompetitorsPriceAPIController extends Controller
                 $date = ($dateFrom < date("Y-m-d")) ? date("Y-m-d") : $dateFrom;
                 $endDate = ($dateTo > date("Y-m-d", strtotime("+365 day"))) ? date("Y-m-d", strtotime("+365 day")) : $dateTo;;
 
+                $dA7 = [];
                 while (strtotime($date) <= strtotime($endDate)) {
 
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
@@ -70,14 +71,15 @@ class CompetitorsPriceAPIController extends Controller
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : null);
                             $dA1['hotel_name'] = $competitorHotelInstance['name'];
-                            $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : null);
+                            $dA2[$dA1['hotel_name']][] = $dA2A[] = (!empty($dA1['price']) ? $dA1['price'] : null);
                             $dA1 = null;
                         } else {
                             $dA1['price'] = null;
                             $dA1['hotel_name'] = $competitorHotelInstance['name'];
-                            $dA2[$dA1['hotel_name']][] = (!empty($dA1['price']) ? $dA1['price'] : null);
+                            $dA2[$dA1['hotel_name']][] = $dA2A[] = (!empty($dA1['price']) ? $dA1['price'] : null);
                             $dA1 = null;
                         }
+
 
                     }
 
@@ -85,7 +87,19 @@ class CompetitorsPriceAPIController extends Controller
                     $firstArrayLength = 0;
                     $i = 0;
                     if (isset($dA2)) {
-                        foreach (array_keys($dA2) as $index => $key) {
+
+                        $dA6['date'] = $date;
+                        $k = 1;
+                        foreach ($dA2A as $dA2AKaInstance) {
+
+                            $dA6['p' . $k++] = $dA2AKaInstance;
+                        }
+                        $dA2A = [];
+                        $dA7[] = $dA6;
+                        $dA6 = [];
+
+
+                        foreach (array_keys($dA2) as $index => $key) { // maybe useless code; code 100% sure.
                             if ($i == 0) {
                                 $firstArrayLength = count($dA2[$key]);
                                 $i++;
@@ -93,6 +107,7 @@ class CompetitorsPriceAPIController extends Controller
                             if ($firstArrayLength != count($dA2[$key])) {
                                 array_push($dA2[$key], null);
                             }
+
                         }
                     }
 
@@ -113,6 +128,7 @@ class CompetitorsPriceAPIController extends Controller
 
                     foreach ($dA2 as $key => $dA2instance) {
                         $tempPrice = 0;
+
                         foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
                             if (empty($dA2InstanceKaInstance)) {
                                 $dA2[$key][$key2] = $tempPrice;
@@ -155,7 +171,7 @@ class CompetitorsPriceAPIController extends Controller
                     'yAxis' => $competitorsDataArray,
                     'dataTable' => [
                         'headers' => $dA5,
-                        'tableData' => ['test']
+                        'tableData' => [$dA7]
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

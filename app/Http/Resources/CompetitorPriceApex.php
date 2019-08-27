@@ -18,7 +18,8 @@ class CompetitorPriceApex extends JsonResource
             'rooms' => $this->rooms,
             'xAxis' => $this->xAxis,
             'yAxis' => $this->yAxis,
-            'dataTableAllData' => $this->dataTableAllData
+            'dataTableAllData' => $this->dataTableAllData,
+            'dataTableMonthlyAverage' => $this->dataTableMonthlyAverage
         ];
     }
 }

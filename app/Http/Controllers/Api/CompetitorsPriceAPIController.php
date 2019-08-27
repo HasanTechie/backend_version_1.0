@@ -109,7 +109,7 @@ class CompetitorsPriceAPIController extends Controller
                                 if (isset($dA8)) {
                                     $dA6[$pValue] = $dA8[$pValue];
                                 } else {
-                                    $dA6[$pValue] = 'not available';
+                                    $dA6[$pValue] = null;
                                 }
                             }
                         }

@@ -88,6 +88,17 @@ class CompetitorsPriceAPIController extends Controller
                     $i = 0;
                     if (isset($dA2)) {
 
+                        foreach (array_keys($dA2) as $index => $key) { // maybe useless code; code 100% sure.
+                            if ($i == 0) {
+                                $firstArrayLength = count($dA2[$key]);
+                                $i++;
+                            }
+                            if ($firstArrayLength != count($dA2[$key])) {
+                                array_push($dA2[$key], null);
+                            }
+
+                        }
+
                         $dA6['date'] = $date;
                         $k = 1;
                         foreach ($dA2A as $dA2AKaInstance) {
@@ -109,17 +120,6 @@ class CompetitorsPriceAPIController extends Controller
                         $dA7[] = $dA6;
                         $dA6 = [];
 
-
-                        foreach (array_keys($dA2) as $index => $key) { // maybe useless code; code 100% sure.
-                            if ($i == 0) {
-                                $firstArrayLength = count($dA2[$key]);
-                                $i++;
-                            }
-                            if ($firstArrayLength != count($dA2[$key])) {
-                                array_push($dA2[$key], null);
-                            }
-
-                        }
                     }
 
                     $check_in_datesArray[] = $date;

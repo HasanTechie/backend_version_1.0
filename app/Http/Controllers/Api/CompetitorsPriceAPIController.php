@@ -182,7 +182,7 @@ class CompetitorsPriceAPIController extends Controller
                     'yAxis' => $competitorsDataArray,
                     'dataTableAllData' => [
                         'headers' => $dA5,
-                        'tableData' => [$dA7]
+                        'tableData' => $dA7
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

@@ -106,8 +106,8 @@ class TrendController extends Controller
 
         foreach ($countries as $country) {
             $countrycode = DB::table('countries')->select('iso_code', 'name')->where('name', '=', $country)->get();
-//            echo $countrycode[0]->name . " ";
-//            echo $countrycode[0]->iso_code . "<br>";
+            echo $countrycode[0]->name . " ";
+            echo $countrycode[0]->iso_code . "<br>";
 
             # This options are by default if none provided
             $options = [

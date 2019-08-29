@@ -74,7 +74,17 @@ class CompetitorsPriceAPIController extends Controller
                         }
                     }
                 }
-                
+
+                $dAm3 =[];
+                foreach($dAm1 as $dAm1Key=>$dAm1Instance){
+
+                    $dAm2=[$dAm1Key];
+
+                    foreach($dAm1Instance as $dAm1InstanceKey=>$dAm1InstanceKaInstance){
+                        $dAm2[$dAm1InstanceKey]=$dAm1InstanceKaInstance;
+                    }
+                    $dAm3[]=$dAm2;
+                }
 
 
                 while (strtotime($date) <= strtotime($endDate)) {
@@ -214,7 +224,7 @@ class CompetitorsPriceAPIController extends Controller
                     ],
                     'dataTableMonthlyAverage' => [
                         'headers' => $dA5,
-                        'tableData' => $dAm1
+                        'tableData' => $dAm3
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

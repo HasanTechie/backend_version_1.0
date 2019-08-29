@@ -53,6 +53,29 @@ class CompetitorsPriceAPIController extends Controller
                 $endDate = ($dateTo > date("Y-m-d", strtotime("+365 day"))) ? date("Y-m-d", strtotime("+365 day")) : $dateTo;;
 
                 $dA7 = [];
+
+
+                foreach ($competitorIdsArray as $competitorHotelInstance) {
+                    $competitorsDataForMonthlyAverage = DB::table('rooms_hrs')
+                        ->select(DB::raw("DATE_FORMAT(prices_hrs.check_in_date, '%Y-%m') AS month, DATE_FORMAT(prices_hrs.check_in_date, '%M, %Y') AS yearMonth,
+                            ROUND(AVG(prices_hrs.price),2) AS price,hotels_hrs.name as hotel_name, hotels_hrs.id"))
+                        ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
+                        ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
+                        ->where([
+                            ['rooms_hrs.hotel_id', '=', $competitorHotelInstance['id']],
+                        ]);
+                    (strtolower($room) != 'all') ? $competitorsDataForMonthlyAverage = $competitorsDataForMonthlyAverage->where('room', '=', $room) : null;
+                    $competitorsDataForMonthlyAverage = $competitorsDataForMonthlyAverage->groupBy(['yearMonth', 'month'])->orderBy('month')->get();
+
+
+                    if (count($competitorsDataForMonthlyAverage) > 0) {
+                        $dAm1[]=$competitorsDataForMonthlyAverage;
+                    } else {
+                    }
+                }
+                    dd($dAm1);
+
+
                 while (strtotime($date) <= strtotime($endDate)) {
 
                     foreach ($competitorIdsArray as $competitorHotelInstance) {

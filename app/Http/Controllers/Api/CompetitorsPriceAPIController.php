@@ -54,11 +54,11 @@ class CompetitorsPriceAPIController extends Controller
 
                 $dA7 = [];
 
-
+                $dAm1 = [];
                 foreach ($competitorIdsArray as $competitorHotelInstance) {
                     $competitorsDataForMonthlyAverage = DB::table('rooms_hrs')
                         ->select(DB::raw("DATE_FORMAT(prices_hrs.check_in_date, '%Y-%m') AS month, DATE_FORMAT(prices_hrs.check_in_date, '%M, %Y') AS yearMonth,
-                            ROUND(AVG(prices_hrs.price),2) AS price,hotels_hrs.name as hotel_name, hotels_hrs.id"))
+                            ROUND(AVG(prices_hrs.price),2) AS price,hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id"))
                         ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
                         ->join('hotels_hrs', 'hotels_hrs.id', '=', 'rooms_hrs.hotel_id')
                         ->where([
@@ -69,11 +69,12 @@ class CompetitorsPriceAPIController extends Controller
 
 
                     if (count($competitorsDataForMonthlyAverage) > 0) {
-                        $dAm1[]=$competitorsDataForMonthlyAverage;
-                    } else {
+                        foreach ($competitorsDataForMonthlyAverage as $competitorsDataForMonthlyAverageInstance) {
+                            $dAm1[$competitorsDataForMonthlyAverageInstance->yearMonth][$competitorsDataForMonthlyAverageInstance->hotel_id] = (isset($competitorsDataForMonthlyAverageInstance->price) ? $competitorsDataForMonthlyAverageInstance->price : null);
+                        }
                     }
                 }
-                    dd($dAm1);
+                
 
 
                 while (strtotime($date) <= strtotime($endDate)) {
@@ -213,6 +214,7 @@ class CompetitorsPriceAPIController extends Controller
                     ],
                     'dataTableMonthlyAverage' => [
                         'headers' => $dA5,
+                        'tableData' => $dAm1
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

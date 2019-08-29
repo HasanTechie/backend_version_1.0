@@ -55,7 +55,9 @@ class CompetitorsPriceAPIController extends Controller
                 $dA7 = [];
 
                 $dAm1 = [];
+                $dAm5[] = ['text' => 'Dates', 'align' => 'left', 'sortable' => false, 'value' => 'date'];
                 foreach ($competitorIdsArray as $competitorHotelInstance) {
+                    $l = 0;
                     $competitorsDataForMonthlyAverage = DB::table('rooms_hrs')
                         ->select(DB::raw("DATE_FORMAT(prices_hrs.check_in_date, '%Y-%m') AS month, DATE_FORMAT(prices_hrs.check_in_date, '%M, %Y') AS yearMonth,
                             ROUND(AVG(prices_hrs.price),2) AS price,hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id"))
@@ -71,19 +73,26 @@ class CompetitorsPriceAPIController extends Controller
                     if (count($competitorsDataForMonthlyAverage) > 0) {
                         foreach ($competitorsDataForMonthlyAverage as $competitorsDataForMonthlyAverageInstance) {
                             $dAm1[$competitorsDataForMonthlyAverageInstance->yearMonth][$competitorsDataForMonthlyAverageInstance->hotel_id] = (isset($competitorsDataForMonthlyAverageInstance->price) ? $competitorsDataForMonthlyAverageInstance->price : null);
+
+                            if ($l == 0) {
+                                $dAm4['text'] = $competitorsDataForMonthlyAverageInstance->hotel_name;
+                                $dAm4['value'] = $competitorsDataForMonthlyAverageInstance->hotel_id;
+                                $dAm5[] = $dAm4;
+                                $l++;
+                            }
                         }
                     }
                 }
 
-                $dAm3 =[];
-                foreach($dAm1 as $dAm1Key=>$dAm1Instance){
+                $dAm3 = [];
+                foreach ($dAm1 as $dAm1Key => $dAm1Instance) {
 
-                    $dAm2=[$dAm1Key];
+                    $dAm2['date'] = $dAm1Key;
 
-                    foreach($dAm1Instance as $dAm1InstanceKey=>$dAm1InstanceKaInstance){
-                        $dAm2[$dAm1InstanceKey]=$dAm1InstanceKaInstance;
+                    foreach ($dAm1Instance as $dAm1InstanceKey => $dAm1InstanceKaInstance) {
+                        $dAm2[$dAm1InstanceKey] = $dAm1InstanceKaInstance;
                     }
-                    $dAm3[]=$dAm2;
+                    $dAm3[] = $dAm2;
                 }
 
 
@@ -223,7 +232,7 @@ class CompetitorsPriceAPIController extends Controller
                         'tableData' => $dA7
                     ],
                     'dataTableMonthlyAverage' => [
-                        'headers' => $dA5,
+                        'headers' => $dAm5,
                         'tableData' => $dAm3
                     ]
                 );

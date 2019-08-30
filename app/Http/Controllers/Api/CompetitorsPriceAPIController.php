@@ -24,40 +24,29 @@ class CompetitorsPriceAPIController extends Controller
 
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {
-
         if ($apiKey == $this->apiKey) {
-
             $hotelId = DB::table('users')->select('hotel_id', 'hotels_hrs.name')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'users.hotel_id')
                 ->where('users.id', '=', $userid)->get();
-
             $competitorIds = DB::table('competitors')->select('hotel_id', 'hotels_hrs.name')
                 ->join('hotels_hrs', 'hotels_hrs.id', '=', 'competitors.hotel_id')
                 ->where('user_id', '=', $userid)->get();
-
             $competitorIdsArray = [];
-
             if (count($hotelId)) {
                 $tempArray['id'] = $hotelId[0]->hotel_id;
                 $tempArray['name'] = $hotelId[0]->name;
                 $competitorIdsArray[] = $tempArray;
-
                 foreach ($competitorIds as $competitorIdInstance1) {
                     $tempArray['id'] = $competitorIdInstance1->hotel_id;
                     $tempArray['name'] = $competitorIdInstance1->name;
                     $competitorIdsArray[] = $tempArray;
                 }
-
                 $check_in_datesArray = [];
                 $date = ($dateFrom < date("Y-m-d")) ? date("Y-m-d") : $dateFrom;
                 $endDate = ($dateTo > date("Y-m-d", strtotime("+365 day"))) ? date("Y-m-d", strtotime("+365 day")) : $dateTo;;
-
                 $dA7 = [];
-
                 $dAm1 = [];
-                $dAm5[] = ['text' => 'Dates', 'align' => 'left', 'sortable' => false, 'value' => 'date'];
                 foreach ($competitorIdsArray as $competitorHotelInstance) {
-                    $l = 0;
                     $competitorsDataForMonthlyAverage = DB::table('rooms_hrs')
                         ->select(DB::raw("DATE_FORMAT(prices_hrs.check_in_date, '%Y-%m') AS month, DATE_FORMAT(prices_hrs.check_in_date, '%M, %Y') AS yearMonth,
                             ROUND(AVG(prices_hrs.price),2) AS price,hotels_hrs.name as hotel_name, hotels_hrs.id as hotel_id"))
@@ -68,38 +57,22 @@ class CompetitorsPriceAPIController extends Controller
                         ]);
                     (strtolower($room) != 'all') ? $competitorsDataForMonthlyAverage = $competitorsDataForMonthlyAverage->where('room', '=', $room) : null;
                     $competitorsDataForMonthlyAverage = $competitorsDataForMonthlyAverage->groupBy(['yearMonth', 'month'])->orderBy('month')->get();
-
-
                     if (count($competitorsDataForMonthlyAverage) > 0) {
                         foreach ($competitorsDataForMonthlyAverage as $competitorsDataForMonthlyAverageInstance) {
                             $dAm1[$competitorsDataForMonthlyAverageInstance->yearMonth][$competitorsDataForMonthlyAverageInstance->hotel_id] = (isset($competitorsDataForMonthlyAverageInstance->price) ? $competitorsDataForMonthlyAverageInstance->price : null);
-
-                            if ($l == 0) {
-                                $dAm4['text'] = $competitorsDataForMonthlyAverageInstance->hotel_name;
-                                $dAm4['value'] = $competitorsDataForMonthlyAverageInstance->hotel_id;
-                                $dAm5[] = $dAm4;
-                                $l++;
-                            }
                         }
                     }
                 }
-
-                $dAm3 = [];
-                foreach ($dAm1 as $dAm1Key => $dAm1Instance) {
-
-                    $dAm2['date'] = $dAm1Key;
-
-                    foreach ($dAm1Instance as $dAm1InstanceKey => $dAm1InstanceKaInstance) {
-                        $dAm2[$dAm1InstanceKey] = $dAm1InstanceKaInstance;
+                $dAm3 =[];
+                foreach($dAm1 as $dAm1Key=>$dAm1Instance){
+                    $dAm2=[$dAm1Key];
+                    foreach($dAm1Instance as $dAm1InstanceKey=>$dAm1InstanceKaInstance){
+                        $dAm2[$dAm1InstanceKey]=$dAm1InstanceKaInstance;
                     }
-                    $dAm3[] = $dAm2;
+                    $dAm3[]=$dAm2;
                 }
-
-
                 while (strtotime($date) <= strtotime($endDate)) {
-
                     foreach ($competitorIdsArray as $competitorHotelInstance) {
-
                         $competitorsData = DB::table('rooms_hrs')
                             ->select(DB::raw('hotels_hrs.name as hotel_name, hotels_hrs.id,  ROUND(avg(prices_hrs.price),2) as price, prices_hrs.check_in_date'))
                             ->join('prices_hrs', 'prices_hrs.room_id', '=', 'rooms_hrs.id')
@@ -110,7 +83,6 @@ class CompetitorsPriceAPIController extends Controller
                             ]);
                         (strtolower($room) != 'all') ? $competitorsData = $competitorsData->where('room', '=', $room) : null;
                         $competitorsData = $competitorsData->groupBy('check_in_date')->get();
-
                         if (count($competitorsData) > 0) {
                             $dA1['price'] = (!empty($competitorsData[0]->price) ? $competitorsData[0]->price : null);
                             $dA1['hotel_name'] = $competitorHotelInstance['name'];
@@ -122,15 +94,10 @@ class CompetitorsPriceAPIController extends Controller
                             $dA2[$dA1['hotel_name']][] = $dA2A[] = (!empty($dA1['price']) ? $dA1['price'] : null);
                             $dA1 = null;
                         }
-
-
                     }
-
-
                     $firstArrayLength = 0;
                     $i = 0;
                     if (isset($dA2)) {
-
                         foreach (array_keys($dA2) as $index => $key) { // maybe useless code; code 100% sure.
                             if ($i == 0) {
                                 $firstArrayLength = count($dA2[$key]);
@@ -139,9 +106,7 @@ class CompetitorsPriceAPIController extends Controller
                             if ($firstArrayLength != count($dA2[$key])) {
                                 array_push($dA2[$key], null);
                             }
-
                         }
-
                         $dA6['date'] = $date;
                         $k = 1;
                         foreach ($dA2A as $dA2AKaInstance) {
@@ -156,33 +121,23 @@ class CompetitorsPriceAPIController extends Controller
                                 }
                             }
                         }
-
-
                         $dA8 = $dA6;
                         $dA2A = [];
                         $dA7[] = $dA6;
                         $dA6 = [];
-
                     }
-
                     $check_in_datesArray[] = $date;
-
                     $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
                 }
-
-
                 $rooms = DB::table('rooms_hrs')->select('room')->distinct()->where('hotel_id', '=', $hotelId[0]->hotel_id)->get();
                 $roomsArray = ['All'];
                 foreach ($rooms as $roomInstance) {
                     $roomsArray[] = $roomInstance->room;
                 }
                 $competitorsDataArray = [];
-
                 if (isset($dA2)) {
-
                     foreach ($dA2 as $key => $dA2instance) {
                         $tempPrice = 0;
-
                         foreach ($dA2instance as $key2 => $dA2InstanceKaInstance) {
                             if (empty($dA2InstanceKaInstance)) {
                                 $dA2[$key][$key2] = $tempPrice;
@@ -195,20 +150,17 @@ class CompetitorsPriceAPIController extends Controller
                     $j = 1;
                     $dA5[] = ['text' => 'Dates', 'align' => 'left', 'sortable' => false, 'value' => 'date'];
                     foreach ($dA2 as $key => $value) {
-
                         $a = array_filter($value);
                         if (count($a) > 0) {
                             $average = round(array_sum($a) / count($a), 2);
                         } else {
                             $average = 0;
                         }
-
                         foreach ($value as $key2 => $valueInstance) {
                             if ($valueInstance == 0) {
                                 $value[$key2] = $average;
                             }
                         }
-
                         if (array_sum($value) != 0) {
                             $dA3['name'] = $dA4['text'] = $key;
                             $dA4['value'] = 'p' . $j++;
@@ -222,7 +174,6 @@ class CompetitorsPriceAPIController extends Controller
                         }
                     }
                 }
-
                 $object = (object)array(
                     'rooms' => $roomsArray,
                     'xAxis' => $check_in_datesArray,
@@ -232,12 +183,11 @@ class CompetitorsPriceAPIController extends Controller
                         'tableData' => $dA7
                     ],
                     'dataTableMonthlyAverage' => [
-                        'headers' => $dAm5,
-                        'tableData' => ''
+                        'headers' => $dA5,
+                        'tableData' => $dAm3
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);
-
             }
             dd('Error: Data Not Found :  HRSHotelsCompetitorsPricesApex');
         } else {

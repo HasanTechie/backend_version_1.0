@@ -58,7 +58,7 @@ class CompetitorsPriceAPIController extends Controller
                             $dAm1[$competitorsDataForMonthlyAverageInstance->yearMonth][$competitorsDataForMonthlyAverageInstance->hotel_id] = (isset($competitorsDataForMonthlyAverageInstance->price) ? $competitorsDataForMonthlyAverageInstance->price : null);
                             if ($l == 0) {
                                 $dAm4['text'] = $competitorsDataForMonthlyAverageInstance->hotel_name;
-                                $dAm4['value'] = $competitorsDataForMonthlyAverageInstance->hotel_id;
+                                $dAm4['value'] = 'p'.$competitorsDataForMonthlyAverageInstance->hotel_id;
                                 $dAm5[] = $dAm4;
                                 $l++;
                             }
@@ -69,7 +69,7 @@ class CompetitorsPriceAPIController extends Controller
                 foreach ($dAm1 as $dAm1Key => $dAm1Instance) {
                     $dAm2['date'] = $dAm1Key;
                     foreach ($dAm1Instance as $dAm1InstanceKey => $dAm1InstanceKaInstance) {
-                        $dAm2[$dAm1InstanceKey] = $dAm1InstanceKaInstance;
+                        $dAm2['p'.$dAm1InstanceKey] = $dAm1InstanceKaInstance;
                     }
                     $dAm3[] = $dAm2;
                 }

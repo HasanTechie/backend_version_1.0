@@ -233,7 +233,7 @@ class CompetitorsPriceAPIController extends Controller
                     ],
                     'dataTableMonthlyAverage' => [
                         'headers' => $dAm5,
-                        'tableData' => $dAm3
+                        'tableData' => ''
                     ]
                 );
                 return CompetitorPriceResourceApex::make($object);

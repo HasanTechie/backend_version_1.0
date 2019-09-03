@@ -23,7 +23,7 @@ class ManualPriceSeeder extends Seeder
             $dA['check_in_date'] = $dA['start_date'];
             $dA['check_out_date'] = date("Y-m-d", strtotime("+1 day", strtotime($dA['start_date'])));
 
-            DB::table('price_hrs')->insert(
+            DB::table('prices_hrs')->insert(
                 [
                     'price' => 49,
                     'currency' => '€',

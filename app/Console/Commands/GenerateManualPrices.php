@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
+use GenerateManualPriceSeeder;
+
 use Illuminate\Console\Command;
 
 class GenerateManualPrices extends Command
@@ -11,7 +14,7 @@ class GenerateManualPrices extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'command:generatemanualprices';
 
     /**
      * The console command description.
@@ -38,5 +41,11 @@ class GenerateManualPrices extends Command
     public function handle()
     {
         //
+        echo 'GenerateManualPrice Command started at : ' . Carbon::now()->toDateTimeString() . "\n";
+
+        $instance = new GenerateManualPriceSeeder();
+        $instance->run();
+
+        echo 'GenerateManualPrice Command ended at : ' . Carbon::now()->toDateTimeString() . "\n\n";
     }
 }

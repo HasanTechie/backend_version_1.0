@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ManualPriceSeeder extends Seeder
+class GenerateManualPriceSeeder extends Seeder
 {
     /**
      * Run the database seeds.

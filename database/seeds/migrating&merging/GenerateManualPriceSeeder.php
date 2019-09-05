@@ -14,7 +14,7 @@ class GenerateManualPriceSeeder extends Seeder
     {
         //
 
-        $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
+        $dA['start_date'] = date("Y-m-d");
         $dA['end_date'] = date("Y-m-d", strtotime("+365 day"));
 
 

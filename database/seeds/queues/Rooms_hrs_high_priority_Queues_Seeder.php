@@ -22,7 +22,7 @@ class Rooms_hrs_high_priority_Queues_Seeder extends Seeder
 
         $dA['currency'] = 'EUR';
         $dA['adults'] = [2];
-        $dA['start_date'] = date("Y-m-d", strtotime("+1 day"));
+        $dA['start_date'] = date("Y-m-d");
         $dA['end_date'] = date("Y-m-d", strtotime("+365 day"));
 
 

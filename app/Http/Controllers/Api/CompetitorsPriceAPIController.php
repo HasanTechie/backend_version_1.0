@@ -14,7 +14,7 @@ class CompetitorsPriceAPIController extends Controller
     protected $apiKey;
     public function __construct()
     {
-        $this->apiKey = 'KuKMQbgZPv0PRC6GqCMlDQ7fgdamsVY75FrQvHfoIbw4gBaG5UX0wfk6dugKxrtW';
+        $this->apiKey = env('API_KEY');
     }
     public function HRSHotelsCompetitorsPricesApex($rows, $apiKey, $userid, $dateFrom, $dateTo, $room)
     {
